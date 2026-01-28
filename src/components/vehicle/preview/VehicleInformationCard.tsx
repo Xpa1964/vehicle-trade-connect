@@ -165,13 +165,13 @@ const VehicleInformationCard: React.FC<VehicleInformationCardProps> = ({
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
           {icon}
-          <h4 className="font-medium text-sm text-gray-600">{title}</h4>
+          <h4 className="font-medium text-sm text-muted-foreground">{title}</h4>
         </div>
         <div className="grid grid-cols-1 gap-2 ml-6">
           {validItems.map((item, index) => (
             <div key={index} className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span className="text-sm">
+              <div className="w-2 h-2 bg-[#0EA5E9] rounded-full"></div>
+              <span className="text-sm text-foreground">
                 <strong>{item.label}:</strong> {formatValue(item.value)}
               </span>
             </div>
@@ -182,10 +182,10 @@ const VehicleInformationCard: React.FC<VehicleInformationCardProps> = ({
   };
 
   return (
-    <Card>
+    <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Info className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-foreground">
+          <Info className="h-5 w-5 text-muted-foreground" />
           {t('vehicles.information')}
         </CardTitle>
       </CardHeader>
@@ -246,13 +246,13 @@ const VehicleInformationCard: React.FC<VehicleInformationCardProps> = ({
             {vehicleInfo?.additional_notes && (
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">
-                  <FileText className="h-4 w-4 text-orange-500" />
-                  <h4 className="font-medium text-sm text-gray-600">{t('vehicles.additionalNotesTitle')}</h4>
+                  <FileText className="h-4 w-4 text-primary" />
+                  <h4 className="font-medium text-sm text-muted-foreground">{t('vehicles.additionalNotesTitle')}</h4>
                 </div>
                 <div className="ml-6">
                   <div className="flex items-start gap-2">
-                    <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
-                    <span className="text-sm">{vehicleInfo.additional_notes}</span>
+                    <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                    <span className="text-sm text-foreground">{vehicleInfo.additional_notes}</span>
                   </div>
                 </div>
               </div>
@@ -269,7 +269,7 @@ const VehicleInformationCard: React.FC<VehicleInformationCardProps> = ({
             )}
           </div>
         ) : (
-          <p className="text-gray-500 italic">
+          <p className="text-muted-foreground italic">
             {t('vehicles.informationNotAvailable')}
           </p>
         )}

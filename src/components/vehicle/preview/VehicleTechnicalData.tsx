@@ -81,19 +81,19 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
 
   return (
     <>
-      <Card className="min-h-[500px] flex flex-col">
+      <Card className="min-h-[500px] flex flex-col bg-card border-border">
         <CardContent className="flex-1 flex flex-col justify-between p-6">
           {/* Línea 1: Marca y modelo */}
           <div className="space-y-4">
             <div>
-              <CardTitle className="text-2xl font-heading font-medium text-neutral-900 tracking-tight">
+              <CardTitle className="text-2xl font-heading font-medium text-foreground tracking-tight">
                 {vehicle.brand} {vehicle.model}
               </CardTitle>
             </div>
 
             {/* Línea 2: Precio */}
             <div>
-              <span className="text-4xl font-heading font-medium text-brand-orange tracking-tight">
+              <span className="text-4xl font-heading font-medium text-primary tracking-tight">
                 {formatPrice(vehicle.price || 0)}
               </span>
             </div>
@@ -110,54 +110,54 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
             <div className="grid grid-cols-3 gap-x-4 gap-y-3">
               {/* FILA 1: Datos básicos */}
               <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 <span className="text-sm font-body">
-                  <span className="font-medium text-neutral-700">{t('vehicles.year')}:</span> 
-                  <span className="font-semibold text-neutral-900 ml-1">{vehicle.year}</span>
+                  <span className="font-medium text-muted-foreground">{t('vehicles.year')}:</span> 
+                  <span className="font-semibold text-foreground ml-1">{vehicle.year}</span>
                 </span>
               </div>
               
               <div className="flex items-center gap-2">
-                <Gauge className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                <Gauge className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 <span className="text-sm font-body">
-                  <span className="font-medium text-neutral-700">{t('vehicles.mileage')}:</span> 
-                  <span className="font-semibold text-neutral-900 ml-1">{formatMileage(vehicle.mileage || 0)} km</span>
+                  <span className="font-medium text-muted-foreground">{t('vehicles.mileage')}:</span> 
+                  <span className="font-semibold text-foreground ml-1">{formatMileage(vehicle.mileage || 0)} km</span>
                 </span>
               </div>
               
               <div className="flex items-center gap-2">
-                <Fuel className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                <Fuel className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 <span className="text-sm font-body">
-                  <span className="font-medium text-neutral-700">{t('vehicles.fuel')}:</span> 
-                  <span className="font-semibold text-neutral-900 ml-1">{vehicle.fuel}</span>
+                  <span className="font-medium text-muted-foreground">{t('vehicles.fuel')}:</span> 
+                  <span className="font-semibold text-foreground ml-1">{vehicle.fuel}</span>
                 </span>
               </div>
               
               {/* FILA 2: Mecánica */}
               <div className="flex items-center gap-2">
-                <Settings className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                <Settings className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 <span className="text-sm font-body">
-                  <span className="font-medium text-neutral-700">{t('vehicles.transmission')}:</span> 
-                  <span className="font-semibold text-neutral-900 ml-1">{vehicle.transmission}</span>
+                  <span className="font-medium text-muted-foreground">{t('vehicles.transmission')}:</span> 
+                  <span className="font-semibold text-foreground ml-1">{vehicle.transmission}</span>
                 </span>
               </div>
               
               {vehicle.enginePower && (
                 <div className="flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                  <Zap className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-body">
-                    <span className="font-medium text-neutral-700">{t('vehicles.power', { fallback: 'Potencia' })}:</span> 
-                    <span className="font-semibold text-neutral-900 ml-1">{vehicle.enginePower} CV</span>
+                    <span className="font-medium text-muted-foreground">{t('vehicles.power', { fallback: 'Potencia' })}:</span> 
+                    <span className="font-semibold text-foreground ml-1">{vehicle.enginePower} CV</span>
                   </span>
                 </div>
               )}
               
               {vehicle.engineSize && (
                 <div className="flex items-center gap-2">
-                  <CircleDot className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                  <CircleDot className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-body">
-                    <span className="font-medium text-neutral-700">{t('vehicles.engineSize', { fallback: 'Cilindrada' })}:</span> 
-                    <span className="font-semibold text-neutral-900 ml-1">{vehicle.engineSize} cc</span>
+                    <span className="font-medium text-muted-foreground">{t('vehicles.engineSize', { fallback: 'Cilindrada' })}:</span> 
+                    <span className="font-semibold text-foreground ml-1">{vehicle.engineSize} cc</span>
                   </span>
                 </div>
               )}
@@ -165,30 +165,30 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
               {/* FILA 3: Características físicas */}
               {vehicle.doors && (
                 <div className="flex items-center gap-2">
-                  <DoorOpen className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                  <DoorOpen className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-body">
-                    <span className="font-medium text-neutral-700">{t('vehicles.doors', { fallback: 'Puertas' })}:</span> 
-                    <span className="font-semibold text-neutral-900 ml-1">{vehicle.doors}</span>
+                    <span className="font-medium text-muted-foreground">{t('vehicles.doors', { fallback: 'Puertas' })}:</span> 
+                    <span className="font-semibold text-foreground ml-1">{vehicle.doors}</span>
                   </span>
                 </div>
               )}
               
               {vehicle.color && (
                 <div className="flex items-center gap-2">
-                  <Palette className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                  <Palette className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-body">
-                    <span className="font-medium text-neutral-700">{t('vehicles.color')}:</span> 
-                    <span className="font-semibold text-neutral-900 ml-1">{vehicle.color}</span>
+                    <span className="font-medium text-muted-foreground">{t('vehicles.color')}:</span> 
+                    <span className="font-semibold text-foreground ml-1">{vehicle.color}</span>
                   </span>
                 </div>
               )}
               
               {vehicle.vehicleType && (
                 <div className="flex items-center gap-2">
-                  <Car className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                  <Car className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-body">
-                    <span className="font-medium text-neutral-700">{t('vehicles.type', { fallback: 'Tipo' })}:</span> 
-                    <span className="font-semibold text-neutral-900 ml-1">{vehicle.vehicleType}</span>
+                    <span className="font-medium text-muted-foreground">{t('vehicles.type', { fallback: 'Tipo' })}:</span> 
+                    <span className="font-semibold text-foreground ml-1">{vehicle.vehicleType}</span>
                   </span>
                 </div>
               )}
@@ -196,30 +196,30 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
               {/* FILA 4: Emisiones y normativas */}
               {vehicle.euroStandard && (
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                  <ShieldCheck className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-body">
-                    <span className="font-medium text-neutral-700">{t('vehicles.euroStandard', { fallback: 'Normativa' })}:</span> 
-                    <span className="font-semibold text-neutral-900 ml-1">{vehicle.euroStandard.toUpperCase()}</span>
+                    <span className="font-medium text-muted-foreground">{t('vehicles.euroStandard', { fallback: 'Normativa' })}:</span> 
+                    <span className="font-semibold text-foreground ml-1">{vehicle.euroStandard.toUpperCase()}</span>
                   </span>
                 </div>
               )}
               
               {vehicle.co2Emissions && (
                 <div className="flex items-center gap-2">
-                  <CloudOff className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                  <CloudOff className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-body">
-                    <span className="font-medium text-neutral-700">{t('vehicles.co2', { fallback: 'CO₂' })}:</span> 
-                    <span className="font-semibold text-neutral-900 ml-1">{vehicle.co2Emissions} g/km</span>
+                    <span className="font-medium text-muted-foreground">{t('vehicles.co2', { fallback: 'CO₂' })}:</span> 
+                    <span className="font-semibold text-foreground ml-1">{vehicle.co2Emissions} g/km</span>
                   </span>
                 </div>
               )}
               
               {vehicle.countryCode && (
                 <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-neutral-500 flex-shrink-0" />
+                  <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-body">
-                    <span className="font-medium text-neutral-700">{t('vehicles.location')}:</span> 
-                    <span className="font-semibold text-neutral-900 ml-1">{vehicle.countryCode.toUpperCase()}</span>
+                    <span className="font-medium text-muted-foreground">{t('vehicles.location')}:</span> 
+                    <span className="font-semibold text-foreground ml-1">{vehicle.countryCode.toUpperCase()}</span>
                   </span>
                 </div>
               )}
@@ -228,10 +228,10 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
 
           {/* Línea 5: Botones de contacto (al final) */}
           {showContactButtons && (
-            <div className="space-y-3 pt-6 border-t">
+            <div className="space-y-3 pt-6 border-t border-border">
               {/* Botón Contactar con el Vendedor */}
               <Button 
-                className="w-full"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                 onClick={() => setIsContactDialogOpen(true)}
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
@@ -243,7 +243,7 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
               {!importDetectionLoading && shouldShowImportCalculator && (
                 <Button 
                   variant="outline"
-                  className="w-full border-blue-300 text-blue-700 hover:bg-blue-50"
+                  className="w-full border-[#0EA5E9] text-[#0EA5E9] hover:bg-[#0EA5E9]/10"
                   onClick={() => navigate(`/import-calculator?from_vehicle=${vehicle.id}&vehicle_info=${encodeURIComponent(`${vehicle.brand} ${vehicle.model} ${vehicle.year}`)}`)}
                 >
                   <Calculator className="h-4 w-4 mr-2" />

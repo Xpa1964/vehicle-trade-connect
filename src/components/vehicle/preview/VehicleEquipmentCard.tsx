@@ -49,10 +49,10 @@ const VehicleEquipmentCard: React.FC<VehicleEquipmentCardProps> = ({
   });
 
   return (
-    <Card>
+    <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Settings className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-foreground">
+          <Settings className="h-5 w-5 text-muted-foreground" />
           {t('vehicles.equipment')}
         </CardTitle>
       </CardHeader>
@@ -68,8 +68,8 @@ const VehicleEquipmentCard: React.FC<VehicleEquipmentCardProps> = ({
               
               return (
                 <div key={index} className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm">
+                  <div className="w-2 h-2 bg-[#22C55E] rounded-full"></div>
+                  <span className="text-sm text-foreground">
                     {getEquipmentName(item.equipment_items?.standard_name, item.equipment_items?.name)}
                   </span>
                 </div>
@@ -77,7 +77,7 @@ const VehicleEquipmentCard: React.FC<VehicleEquipmentCardProps> = ({
             })}
           </div>
         ) : (
-          <p className="text-gray-500 italic">
+          <p className="text-muted-foreground italic">
             {t('vehicles.equipmentNotAvailable')}
           </p>
         )}
