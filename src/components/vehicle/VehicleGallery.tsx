@@ -101,10 +101,10 @@ const VehicleGallery: React.FC<VehicleGalleryProps> = memo(({
   return (
     <div className="space-y-4">
       {/* Main image display - ALWAYS shown */}
-      <div className="relative rounded-lg overflow-hidden bg-neutral-100 border">
-        <AspectRatio ratio={16/9} className="bg-neutral-100">
+      <div className="relative rounded-lg overflow-hidden bg-secondary border border-border">
+        <AspectRatio ratio={16/9} className="bg-secondary">
           {shouldShowLoading ? (
-            <Skeleton className="w-full h-full" />
+            <Skeleton className="w-full h-full bg-secondary" />
           ) : (
             <>
               <ZoomableImage
@@ -130,7 +130,7 @@ const VehicleGallery: React.FC<VehicleGalleryProps> = memo(({
                   <Button
                     variant="outline"
                     size="icon"
-                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white z-50"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-card/80 hover:bg-card border-border text-foreground z-50"
                     onClick={goToPrevious}
                   >
                     <ChevronLeft className="h-4 w-4" />
@@ -139,13 +139,13 @@ const VehicleGallery: React.FC<VehicleGalleryProps> = memo(({
                   <Button
                     variant="outline"
                     size="icon"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white z-50"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-card/80 hover:bg-card border-border text-foreground z-50"
                     onClick={goToNext}
                   >
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                   
-                  <div className="absolute bottom-2 right-2 bg-black/60 text-white px-2 py-1 rounded text-sm z-50">
+                  <div className="absolute bottom-2 right-2 bg-background/80 text-foreground px-2 py-1 rounded text-sm z-50">
                     {currentImageIndex + 1} / {allImages.length}
                   </div>
                 </>
@@ -165,8 +165,8 @@ const VehicleGallery: React.FC<VehicleGalleryProps> = memo(({
                   <button
                     onClick={() => handleThumbnailClick(imageUrl, index)}
                     className={cn(
-                      "w-full aspect-square rounded-md overflow-hidden border-2 transition-all duration-200",
-                      selectedImage === imageUrl ? "border-auto-blue opacity-100" : "border-transparent opacity-70 hover:opacity-100"
+                      "w-full aspect-square rounded-md overflow-hidden border-2 transition-colors duration-200",
+                      selectedImage === imageUrl ? "border-primary opacity-100" : "border-border opacity-70 hover:opacity-100 hover:border-primary/50"
                     )}
                   >
                     <div className="relative w-full h-full">
@@ -179,7 +179,7 @@ const VehicleGallery: React.FC<VehicleGalleryProps> = memo(({
                       />
                       {/* Show "Principal" label for the first image when coming from DB images */}
                       {images && images.length > 0 && index === 0 && images.find(img => img.image_url === imageUrl)?.is_primary && (
-                        <div className="absolute top-0 left-0 m-1 bg-black bg-opacity-70 text-white text-xs px-1 py-0.5 rounded">
+                        <div className="absolute top-0 left-0 m-1 bg-background/80 text-foreground text-xs px-1 py-0.5 rounded">
                           Principal
                         </div>
                       )}
