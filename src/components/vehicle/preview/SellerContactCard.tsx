@@ -52,10 +52,10 @@ const SellerContactCard: React.FC<SellerContactCardProps> = ({ vehicle }) => {
 
   if (isLoading) {
     return (
-      <Card>
+      <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-foreground">
+            <User className="h-5 w-5 text-muted-foreground" />
             {t('common.loading')}...
           </CardTitle>
         </CardHeader>
@@ -64,10 +64,10 @@ const SellerContactCard: React.FC<SellerContactCardProps> = ({ vehicle }) => {
   }
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col bg-card border-border">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <User className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-foreground">
+          <User className="h-5 w-5 text-muted-foreground" />
           {isOwner ? t('profile.myProfile') : t('vehicles.seller')}
         </CardTitle>
       </CardHeader>
@@ -81,15 +81,15 @@ const SellerContactCard: React.FC<SellerContactCardProps> = ({ vehicle }) => {
               <img 
                 src={sellerProfile.company_logo} 
                 alt={`Logo de ${sellerDisplayName}`}
-                className="h-16 w-16 object-contain rounded-lg border"
+                className="h-16 w-16 object-contain rounded-lg border border-border"
               />
             </div>
           )}
           
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-lg">{sellerDisplayName}</h3>
+            <h3 className="font-semibold text-lg text-foreground">{sellerDisplayName}</h3>
             {isOwner && (
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs border-border text-muted-foreground">
                 {t('common.owner')}
               </Badge>
             )}
@@ -97,14 +97,14 @@ const SellerContactCard: React.FC<SellerContactCardProps> = ({ vehicle }) => {
 
           {/* Información de contacto - SIEMPRE presente si está disponible */}
           {sellerProfile?.contact_phone && (
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Phone className="h-4 w-4" />
               <span>{sellerProfile.contact_phone}</span>
             </div>
           )}
 
           {/* Ubicación - SIEMPRE presente */}
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
             <span>{vehicle.location || vehicle.country || t('vehicles.locationNotSpecified')}</span>
           </div>
@@ -124,7 +124,7 @@ const SellerContactCard: React.FC<SellerContactCardProps> = ({ vehicle }) => {
         </div>
 
         {/* Botones de acción - SIEMPRE presentes */}
-        <div className="space-y-2 pt-2 border-t">
+        <div className="space-y-2 pt-2 border-t border-border">
           {!isOwner ? (
             <>
               {/* Botón ver perfil */}
@@ -145,7 +145,7 @@ const SellerContactCard: React.FC<SellerContactCardProps> = ({ vehicle }) => {
                 </Button>
               </Link>
               
-              <div className="text-center text-sm text-gray-500 mt-2">
+              <div className="text-center text-sm text-muted-foreground mt-2">
                 {t('vehicles.thisIsYourVehicle')}
               </div>
             </>

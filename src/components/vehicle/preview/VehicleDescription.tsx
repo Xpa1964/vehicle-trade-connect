@@ -86,9 +86,9 @@ const VehicleDescription: React.FC<VehicleDescriptionProps> = ({ description }) 
   if (!description) return null;
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col bg-card border-border">
       <CardHeader>
-        <CardTitle className="text-2xl flex items-center justify-between">
+        <CardTitle className="text-2xl flex items-center justify-between text-foreground">
           {t('vehicles.description')}
           {!shouldShowOriginal && (
             <div className="flex items-center gap-2">
@@ -131,22 +131,22 @@ const VehicleDescription: React.FC<VehicleDescriptionProps> = ({ description }) 
       </CardHeader>
       <CardContent className="flex-1">
         {isTranslating ? (
-          <div className="flex items-center gap-2 text-gray-600">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" />
             <span>{t('common.translating')}</span>
           </div>
         ) : (
           <div>
             {translationError ? (
-              <div className="text-red-500 mb-2 text-sm">{translationError}</div>
+              <div className="text-[#EF4444] mb-2 text-sm">{translationError}</div>
             ) : null}
             
-            <p className="text-gray-700 whitespace-pre-wrap text-lg leading-relaxed">
+            <p className="text-foreground whitespace-pre-wrap text-lg leading-relaxed">
               {showOriginal || !hasTranslation ? description : translatedText}
             </p>
             
             {hasTranslation && !showOriginal && (
-              <p className="text-xs text-gray-500 mt-2 italic">
+              <p className="text-xs text-muted-foreground mt-2 italic">
                 {t('common.translatedFrom')}
               </p>
             )}

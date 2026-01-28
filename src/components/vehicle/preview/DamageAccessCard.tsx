@@ -42,20 +42,20 @@ const DamageAccessCard: React.FC<DamageAccessCardProps> = ({
 
   return (
     <Card 
-      className="cursor-pointer hover:shadow-md transition-shadow"
+      className="cursor-pointer bg-card border-border hover:border-primary/30 transition-colors"
       onClick={handleDamagesClick}
     >
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-3">
-            <AlertTriangle className="h-5 w-5 text-orange-500" />
-            <span className="font-medium">Estado</span>
+            <AlertTriangle className="h-5 w-5 text-primary" />
+            <span className="font-medium text-foreground">Estado</span>
           </div>
-          <Badge variant="secondary" className="px-2 py-1">
+          <Badge variant="secondary" className="px-2 py-1 bg-secondary text-foreground">
             {damagesCount}
           </Badge>
         </div>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Acceder para conocer el estado del vehículo
         </p>
       </CardContent>

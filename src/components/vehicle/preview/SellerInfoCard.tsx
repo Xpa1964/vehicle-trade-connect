@@ -77,9 +77,9 @@ const SellerInfoCard: React.FC<SellerInfoCardProps> = ({ sellerId, onContact }) 
 
   if (profileLoading) {
     return (
-      <Card>
+      <Card className="bg-card border-border">
         <CardContent className="p-6">
-          <div className="text-center">{t('seller.loadingInfo')}</div>
+          <div className="text-center text-foreground">{t('seller.loadingInfo')}</div>
         </CardContent>
       </Card>
     );
@@ -88,9 +88,9 @@ const SellerInfoCard: React.FC<SellerInfoCardProps> = ({ sellerId, onContact }) 
   // CORREGIDO: No mostrar null, usar datos por defecto
   if (!profile) {
     return (
-      <Card>
+      <Card className="bg-card border-border">
         <CardContent className="p-6">
-          <div className="text-center text-gray-500">Error al cargar información del vendedor</div>
+          <div className="text-center text-muted-foreground">Error al cargar información del vendedor</div>
         </CardContent>
       </Card>
     );
@@ -117,17 +117,17 @@ const SellerInfoCard: React.FC<SellerInfoCardProps> = ({ sellerId, onContact }) 
   }
 
   return (
-    <Card className="min-h-[480px] flex flex-col">
+    <Card className="min-h-[480px] flex flex-col bg-card border-border">
       <CardHeader className="text-center pb-4">
         <Avatar className="h-16 w-16 mx-auto mb-4">
           <AvatarImage src={profile.company_logo || undefined} alt={displayName} />
-          <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-lg font-bold">
+          <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground text-lg font-bold">
             {displayName[0].toUpperCase()}
           </AvatarFallback>
         </Avatar>
-        <CardTitle className="text-lg mb-2">{displayName}</CardTitle>
+        <CardTitle className="text-lg mb-2 text-foreground">{displayName}</CardTitle>
         {profile.business_type && (
-          <Badge variant="outline" className="w-fit mx-auto mb-3">
+          <Badge variant="outline" className="w-fit mx-auto mb-3 border-border text-muted-foreground">
             {getBusinessTypeLabel(profile.business_type)}
           </Badge>
         )}
@@ -139,7 +139,7 @@ const SellerInfoCard: React.FC<SellerInfoCardProps> = ({ sellerId, onContact }) 
           <div>
             <StarRating rating={averageRating} size={16} />
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             {totalRatings > 0 ? (
               <>
                 {averageRating.toFixed(1)} ({totalRatings} {t('seller.ratings')})
@@ -149,7 +149,7 @@ const SellerInfoCard: React.FC<SellerInfoCardProps> = ({ sellerId, onContact }) 
             )}
           </p>
           {verifiedRatings > 0 && (
-            <p className="text-xs text-green-600">
+            <p className="text-xs text-[#22C55E]">
               {verifiedRatings} {t('seller.verified')}
             </p>
           )}
@@ -167,7 +167,7 @@ const SellerInfoCard: React.FC<SellerInfoCardProps> = ({ sellerId, onContact }) 
         <div className="space-y-2">
           {/* Location */}
           {profile.country && (
-            <div className="flex items-center justify-center text-sm text-gray-600">
+            <div className="flex items-center justify-center text-sm text-muted-foreground">
               <MapPin className="h-4 w-4 mr-1" />
               <span>{profile.country}</span>
             </div>
@@ -175,7 +175,7 @@ const SellerInfoCard: React.FC<SellerInfoCardProps> = ({ sellerId, onContact }) 
 
           {/* Member since */}
           {profile.registration_date && (
-            <div className="flex items-center justify-center text-sm text-gray-600">
+            <div className="flex items-center justify-center text-sm text-muted-foreground">
               <Calendar className="h-4 w-4 mr-1" />
               <span>{t('seller.memberSince')} {new Date(profile.registration_date).toLocaleDateString()}</span>
             </div>
@@ -183,7 +183,7 @@ const SellerInfoCard: React.FC<SellerInfoCardProps> = ({ sellerId, onContact }) 
 
           {/* Contact Person */}
           {profile.full_name && profile.company_name && (
-            <div className="text-center text-sm text-gray-600">
+            <div className="text-center text-sm text-muted-foreground">
               <span className="font-medium">{t('seller.contact')}: </span>
               <span>{profile.full_name}</span>
             </div>
@@ -193,9 +193,9 @@ const SellerInfoCard: React.FC<SellerInfoCardProps> = ({ sellerId, onContact }) 
         {/* Sección de acciones - siempre al final */}
         <div className="space-y-3 mt-auto">
           {/* Botón de valoración con nuevo texto */}
-          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-3 rounded-lg border border-yellow-200">
+          <div className="bg-secondary/50 p-3 rounded-lg border border-border">
             <div className="text-center mb-2">
-              <h3 className="text-sm font-bold text-gray-800">🌟 {t('rating.rateSeller')}</h3>
+              <h3 className="text-sm font-bold text-foreground">🌟 {t('rating.rateSeller')}</h3>
             </div>
             
             <QuickRatingDialog

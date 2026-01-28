@@ -42,20 +42,20 @@ const DocumentAccessCard: React.FC<DocumentAccessCardProps> = ({
 
   return (
     <Card 
-      className="cursor-pointer hover:shadow-md transition-shadow"
+      className="cursor-pointer bg-card border-border hover:border-primary/30 transition-colors"
       onClick={handleDocumentsClick}
     >
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-3">
-            <FileText className="h-5 w-5 text-blue-500" />
-            <span className="font-medium">Archivos</span>
+            <FileText className="h-5 w-5 text-[#0EA5E9]" />
+            <span className="font-medium text-foreground">Archivos</span>
           </div>
-          <Badge variant="secondary" className="px-2 py-1">
+          <Badge variant="secondary" className="px-2 py-1 bg-secondary text-foreground">
             {documentsCount}
           </Badge>
         </div>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Acceso a archivos adicionales
         </p>
       </CardContent>
