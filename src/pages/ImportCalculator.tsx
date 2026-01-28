@@ -15,7 +15,7 @@ const ImportCalculator: React.FC = () => {
   const vehicleInfo = searchParams.get('vehicle_info');
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header con imagen de fondo SIN máscara */}
         <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
@@ -63,7 +63,7 @@ const ImportCalculator: React.FC = () => {
         </div>
 
         {/* Contenedor de la calculadora */}
-        <div className="bg-white rounded-lg shadow-lg">
+        <div className="bg-card rounded-lg shadow-lg border border-border">
           <ImportCalculatorComponent />
         </div>
       </div>
