@@ -55,14 +55,14 @@ const VehicleList: React.FC<VehicleListProps> = ({
   if (vehicles.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="bg-white rounded-lg shadow-sm border p-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        <div className="bg-card rounded-lg border border-border p-8">
+          <h3 className="text-lg font-semibold text-foreground mb-2">
             {t('vehicles.noVehicles')}
           </h3>
-          <p className="text-gray-600 mb-4">
+          <p className="text-muted-foreground mb-4">
             {t('vehicles.tryDifferentSearch')}
           </p>
-          <Button onClick={onResetSearch} variant="outline">
+          <Button onClick={onResetSearch} variant="outline" className="border-border text-foreground hover:bg-secondary">
             {t('vehicles.showAll')}
           </Button>
         </div>

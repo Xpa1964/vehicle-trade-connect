@@ -11,15 +11,15 @@ const VehicleEmpty: React.FC = () => {
 
   return (
     <div className="text-center py-12">
-      <Car className="mx-auto h-12 w-12 text-gray-400" />
-      <h3 className="mt-2 text-sm font-semibold text-gray-900">
+      <Car className="mx-auto h-12 w-12 text-muted-foreground" />
+      <h3 className="mt-2 text-sm font-semibold text-foreground">
         {t('vehicles.noVehiclesOwned')}
       </h3>
-      <p className="mt-1 text-sm text-gray-500">
+      <p className="mt-1 text-sm text-muted-foreground">
         {t('vehicles.publishVehiclePrompt')}
       </p>
       <div className="mt-6">
-        <Button onClick={() => navigate('/vehicle-management')}>
+        <Button onClick={() => navigate('/vehicle-management')} className="bg-primary text-primary-foreground hover:bg-primary/90">
           <Plus className="h-4 w-4 mr-2" />
           {t('vehicles.publishNewVehicle')}
         </Button>
