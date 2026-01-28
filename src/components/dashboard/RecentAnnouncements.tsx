@@ -63,7 +63,7 @@ const RecentAnnouncements: React.FC = () => {
                   </Link>
                   <div className="flex items-center gap-1 shrink-0 ml-2">
                     <span className={`text-xs px-1.5 py-0.5 rounded-full flex items-center ${
-                      (announcement as any).type === 'offer' ? 'bg-blue-50 text-blue-800 border border-blue-100' : 'bg-green-50 text-green-800 border border-green-100'
+                      (announcement as any).type === 'offer' ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' : 'bg-success/10 text-[#22C55E] border border-success/20'
                     }`}>
                       {(announcement as any).type === 'offer' ? (
                         <>
@@ -79,11 +79,11 @@ const RecentAnnouncements: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center text-xs text-gray-500 mb-1">
+                <div className="flex items-center text-xs text-muted-foreground mb-1">
                   <CalendarIcon className="h-3 w-3 mr-1" />
                   {new Date(announcement.created_at).toLocaleDateString()}
                 </div>
-                <p className="text-xs text-gray-600 line-clamp-1">
+                <p className="text-xs text-muted-foreground line-clamp-1">
                   <TranslatedContent 
                     originalText={announcement.content} 
                     originalLanguage="es"

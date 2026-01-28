@@ -17,11 +17,11 @@ const VehicleManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState("individual");
 
   if (!user) {
-    return <div>{t('auth.loginRequired')}</div>;
+    return <div className="text-foreground">{t('auth.loginRequired')}</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary overflow-x-hidden">
       {/* Hero Section with Background Image - Optimized for mobile */}
       <div className="relative overflow-hidden rounded-none sm:rounded-xl shadow-lg mx-0 sm:mx-4 mt-0 sm:mt-4">
         {/* Background usando imagen para mejor rendimiento */}
@@ -79,7 +79,7 @@ const VehicleManagement: React.FC = () => {
 
       {/* Main Content - Improved mobile spacing */}
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 md:py-8">
-        <div className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-6 mb-4 sm:mb-6">
+        <div className="bg-card rounded-lg shadow-lg p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 border border-border">
           <div className="flex justify-end items-center mb-4 sm:mb-6">
             <Button 
               variant="outline"
@@ -116,9 +116,9 @@ const VehicleManagement: React.FC = () => {
             
             <TabsContent value="debug" className="py-4 sm:py-6">
               <div className="space-y-4">
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4">
-                  <h3 className="font-medium text-yellow-800 mb-2 text-sm sm:text-base">🧪 Herramienta de Debug</h3>
-                  <p className="text-xs sm:text-sm text-yellow-700 leading-relaxed">
+                <div className="bg-warning/10 border border-warning/30 rounded-lg p-3 sm:p-4">
+                  <h3 className="font-medium text-amber-400 mb-2 text-sm sm:text-base">🧪 Herramienta de Debug</h3>
+                  <p className="text-xs sm:text-sm text-amber-300 leading-relaxed">
                     Esta herramienta te permite probar la subida de imágenes al proyecto y verificar que funciona correctamente.
                   </p>
                 </div>

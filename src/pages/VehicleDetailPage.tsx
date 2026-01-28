@@ -12,7 +12,7 @@ const VehicleDetailPage: React.FC = () => {
   if (!id) {
     return (
       <div className="container mx-auto py-8 text-center">
-        <h1 className="text-2xl font-bold mb-4">Vehículo no encontrado</h1>
+        <h1 className="text-2xl font-bold mb-4 text-foreground">Vehículo no encontrado</h1>
         <Button asChild>
           <Link to="/vehicles">Volver a Vehículos</Link>
         </Button>
@@ -21,7 +21,7 @@ const VehicleDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="mb-6">
           <Button variant="outline" asChild>
@@ -32,9 +32,9 @@ const VehicleDetailPage: React.FC = () => {
           </Button>
         </div>
 
-        <div className="bg-white shadow-sm rounded-lg p-6 sm:p-8">
+        <div className="bg-card shadow-sm rounded-lg p-6 sm:p-8 border border-border">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-            <h1 className="text-3xl font-bold mb-4 sm:mb-0">
+            <h1 className="text-3xl font-bold mb-4 sm:mb-0 text-foreground">
               Detalles del Vehículo #{id}
             </h1>
             
@@ -71,27 +71,27 @@ const VehicleDetailPage: React.FC = () => {
             <div className="lg:col-span-2">
               <div className="space-y-6">
                 <section>
-                  <h2 className="text-xl font-semibold mb-4">Información Básica</h2>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">
+                  <h2 className="text-xl font-semibold mb-4 text-foreground">Información Básica</h2>
+                  <div className="bg-secondary p-4 rounded-lg">
+                    <p className="text-muted-foreground">
                       Los detalles del vehículo se mostrarán aquí una vez conectado a la base de datos.
                     </p>
                   </div>
                 </section>
 
                 <section>
-                  <h2 className="text-xl font-semibold mb-4">Galería de Imágenes</h2>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">
+                  <h2 className="text-xl font-semibold mb-4 text-foreground">Galería de Imágenes</h2>
+                  <div className="bg-secondary p-4 rounded-lg">
+                    <p className="text-muted-foreground">
                       Las imágenes del vehículo se mostrarán aquí.
                     </p>
                   </div>
                 </section>
 
                 <section>
-                  <h2 className="text-xl font-semibold mb-4">Descripción</h2>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-600">
+                  <h2 className="text-xl font-semibold mb-4 text-foreground">Descripción</h2>
+                  <div className="bg-secondary p-4 rounded-lg">
+                    <p className="text-muted-foreground">
                       La descripción detallada del vehículo se mostrará aquí.
                     </p>
                   </div>
@@ -102,8 +102,8 @@ const VehicleDetailPage: React.FC = () => {
             {/* Sidebar */}
             <div className="lg:col-span-1">
               <div className="sticky top-8 space-y-6">
-                <section className="bg-blue-50 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2">Acciones Rápidas</h3>
+                <section className="bg-primary/10 p-4 rounded-lg border border-primary/20">
+                  <h3 className="font-semibold mb-2 text-foreground">Acciones Rápidas</h3>
                   <div className="space-y-2">
                     <Button size="sm" className="w-full" asChild>
                       <Link to={`/vehicle/${id}/additional-info`}>
@@ -119,9 +119,9 @@ const VehicleDetailPage: React.FC = () => {
                   </div>
                 </section>
 
-                <section className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2">Estado del Vehículo</h3>
-                  <p className="text-sm text-gray-600">
+                <section className="bg-secondary p-4 rounded-lg">
+                  <h3 className="font-semibold mb-2 text-foreground">Estado del Vehículo</h3>
+                  <p className="text-sm text-muted-foreground">
                     El estado actual y historial se mostrarán aquí.
                   </p>
                 </section>

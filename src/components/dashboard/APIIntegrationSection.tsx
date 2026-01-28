@@ -103,7 +103,7 @@ const APIIntegrationSection: React.FC = () => {
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600 leading-relaxed text-center">
+              <p className="text-sm text-muted-foreground leading-relaxed text-center">
                 {t('api.integration.description', { fallback: 'Gestiona tus API keys para sincronización automática de stock' })}
               </p>
             </CardContent>
@@ -161,7 +161,7 @@ const APIIntegrationSection: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-gray-600 text-center">
+                <p className="text-sm text-muted-foreground text-center">
                   {t('api.integration.noRequests', { fallback: 'No hay solicitudes aún' })}
                 </p>
               )}

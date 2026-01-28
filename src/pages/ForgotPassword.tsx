@@ -62,15 +62,15 @@ const ForgotPassword: React.FC = () => {
 
   if (isEmailSent) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
-        <Card className="w-full max-w-sm sm:max-w-md bg-white shadow-2xl">
+      <div className="min-h-screen flex items-center justify-center bg-background py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+        <Card className="w-full max-w-sm sm:max-w-md shadow-2xl">
           <CardHeader className="space-y-1 p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <Button 
                 variant="ghost" 
                 size="sm"
                 onClick={handleReturnHome}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
               >
                 <Home className="h-4 w-4" />
                 {t('common.returnHome')}
@@ -92,7 +92,7 @@ const ForgotPassword: React.FC = () => {
                     console.log('Error loading fallback logo, using text fallback');
                     e.currentTarget.style.display = 'none';
                     const fallback = document.createElement('div');
-                    fallback.className = 'text-2xl font-bold text-auto-blue';
+                    fallback.className = 'text-2xl font-bold text-primary';
                     fallback.textContent = 'KONTACT VO';
                     e.currentTarget.parentNode?.appendChild(fallback);
                   };
@@ -100,7 +100,7 @@ const ForgotPassword: React.FC = () => {
               />
             </div>
             
-            <CardTitle className="text-xl sm:text-2xl font-bold text-center text-green-600">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-center text-[#22C55E]">
               {t('auth.emailSent')}
             </CardTitle>
             <CardDescription className="text-center text-sm sm:text-base">
@@ -110,7 +110,7 @@ const ForgotPassword: React.FC = () => {
           
           <CardContent className="p-4 sm:p-6">
             <div className="text-center space-y-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 {t('auth.didntReceiveEmail')}
               </p>
               <Button 
@@ -136,15 +136,15 @@ const ForgotPassword: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-sm sm:max-w-md bg-white shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-background py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-sm sm:max-w-md shadow-2xl">
         <CardHeader className="space-y-1 p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4">
             <Button 
               variant="ghost" 
               size="sm"
               onClick={handleReturnHome}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
             >
               <Home className="h-4 w-4" />
               {t('common.returnHome')}
@@ -166,7 +166,7 @@ const ForgotPassword: React.FC = () => {
                   console.log('Error loading fallback logo, using text fallback');
                   e.currentTarget.style.display = 'none';
                   const fallback = document.createElement('div');
-                  fallback.className = 'text-2xl font-bold text-auto-blue';
+                  fallback.className = 'text-2xl font-bold text-primary';
                   fallback.textContent = 'KONTACT VO';
                   e.currentTarget.parentNode?.appendChild(fallback);
                 };
@@ -207,7 +207,7 @@ const ForgotPassword: React.FC = () => {
             
             <Button 
               type="submit" 
-              className="w-full bg-blue-600 hover:bg-blue-700 h-11 sm:h-10 text-base sm:text-sm touch-manipulation font-medium" 
+              className="w-full h-11 sm:h-10 text-base sm:text-sm touch-manipulation font-medium" 
               disabled={isSubmitting}
             >
               {isSubmitting ? t('common.loading') : t('auth.sendResetEmail')}

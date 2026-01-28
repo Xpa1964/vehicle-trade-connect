@@ -27,21 +27,21 @@ const UserRoleInfo: React.FC<UserRoleInfoProps> = ({ user }) => {
   }, [user?.role]);
 
   return (
-    <Card className="bg-white border-orange-400 border-l-4">
+    <Card className="bg-card border-primary/50 border-l-4">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg flex items-center">
-          <Shield className="w-5 h-5 mr-2 text-orange-500" />
+        <CardTitle className="text-lg flex items-center text-foreground">
+          <Shield className="w-5 h-5 mr-2 text-primary" />
           {t('profile.userInfo', { fallback: 'Información de usuario y permisos' })}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 text-foreground">
           <p><strong>ID de usuario:</strong> {user.id}</p>
           <p><strong>Email:</strong> {user.email}</p>
           <p>
             <strong>Rol actual:</strong> {isReloading ? 'Recargando...' : currentRole || 'No asignado'} 
             {currentRole === 'admin' && (
-              <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+              <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-[#22C55E]">
                 <Shield className="w-3 h-3 mr-1" /> Administrador
               </span>
             )}
@@ -62,7 +62,7 @@ const UserRoleInfo: React.FC<UserRoleInfoProps> = ({ user }) => {
                variant="outline"
                size="sm"
                onClick={toggleEmergencyMode}
-               className="text-blue-600 border-blue-400 hover:bg-blue-50"
+               className="text-sky-400 border-sky-400/50 hover:bg-sky-400/10"
              >
                {emergencyMode ? <LogOut className="w-4 h-4 mr-2" /> : <LogIn className="w-4 h-4 mr-2" />}
                {emergencyMode ? t('profile.hideAdvanced', { fallback: 'Opciones avanzadas' }) : t('profile.showAdvanced', { fallback: 'Opciones avanzadas' })}
@@ -74,7 +74,7 @@ const UserRoleInfo: React.FC<UserRoleInfoProps> = ({ user }) => {
                  size="sm" 
                  onClick={handleRoleReload} 
                  disabled={isReloading}
-                 className="text-orange-600 border-orange-400 hover:bg-orange-50"
+                 className="text-primary border-primary/50 hover:bg-primary/10"
                >
                  <RefreshCw className={`w-4 h-4 mr-2 ${isReloading ? 'animate-spin' : ''}`} />
                  {t('profile.reloadRole', { fallback: 'Recargar rol' })}
@@ -89,7 +89,7 @@ const UserRoleInfo: React.FC<UserRoleInfoProps> = ({ user }) => {
                 {t('profile.goToAdmin', { fallback: 'Ir al panel de administración' })}
               </Button>
             ) : (
-              <p className="text-yellow-600 mt-2">
+              <p className="text-amber-400 mt-2">
                 No tienes permisos de administración. Contacta al administrador del sistema si crees que deberías tenerlos.
               </p>
             )}
