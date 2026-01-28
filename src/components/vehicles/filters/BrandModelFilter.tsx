@@ -29,15 +29,15 @@ const BrandModelFilter: React.FC<BrandModelFilterProps> = ({
   return (
     <div className="space-y-3">
       <div>
-        <label className="text-xs font-medium text-gray-700 mb-1 block">{t('filters.brand')}</label>
+        <label className="text-xs font-medium text-foreground mb-1 block">{t('filters.brand')}</label>
         <Select value={brand} onValueChange={handleBrandChange}>
-          <SelectTrigger className="h-8 text-xs">
+          <SelectTrigger className="h-8 text-xs bg-card border-border text-foreground hover:border-primary/30">
             <SelectValue placeholder={t('filters.selectBrand')} />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t('filters.allBrands')}</SelectItem>
+          <SelectContent className="bg-card border-border">
+            <SelectItem value="all" className="text-foreground hover:bg-primary/10">{t('filters.allBrands')}</SelectItem>
             {brands.map((brandOption) => (
-              <SelectItem key={brandOption} value={brandOption}>
+              <SelectItem key={brandOption} value={brandOption} className="text-foreground hover:bg-primary/10">
                 {brandOption}
               </SelectItem>
             ))}
@@ -46,15 +46,15 @@ const BrandModelFilter: React.FC<BrandModelFilterProps> = ({
       </div>
 
       <div>
-        <label className="text-xs font-medium text-gray-700 mb-1 block">{t('filters.model')}</label>
+        <label className="text-xs font-medium text-foreground mb-1 block">{t('filters.model')}</label>
         <Select value={model} onValueChange={setModel} disabled={brand === 'all'}>
-          <SelectTrigger className="h-8 text-xs">
+          <SelectTrigger className="h-8 text-xs bg-card border-border text-foreground hover:border-primary/30 disabled:bg-secondary disabled:text-muted-foreground">
             <SelectValue placeholder={t('filters.selectModel')} />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t('filters.allModels')}</SelectItem>
+          <SelectContent className="bg-card border-border">
+            <SelectItem value="all" className="text-foreground hover:bg-primary/10">{t('filters.allModels')}</SelectItem>
             {availableModels.map((modelOption) => (
-              <SelectItem key={modelOption} value={modelOption}>
+              <SelectItem key={modelOption} value={modelOption} className="text-foreground hover:bg-primary/10">
                 {modelOption}
               </SelectItem>
             ))}

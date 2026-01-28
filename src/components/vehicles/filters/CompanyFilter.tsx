@@ -58,16 +58,16 @@ const CompanyFilter: React.FC<CompanyFilterProps> = ({
 
   return (
     <Select value={company} onValueChange={setCompany}>
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="w-full bg-card border-border text-foreground hover:border-primary/30">
         <SelectValue placeholder={t('filters.selectCompany')} />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="all">{t('filters.allCompanies')}</SelectItem>
+      <SelectContent className="bg-card border-border">
+        <SelectItem value="all" className="text-foreground hover:bg-primary/10">{t('filters.allCompanies')}</SelectItem>
         {companiesWithCount.map((company) => (
-          <SelectItem key={company.userId} value={company.userId}>
+          <SelectItem key={company.userId} value={company.userId} className="text-foreground hover:bg-primary/10">
             <div className="flex justify-between items-center w-full">
               <span className="truncate">{company.name}</span>
-              <span className="ml-2 text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
+              <span className="ml-2 text-xs text-muted-foreground bg-secondary px-1.5 py-0.5 rounded">
                 {company.count}
               </span>
             </div>

@@ -14,15 +14,15 @@ const FuelFilter: React.FC<FuelFilterProps> = ({ fuel, setFuel, fuelTypes }) => 
   
   return (
     <div>
-      <label className="text-xs font-medium text-gray-700 mb-1 block">{t('filters.fuel')}</label>
+      <label className="text-xs font-medium text-foreground mb-1 block">{t('filters.fuel')}</label>
       <Select value={fuel} onValueChange={setFuel}>
-        <SelectTrigger className="h-8 text-xs">
+        <SelectTrigger className="h-8 text-xs bg-card border-border text-foreground hover:border-primary/30">
           <SelectValue placeholder={t('filters.selectFuel')} />
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">{t('filters.allFuels')}</SelectItem>
+        <SelectContent className="bg-card border-border">
+          <SelectItem value="all" className="text-foreground hover:bg-primary/10">{t('filters.allFuels')}</SelectItem>
           {fuelTypes.map((type) => (
-            <SelectItem key={type} value={type}>
+            <SelectItem key={type} value={type} className="text-foreground hover:bg-primary/10">
               {type}
             </SelectItem>
           ))}

@@ -17,13 +17,13 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ searchTerm, setSearchTerm }
     <div className="space-y-2">
       <Label className="text-xs font-medium">{t('filters.search')}</Label>
       <div className="relative">
-        <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-gray-400" />
+        <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
         <Input
           type="text"
           placeholder={t('filters.searchPlaceholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-7 h-8 text-xs"
+          className="pl-7 h-8 text-xs bg-card border-border text-foreground placeholder:text-muted-foreground"
         />
       </div>
     </div>
