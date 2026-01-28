@@ -15,7 +15,7 @@ const NearlyNewBadge: React.FC<NearlyNewBadgeProps> = ({ isNearlyNew }) => {
   return (
     <Badge 
       variant="outline" 
-      className="bg-amber-50 text-amber-700 border-amber-200 flex items-center gap-1 text-xs px-2 py-1 w-fit min-w-0 max-w-full"
+      className="bg-amber-500/20 text-amber-400 border-amber-500/30 flex items-center gap-1 text-xs px-2 py-1 w-fit min-w-0 max-w-full"
       title={t('vehicles.nearlyNew')}
     >
       <Sparkles className="h-3 w-3 flex-shrink-0" />

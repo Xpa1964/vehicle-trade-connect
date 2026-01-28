@@ -35,15 +35,15 @@ const IvaBadge: React.FC<IvaBadgeProps> = ({
   const getIvaColor = (status: string) => {
     switch (status) {
       case 'included':
-        return 'bg-green-100 text-green-800 border-green-300';
+        return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
       case 'notIncluded':
-        return 'bg-red-100 text-red-800 border-red-300';
+        return 'bg-red-500/20 text-red-400 border-red-500/30';
       case 'deductible':
-        return 'bg-blue-100 text-blue-800 border-blue-300';
+        return 'bg-sky-500/20 text-sky-400 border-sky-500/30';
       case 'rebu':
-        return 'bg-orange-100 text-orange-800 border-orange-300';
+        return 'bg-primary/20 text-primary border-primary/30';
       default:
-        return 'bg-green-100 text-green-800 border-green-300';
+        return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
     }
   };
 
@@ -75,7 +75,7 @@ const IvaBadge: React.FC<IvaBadgeProps> = ({
             <span className="truncate">{getIvaText(ivaStatus)}</span>
           </Badge>
         </TooltipTrigger>
-        <TooltipContent className="max-w-xs">
+        <TooltipContent className="max-w-xs bg-card border-border text-foreground">
           <p className="text-sm">
             {getTooltipText(ivaStatus)}
           </p>
