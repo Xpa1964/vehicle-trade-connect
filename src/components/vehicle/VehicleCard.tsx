@@ -38,7 +38,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   });
   
   const cardContent = (
-    <Card className="hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+    <Card className="bg-card border-border hover:border-primary/30 hover:shadow-lg transition-shadow duration-200 cursor-pointer">
       <div className="relative">
         <img
           src={vehicle.thumbnailUrl || vehicle.thumbnailurl || '/placeholder.svg'}
@@ -49,31 +49,31 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           }}
         />
         {vehicle.status === 'reserved' && (
-          <Badge className="absolute top-2 right-2 bg-red-500 text-white">
+          <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground">
             {t('vehicles.statusReserved')}
           </Badge>
         )}
         {vehicle.status === 'in_auction' && (
-          <Badge className="absolute top-2 right-2 bg-orange-500 text-white">
+          <Badge className="absolute top-2 right-2 bg-sky-500 text-white">
             {t('vehicles.statusInAuction')}
           </Badge>
         )}
         {isOwner && (
-          <Badge className="absolute top-2 left-2 bg-green-500 text-white">
+          <Badge className="absolute top-2 left-2 bg-green-500 text-primary-foreground">
             {t('vehicles.yourVehicle')}
           </Badge>
         )}
       </div>
       
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg font-semibold truncate">
+        <CardTitle className="text-lg font-semibold truncate text-foreground">
           {vehicle.brand} {vehicle.model}
         </CardTitle>
         <div className="flex justify-between items-center">
-          <span className="text-2xl font-bold text-blue-600">
+          <span className="text-2xl font-bold text-primary">
             {formatPrice(vehicle.price)}
           </span>
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" className="text-xs border-border text-muted-foreground">
             {vehicle.year}
           </Badge>
         </div>
@@ -81,7 +81,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
       
       <CardContent className="space-y-3">
         {/* Vehicle Details */}
-        <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
+        <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Gauge className="w-4 h-4" />
             <span>{vehicle.mileage?.toLocaleString()} km</span>
@@ -101,7 +101,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         </div>
         
         {/* Location */}
-        <div className="flex items-center gap-1 text-sm text-gray-600">
+        <div className="flex items-center gap-1 text-sm text-muted-foreground">
           <MapPin className="w-4 h-4" />
           <span>{vehicle.location}, {vehicle.country}</span>
         </div>
@@ -109,9 +109,9 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         {/* MEJORADO: Seller Section - Solo si NO es el propietario */}
         {!isOwner && vehicle.user_id && (
           <>
-            <div className="pt-2 border-t border-gray-100 space-y-2">
+            <div className="pt-2 border-t border-border space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500 font-medium">{t('vehicles.seller')}:</span>
+                <span className="text-xs text-muted-foreground font-medium">{t('vehicles.seller')}:</span>
                 {showUserRating && ratingSummary && ratingSummary.total_ratings > 0 && (
                   <UserRatingBadge
                     averageRating={Number(ratingSummary.average_rating)}
@@ -124,14 +124,14 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
               </div>
               
               <Link to={`/user/${vehicle.user_id}`} onClick={(e) => e.stopPropagation()}>
-                <Button variant="outline" size="sm" className="w-full text-xs bg-blue-50 hover:bg-blue-100 border-blue-200">
+                <Button variant="outline" size="sm" className="w-full text-xs bg-secondary hover:bg-secondary/80 border-border text-foreground">
                   <User className="w-3 h-3 mr-1" />
                   {t('vehicles.viewSellerProfile')}
                 </Button>
               </Link>
               
               <div className="text-center">
-                <p className="text-xs text-blue-600 font-medium">
+                <p className="text-xs text-primary font-medium">
                   💫 {t('vehicles.ratingInfo')}
                 </p>
               </div>
@@ -141,9 +141,9 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
         {/* NUEVO: Mensaje para propios vehículos */}
         {isOwner && (
-          <div className="pt-2 border-t border-gray-100">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
-              <p className="text-xs text-green-700 font-medium">
+          <div className="pt-2 border-t border-border">
+            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-2 text-center">
+              <p className="text-xs text-green-400 font-medium">
                 📝 {t('vehicles.thisIsYourVehicle')}
               </p>
             </div>
@@ -151,7 +151,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         )}
         
         {/* Creation Date */}
-        <div className="flex items-center gap-1 text-xs text-gray-500">
+        <div className="flex items-center gap-1 text-xs text-muted-foreground">
           <Calendar className="w-3 h-3" />
           <span>{t('vehicles.published')} {new Date(vehicle.created_at).toLocaleDateString()}</span>
         </div>

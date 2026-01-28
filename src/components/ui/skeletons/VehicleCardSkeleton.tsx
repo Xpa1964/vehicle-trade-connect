@@ -4,30 +4,30 @@ export const VehicleCardSkeleton = () => {
   return (
     <div className="bg-card rounded-lg border border-border overflow-hidden shadow-sm">
       {/* Image skeleton */}
-      <Skeleton className="w-full h-48" />
+      <Skeleton className="w-full h-48 bg-secondary" />
       
       {/* Content skeleton */}
       <div className="p-4 space-y-3">
         {/* Title */}
-        <Skeleton className="h-6 w-3/4" />
+        <Skeleton className="h-6 w-3/4 bg-secondary" />
         
         {/* Price and details */}
         <div className="flex justify-between items-center">
-          <Skeleton className="h-5 w-24" />
-          <Skeleton className="h-5 w-20" />
+          <Skeleton className="h-5 w-24 bg-secondary" />
+          <Skeleton className="h-5 w-20 bg-secondary" />
         </div>
         
         {/* Specs */}
         <div className="flex gap-2">
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-4 w-16 bg-secondary" />
+          <Skeleton className="h-4 w-16 bg-secondary" />
+          <Skeleton className="h-4 w-16 bg-secondary" />
         </div>
         
         {/* Action buttons */}
         <div className="flex gap-2 pt-2">
-          <Skeleton className="h-10 flex-1" />
-          <Skeleton className="h-10 w-10" />
+          <Skeleton className="h-10 flex-1 bg-secondary" />
+          <Skeleton className="h-10 w-10 bg-secondary" />
         </div>
       </div>
     </div>

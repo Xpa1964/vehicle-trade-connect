@@ -70,23 +70,23 @@ const VehicleDetailsCard: React.FC<VehicleDetailsCardProps> = ({
   if (showSellerInfo && sellerProfile) {
     // Mostrar información del vendedor
     return (
-      <Card>
+      <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-foreground">
             <User className="h-5 w-5" />
             {t('seller.contact')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <p className="font-medium">{sellerProfile.full_name || sellerProfile.company_name}</p>
+            <p className="font-medium text-foreground">{sellerProfile.full_name || sellerProfile.company_name}</p>
             {sellerProfile.contact_phone && (
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4" />
                 {sellerProfile.contact_phone}
               </div>
             )}
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Calendar className="h-4 w-4" />
               {t('seller.memberSince')} {new Date(sellerProfile.created_at).getFullYear()}
             </div>
@@ -121,14 +121,14 @@ const VehicleDetailsCard: React.FC<VehicleDetailsCardProps> = ({
 
   // Mostrar datos técnicos del vehículo
   return (
-    <Card>
+    <Card className="bg-card border-border">
       <CardHeader>
         <div className="space-y-2">
-          <CardTitle className="text-2xl">
+          <CardTitle className="text-2xl text-foreground">
             {vehicle.brand} {vehicle.model}
           </CardTitle>
           <div className="flex items-center justify-between">
-            <span className="text-3xl font-bold text-auto-blue">
+            <span className="text-3xl font-bold text-primary">
               {formatPrice(vehicle.price || 0)}
             </span>
             <div className="flex flex-col gap-2">
@@ -142,37 +142,37 @@ const VehicleDetailsCard: React.FC<VehicleDetailsCardProps> = ({
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-gray-500" />
-            <span className="text-sm">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-foreground">
               <span className="font-medium">{t('vehicles.year')}:</span> {vehicle.year}
             </span>
           </div>
           
           <div className="flex items-center gap-2">
-            <Gauge className="h-4 w-4 text-gray-500" />
-            <span className="text-sm">
+            <Gauge className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-foreground">
               <span className="font-medium">{t('vehicles.mileage')}:</span> {formatMileage(vehicle.mileage || 0)} km
             </span>
           </div>
           
           <div className="flex items-center gap-2">
-            <Fuel className="h-4 w-4 text-gray-500" />
-            <span className="text-sm">
+            <Fuel className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-foreground">
               <span className="font-medium">{t('vehicles.fuel')}:</span> {vehicle.fuel}
             </span>
           </div>
           
           <div className="flex items-center gap-2">
-            <Settings className="h-4 w-4 text-gray-500" />
-            <span className="text-sm">
+            <Settings className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-foreground">
               <span className="font-medium">{t('vehicles.transmission')}:</span> {vehicle.transmission}
             </span>
           </div>
           
           {vehicle.color && (
             <div className="flex items-center gap-2">
-              <Palette className="h-4 w-4 text-gray-500" />
-              <span className="text-sm">
+              <Palette className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-foreground">
                 <span className="font-medium">{t('vehicles.color')}:</span> {vehicle.color}
               </span>
             </div>
@@ -180,8 +180,8 @@ const VehicleDetailsCard: React.FC<VehicleDetailsCardProps> = ({
           
           {vehicle.countryCode && (
             <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-gray-500" />
-              <span className="text-sm">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-foreground">
                 <span className="font-medium">{t('vehicles.location')}:</span> {vehicle.countryCode.toUpperCase()}
               </span>
             </div>
