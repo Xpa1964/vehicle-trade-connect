@@ -80,16 +80,16 @@ const ContactSellerDialog: React.FC<ContactSellerDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-card border-border">
         <DialogHeader>
-          <DialogTitle>Contactar al vendedor</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-foreground">Contactar al vendedor</DialogTitle>
+          <DialogDescription className="text-muted-foreground">
             Envía un mensaje a {sellerName}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-1 items-center gap-4">
-            <label htmlFor="message" className="text-sm font-medium">
+            <label htmlFor="message" className="text-sm font-medium text-foreground">
               Contenido del mensaje
             </label>
             <Textarea 
@@ -98,6 +98,7 @@ const ContactSellerDialog: React.FC<ContactSellerDialogProps> = ({
               onChange={(e) => setMessage(e.target.value)}
               rows={5}
               placeholder="Escribe tu mensaje aquí..."
+              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground"
             />
           </div>
         </div>
@@ -106,6 +107,7 @@ const ContactSellerDialog: React.FC<ContactSellerDialogProps> = ({
             type="submit" 
             onClick={handleSendMessage}
             disabled={isSending || !message.trim()}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
             {isSending ? (
               <>

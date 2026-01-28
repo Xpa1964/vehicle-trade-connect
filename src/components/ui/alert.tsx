@@ -5,19 +5,19 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const alertVariants = cva(
-  "relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-gray-800",
+  "relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
   {
     variants: {
       variant: {
-        default: "bg-background text-gray-800 border-gray-200",
+        default: "bg-secondary text-foreground border-border",
         destructive:
-          "border-red-200 text-red-800 bg-red-50 [&>svg]:text-red-600",
+          "border-red-500/30 text-red-400 bg-red-500/10 [&>svg]:text-red-400",
         success:
-          "border-green-200 text-green-800 bg-green-50 [&>svg]:text-green-600",
+          "border-[#22C55E]/30 text-[#22C55E] bg-[#22C55E]/10 [&>svg]:text-[#22C55E]",
         warning:
-          "border-amber-200 text-amber-800 bg-amber-50 [&>svg]:text-amber-600",
+          "border-amber-500/30 text-amber-400 bg-amber-500/10 [&>svg]:text-amber-400",
         info:
-          "border-gray-200 text-gray-800 bg-gray-50 [&>svg]:text-gray-600",
+          "border-[#0EA5E9]/30 text-[#0EA5E9] bg-[#0EA5E9]/10 [&>svg]:text-[#0EA5E9]",
       },
     },
     defaultVariants: {
@@ -45,7 +45,7 @@ const AlertTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h5
     ref={ref}
-    className={cn("mb-1 font-medium leading-none tracking-tight text-gray-900", className)}
+    className={cn("mb-1 font-medium leading-none tracking-tight text-foreground", className)}
     {...props}
   />
 ))
@@ -57,7 +57,7 @@ const AlertDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-sm text-gray-600 [&_p]:leading-relaxed", className)}
+    className={cn("text-sm text-muted-foreground [&_p]:leading-relaxed", className)}
     {...props}
   />
 ))
