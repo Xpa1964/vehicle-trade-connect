@@ -32,7 +32,7 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
   };
 
   return (
-    <div className="p-4 border-b border-gray-200 sticky top-0 bg-white z-10">
+    <div className="p-4 border-b border-border sticky top-0 bg-card z-10">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Avatar>
@@ -45,10 +45,10 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
             )}
           </Avatar>
           <div>
-            <p className="font-medium line-clamp-1">
+            <p className="font-medium text-foreground line-clamp-1">
               {getSourceTitle(conversation)}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               {currentUserId === conversation.buyer_id ? 
                 t('messages.talkingToSeller', {}) : 
                 t('messages.talkingToBuyer', {})}

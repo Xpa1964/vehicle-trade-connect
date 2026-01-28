@@ -32,13 +32,13 @@ const ConversationsListOptimized: React.FC<ConversationsListOptimizedProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 flex-1 flex flex-col min-h-0">
-        <div className="p-4 border-b">
-          <h2 className="font-semibold text-lg">{t('messages.conversations', {})}</h2>
+      <div className="bg-card rounded-lg shadow-sm border border-border flex-1 flex flex-col min-h-0">
+        <div className="p-4 border-b border-border">
+          <h2 className="font-semibold text-lg text-foreground">{t('messages.conversations', {})}</h2>
         </div>
         <div className="flex items-center justify-center flex-1">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-800"></div>
-          <span className="ml-2">Cargando...</span>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <span className="ml-2 text-foreground">Cargando...</span>
         </div>
       </div>
     );
@@ -49,26 +49,26 @@ const ConversationsListOptimized: React.FC<ConversationsListOptimizedProps> = ({
   const regularConversations = conversations.filter(conv => !conv.is_admin_conversation || conv.source_type !== 'system_notification');
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 flex-1 flex flex-col min-h-0">
-      <div className="p-4 border-b">
-        <h2 className="font-semibold text-lg">{t('messages.conversations', {})}</h2>
+    <div className="bg-card rounded-lg shadow-sm border border-border flex-1 flex flex-col min-h-0">
+      <div className="p-4 border-b border-border">
+        <h2 className="font-semibold text-lg text-foreground">{t('messages.conversations', {})}</h2>
       </div>
       
       <ScrollArea className="flex-1">
         {(systemNotifications.length > 0 || regularConversations.length > 0) ? (
-          <div className="divide-y">
+          <div className="divide-y divide-border">
             {/* System Notifications Section */}
             {systemNotifications.length > 0 && (
               <>
-                <div className="p-3 bg-blue-50 border-b">
-                  <div className="flex items-center gap-2 text-sm font-medium text-blue-700">
+                <div className="p-3 bg-primary/10 border-b border-border">
+                  <div className="flex items-center gap-2 text-sm font-medium text-primary">
                     <Bell className="h-4 w-4" />
                     Notificaciones del Sistema
                   </div>
                 </div>
                 {systemNotifications.map((conversation) => (
                   <div key={conversation.id} className="relative">
-                    <div className="absolute left-2 top-4 h-2 w-2 bg-blue-500 rounded-full z-10"></div>
+                    <div className="absolute left-2 top-4 h-2 w-2 bg-primary rounded-full z-10"></div>
                     <ConversationListItemWithActions
                       conversation={conversation}
                       isSelected={selectedConversation === conversation.id}
@@ -89,8 +89,8 @@ const ConversationsListOptimized: React.FC<ConversationsListOptimizedProps> = ({
             {regularConversations.length > 0 && (
               <>
                 {systemNotifications.length > 0 && (
-                  <div className="p-3 bg-gray-50 border-b">
-                    <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <div className="p-3 bg-secondary border-b border-border">
+                    <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                       <MessageSquare className="h-4 w-4" />
                       Conversaciones
                     </div>

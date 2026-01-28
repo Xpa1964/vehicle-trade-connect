@@ -75,14 +75,14 @@ const AudioPresentationSection: React.FC = () => {
 
   return (
     <>
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-gradient-to-br from-blue-50 to-white">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 bg-gradient-to-br from-card to-background">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-10 sm:mb-12 md:mb-14 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-7 md:mb-8 text-auto-blue">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-7 md:mb-8 text-primary">
               {t('home.promoSlogan')}
             </h2>
             
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 leading-relaxed max-w-4xl mx-auto px-4">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-4xl mx-auto px-4">
               {t('home.promoDescription')}
             </p>
           </div>
@@ -110,9 +110,9 @@ const AudioPresentationSection: React.FC = () => {
                         className={`
                           relative rounded-full w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20
                           flex flex-col items-center justify-center
-                          bg-gradient-to-br from-cyan-50 to-teal-50
-                          border-2 border-teal-200
-                          hover:from-cyan-100 hover:to-teal-100
+                          bg-gradient-to-br from-card to-secondary
+                          border-2 border-border
+                          hover:from-secondary hover:to-card
                           hover:scale-110 hover:shadow-2xl
                           cursor-pointer active:scale-95
                           transition-all duration-300 ease-out
@@ -123,8 +123,8 @@ const AudioPresentationSection: React.FC = () => {
                           animationDelay: `${index * 50}ms` 
                         }}
                       >
-                        <Headphones className="w-6 h-6 sm:w-6 sm:h-6 md:w-7 md:h-7 mb-1 text-teal-700" />
-                        <span className="text-[10px] sm:text-[10px] md:text-xs font-bold text-teal-700">
+                        <Headphones className="w-6 h-6 sm:w-6 sm:h-6 md:w-7 md:h-7 mb-1 text-primary" />
+                        <span className="text-[10px] sm:text-[10px] md:text-xs font-bold text-primary">
                           {lang.toUpperCase()}
                         </span>
                     </button>
@@ -135,14 +135,14 @@ const AudioPresentationSection: React.FC = () => {
 
             <div className="lg:col-span-5 flex flex-col justify-center h-full">
               <div className="space-y-4 sm:space-y-5 md:space-y-6 flex-1 flex flex-col justify-center">
-                <div className="text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
+                <div className="text-muted-foreground leading-relaxed text-sm sm:text-base md:text-lg">
                   <p className="mb-3 sm:mb-4 md:mb-5 text-justify">
                     {t('home.newEcosystemText')}
                   </p>
                   <p className="mb-4 sm:mb-5 md:mb-6 text-justify">
                     {t('home.newEcosystemBenefits')}
                   </p>
-                  <p className="font-semibold text-auto-blue mb-4 sm:mb-5 md:mb-6 text-center sm:text-left text-base sm:text-lg">
+                  <p className="font-semibold text-primary mb-4 sm:mb-5 md:mb-6 text-center sm:text-left text-base sm:text-lg">
                     {t('home.newDecisionCall')}
                   </p>
                 </div>
@@ -151,7 +151,7 @@ const AudioPresentationSection: React.FC = () => {
                   onClick={handleRegisterClick} 
                   variant="gold" 
                   size="lg" 
-                  className="w-full text-base sm:text-lg md:text-xl font-semibold py-4 sm:py-5 min-h-[52px] bg-gradient-to-br from-cyan-50 to-teal-50 hover:from-cyan-100 hover:to-teal-100 text-teal-700 border-teal-200 touch-manipulation active:scale-95 transition-transform"
+                  className="w-full text-base sm:text-lg md:text-xl font-semibold py-4 sm:py-5 min-h-[52px] bg-gradient-to-br from-card to-secondary hover:from-secondary hover:to-card text-primary border-border touch-manipulation active:scale-95 transition-transform"
                 >
                   {t('auth.register.title')}
                 </Button>

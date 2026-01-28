@@ -15,21 +15,21 @@ const CallToAction: React.FC = () => {
   return (
     <section className="relative pt-40 pb-20 px-4 overflow-hidden">
       {/* Premium gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-200 to-slate-300" />
+      <div className="absolute inset-0 bg-gradient-to-r from-secondary to-card" />
       
       {/* Decorative elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-72 h-72 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full translate-x-1/2 translate-y-1/2" />
+        <div className="absolute top-0 left-0 w-72 h-72 bg-primary/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/10 rounded-full translate-x-1/2 translate-y-1/2" />
       </div>
       
       <div className="container relative mx-auto max-w-5xl text-center z-10">
         {/* Slogan promocional */}
         <div className="mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             {t('home.promoSlogan', { fallback: 'Descubre KONTACT VO en 5 minutos' })}
           </h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground mb-6 max-w-3xl mx-auto">
             {t('home.promoDescription', { 
               fallback: 'Escucha nuestra presentación completa del marketplace que está revolucionando la importación y exportación de vehículos' 
             })}
@@ -37,7 +37,7 @@ const CallToAction: React.FC = () => {
           
           {/* Audio buttons section */}
           <div className="mb-8">
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               {t('home.chooseLanguage', { fallback: 'Elige tu idioma preferido:' })}
             </p>
             <div className="flex flex-wrap justify-center gap-3">
@@ -81,7 +81,7 @@ const CallToAction: React.FC = () => {
               <Button 
                 size="lg"
                 onClick={() => navigate('/admin/dashboard')}
-                className="flex items-center bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold px-8"
+                className="flex items-center bg-primary hover:bg-primary/90 text-primary-foreground text-base font-semibold px-8"
               >
                 <Settings className="h-5 w-5 mr-2" />
                 Panel de Administración
@@ -100,7 +100,7 @@ const CallToAction: React.FC = () => {
             <Button 
               size="lg"
               onClick={() => navigate('/login')}
-              className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-base font-semibold px-8 border border-gray-200"
+              className="bg-secondary hover:bg-secondary/80 text-foreground text-base font-semibold px-8 border border-border"
             >
               {t('auth.login', { fallback: 'Iniciar sesión' })}
             </Button>

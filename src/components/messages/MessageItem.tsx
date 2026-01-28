@@ -39,8 +39,8 @@ const MessageItem: React.FC<MessageItemProps> = ({
       <div 
         className={`max-w-[80%] p-3 rounded-lg ${
           isOwn 
-            ? `bg-auto-blue text-white rounded-br-none ${isOptimistic ? 'opacity-70' : ''}` 
-            : 'bg-gray-100 text-gray-800 rounded-bl-none'
+            ? `bg-primary text-primary-foreground rounded-br-none ${isOptimistic ? 'opacity-70' : ''}` 
+            : 'bg-secondary text-foreground rounded-bl-none'
         }`}
       >
         {/* Show original message if it's in our language, otherwise show translated version */}
@@ -52,18 +52,18 @@ const MessageItem: React.FC<MessageItemProps> = ({
             originalLanguage={message.original_language || 'es'}
             translatedContent={message.translated_content}
             targetLanguage={currentLanguage}
-            className={isOwn ? 'text-white' : 'text-gray-800'}
+            className={isOwn ? 'text-primary-foreground' : 'text-foreground'}
           />
         )}
         
         <div className={`flex items-center justify-end gap-1 mt-1 text-xs ${
-          isOwn ? 'text-white/70' : 'text-gray-500'
+          isOwn ? 'text-primary-foreground/70' : 'text-muted-foreground'
         }`}>
           <span>{formatMessageDate(message.created_at)}</span>
           {isOwn && (
             <MessageStatusIndicator 
               status={messageStatus} 
-              className={isOwn ? 'text-white/70' : 'text-gray-500'} 
+              className={isOwn ? 'text-primary-foreground/70' : 'text-muted-foreground'} 
             />
           )}
         </div>

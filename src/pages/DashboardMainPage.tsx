@@ -18,10 +18,10 @@ const DashboardMainPage: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 px-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 text-center">
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground text-center">
           {t('auth.sessionRequired', { fallback: 'Sesión no iniciada' })}
         </h2>
-        <p className="text-gray-600 text-center text-sm sm:text-base">
+        <p className="text-muted-foreground text-center text-sm sm:text-base">
           {t('auth.loginRequired', { fallback: 'Debes iniciar sesión para ver el dashboard.' })}
         </p>
         <Button variant="gold" asChild className="min-h-[44px] px-6">
@@ -32,7 +32,7 @@ const DashboardMainPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full">
+    <div className="min-h-screen bg-background w-full">
       <div className="w-full px-3 sm:px-4 md:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Header Section - Full Width with responsive spacing */}
         <DashboardHeader user={user} />

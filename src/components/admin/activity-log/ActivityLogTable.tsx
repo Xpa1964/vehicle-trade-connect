@@ -29,21 +29,21 @@ const ActivityLogTable: React.FC<ActivityLogTableProps> = ({ logs, isLoading }) 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'info':
-        return 'bg-blue-100 text-blue-800 hover:bg-blue-200';
+        return 'bg-primary/10 text-primary hover:bg-primary/20';
       case 'success':
-        return 'bg-green-100 text-green-800 hover:bg-green-200';
+        return 'bg-[#22C55E]/10 text-[#22C55E] hover:bg-[#22C55E]/20';
       case 'warning':
-        return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
+        return 'bg-amber-400/10 text-amber-400 hover:bg-amber-400/20';
       case 'error':
-        return 'bg-red-100 text-red-800 hover:bg-red-200';
+        return 'bg-destructive/10 text-destructive hover:bg-destructive/20';
       default:
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+        return 'bg-secondary text-foreground hover:bg-secondary/80';
     }
   };
 
   if (isLoading) {
     return (
-      <div className="border rounded-md">
+      <div className="border border-border rounded-md">
         <div className="p-4">
           <div className="space-y-3">
             {Array.from({ length: 5 }).map((_, index) => (
@@ -64,7 +64,7 @@ const ActivityLogTable: React.FC<ActivityLogTableProps> = ({ logs, isLoading }) 
 
   if (logs.length === 0) {
     return (
-      <div className="text-center p-12 border rounded-md bg-gray-50">
+      <div className="text-center p-12 border border-border rounded-md bg-secondary">
         <p className="text-muted-foreground">{t('admin.activityLog.noResults')}</p>
       </div>
     );
@@ -72,7 +72,7 @@ const ActivityLogTable: React.FC<ActivityLogTableProps> = ({ logs, isLoading }) 
 
   return (
     <>
-      <div className="border rounded-md overflow-hidden">
+      <div className="border border-border rounded-md overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
@@ -87,18 +87,18 @@ const ActivityLogTable: React.FC<ActivityLogTableProps> = ({ logs, isLoading }) 
           <TableBody>
             {logs.map((log) => (
               <TableRow key={log.id}>
-                <TableCell className="font-medium whitespace-nowrap">
+                <TableCell className="font-medium whitespace-nowrap text-foreground">
                   {format(new Date(log.created_at), 'dd/MM/yyyy HH:mm:ss')}
                 </TableCell>
-                <TableCell className="max-w-[150px] truncate">
+                <TableCell className="max-w-[150px] truncate text-foreground">
                   {log.user_id ? log.user_id.substring(0, 8) + '...' : 'System'}
                 </TableCell>
-                <TableCell>{log.action_type}</TableCell>
-                <TableCell>
+                <TableCell className="text-foreground">{log.action_type}</TableCell>
+                <TableCell className="text-foreground">
                   {log.entity_type ? (
                     <span>
                       {log.entity_type}
-                      {log.entity_id && <span className="text-xs text-gray-500 ml-1">({log.entity_id.substring(0, 6)}...)</span>}
+                      {log.entity_id && <span className="text-xs text-muted-foreground ml-1">({log.entity_id.substring(0, 6)}...)</span>}
                     </span>
                   ) : (
                     '-'
@@ -128,36 +128,36 @@ const ActivityLogTable: React.FC<ActivityLogTableProps> = ({ logs, isLoading }) 
       <Dialog open={!!selectedLog} onOpenChange={(open) => !open && setSelectedLog(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Activity Details</DialogTitle>
+            <DialogTitle className="text-foreground">Activity Details</DialogTitle>
           </DialogHeader>
           {selectedLog && (
             <div className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-500">Timestamp</p>
-                  <p>{format(new Date(selectedLog.created_at), 'PPP HH:mm:ss')}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Timestamp</p>
+                  <p className="text-foreground">{format(new Date(selectedLog.created_at), 'PPP HH:mm:ss')}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-500">User</p>
-                  <p>{selectedLog.user_id || 'System'}</p>
+                  <p className="text-sm font-medium text-muted-foreground">User</p>
+                  <p className="text-foreground">{selectedLog.user_id || 'System'}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-500">Action</p>
-                  <p>{selectedLog.action_type}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Action</p>
+                  <p className="text-foreground">{selectedLog.action_type}</p>
                 </div>
               </div>
               
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-500">Entity Type</p>
-                  <p>{selectedLog.entity_type || '-'}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Entity Type</p>
+                  <p className="text-foreground">{selectedLog.entity_type || '-'}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-500">Entity ID</p>
-                  <p>{selectedLog.entity_id || '-'}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Entity ID</p>
+                  <p className="text-foreground">{selectedLog.entity_id || '-'}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-500">Severity</p>
+                  <p className="text-sm font-medium text-muted-foreground">Severity</p>
                   <Badge className={getSeverityColor(selectedLog.severity)}>
                     {selectedLog.severity}
                   </Badge>
@@ -166,8 +166,8 @@ const ActivityLogTable: React.FC<ActivityLogTableProps> = ({ logs, isLoading }) 
               
               {selectedLog.details && (
                 <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-500">Details</p>
-                  <pre className="bg-gray-50 p-4 rounded-md overflow-auto text-xs">
+                  <p className="text-sm font-medium text-muted-foreground">Details</p>
+                  <pre className="bg-secondary p-4 rounded-md overflow-auto text-xs text-foreground">
                     {JSON.stringify(selectedLog.details, null, 2)}
                   </pre>
                 </div>

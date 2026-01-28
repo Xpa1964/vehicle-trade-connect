@@ -85,7 +85,7 @@ const VehicleGalleryContent: React.FC<VehicleGalleryContentProps> = ({
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
             {/* Search Input */}
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder={t('vehicles.searchPlaceholder')}
                 value={searchTerm}
@@ -117,7 +117,7 @@ const VehicleGalleryContent: React.FC<VehicleGalleryContentProps> = ({
 
           {/* Results Counter and Sort */}
           <div className="flex justify-between items-center">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               {isLoading ? (
                 <span>{t('vehicles.loading')}...</span>
               ) : (

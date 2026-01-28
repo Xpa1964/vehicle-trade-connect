@@ -10,14 +10,14 @@ interface FeatureItemProps {
 }
 
 const FeatureItem: React.FC<FeatureItemProps> = ({ icon, title, description }) => (
-  <div className="bg-gradient-to-br from-cyan-50 to-teal-50 rounded-xl p-5 sm:p-6 md:p-7 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02]">
+  <div className="bg-gradient-to-br from-card to-secondary rounded-xl p-5 sm:p-6 md:p-7 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02] border border-border">
     <div className="flex gap-3 sm:gap-4 items-start">
-      <div className="flex-shrink-0 text-teal-600 min-h-[44px] flex items-center justify-center">
+      <div className="flex-shrink-0 text-primary min-h-[44px] flex items-center justify-center">
         {icon}
       </div>
       <div className="flex-1">
-        <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 text-gray-900">{title}</h3>
-        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{description}</p>
+        <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 text-foreground">{title}</h3>
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{description}</p>
       </div>
     </div>
   </div>
@@ -55,9 +55,9 @@ const FeaturesSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-8 bg-white">
+    <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-8 bg-background">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 sm:mb-10 md:mb-12 text-center">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 sm:mb-10 md:mb-12 text-center text-foreground">
           {t('home.whyChooseUs')}
         </h2>
         

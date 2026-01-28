@@ -63,7 +63,7 @@ const Dashboard: React.FC = () => {
       icon: <BarChart3 className="h-5 w-5" />,
       href: '/admin/analytics',
       permission: 'analytics.view' as Permission,
-      color: 'bg-blue-50 border-blue-200',
+      color: 'bg-primary/10 border-primary/30',
     },
     {
       title: 'Solicitudes de Registro',
@@ -72,7 +72,7 @@ const Dashboard: React.FC = () => {
       href: '/admin/registration-requests',
       permission: 'registrations.manage' as Permission,
       badge: pendingRequestsCount ? pendingRequestsCount : undefined,
-      color: 'bg-green-50 border-green-200',
+      color: 'bg-[#22C55E]/10 border-[#22C55E]/30',
     },
     {
       title: 'Gestión de Usuarios',
@@ -80,7 +80,7 @@ const Dashboard: React.FC = () => {
       icon: <Users className="h-5 w-5" />,
       href: '/admin/users',
       permission: 'users.view' as Permission,
-      color: 'bg-purple-50 border-purple-200',
+      color: 'bg-[#A855F7]/10 border-[#A855F7]/30',
     },
     {
       title: 'Vehículos y Contenido',
@@ -88,7 +88,7 @@ const Dashboard: React.FC = () => {
       icon: <Car className="h-5 w-5" />,
       href: '/admin/vehicles',
       permission: 'vehicles.view' as Permission,
-      color: 'bg-orange-50 border-orange-200',
+      color: 'bg-[#F97316]/10 border-[#F97316]/30',
     },
     {
       title: 'Cotizaciones de Transporte',
@@ -96,7 +96,7 @@ const Dashboard: React.FC = () => {
       icon: <Truck className="h-5 w-5" />,
       href: '/admin/transport-quotes',
       permission: 'admin' as Permission,
-      color: 'bg-cyan-50 border-cyan-200',
+      color: 'bg-[#0EA5E9]/10 border-[#0EA5E9]/30',
     },
     {
       title: 'Roles y Permisos',
@@ -104,7 +104,7 @@ const Dashboard: React.FC = () => {
       icon: <ShieldAlert className="h-5 w-5" />,
       href: '/admin/roles',
       permission: 'roles.manage' as Permission,
-      color: 'bg-red-50 border-red-200',
+      color: 'bg-destructive/10 border-destructive/30',
     },
     {
       title: 'Registros de Actividad',
@@ -112,7 +112,7 @@ const Dashboard: React.FC = () => {
       icon: <Activity className="h-5 w-5" />,
       href: '/admin/activity-logs',
       permission: 'logs.view' as Permission,
-      color: 'bg-yellow-50 border-yellow-200',
+      color: 'bg-amber-400/10 border-amber-400/30',
     },
     {
       title: 'Notificaciones',
@@ -120,24 +120,24 @@ const Dashboard: React.FC = () => {
       icon: <Bell className="h-5 w-5" />,
       href: '/admin/notifications',
       permission: 'notifications.manage' as Permission,
-      color: 'bg-gray-50 border-gray-200',
+      color: 'bg-secondary border-border',
     },
   ];
 
   if (error) {
     return (
       <div className="container px-0">
-        <h1 className="text-3xl font-bold mb-4">Panel de Administración</h1>
+        <h1 className="text-3xl font-bold mb-4 text-foreground">Panel de Administración</h1>
         
-        <Card className="bg-red-50 border-red-200 mb-6">
+        <Card className="bg-destructive/10 border-destructive/30 mb-6">
           <CardHeader className="pb-2">
-            <CardTitle className="text-red-700 flex items-center gap-2">
+            <CardTitle className="text-destructive flex items-center gap-2">
               <AlertTriangle className="h-5 w-5" />
               Error al cargar los datos
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-red-700">
+            <p className="text-destructive">
               Ocurrió un error al cargar las estadísticas: {error}
             </p>
             <Button 
@@ -162,12 +162,12 @@ const Dashboard: React.FC = () => {
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
                     {card.icon}
-                    <CardTitle className="flex items-center gap-2 text-lg">
+                    <CardTitle className="flex items-center gap-2 text-lg text-foreground">
                       {card.title}
                       {isLoadingRequests ? (
                         <Skeleton className="h-6 w-6 rounded-full" />
                       ) : card.badge ? (
-                        <Badge className="bg-red-500">{card.badge}</Badge>
+                        <Badge className="bg-destructive">{card.badge}</Badge>
                       ) : null}
                     </CardTitle>
                   </div>
@@ -175,7 +175,7 @@ const Dashboard: React.FC = () => {
                 <CardContent className="pt-2">
                   <CardDescription className="text-sm mb-4">{card.description}</CardDescription>
                 </CardContent>
-                <CardFooter className="bg-white/50 pb-4">
+                <CardFooter className="bg-card/50 pb-4">
                   <Button variant="default" asChild className="w-full">
                     <Link to={card.href}>Acceder</Link>
                   </Button>
@@ -192,7 +192,7 @@ const Dashboard: React.FC = () => {
     <div className="container px-0 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Panel de Administración</h1>
+        <h1 className="text-3xl font-bold text-foreground">Panel de Administración</h1>
         <Button variant="outline" asChild>
           <Link to="/admin/analytics">
             <BarChart3 className="h-4 w-4 mr-2" />
@@ -204,7 +204,7 @@ const Dashboard: React.FC = () => {
       {/* Enhanced KPIs - Ahora con datos reales */}
       {!isLoading && extendedStats && (
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Métricas Principales</h2>
+          <h2 className="text-xl font-semibold text-foreground">Métricas Principales</h2>
           <EnhancedKPIs stats={structuredStats} realStats={extendedStats.realStats} />
         </div>
       )}
@@ -222,7 +222,7 @@ const Dashboard: React.FC = () => {
         <TabsContent value="overview" className="space-y-6">
           {/* Conversation Deletion Metrics */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Métricas de Eliminación de Conversaciones</h3>
+            <h3 className="text-lg font-semibold text-foreground">Métricas de Eliminación de Conversaciones</h3>
             <ConversationDeletionMetrics />
           </div>
           
@@ -237,12 +237,12 @@ const Dashboard: React.FC = () => {
                   <CardHeader className="pb-3">
                     <div className="flex items-center gap-3">
                       {card.icon}
-                      <CardTitle className="flex items-center gap-2 text-sm">
+                      <CardTitle className="flex items-center gap-2 text-sm text-foreground">
                         {card.title}
                         {isLoadingRequests ? (
                           <Skeleton className="h-5 w-5 rounded-full" />
                         ) : card.badge ? (
-                          <Badge className="bg-red-500 text-xs">{card.badge}</Badge>
+                          <Badge className="bg-destructive text-xs">{card.badge}</Badge>
                         ) : null}
                       </CardTitle>
                     </div>
@@ -250,7 +250,7 @@ const Dashboard: React.FC = () => {
                   <CardContent className="pt-2">
                     <CardDescription className="text-xs mb-3">{card.description}</CardDescription>
                   </CardContent>
-                  <CardFooter className="bg-white/50 pb-3">
+                  <CardFooter className="bg-card/50 pb-3">
                     <Button variant="default" size="sm" asChild className="w-full">
                       <Link to={card.href}>Acceder</Link>
                     </Button>
@@ -278,7 +278,7 @@ const Dashboard: React.FC = () => {
           {!isLoadingKPIs && comprehensiveKPIs ? (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold">KPIs Comprehensivos</h2>
+                <h2 className="text-2xl font-bold text-foreground">KPIs Comprehensivos</h2>
                 <Badge variant="outline" className="text-sm">
                   {Object.keys(comprehensiveKPIs).length} métricas disponibles
                 </Badge>
@@ -295,12 +295,12 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           ) : (
-            <Card className="bg-yellow-50 border-yellow-200">
+            <Card className="bg-amber-400/10 border-amber-400/30">
               <CardHeader>
-                <CardTitle className="text-yellow-700">KPIs no disponibles</CardTitle>
+                <CardTitle className="text-amber-400">KPIs no disponibles</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-yellow-700">
+                <p className="text-amber-400">
                   No se pudieron cargar los KPIs comprehensivos. Intenta recargar la página.
                 </p>
               </CardContent>
@@ -328,12 +328,12 @@ const Dashboard: React.FC = () => {
                   <CardHeader className="pb-3">
                     <div className="flex items-center gap-3">
                       {card.icon}
-                      <CardTitle className="flex items-center gap-2 text-lg">
+                      <CardTitle className="flex items-center gap-2 text-lg text-foreground">
                         {card.title}
                         {isLoadingRequests ? (
                           <Skeleton className="h-6 w-6 rounded-full" />
                         ) : card.badge ? (
-                          <Badge className="bg-red-500">{card.badge}</Badge>
+                          <Badge className="bg-destructive">{card.badge}</Badge>
                         ) : null}
                       </CardTitle>
                     </div>
@@ -341,7 +341,7 @@ const Dashboard: React.FC = () => {
                   <CardContent className="pt-2">
                     <CardDescription className="text-sm mb-4">{card.description}</CardDescription>
                   </CardContent>
-                  <CardFooter className="bg-white/50 pb-4">
+                  <CardFooter className="bg-card/50 pb-4">
                     <Button variant="default" asChild className="w-full">
                       <Link to={card.href}>Acceder</Link>
                     </Button>

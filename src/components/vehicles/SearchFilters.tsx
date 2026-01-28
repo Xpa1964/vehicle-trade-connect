@@ -46,7 +46,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
   ];
 
   return (
-    <div className="bg-white shadow-sm border-b sticky top-16 z-10">
+    <div className="bg-card shadow-sm border-b border-border sticky top-16 z-10">
       <div className="container mx-auto px-4 py-4">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">

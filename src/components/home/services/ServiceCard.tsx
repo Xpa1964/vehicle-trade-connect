@@ -35,14 +35,14 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(({
       "rounded-lg shadow-lg transition-all duration-300", 
       "hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-xl",
       "h-full flex flex-col min-h-[240px] sm:min-h-[280px]",
-      "border border-gray-100 group touch-manipulation overflow-hidden",
-      "bg-white relative",
+      "border border-border group touch-manipulation overflow-hidden",
+      "bg-card relative",
       className
     )}
   >
     {/* Badge flotante */}
     {badge && (
-      <div className="absolute top-3 right-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg z-20 uppercase tracking-wide">
+      <div className="absolute top-3 right-3 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground px-3 py-1.5 rounded-full text-xs font-bold shadow-lg z-20 uppercase tracking-wide">
         {badge}
       </div>
     )}
@@ -54,19 +54,19 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(({
         style={{ backgroundImage: `url(${backgroundImage})`, backgroundPosition: imagePosition }}
       />
     ) : (
-      <div className="w-full h-[80%] flex items-center justify-center bg-gradient-to-br from-auto-blue/5 to-auto-blue/10">
-        <div className="transform transition-transform group-hover:scale-110 duration-300 text-auto-blue">
+      <div className="w-full h-[80%] flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10">
+        <div className="transform transition-transform group-hover:scale-110 duration-300 text-primary">
           <Icon size={48} className="w-12 h-12 sm:w-16 sm:h-16" />
         </div>
       </div>
     )}
     
     {/* Content section - 20% height */}
-    <div className="p-3 sm:p-4 flex flex-col flex-1 bg-white">
-      <h3 className="text-sm sm:text-base font-semibold mb-1.5 leading-tight text-gray-800">
+    <div className="p-3 sm:p-4 flex flex-col flex-1 bg-card">
+      <h3 className="text-sm sm:text-base font-semibold mb-1.5 leading-tight text-foreground">
         {title}
       </h3>
-      <p className="text-xs sm:text-xs mb-2 leading-relaxed flex-1 text-gray-700">
+      <p className="text-xs sm:text-xs mb-2 leading-relaxed flex-1 text-muted-foreground">
         {description}
       </p>
       <Link to={linkPath} className="mt-auto">
