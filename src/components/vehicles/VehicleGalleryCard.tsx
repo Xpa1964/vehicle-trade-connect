@@ -49,11 +49,11 @@ const VehicleGalleryCard: React.FC<VehicleGalleryCardProps> = ({
   const getStatusColor = (status?: string) => {
     switch (status) {
       case 'sold':
-        return 'bg-red-100 text-red-800 border-red-300 hover:bg-red-200';
+        return 'bg-muted-foreground/20 text-muted-foreground border-muted-foreground/30';
       case 'reserved':
-        return 'bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-200';
+        return 'bg-primary/20 text-primary border-primary/30';
       default:
-        return 'bg-green-100 text-green-800 border-green-300 hover:bg-green-200';
+        return 'bg-green-500/20 text-green-400 border-green-500/30';
     }
   };
 
@@ -72,10 +72,10 @@ const VehicleGalleryCard: React.FC<VehicleGalleryCardProps> = ({
 
   return (
     <Card 
-      className="overflow-hidden group cursor-pointer hover:shadow-lg transition-shadow h-full border hover:border-primary/20" 
+      className="overflow-hidden group cursor-pointer bg-card border-border hover:border-primary/30 hover:shadow-lg transition-shadow h-full" 
       onClick={handleViewClick}
     >
-      <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
+      <div className="relative w-full aspect-[4/3] overflow-hidden bg-secondary">
         <FastImage
           src={vehicle.thumbnailUrl || vehicle.thumbnailurl || '/placeholder-vehicle.jpg'}
           alt={`${vehicle.brand} ${vehicle.model}`}
@@ -110,10 +110,10 @@ const VehicleGalleryCard: React.FC<VehicleGalleryCardProps> = ({
         </div>
         
         {isPublicView && (
-          <div className="absolute inset-0 bg-black bg-opacity-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20">
-            <div className="bg-white bg-opacity-90 px-2 py-1 rounded flex items-center">
-              <Lock className="h-3 w-3 mr-1 text-gray-600" />
-              <span className="text-xs font-medium text-gray-800">Regístrate</span>
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20">
+            <div className="bg-card/90 px-2 py-1 rounded flex items-center border border-border">
+              <Lock className="h-3 w-3 mr-1 text-muted-foreground" />
+              <span className="text-xs font-medium text-foreground">Regístrate</span>
             </div>
           </div>
         )}
@@ -121,7 +121,7 @@ const VehicleGalleryCard: React.FC<VehicleGalleryCardProps> = ({
       
       <CardContent className="p-3">
         <div className="mb-2">
-          <h3 className="text-sm font-bold truncate">{vehicle.brand} {vehicle.model}</h3>
+          <h3 className="text-sm font-bold truncate text-foreground">{vehicle.brand} {vehicle.model}</h3>
           <p className="text-base font-bold text-primary">
             {formatCurrency(vehicle.price || 0, vehicle.currency || 'EUR')}
           </p>

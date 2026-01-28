@@ -48,7 +48,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
   return (
     <Link to={`/vehicle/${vehicle.id}`} className="block">
-      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <Card className="overflow-hidden bg-card border-border hover:border-primary/30 hover:shadow-lg transition-shadow duration-300">
         {/* Image Section - Usando FastImage optimizado */}
         <div className="relative aspect-[4/3] overflow-hidden">
           <FastImage
@@ -71,12 +71,12 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           {/* Badges overlay */}
           <div className="absolute top-2 left-2 space-y-1 z-10 max-w-[calc(100%-8px)]">
             {showExchangeBadge && vehicle.acceptsExchange && (
-              <Badge variant="secondary" className="text-xs bg-green-100 text-green-800 w-fit min-w-0 max-w-full">
+              <Badge variant="secondary" className="text-xs bg-green-500/20 text-green-400 border-green-500/30 w-fit min-w-0 max-w-full">
                 <span className="truncate">{t('vehicles.acceptsExchange')}</span>
               </Badge>
             )}
             {isNearlyNew(vehicle.mileage || 0, vehicle.year) && (
-              <Badge variant="outline" className="text-xs bg-amber-50 text-amber-700 border-amber-200 w-fit min-w-0 max-w-full">
+              <Badge variant="outline" className="text-xs bg-amber-500/20 text-amber-400 border-amber-500/30 w-fit min-w-0 max-w-full">
                 <span className="truncate">{t('vehicles.nearlyNew')}</span>
               </Badge>
             )}
@@ -90,16 +90,16 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         <CardContent className="p-4">
           {/* Title and Price */}
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold text-lg truncate">
+            <h3 className="font-semibold text-lg truncate text-foreground">
               {vehicle.brand} {vehicle.model}
             </h3>
-            <span className="text-lg font-bold text-auto-blue ml-2">
+            <span className="text-lg font-bold text-primary ml-2">
               {formatPrice(vehicle.price || 0)}
             </span>
           </div>
 
           {/* Vehicle Details */}
-          <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 mb-3">
+          <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground mb-3">
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
               <span>{vehicle.year}</span>
@@ -122,7 +122,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
           {/* Description Preview */}
           {vehicle.description && (
-            <p className="text-sm text-gray-500 line-clamp-2">
+            <p className="text-sm text-muted-foreground line-clamp-2">
               {vehicle.description}
             </p>
           )}
