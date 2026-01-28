@@ -4,112 +4,114 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 215 28% 20%; /* Improved contrast from 27% to 20% for WCAG AA */
-    --card: 0 0% 100%;
-    --card-foreground: 215 28% 20%; /* Improved contrast */
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 28% 20%; /* Improved contrast */
-    --primary: 221 83% 53%;
-    --primary-foreground: 0 0% 100%; /* Pure white for better contrast */
-    --secondary: 210 40% 96%; /* Adjusted for better contrast */
-    --secondary-foreground: 215 28% 20%; /* Improved contrast */
-    --muted: 210 40% 96%; /* Adjusted */
-    --muted-foreground: 215 25% 45%; /* Improved from 65% to 45% for better readability */
-    --accent: 210 40% 96%; /* Adjusted */
-    --accent-foreground: 215 28% 20%; /* Improved contrast */
+    /* Dark Professional Automotive Theme */
+    --background: 222 47% 5%; /* #0B0F1A */
+    --foreground: 210 40% 98%; /* #F8FAFC */
+    --card: 222 33% 13%; /* #161B2A */
+    --card-foreground: 210 40% 98%; /* #F8FAFC */
+    --popover: 222 33% 13%; /* #161B2A */
+    --popover-foreground: 210 40% 98%; /* #F8FAFC */
+    --primary: 25 95% 53%; /* #F97316 - Accent Orange */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 26% 17%; /* #1E2436 */
+    --secondary-foreground: 210 40% 98%; /* #F8FAFC */
+    --muted: 222 26% 17%; /* #1E2436 */
+    --muted-foreground: 215 20% 65%; /* #94A3B8 */
+    --accent: 222 26% 17%; /* #1E2436 */
+    --accent-foreground: 210 40% 98%; /* #F8FAFC */
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%; /* Pure white */
-    --border: 214 32% 88%; /* Slightly darker for better visibility */
-    --input: 214 32% 88%; /* Slightly darker */
-    --ring: 221 83% 53%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217 19% 27%; /* #2D3748 */
+    --input: 217 19% 27%; /* #2D3748 */
+    --ring: 25 95% 53%; /* #F97316 */
     --radius: 0.5rem;
     --auto-blue: 221 83% 53%;
     --auto-blue-dark: 221 83% 45%;
     --auto-gold: 45 96% 64%;
     --auto-gold-dark: 45 96% 56%;
 
-    /* Professional Brand Colors */
+    /* Professional Brand Colors - Dark Theme */
     --brand-blue: 221 83% 53%;
     --brand-blue-dark: 221 83% 45%;
     --brand-blue-light: 221 83% 65%;
-    --brand-blue-subtle: 221 50% 95%;
+    --brand-blue-subtle: 222 33% 13%;
     
     --brand-green: 142 76% 36%;
     --brand-green-dark: 142 76% 28%;
     --brand-green-light: 142 76% 48%;
-    --brand-green-subtle: 142 50% 95%;
+    --brand-green-subtle: 222 33% 13%;
     
-    --brand-orange: 25 95% 53%;
+    --brand-orange: 25 95% 53%; /* #F97316 */
     --brand-orange-dark: 25 95% 45%;
     --brand-orange-light: 25 95% 65%;
-    --brand-orange-subtle: 25 70% 95%;
+    --brand-orange-subtle: 222 33% 13%;
     
     --brand-purple: 262 83% 58%;
     --brand-purple-dark: 262 83% 48%;
     --brand-purple-light: 262 83% 68%;
-    --brand-purple-subtle: 262 50% 95%;
+    --brand-purple-subtle: 222 33% 13%;
     
     --brand-teal: 173 58% 39%;
     --brand-teal-dark: 173 58% 31%;
     --brand-teal-light: 173 58% 49%;
-    --brand-teal-subtle: 173 40% 95%;
+    --brand-teal-subtle: 222 33% 13%;
 
-    /* Professional Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--brand-blue)) 0%, hsl(var(--brand-blue-light)) 100%);
+    /* Professional Gradients - Dark Theme */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--brand-orange)) 0%, hsl(var(--brand-orange-light)) 100%);
     --gradient-success: linear-gradient(135deg, hsl(var(--brand-green)) 0%, hsl(var(--brand-green-light)) 100%);
     --gradient-warning: linear-gradient(135deg, hsl(var(--brand-orange)) 0%, hsl(var(--brand-orange-light)) 100%);
     --gradient-info: linear-gradient(135deg, hsl(var(--brand-teal)) 0%, hsl(var(--brand-teal-light)) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(var(--brand-purple)) 0%, hsl(var(--brand-purple-light)) 100%);
     
-    /* Professional Shadows */
-    --shadow-primary: 0 4px 14px -2px hsl(var(--brand-blue) / 0.15);
-    --shadow-success: 0 4px 14px -2px hsl(var(--brand-green) / 0.15);
-    --shadow-warning: 0 4px 14px -2px hsl(var(--brand-orange) / 0.15);
-    --shadow-accent: 0 4px 14px -2px hsl(var(--brand-purple) / 0.15);
-    --shadow-elegant: 0 8px 25px -5px hsl(215 25% 27% / 0.1);
+    /* Professional Shadows - Dark Theme */
+    --shadow-primary: 0 4px 14px -2px hsl(var(--brand-orange) / 0.25);
+    --shadow-success: 0 4px 14px -2px hsl(var(--brand-green) / 0.25);
+    --shadow-warning: 0 4px 14px -2px hsl(var(--brand-orange) / 0.25);
+    --shadow-accent: 0 4px 14px -2px hsl(var(--brand-purple) / 0.25);
+    --shadow-elegant: 0 8px 25px -5px hsl(222 47% 5% / 0.5);
     
-    /* Surface Colors */
-    --surface: 0 0% 100%;
-    --surface-elevated: 0 0% 100%;
-    --surface-overlay: 0 0% 100%;
-    --surface-subtle: 210 20% 99%;
-    --surface-muted: 210 40% 98%;
+    /* Surface Colors - Dark Theme */
+    --surface: 222 33% 13%; /* #161B2A */
+    --surface-elevated: 222 26% 17%; /* #1E2436 */
+    --surface-overlay: 222 26% 20%;
+    --surface-subtle: 222 40% 10%;
+    --surface-muted: 222 33% 15%;
     
-    /* Neutral Colors */
-    --neutral-50: 210 20% 98%;
-    --neutral-100: 210 20% 95%;
+    /* Neutral Colors - Dark Theme */
+    --neutral-50: 210 40% 98%; /* #F8FAFC */
+    --neutral-100: 210 40% 96%;
     --neutral-200: 214 32% 91%;
     --neutral-300: 213 27% 84%;
-    --neutral-400: 215 20% 65%;
+    --neutral-400: 215 20% 65%; /* #94A3B8 */
     --neutral-500: 215 16% 47%;
     --neutral-600: 215 19% 35%;
-    --neutral-700: 215 25% 27%;
-    --neutral-800: 215 28% 17%;
-    --neutral-900: 215 32% 12%;
-    --neutral-950: 215 39% 7%;
+    --neutral-700: 217 19% 27%; /* #2D3748 */
+    --neutral-800: 222 26% 17%; /* #1E2436 */
+    --neutral-900: 222 33% 13%; /* #161B2A */
+    --neutral-950: 222 47% 5%; /* #0B0F1A */
   }
 
   .dark {
-    --background: 215 28% 17%;
-    --foreground: 213 31% 91%;
-    --card: 215 28% 17%;
-    --card-foreground: 213 31% 91%;
-    --popover: 215 28% 17%;
-    --popover-foreground: 213 31% 91%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 215 25% 27%;
-    --secondary-foreground: 213 31% 91%;
-    --muted: 215 25% 27%;
-    --muted-foreground: 213 20% 65%;
-    --accent: 215 25% 27%;
-    --accent-foreground: 213 31% 91%;
+    /* Dark mode inherits the same dark theme */
+    --background: 222 47% 5%; /* #0B0F1A */
+    --foreground: 210 40% 98%; /* #F8FAFC */
+    --card: 222 33% 13%; /* #161B2A */
+    --card-foreground: 210 40% 98%; /* #F8FAFC */
+    --popover: 222 33% 13%; /* #161B2A */
+    --popover-foreground: 210 40% 98%; /* #F8FAFC */
+    --primary: 25 95% 53%; /* #F97316 - Accent Orange */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 26% 17%; /* #1E2436 */
+    --secondary-foreground: 210 40% 98%; /* #F8FAFC */
+    --muted: 222 26% 17%; /* #1E2436 */
+    --muted-foreground: 215 20% 65%; /* #94A3B8 */
+    --accent: 222 26% 17%; /* #1E2436 */
+    --accent-foreground: 210 40% 98%; /* #F8FAFC */
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 85% 97%;
-    --border: 215 25% 27%;
-    --input: 215 25% 27%;
-    --ring: 221 83% 53%;
+    --border: 217 19% 27%; /* #2D3748 */
+    --input: 217 19% 27%; /* #2D3748 */
+    --ring: 25 95% 53%; /* #F97316 */
     --auto-blue: 221 83% 53%;
     --auto-blue-dark: 221 83% 45%;
     --auto-gold: 45 96% 64%;
@@ -119,34 +121,34 @@
     --brand-blue: 221 83% 58%;
     --brand-blue-dark: 221 83% 48%;
     --brand-blue-light: 221 83% 70%;
-    --brand-blue-subtle: 221 50% 15%;
+    --brand-blue-subtle: 222 33% 13%;
     
     --brand-green: 142 76% 42%;
     --brand-green-dark: 142 76% 32%;
     --brand-green-light: 142 76% 54%;
-    --brand-green-subtle: 142 50% 15%;
+    --brand-green-subtle: 222 33% 13%;
     
     --brand-orange: 25 95% 58%;
     --brand-orange-dark: 25 95% 48%;
     --brand-orange-light: 25 95% 70%;
-    --brand-orange-subtle: 25 70% 15%;
+    --brand-orange-subtle: 222 33% 13%;
     
     --brand-purple: 262 83% 64%;
     --brand-purple-dark: 262 83% 54%;
     --brand-purple-light: 262 83% 74%;
-    --brand-purple-subtle: 262 50% 15%;
+    --brand-purple-subtle: 222 33% 13%;
     
     --brand-teal: 173 58% 45%;
     --brand-teal-dark: 173 58% 35%;
     --brand-teal-light: 173 58% 55%;
-    --brand-teal-subtle: 173 40% 15%;
+    --brand-teal-subtle: 222 33% 13%;
 
     /* Surface Colors - Dark Mode */
-    --surface: 215 28% 17%;
-    --surface-elevated: 215 25% 22%;
-    --surface-overlay: 215 22% 25%;
-    --surface-subtle: 215 28% 19%;
-    --surface-muted: 215 25% 20%;
+    --surface: 222 33% 13%; /* #161B2A */
+    --surface-elevated: 222 26% 17%; /* #1E2436 */
+    --surface-overlay: 222 26% 20%;
+    --surface-subtle: 222 40% 10%;
+    --surface-muted: 222 33% 15%;
   }
 }
 
@@ -156,7 +158,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', Roboto, sans-serif;
+    font-family: 'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     letter-spacing: -0.011em;
     font-display: swap;
@@ -164,11 +167,11 @@
   
   /* Apply custom fonts only when loaded */
   .fonts-loaded body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', Roboto, sans-serif;
+    font-family: 'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Montserrat', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-weight: 600;
     letter-spacing: -0.025em;
     font-display: swap;
@@ -181,7 +184,7 @@
   .fonts-loaded h4,
   .fonts-loaded h5,
   .fonts-loaded h6 {
-    font-family: 'Nunito Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Montserrat', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   
   /* Enhanced responsive utilities */
