@@ -28,7 +28,7 @@ const ExchangeBadge: React.FC<ExchangeBadgeProps> = ({
     return (
       <Badge 
         variant={variant} 
-        className={`flex items-center gap-1 bg-gray-100 text-gray-600 border-gray-200 text-xs px-2 py-1 w-fit min-w-0 max-w-full ${className}`}
+        className={`flex items-center gap-1 bg-secondary text-muted-foreground border-border text-xs px-2 py-1 w-fit min-w-0 max-w-full ${className}`}
         title={t('vehicles.noExchange')}
       >
         <ArrowLeftRight className="h-3 w-3 flex-shrink-0" />
@@ -42,8 +42,8 @@ const ExchangeBadge: React.FC<ExchangeBadgeProps> = ({
       variant={variant} 
       className={`flex items-center gap-1 ${
         compact 
-          ? 'bg-emerald-50 text-emerald-700 border-emerald-200 text-xs px-1.5 py-0.5 w-fit min-w-0 max-w-full' 
-          : 'bg-emerald-100 text-emerald-800 border-emerald-300 text-xs px-2 py-1 w-fit min-w-0 max-w-full'
+          ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs px-1.5 py-0.5 w-fit min-w-0 max-w-full' 
+          : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs px-2 py-1 w-fit min-w-0 max-w-full'
       } ${className}`}
       title={compact ? t('vehicles.exchange') : t('vehicles.acceptExchange')}
     >

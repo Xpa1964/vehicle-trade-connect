@@ -24,7 +24,7 @@ const CommissionSaleBadge: React.FC<CommissionSaleBadgeProps> = ({
       <Tooltip>
         <TooltipTrigger asChild>
           <Badge 
-            className={`flex items-center gap-1 bg-purple-100 text-purple-800 border-purple-300 ${
+            className={`flex items-center gap-1 bg-purple-500/20 text-purple-400 border-purple-500/30 ${
               compact ? 'text-xs px-1.5 py-0.5 w-fit min-w-0 max-w-full' : 'text-xs px-2 py-1 w-fit min-w-0 max-w-full'
             } ${className}`}
           >
@@ -32,7 +32,7 @@ const CommissionSaleBadge: React.FC<CommissionSaleBadgeProps> = ({
             <span className="truncate">{compact ? t('vehicles.commission') : t('vehicles.commissionSale')}</span>
           </Badge>
         </TooltipTrigger>
-        <TooltipContent className="max-w-xs">
+        <TooltipContent className="max-w-xs bg-card border-border text-foreground">
           <p className="text-sm">
             {t('vehicles.commissionSaleTooltip')}
           </p>
