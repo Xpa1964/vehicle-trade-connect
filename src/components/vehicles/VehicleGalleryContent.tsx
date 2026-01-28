@@ -81,7 +81,7 @@ const VehicleGalleryContent: React.FC<VehicleGalleryContentProps> = ({
       {/* Contenido Principal */}
       <div className="flex-1 space-y-6">
         {/* Search and View Controls */}
-        <div className="bg-white rounded-lg shadow-sm border p-6">
+        <div className="bg-card rounded-lg shadow-sm border border-border p-6">
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
             {/* Search Input */}
             <div className="relative flex-1">
