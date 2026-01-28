@@ -72,7 +72,7 @@ const VehicleSidebarFilters: React.FC<VehicleSidebarFiltersProps> = ({
   const hasChanges = JSON.stringify(filters) !== JSON.stringify(tempFilters);
 
   return (
-    <div className="w-56 bg-white border-r border-gray-200 h-full overflow-y-auto">
+    <div className="w-56 bg-card border-r border-border h-full overflow-y-auto">
       <div className="p-4 space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-semibold">{t('vehicles.filtersTitle')}</h2>
@@ -99,10 +99,10 @@ const VehicleSidebarFilters: React.FC<VehicleSidebarFiltersProps> = ({
           </div>
         </div>
 
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-muted-foreground">
           {t('vehicles.vehiclesFoundCount', { count: vehicleCount })}
           {isPublicView && (
-            <div className="mt-2 text-xs bg-blue-50 text-blue-700 p-2 rounded">
+            <div className="mt-2 text-xs bg-secondary text-primary p-2 rounded border border-border">
               {t('vehicles.limitedView')}
             </div>
           )}

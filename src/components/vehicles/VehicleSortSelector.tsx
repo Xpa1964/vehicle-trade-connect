@@ -24,12 +24,12 @@ const VehicleSortSelector: React.FC<VehicleSortSelectorProps> = ({
 
   return (
     <Select value={sortBy} onValueChange={setSortBy}>
-      <SelectTrigger className="w-48">
+      <SelectTrigger className="w-48 bg-card border-border text-foreground hover:border-primary/30">
         <SelectValue placeholder={t('vehicles.sortByPlaceholder')} />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-card border-border">
         {sortOptions.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
+          <SelectItem key={option.value} value={option.value} className="text-foreground hover:bg-secondary">
             {option.label}
           </SelectItem>
         ))}

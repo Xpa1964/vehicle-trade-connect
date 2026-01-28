@@ -38,7 +38,7 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
 }) => {
   return (
     <Drawer open={isOpen} onOpenChange={onClose}>
-      <DrawerContent className="max-h-[90vh]">
+      <DrawerContent className="max-h-[90vh] bg-card border-t border-border">
         <DrawerHeader className="pb-4">
           <div className="flex items-center justify-between">
             <DrawerTitle>Filtros</DrawerTitle>
