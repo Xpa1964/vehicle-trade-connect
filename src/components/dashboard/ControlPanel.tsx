@@ -277,7 +277,7 @@ const ControlPanel: React.FC = () => {
                 <h4 className={`text-lg font-semibold text-foreground mb-4 transition-colors duration-300 ${styles.titleHover}`}>
                   {action.title}
                 </h4>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-muted-foreground leading-relaxed">
                   {action.description}
                 </p>
               </CardContent>
@@ -314,7 +314,7 @@ const ControlPanel: React.FC = () => {
             {t('control.title')}
           </h2>
         </div>
-        <p className="text-gray-600 max-w-3xl mx-auto">
+        <p className="text-muted-foreground max-w-3xl mx-auto">
           {t('dashboard.controlPanelDescription')}
         </p>
       </div>
@@ -371,7 +371,7 @@ const ControlPanel: React.FC = () => {
                     <h4 className={`text-base font-semibold text-foreground mb-3 transition-colors duration-300 ${styles.titleHover}`}>
                       {tool.title}
                     </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {tool.description}
                     </p>
                   </CardContent>
