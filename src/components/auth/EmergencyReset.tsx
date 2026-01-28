@@ -38,9 +38,9 @@ const EmergencyReset: React.FC = () => {
   };
   
   return (
-    <div className="mt-6 p-4 border border-gray-200 rounded-md bg-gray-50">
-      <h3 className="font-semibold text-gray-900">{t('auth.loginProblems')}</h3>
-      <p className="text-sm text-gray-600 mb-3">
+    <div className="mt-6 p-4 border border-border rounded-md bg-secondary">
+      <h3 className="font-semibold text-foreground">{t('auth.loginProblems')}</h3>
+      <p className="text-sm text-muted-foreground mb-3">
         {t('auth.loginProblemsDescription')}
       </p>
       <Button 

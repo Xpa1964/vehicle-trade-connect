@@ -4,13 +4,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { safeSignOut } from '@/utils/authUtils';
 import { toast as sonnerToast } from 'sonner';
 import { logSystemActivity } from '@/utils/activityLogger';
-import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
 export const useLogout = (setUser: (user: any) => void) => {
   const { toast } = useToast();
-  const navigate = useNavigate();
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       console.log('[useLogout] Initiating logout');
       
@@ -45,10 +44,10 @@ export const useLogout = (setUser: (user: any) => void) => {
         description: "Has cerrado sesión correctamente"
       });
       
-      // Redirect to home page after logout
+      // Redirect to home page after logout using window.location for reliability
       setTimeout(() => {
-        navigate('/');
-      }, 300); // Small timeout to allow toasts and state updates
+        window.location.href = '/';
+      }, 300);
       
     } catch (error: any) {
       console.error('[useLogout] Logout error:', error);
@@ -69,10 +68,10 @@ export const useLogout = (setUser: (user: any) => void) => {
       
       // Redirect to home page even in case of error
       setTimeout(() => {
-        navigate('/');
+        window.location.href = '/';
       }, 1500);
     }
-  };
+  }, [setUser, toast]);
 
   return { logout };
 };

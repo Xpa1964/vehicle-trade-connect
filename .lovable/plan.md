@@ -1,8 +1,13 @@
 # Plan de Unificación Visual: Tema Oscuro Profesional
 
-## ✅ Estado: IMPLEMENTACIÓN COMPLETADA
+## ✅ Estado: IMPLEMENTACIÓN COMPLETADA (Fase 2)
 
 La migración del tema oscuro ha sido aplicada exitosamente a los componentes principales del proyecto.
+
+### 🔧 Correcciones Adicionales (Fase 2):
+- Arreglado error crítico "useContext null" en hooks de auth
+- `useLogout.ts` y `useRegister.ts` refactorizados para evitar `useNavigate()` problemático
+- Más de 15 archivos adicionales migrados a tema oscuro
 
 ---
 

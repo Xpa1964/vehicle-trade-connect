@@ -64,8 +64,8 @@ const Login: React.FC = () => {
   // Loading state
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -73,10 +73,10 @@ const Login: React.FC = () => {
   // Already authenticated
   if (isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <p className="text-lg mb-4">Ya has iniciado sesión, redirigiendo...</p>
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="text-lg mb-4 text-foreground">Ya has iniciado sesión, redirigiendo...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mx-auto"></div>
         </div>
       </div>
     );
@@ -91,7 +91,7 @@ const Login: React.FC = () => {
               variant="ghost" 
               size="sm"
               onClick={handleReturnHome}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
             >
               <Home className="h-4 w-4" />
               {t('common.returnHome')}
@@ -113,7 +113,7 @@ const Login: React.FC = () => {
                   console.log('Error loading fallback logo, using text fallback');
                   e.currentTarget.style.display = 'none';
                   const fallback = document.createElement('div');
-                  fallback.className = 'text-2xl font-bold text-auto-blue';
+                  fallback.className = 'text-2xl font-bold text-primary';
                   fallback.textContent = 'KONTACT VO';
                   e.currentTarget.parentNode?.appendChild(fallback);
                 };
@@ -155,7 +155,7 @@ const Login: React.FC = () => {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <Label htmlFor="password" className="text-sm font-medium">{t('auth.password')}</Label>
-                <Link to="/forgot-password" className="text-xs text-blue-500 hover:underline">
+                <Link to="/forgot-password" className="text-xs text-primary hover:underline">
                   {t('auth.forgotPassword')}
                 </Link>
               </div>
@@ -172,7 +172,7 @@ const Login: React.FC = () => {
             
             <Button 
               type="submit" 
-              className="w-full bg-blue-600 hover:bg-blue-700 h-11 sm:h-10 text-base sm:text-sm touch-manipulation font-medium" 
+              className="w-full h-11 sm:h-10 text-base sm:text-sm touch-manipulation font-medium" 
               disabled={isSubmitting}
             >
               {isSubmitting ? t('common.loading') : t('auth.login')}
@@ -184,9 +184,9 @@ const Login: React.FC = () => {
         </CardContent>
         
         <CardFooter className="flex flex-col p-4 sm:p-6 pt-0">
-          <p className="text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-muted-foreground">
             {t('auth.dontHaveAccount')}{' '}
-            <Link to="/register" className="text-blue-500 hover:underline font-medium">
+            <Link to="/register" className="text-primary hover:underline font-medium">
               {t('auth.register')}
             </Link>
           </p>

@@ -16,10 +16,10 @@ const UserReputationCard: React.FC<UserReputationCardProps> = ({ user }) => {
   const { ratingSummary, ratingsLoading } = useRatings(user?.id);
   
   return (
-    <Card className="bg-white border-auto-blue border-l-4">
+    <Card className="bg-card border-sky-400/50 border-l-4">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg flex items-center">
-          <Star className="w-5 h-5 mr-2 text-auto-blue" />
+        <CardTitle className="text-lg flex items-center text-foreground">
+          <Star className="w-5 h-5 mr-2 text-sky-400" />
           Tu reputación
         </CardTitle>
       </CardHeader>
@@ -28,8 +28,8 @@ const UserReputationCard: React.FC<UserReputationCardProps> = ({ user }) => {
           <div className="mr-4">
             {ratingsLoading ? (
               <div className="flex items-center">
-                <div className="w-6 h-6 border-2 border-gray-300 border-t-auto-blue rounded-full animate-spin mr-2"></div>
-                <span className="text-sm text-gray-500">Cargando...</span>
+                <div className="w-6 h-6 border-2 border-border border-t-primary rounded-full animate-spin mr-2"></div>
+                <span className="text-sm text-muted-foreground">Cargando...</span>
               </div>
             ) : (
               <StarRating 
@@ -39,10 +39,10 @@ const UserReputationCard: React.FC<UserReputationCardProps> = ({ user }) => {
               />
             )}
           </div>
-          <div className="text-sm">
+          <div className="text-sm text-muted-foreground">
             <p>Basado en {ratingSummary?.total_ratings || 0} valoraciones</p>
             {ratingSummary?.verified_ratings && ratingSummary.verified_ratings > 0 ? (
-              <p className="text-green-600">{ratingSummary.verified_ratings} valoraciones verificadas</p>
+              <p className="text-[#22C55E]">{ratingSummary.verified_ratings} valoraciones verificadas</p>
             ) : null}
           </div>
           <div className="ml-auto">
