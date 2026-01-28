@@ -5,9 +5,9 @@ import AdminNavigation from '@/components/layout/AdminNavigation';
 
 const AdminLayout: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       {/* Admin header with navigation */}
-      <div className="bg-white dark:bg-gray-800 shadow sticky top-0 z-50">
+      <div className="bg-card shadow-md border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">
           <AdminNavigation />
         </div>

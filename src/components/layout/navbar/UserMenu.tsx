@@ -28,7 +28,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isHomePage, isScrolled }) => {
   const displayName = user?.profile?.company_name || user?.profile?.full_name || user?.name || 'Usuario';
 
   // Determine text color based on page location and scroll state
-  const textClass = (isHomePage && !isScrolled) ? 'text-white' : 'text-gray-700';
+  const textClass = (isHomePage && !isScrolled) ? 'text-white' : 'text-foreground';
 
   return (
     <DropdownMenu>
@@ -38,7 +38,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isHomePage, isScrolled }) => {
           className={`flex items-center gap-2 h-10 px-3 touch-manipulation min-h-[44px] ${
             isHomePage && !isScrolled 
               ? 'text-white hover:text-gray-200 hover:bg-white/10' 
-              : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+              : 'text-foreground hover:text-foreground hover:bg-secondary'
           }`}
         >
           <User className="h-4 w-4 flex-shrink-0" />
@@ -84,7 +84,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isHomePage, isScrolled }) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem 
           onClick={logout}
-          className="text-red-600 focus:text-red-700 cursor-pointer min-h-[48px] touch-manipulation font-medium bg-red-50 hover:bg-red-100 focus:bg-red-100"
+          className="text-destructive focus:text-destructive cursor-pointer min-h-[48px] touch-manipulation font-medium bg-destructive/10 hover:bg-destructive/20 focus:bg-destructive/20"
         >
           <LogOut className="mr-2 h-5 w-5" />
           <span className="text-base">{t('auth.logout', { fallback: 'Cerrar Sesión' })}</span>

@@ -24,7 +24,7 @@ const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   };
 
   return (
-    <div className="bg-white border-b border-gray-200 px-4 py-6">
+    <div className="bg-card border-b border-border px-4 py-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-4">
           {showBackButton && (
@@ -54,7 +54,7 @@ const NavigationHeader: React.FC<NavigationHeaderProps> = ({
           />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-auto-blue">{title}</h1>
+          <h1 className="text-2xl font-bold text-primary">{title}</h1>
           <p className="text-muted-foreground mt-1">
             {t('messages.description', { fallback: 'Gestiona tus conversaciones y mensajes' })}
           </p>
