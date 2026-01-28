@@ -27,9 +27,9 @@ const YearFilter: React.FC<YearFilterProps> = ({
 
   return (
     <Collapsible defaultOpen>
-      <CollapsibleTrigger className="flex items-center justify-between w-full p-1 hover:bg-gray-50 rounded">
-        <Label className="text-xs font-medium">{t('filters.year')}</Label>
-        <ChevronDown className="h-3 w-3" />
+      <CollapsibleTrigger className="flex items-center justify-between w-full p-1 hover:bg-secondary rounded">
+        <Label className="text-xs font-medium text-foreground">{t('filters.year')}</Label>
+        <ChevronDown className="h-3 w-3 text-muted-foreground" />
       </CollapsibleTrigger>
       <CollapsibleContent className="space-y-3 pt-1">
         <div className="px-1">
@@ -41,30 +41,30 @@ const YearFilter: React.FC<YearFilterProps> = ({
             step={1}
             className="w-full"
           />
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
+          <div className="flex justify-between text-xs text-muted-foreground mt-1">
             <span>{yearMin}</span>
             <span>{yearMax}</span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-1">
           <div>
-            <Label className="text-xs">{t('filters.minimum')}</Label>
+            <Label className="text-xs text-foreground">{t('filters.minimum')}</Label>
             <Input
               type="number"
               value={yearMin}
               onChange={(e) => setYearMin(Number(e.target.value))}
-              className="text-xs h-7"
+              className="text-xs h-7 bg-card border-border text-foreground"
               min={2000}
               max={currentYear}
             />
           </div>
           <div>
-            <Label className="text-xs">{t('filters.maximum')}</Label>
+            <Label className="text-xs text-foreground">{t('filters.maximum')}</Label>
             <Input
               type="number"
               value={yearMax}
               onChange={(e) => setYearMax(Number(e.target.value))}
-              className="text-xs h-7"
+              className="text-xs h-7 bg-card border-border text-foreground"
               min={2000}
               max={currentYear}
             />

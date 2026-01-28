@@ -19,15 +19,15 @@ const CountryFilter: React.FC<CountryFilterProps> = ({ country, setCountry, coun
   
   return (
     <div>
-      <label className="text-xs font-medium text-gray-700 mb-1 block">{t('filters.country')}</label>
+      <label className="text-xs font-medium text-foreground mb-1 block">{t('filters.country')}</label>
       <Select value={country} onValueChange={setCountry}>
-        <SelectTrigger className="h-8 text-xs">
+        <SelectTrigger className="h-8 text-xs bg-card border-border text-foreground hover:border-primary/30">
           <SelectValue placeholder={t('filters.selectCountry')} />
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">{t('filters.allCountries')}</SelectItem>
+        <SelectContent className="bg-card border-border">
+          <SelectItem value="all" className="text-foreground hover:bg-primary/10">{t('filters.allCountries')}</SelectItem>
           {countries.map((c) => (
-            <SelectItem key={c.code} value={c.code}>
+            <SelectItem key={c.code} value={c.code} className="text-foreground hover:bg-primary/10">
               {c.name}
             </SelectItem>
           ))}

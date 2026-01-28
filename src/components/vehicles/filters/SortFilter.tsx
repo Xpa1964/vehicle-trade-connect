@@ -21,14 +21,14 @@ const SortFilter: React.FC<SortFilterProps> = ({ sortBy, setSortBy }) => {
 
   return (
     <div className="space-y-2">
-      <Label className="text-xs font-medium">{t('filters.sortBy')}</Label>
+      <Label className="text-xs font-medium text-foreground">{t('filters.sortBy')}</Label>
       <Select value={sortBy} onValueChange={setSortBy}>
-        <SelectTrigger className="w-full h-8 text-xs">
+        <SelectTrigger className="w-full h-8 text-xs bg-card border-border text-foreground hover:border-primary/30">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-card border-border">
           {sortOptions.map((option) => (
-            <SelectItem key={option.value} value={option.value} className="text-xs">
+            <SelectItem key={option.value} value={option.value} className="text-xs text-foreground hover:bg-primary/10">
               {option.label}
             </SelectItem>
           ))}
