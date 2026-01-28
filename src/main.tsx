@@ -1,17 +1,7 @@
-
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-
-// No QueryClient needed here - App.tsx handles it
-
-// Error boundary simple para capturar errores de carga
-class ErrorBoundary extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'LoadingError';
-  }
-}
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
 
 // Make sure root element exists before rendering
 const root = document.getElementById("root");
@@ -19,7 +9,9 @@ const root = document.getElementById("root");
 if (root) {
   try {
     createRoot(root).render(
-      <App />
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
     );
   } catch (error) {
     console.error("Error al renderizar la aplicación:", error);
