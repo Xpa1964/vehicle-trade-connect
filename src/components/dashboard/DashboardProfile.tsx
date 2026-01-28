@@ -91,9 +91,9 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
   const renderRatingSection = useMemo(() => {
     if (ratingsLoading) {
       return (
-        <div className="flex items-center gap-3 text-sm text-gray-600">
-          <div className="w-4 h-4 border-2 border-gray-300 border-t-yellow-500 rounded-full animate-spin"></div>
-          <span className="text-gray-500">{t('profile.loadingRatings', { fallback: 'Cargando valoraciones...' })}</span>
+        <div className="flex items-center gap-3 text-sm text-muted-foreground">
+          <div className="w-4 h-4 border-2 border-border border-t-primary rounded-full animate-spin"></div>
+          <span className="text-muted-foreground">{t('profile.loadingRatings', { fallback: 'Cargando valoraciones...' })}</span>
         </div>
       );
     }
@@ -109,9 +109,9 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
           showValue={false}
           className="flex-shrink-0"
         />
-        <div className="flex items-center gap-2 text-base font-medium text-gray-700">
+        <div className="flex items-center gap-2 text-base font-medium text-foreground">
           <span>{averageRating.toFixed(1)}</span>
-          <span className="text-gray-500 text-sm font-normal">
+          <span className="text-muted-foreground text-sm font-normal">
             ({totalRatings} {t('profile.verifiedRatings', { fallback: 'valoraciones' })})
           </span>
         </div>
@@ -120,7 +120,7 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
   }, [ratingsLoading, ratingSummary, t]);
 
   return (
-    <Card className="border-none shadow-sm bg-white mb-6 overflow-hidden h-full">
+    <Card className="border-border shadow-sm bg-card mb-6 overflow-hidden h-full">
       <CardContent className="p-5 sm:p-6">
         {/* Layout móvil optimizado */}
         <div className="flex flex-col space-y-4 md:hidden">
@@ -131,34 +131,34 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
                 <img
                   src={user.profile.company_logo}
                   alt={`Logo de la empresa ${getCompanyName()}`}
-                  className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+                  className="w-20 h-20 rounded-full object-cover border-2 border-border"
                 />
               ) : (
-                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <User className="w-10 h-10 text-white" />
+                <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary/70 rounded-full flex items-center justify-center">
+                  <User className="w-10 h-10 text-primary-foreground" />
                 </div>
               )}
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#22C55E] rounded-full border-2 border-card flex items-center justify-center">
                 <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
               </div>
             </div>
 
             {/* Nombre de la empresa */}
             <div className="text-center">
-              <h2 className="text-lg font-light text-gray-900 leading-tight break-words">{getCompanyName()}</h2>
+              <h2 className="text-lg font-light text-foreground leading-tight break-words">{getCompanyName()}</h2>
               <Badge variant="outline" className="text-xs w-fit px-2 py-1 mt-2">
                 {getRoleDisplayName()}
               </Badge>
             </div>
 
             {/* Valoraciones - Justo debajo del logo */}
-            <div className="py-3 px-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg border border-yellow-200">
+            <div className="py-3 px-4 bg-primary/10 rounded-lg border border-primary/30">
               {renderRatingSection}
             </div>
           </div>
 
           {/* Información detallada */}
-          <div className="grid grid-cols-1 gap-3.5 text-sm text-gray-600">
+          <div className="grid grid-cols-1 gap-3.5 text-sm text-muted-foreground">
             <div className="flex items-center gap-2.5">
               <Building2 className="w-4 h-4 flex-shrink-0" />
               <span className="break-words leading-relaxed">{getBusinessTypeLabel(user?.profile?.business_type)}</span>
@@ -186,12 +186,12 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
           </div>
 
           {/* Botones - disposición vertical en móvil con mejor spacing */}
-          <div className="flex flex-col gap-3 pt-4 border-t border-gray-100">
+          <div className="flex flex-col gap-3 pt-4 border-t border-border">
             <Button 
               variant="ghost" 
               size="default"
               onClick={() => navigate('/profile')}
-              className="w-full text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 justify-center py-3 px-4"
+              className="w-full text-muted-foreground hover:text-foreground border border-border hover:border-primary/30 justify-center py-3 px-4"
             >
               {t('profile.viewProfile', { fallback: t('profile.viewFullProfile', { fallback: 'Ver Perfil' }) })}
             </Button>
@@ -202,7 +202,7 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
                 size="default" 
                 onClick={handleRoleReload} 
                 disabled={isReloading}
-                className="flex-1 text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 py-3 px-3"
+                className="flex-1 text-muted-foreground hover:text-foreground border border-border hover:border-primary/30 py-3 px-3"
               >
                 <RefreshCw className={`w-4 h-4 mr-1 flex-shrink-0 ${isReloading ? 'animate-spin' : ''}`} />
                 <span className="text-xs break-words">{t('profile.updateRole', { fallback: 'Actualizar' })}</span>
@@ -213,7 +213,7 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
                   variant="ghost" 
                   size="default"
                   onClick={() => navigate('/admin/dashboard')}
-                  className="flex-1 flex items-center justify-center text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 py-3 px-3"
+                  className="flex-1 flex items-center justify-center text-muted-foreground hover:text-foreground border border-border hover:border-primary/30 py-3 px-3"
                 >
                   <Settings className="w-4 h-4 mr-1 flex-shrink-0" />
                   <span className="text-xs break-words">{t('profile.adminPanel', { fallback: 'Admin' })}</span>
@@ -233,20 +233,20 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
                 <img
                   src={user.profile.company_logo}
                   alt={`Logo de la empresa ${getCompanyName()}`}
-                  className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+                  className="w-20 h-20 rounded-full object-cover border-2 border-border"
                 />
               ) : (
-                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <User className="w-10 h-10 text-white" />
+                <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary/70 rounded-full flex items-center justify-center">
+                  <User className="w-10 h-10 text-primary-foreground" />
                 </div>
               )}
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#22C55E] rounded-full border-2 border-card flex items-center justify-center">
                 <div className="w-2 h-2 bg-white rounded-full"></div>
               </div>
             </div>
 
             {/* Valoraciones - Justo debajo del logo */}
-            <div className="py-2 px-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg border border-yellow-200">
+            <div className="py-2 px-4 bg-primary/10 rounded-lg border border-primary/30">
               {renderRatingSection}
             </div>
           </div>
@@ -256,13 +256,13 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
             {/* User Info */}
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-2xl font-light text-gray-900">{getCompanyName()}</h2>
+                <h2 className="text-2xl font-light text-foreground">{getCompanyName()}</h2>
                 <Badge variant="outline" className="text-xs">
                   {getRoleDisplayName()}
                 </Badge>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Building2 className="w-4 h-4" />
                   <span>{getBusinessTypeLabel(user?.profile?.business_type)}</span>
@@ -296,7 +296,7 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
                 variant="ghost" 
                 size="default"
                 onClick={() => navigate('/profile')}
-                className="text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 px-4 py-2 whitespace-nowrap"
+                className="text-muted-foreground hover:text-foreground border border-border hover:border-primary/30 px-4 py-2 whitespace-nowrap"
               >
                 {t('profile.viewFullProfile', { fallback: 'Ver Perfil Completo' })}
               </Button>
@@ -306,7 +306,7 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
                 size="default" 
                 onClick={handleRoleReload} 
                 disabled={isReloading}
-                className="text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 px-4 py-2 whitespace-nowrap"
+                className="text-muted-foreground hover:text-foreground border border-border hover:border-primary/30 px-4 py-2 whitespace-nowrap"
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${isReloading ? 'animate-spin' : ''}`} />
                 {t('profile.updateRole', { fallback: 'Actualizar Rol' })}
@@ -317,7 +317,7 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
                   variant="ghost" 
                   size="default"
                   onClick={() => navigate('/admin/dashboard')}
-                  className="flex items-center text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 px-4 py-2 whitespace-nowrap"
+                  className="flex items-center text-muted-foreground hover:text-foreground border border-border hover:border-primary/30 px-4 py-2 whitespace-nowrap"
                 >
                   <Settings className="w-4 h-4 mr-2" />
                   {t('profile.goToAdmin', { fallback: 'Ir al Panel Admin' })}
