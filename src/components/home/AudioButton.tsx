@@ -61,7 +61,7 @@ const AudioButton: React.FC<AudioButtonProps> = ({
       onClick={handleAudioClick}
       variant="outline"
       size="sm"
-      className={`flex items-center space-x-2 bg-white/90 hover:bg-white text-gray-700 hover:text-gray-900 border-gray-200 ${className}`}
+      className={`flex items-center space-x-2 ${className}`}
     >
       <Headphones className="h-4 w-4" />
       <span className="font-medium">{languageCode.toUpperCase()}</span>

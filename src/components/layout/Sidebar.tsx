@@ -17,9 +17,9 @@ const Sidebar: React.FC = () => {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col h-full bg-white border-r py-4">
+    <div className="flex flex-col h-full bg-card border-r border-border py-4">
       <div className="px-6 mb-6">
-        <Link to="/" className="flex items-center text-lg font-semibold">
+        <Link to="/" className="flex items-center text-lg font-semibold text-foreground">
           <img src={LOGO_IMAGES.primary} alt="KONTACT VO Logo" className="h-8 w-auto mr-2" />
           KONTACT VO
         </Link>
@@ -32,7 +32,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/dashboard"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/dashboard' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/dashboard' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 mr-2">
@@ -46,7 +46,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/services"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/services' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/services' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 mr-2">
@@ -59,7 +59,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/blog"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname.startsWith('/blog') ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname.startsWith('/blog') ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <FileText className="h-4 w-4 mr-2" />
@@ -70,7 +70,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/import-calculator"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/import-calculator' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/import-calculator' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <Calculator className="h-4 w-4 mr-2" />
@@ -81,7 +81,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/vehicles"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/vehicles' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/vehicles' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 mr-2">
@@ -95,7 +95,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/vehicle-management"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/vehicle-management' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/vehicle-management' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 mr-2">
@@ -109,7 +109,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/publish-announcement"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/publish-announcement' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/publish-announcement' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 mr-2">
@@ -122,7 +122,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/bulletin"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/bulletin' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/bulletin' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 mr-2">
@@ -135,7 +135,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/reports"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/reports' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/reports' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 mr-2">
@@ -148,7 +148,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/transport"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/transport' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/transport' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 mr-2">
@@ -161,7 +161,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/admin/control-panel"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/admin/control-panel' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/admin/control-panel' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 mr-2">
@@ -174,7 +174,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/messages"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/messages' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/messages' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 mr-2">
@@ -187,7 +187,7 @@ const Sidebar: React.FC = () => {
               <Link
                 to="/exchanges"
                 className={`flex items-center text-sm px-3 py-2 rounded-md ${
-                  location.pathname === '/exchanges' ? 'bg-blue-100 text-auto-blue font-medium' : 'text-gray-700 hover:bg-gray-100'
+                  location.pathname === '/exchanges' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-primary/10'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 mr-2">
@@ -201,15 +201,15 @@ const Sidebar: React.FC = () => {
         </nav>
       </ScrollArea>
 
-      <div className="p-4">
+      <div className="p-4 border-t border-border">
         <div className="flex items-center space-x-2 text-sm">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.user_metadata?.avatar_url as string} />
-            <AvatarFallback>{user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
+            <AvatarFallback className="bg-primary text-primary-foreground">{user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
-          <span className="font-medium">{user?.email}</span>
+          <span className="font-medium text-foreground">{user?.email}</span>
         </div>
-        <Button variant="ghost" className="w-full mt-2 justify-start" onClick={logout}>
+        <Button variant="ghost" className="w-full mt-2 justify-start text-muted-foreground hover:text-foreground" onClick={logout}>
           <LogOut className="h-4 w-4 mr-2" />
           Logout
         </Button>

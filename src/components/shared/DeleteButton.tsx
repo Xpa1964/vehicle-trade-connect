@@ -48,7 +48,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
           <Button 
             variant="ghost" 
             size="icon" 
-            className="text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full w-8 h-8 flex items-center justify-center p-0 z-10"
+            className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-full w-8 h-8 flex items-center justify-center p-0 z-10"
           >
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">{t('common.delete')}</span>

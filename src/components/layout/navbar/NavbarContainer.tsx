@@ -40,7 +40,7 @@ const NavbarContainer: React.FC = () => {
     <div className={`w-full transition-all duration-300 sticky top-0 z-50 ${
       isHomePage && !isScrolled 
         ? 'bg-transparent' 
-        : 'bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm'
+        : 'bg-card/95 backdrop-blur-md border-b border-border shadow-sm'
     }`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
@@ -75,7 +75,7 @@ const NavbarContainer: React.FC = () => {
               className={`h-10 w-10 p-0 touch-manipulation ${
                 isHomePage && !isScrolled 
                   ? 'text-white hover:text-gray-200 hover:bg-white/10' 
-                  : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                  : 'text-foreground hover:text-foreground hover:bg-primary/10'
               }`}
             >
               {isMenuOpen ? (
