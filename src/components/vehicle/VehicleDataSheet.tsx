@@ -542,10 +542,10 @@ const VehicleDataSheet: React.FC<VehicleDataSheetProps> = ({ vehicle }) => {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-card border-border">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <FileText className="h-4 w-4 text-brand-orange" />
+        <CardTitle className="flex items-center gap-2 text-base text-foreground">
+          <FileText className="h-4 w-4 text-primary" />
           Ficha Técnica
         </CardTitle>
       </CardHeader>
@@ -557,7 +557,7 @@ const VehicleDataSheet: React.FC<VehicleDataSheetProps> = ({ vehicle }) => {
           onClick={handleDownloadPDF}
           variant="outline"
           size="sm"
-          className="w-full flex items-center gap-2"
+          className="w-full flex items-center gap-2 border-border text-foreground hover:bg-primary/10 hover:border-primary/30"
           disabled={isLoading}
         >
           <Download className="h-4 w-4" />

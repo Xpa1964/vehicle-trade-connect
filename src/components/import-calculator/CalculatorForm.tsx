@@ -47,29 +47,29 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle>{t('calculator.form.title', { fallback: 'Vehicle and Import Details' })}</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-foreground">{t('calculator.form.title', { fallback: 'Vehicle and Import Details' })}</CardTitle>
+          <CardDescription className="text-muted-foreground">
             {t('calculator.form.description', { fallback: 'Enter the details to calculate import costs' })}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-4 mb-8">
-              <TabsTrigger value="vehicle" className="flex items-center gap-2">
+            <TabsList className="grid grid-cols-4 mb-8 bg-secondary">
+              <TabsTrigger value="vehicle" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Car className="h-4 w-4" />
                 <span>{t('calculator.tabs.vehicle', { fallback: 'Vehicle' })}</span>
               </TabsTrigger>
-              <TabsTrigger value="fiscal" className="flex items-center gap-2">
+              <TabsTrigger value="fiscal" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <BadgeEuro className="h-4 w-4" />
                 <span>{t('calculator.tabs.fiscal', { fallback: 'Fiscal' })}</span>
               </TabsTrigger>
-              <TabsTrigger value="emissions" className="flex items-center gap-2">
+              <TabsTrigger value="emissions" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <FileBarChart className="h-4 w-4" />
                 <span>{t('calculator.tabs.emissions', { fallback: 'Emissions' })}</span>
               </TabsTrigger>
-              <TabsTrigger value="services" className="flex items-center gap-2">
+              <TabsTrigger value="services" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Truck className="h-4 w-4" />
                 <span>{t('calculator.tabs.services', { fallback: 'Services' })}</span>
               </TabsTrigger>
@@ -122,7 +122,7 @@ const CalculatorForm: React.FC<CalculatorFormProps> = ({
           activeTab === 'fiscal' ? 'emissions' :
           activeTab === 'emissions' ? 'services' : 'vehicle'
         )}
-        className="w-full"
+        className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
       >
         {activeTab === 'services' 
           ? t('calculator.buttons.calculate', { fallback: 'Calculate costs' })

@@ -13,10 +13,10 @@ const HighlightBox: React.FC<HighlightBoxProps> = ({
   className
 }) => {
   const variantStyles = {
-    orange: 'border-brand-orange/30 bg-brand-orange/5 shadow-sm',
-    red: 'border-error-400/30 bg-error/5 shadow-sm',
-    green: 'border-brand-green/30 bg-brand-green/5 shadow-sm',
-    blue: 'border-brand-blue/30 bg-brand-blue/5 shadow-sm'
+    orange: 'border-primary/30 bg-primary/10 shadow-sm',
+    red: 'border-destructive/30 bg-destructive/10 shadow-sm',
+    green: 'border-[#22C55E]/30 bg-[#22C55E]/10 shadow-sm',
+    blue: 'border-[#0EA5E9]/30 bg-[#0EA5E9]/10 shadow-sm'
   };
 
   return (

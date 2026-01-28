@@ -54,12 +54,12 @@ const ImportCalculator: React.FC = memo(() => {
       <div className="w-full max-w-7xl mx-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4 sm:mb-6 gap-4">
           <div className="flex items-start gap-3 sm:gap-4">
-            <Calculator className="h-6 w-6 sm:h-8 sm:w-8 text-auto-blue flex-shrink-0 mt-1" />
+            <Calculator className="h-6 w-6 sm:h-8 sm:w-8 text-primary flex-shrink-0 mt-1" />
             <div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-foreground">
                 {t('calculator.title', { fallback: 'Import Cost Calculator' })}
               </h1>
-              <p className="text-sm sm:text-base text-gray-500 mt-1">
+              <p className="text-sm sm:text-base text-muted-foreground mt-1">
                 {t('calculator.subtitle', { fallback: 'For professionals (B2B) - Vehicle import to Spain' })}
               </p>
             </div>
@@ -70,7 +70,7 @@ const ImportCalculator: React.FC = memo(() => {
               onClick={handleReset}
               variant="outline"
               size="sm"
-              className="flex items-center gap-2 h-10 px-4 text-gray-700 hover:text-gray-900 hover:bg-gray-50 border-gray-300 hover:border-gray-400 font-medium shadow-sm transition-all duration-200"
+              className="flex items-center gap-2 h-10 px-4 text-foreground hover:text-foreground hover:bg-primary/10 border-border hover:border-primary/30 font-medium shadow-sm transition-all duration-200"
             >
               <RotateCcw className="h-4 w-4" />
               <span className="whitespace-nowrap">{t('calculator.buttons.reset', { fallback: 'Reset Calculations' })}</span>
@@ -138,21 +138,21 @@ const ImportCalculator: React.FC = memo(() => {
 
       {/* Diálogo de recordatorio */}
       <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
-        <AlertDialogContent className="max-w-md">
+        <AlertDialogContent className="max-w-md bg-card border-border">
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2">
-              <RotateCcw className="h-5 w-5 text-gray-600" />
+            <AlertDialogTitle className="flex items-center gap-2 text-foreground">
+              <RotateCcw className="h-5 w-5 text-muted-foreground" />
               {t('calculator.title', { fallback: 'Import Calculator' })}
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-left">
+            <AlertDialogDescription className="text-left text-muted-foreground">
               {t('calculator.info.resetQuestion', { fallback: 'Do you want to reset all calculations to start fresh with default values?' })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="gap-2">
-            <AlertDialogCancel onClick={() => setShowResetDialog(false)}>
+            <AlertDialogCancel onClick={() => setShowResetDialog(false)} className="border-border text-foreground hover:bg-secondary">
               {t('common.continue', { fallback: 'Continue' })}
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleResetFromDialog}>
+            <AlertDialogAction onClick={handleResetFromDialog} className="bg-primary text-primary-foreground hover:bg-primary/90">
               {t('calculator.buttons.confirmReset', { fallback: 'Yes, reset' })}
             </AlertDialogAction>
           </AlertDialogFooter>
