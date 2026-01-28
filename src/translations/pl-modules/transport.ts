@@ -1,0 +1,20 @@
+export default {
+  'transport.title': 'Transport Ekspresowy',
+  'transport.description': 'Usługi transportu pojazdów',
+  // Express Transport Page
+  'transport.express.title': 'Ekspresowy Transport Pojazdów',
+  'transport.express.subtitle': 'Dostarcz swoje używane pojazdy szybko, bezpiecznie i bez opóźnień.',
+  'transport.express.intro': 'Nasza usługa Transportu Ekspresowego została zaprojektowana dla profesjonalistów z branży motoryzacyjnej, którzy muszą przyspieszyć dostawę pojazdów kupionych lub sprzedanych w Hiszpanii i Europie.',
+  'transport.express.description': 'Profesjonalny kierowca transportuje pojazd drogą z punktu odbioru do miejsca docelowego, z pojazdem w pełni ubezpieczonym. W ten sposób unikamy typowych opóźnień związanych z transportem ciężarówkami i gwarantujemy szybką, wydajną i bezpieczną dostawę.',
+  'transport.express.idealFor': 'Idealny dla dealerów, importerów, eksporterów, firm leasingowych i flot, które muszą przyspieszyć swoje dostawy bez narażania bezpieczeństwa lub jakości.',
+  'transport.express.highlight1.title': 'Bezpośrednia Dostawa',
+  'transport.express.highlight1.desc': 'Bez oczekiwania na placach lub platformach. Twój pojazd podróżuje bezpośrednio z miejsca pochodzenia do miejsca docelowego.',
+  'transport.express.highlight2.title': 'Ubezpieczenie AC',
+  'transport.express.highlight2.desc': 'Pełne pokrycie podczas całego transferu. Twój pojazd jest chroniony na każdym kilometrze podróży.',
+  'transport.express.highlight3.title': 'Akredytowani Kierowcy',
+  'transport.express.highlight3.desc': 'Profesjonalni specjaliści od używanych i luksusowych pojazdów z wieloletnim doświadczeniem.',
+  'transport.express.highlight4.title': 'Zakres Operacyjny',
+  'transport.express.highlight4.desc': 'Transportujemy TYLKO pojazdy z POCHODZENIEM LUB MIEJSCEM DOCELOWYM W HISZPANII. Nie transportujemy między innymi krajami europejskimi.',
+  'transport.express.highlight4.examples': '✅ Prawidłowe: Madryt → Mediolan | Lyon → Walencja  ❌ NIE prawidłowe: Paryż → Berlin',
+  'transport.express.cta': 'Zamów Swój Transport Ekspresowy',
+};

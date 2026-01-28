@@ -1,0 +1,25 @@
+export default {
+  'bulletinInfo.title': 'Bacheca',
+  'bulletinInfo.subtitle': 'Connettere professionisti del settore automobilistico internazionale',
+  'bulletinInfo.description': 'La nostra Bacheca è una piattaforma dove i professionisti dell\'industria automobilistica possono pubblicare e trovare opportunità di business, annunci importanti e novità del settore.',
+  
+  'bulletinInfo.features.title': 'Caratteristiche Principali',
+  'bulletinInfo.features.categories.title': 'Categorie Specializzate',
+  'bulletinInfo.features.categories.description': 'Annunci organizzati per categorie per una ricerca efficiente.',
+  'bulletinInfo.features.networking.title': 'Networking Professionale',
+  'bulletinInfo.features.networking.description': 'Collegati direttamente con altri professionisti del settore.',
+  'bulletinInfo.features.companies.title': 'Profili Aziendali',
+  'bulletinInfo.features.companies.description': 'Informazioni dettagliate sulle aziende che pubblicano annunci.',
+  'bulletinInfo.features.events.title': 'Eventi del Settore',
+  'bulletinInfo.features.events.description': 'Rimani informato su fiere, esposizioni ed eventi rilevanti.',
+  
+  'bulletinInfo.examples.title': 'Esempi di Annunci',
+  'bulletinInfo.examples.business.title': 'Opportunità di Business',
+  'bulletinInfo.examples.business.content': 'Cerco distributori per la linea di ricambi originali BMW in Spagna e Portogallo. Condizioni speciali per grossisti. Contatto: distribucion@autopartsplus.com',
+  'bulletinInfo.examples.vehicles.title': 'Veicoli Disponibili',
+  'bulletinInfo.examples.vehicles.content': 'Lotto di 15 Mercedes-Benz Classe C (2023) disponibile per esportazione immediata dalla Germania. Tutti con meno di 10.000 km. Documentazione completa e prezzo competitivo. Rif: MB-C23-LOT15.',
+  'bulletinInfo.examples.search.title': 'Ricerca Veicoli',
+  'bulletinInfo.examples.search.content': 'Cerchiamo per un cliente lotti di furgoni Volkswagen Transporter (2019-2023) in buone condizioni. Preferibilmente con meno di 50.000 km. Acquisto diretto e pagamento immediato. Contatto: compras@euromobil.es',
+  'bulletinInfo.examples.services.title': 'Servizi Professionali',
+  'bulletinInfo.examples.services.content': 'Offro servizi di gestione specializzati nelle procedure di importazione di veicoli in Spagna da qualsiasi paese dell\'UE. 15 anni di esperienza e garanzia di servizio. Contatto: tramites@autogestor.es',
+};

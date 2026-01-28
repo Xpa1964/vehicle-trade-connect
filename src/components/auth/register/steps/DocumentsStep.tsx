@@ -1,0 +1,192 @@
+
+import React, { useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { 
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+  FormDescription
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { UseFormReturn } from 'react-hook-form';
+import { RegisterFormData } from '@/schemas/registerSchema';
+import { File, X, HelpCircle, Upload } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+interface DocumentsStepProps {
+  form: UseFormReturn<RegisterFormData>;
+  isSubmitting: boolean;
+}
+
+const DocumentsStep: React.FC<DocumentsStepProps> = ({
+  form,
+  isSubmitting
+}) => {
+  const { t } = useLanguage();
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  
+  const validateFileType = (file: File): boolean => {
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'image/jpeg',
+      'image/jpg',
+      'image/png'
+    ];
+    
+    console.log('Validating file:', file.name, 'Type:', file.type);
+    return allowedTypes.includes(file.type);
+  };
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const filesArray = Array.from(e.target.files);
+      
+      // Validate each file type
+      const invalidFiles = filesArray.filter(file => !validateFileType(file));
+      
+      if (invalidFiles.length > 0) {
+        alert(`Los siguientes archivos no son válidos: ${invalidFiles.map(f => f.name).join(', ')}\n\nTipos permitidos: PDF, Word (.doc, .docx), Imágenes (.jpg, .jpeg, .png)`);
+        return;
+      }
+      
+      console.log('Valid files selected:', filesArray.map(f => ({ name: f.name, type: f.type })));
+      setSelectedFiles(filesArray);
+      form.setValue('documents', e.target.files);
+      form.clearErrors('documents');
+    }
+  };
+  
+  const removeFile = (index: number) => {
+    const updatedFiles = [...selectedFiles];
+    updatedFiles.splice(index, 1);
+    setSelectedFiles(updatedFiles);
+    
+    // Create a new DataTransfer object to update the FileList
+    const dataTransfer = new DataTransfer();
+    updatedFiles.forEach(file => dataTransfer.items.add(file));
+    form.setValue('documents', dataTransfer.files);
+  };
+  
+  return (
+    <div className="space-y-4">
+      <h3 className="text-lg font-medium">
+        {t('auth.register.documents')}
+      </h3>
+      
+      <Card className="bg-gray-50">
+        <CardContent className="pt-4">
+          <div className="space-y-3">
+            <div className="flex items-center gap-1">
+              <h4 className="text-sm font-medium">{t('auth.register.requiredDocuments')}</h4>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-gray-400" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="w-80">{t('auth.register.documentsListHelp')}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
+              <li>{t('auth.register.documentBusiness')}</li>
+              <li>{t('auth.register.documentId')}</li>
+              <li>{t('auth.register.documentProof')}</li>
+              <li>{t('auth.register.documentOthers')}</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <FormField
+        control={form.control}
+        name="documents"
+        render={({ field: { onChange, value, ...rest } }) => (
+          <FormItem>
+            <div className="flex items-center gap-2">
+              <FormLabel>{t('auth.register.documents')}</FormLabel>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-gray-400" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t('auth.register.documentsHelp')}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <FormControl>
+              <div className="border-2 border-dashed rounded-md p-6 text-center hover:bg-gray-50 cursor-pointer transition-colors">
+                <input
+                  type="file"
+                  id="documents"
+                  multiple
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png"
+                  className="sr-only"
+                  onChange={handleFileChange}
+                  disabled={isSubmitting}
+                />
+                <label htmlFor="documents" className="cursor-pointer">
+                  <div className="flex flex-col items-center gap-2">
+                    <Upload className="h-8 w-8 text-gray-400" />
+                    <p className="text-sm font-medium">{t('auth.register.dragDocuments')}</p>
+                    <p className="text-xs text-gray-500">PDF, Word (.doc, .docx), Imágenes (.jpg, .jpeg, .png)</p>
+                    <Button type="button" variant="outline" size="sm">
+                      {t('auth.register.browseFiles')}
+                    </Button>
+                  </div>
+                </label>
+              </div>
+            </FormControl>
+            <FormDescription>
+              {t('auth.register.documentsDescription')}
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      
+      {selectedFiles.length > 0 && (
+        <div className="space-y-2">
+          <h4 className="text-sm font-medium">{t('auth.register.selectedFiles')} ({selectedFiles.length})</h4>
+          <div className="space-y-2">
+            {selectedFiles.map((file, index) => (
+              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded border">
+                <div className="flex items-center gap-2">
+                  <File className="h-4 w-4 text-blue-500" />
+                  <span className="text-sm truncate max-w-[200px]">{file.name}</span>
+                  <span className="text-xs text-gray-500">
+                    ({(file.size / 1024).toFixed(0)} KB) - {file.type}
+                  </span>
+                </div>
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => removeFile(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default DocumentsStep;

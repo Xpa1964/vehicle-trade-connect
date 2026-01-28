@@ -1,0 +1,23 @@
+
+export default {
+  'quickActions.title': 'Azioni Rapide',
+  'quickActions.description': 'Accedi alle funzioni principali',
+  'quickActions.generateAuction': 'Genera Asta',
+  'quickActions.generateAuctionDescription': 'Crea nuove aste di veicoli',
+  'quickActions.publishVehicle': 'Pubblica Veicolo',
+  'quickActions.publishVehicleDescription': 'Gestisci il tuo inventario di veicoli',
+  'quickActions.professionalBlog': 'Blog Professionale',
+  'quickActions.professionalBlogDescription': 'Articoli e tendenze del settore automobilistico',
+  'quickActions.publishAnnouncement': 'Pubblica Annuncio',
+  'quickActions.publishAnnouncementDescription': 'Crea nuovi annunci sulla bacheca',
+  'quickActions.publishExchange': 'Pubblica Scambio',
+  'quickActions.publishExchangeDescription': 'Proponi scambi di veicoli',
+  'quickActions.messages': 'Messaggi',
+  'quickActions.messagesDescription': 'Centro messaggi e comunicazioni',
+  'quickActions.requestReport': 'Richiedi Rapporto',
+  'quickActions.requestReportDescription': 'Rapporti tecnici sui veicoli',
+  'quickActions.quoteTransport': 'Preventivo Trasporto',
+  'quickActions.quoteTransportDescription': 'Calcolatore costi di trasporto',
+  'api.integration.title': 'Integrazione API',
+  'api.integration.bulkDescription': 'Automatizza il caricamento di veicoli dal tuo sistema usando la nostra API REST.',
+};

@@ -1,0 +1,88 @@
+
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { User, TrendingUp, Calendar } from 'lucide-react';
+
+interface OperationsBreakdown {
+  buys: number;
+  sells: number;
+  exchanges: number;
+  total: number;
+}
+
+interface UserStatsProps {
+  totalOperations: number;
+  operationsBreakdown: OperationsBreakdown;
+  registrationDate: string;
+  traderType: string;
+}
+
+const UserStats: React.FC<UserStatsProps> = ({
+  totalOperations,
+  operationsBreakdown,
+  registrationDate,
+  traderType,
+}) => {
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const getTraderTypeText = (type: string) => {
+    const types: Record<string, string> = {
+      buyer: 'Comprador',
+      seller: 'Vendedor',
+      trader: 'Trader',
+      buyer_seller: 'Comprador/Vendedor'
+    };
+    return types[type] || type;
+  };
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
+            Tipo de Comerciante
+          </CardTitle>
+          <User className="h-4 w-4 text-auto-blue" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{getTraderTypeText(traderType)}</div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
+            Operaciones Totales
+          </CardTitle>
+          <TrendingUp className="h-4 w-4 text-auto-blue" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{totalOperations}</div>
+          <div className="text-xs text-muted-foreground mt-1">
+            Compras: {operationsBreakdown.buys} | Ventas: {operationsBreakdown.sells}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
+            Miembro desde
+          </CardTitle>
+          <Calendar className="h-4 w-4 text-auto-blue" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{formatDate(registrationDate)}</div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default UserStats;

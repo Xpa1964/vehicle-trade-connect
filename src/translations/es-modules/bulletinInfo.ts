@@ -1,0 +1,25 @@
+export default {
+  'bulletinInfo.title': 'Tablón de Anuncios',
+  'bulletinInfo.subtitle': 'Conectando profesionales del sector automotriz internacional',
+  'bulletinInfo.description': 'Nuestro Tablón de Anuncios es una plataforma donde los profesionales del sector automotriz pueden publicar y encontrar oportunidades comerciales, anuncios importantes y novedades del sector.',
+  
+  'bulletinInfo.features.title': 'Características Principales',
+  'bulletinInfo.features.categories.title': 'Categorías Especializadas',
+  'bulletinInfo.features.categories.description': 'Anuncios organizados por categorías para una búsqueda eficiente.',
+  'bulletinInfo.features.networking.title': 'Networking Profesional',
+  'bulletinInfo.features.networking.description': 'Conecta directamente con otros profesionales del sector.',
+  'bulletinInfo.features.companies.title': 'Perfiles de Empresa',
+  'bulletinInfo.features.companies.description': 'Información detallada sobre las empresas que publican anuncios.',
+  'bulletinInfo.features.events.title': 'Eventos del Sector',
+  'bulletinInfo.features.events.description': 'Mantente informado sobre ferias, exposiciones y eventos relevantes.',
+  
+  'bulletinInfo.examples.title': 'Ejemplos de Anuncios',
+  'bulletinInfo.examples.business.title': 'Oportunidades de Negocio',
+  'bulletinInfo.examples.business.content': 'Busco distribuidores para línea de repuestos originales BMW en España y Portugal. Condiciones especiales para mayoristas. Contacto: distribucion@autopartsplus.com',
+  'bulletinInfo.examples.vehicles.title': 'Vehículos Disponibles',
+  'bulletinInfo.examples.vehicles.content': 'Lote de 15 Mercedes-Benz Clase C (2023) disponible para exportación inmediata desde Alemania. Todos con menos de 10.000 km. Documentación completa y precio competitivo. Ref: MB-C23-LOT15.',
+  'bulletinInfo.examples.search.title': 'Búsqueda de Vehículos',
+  'bulletinInfo.examples.search.content': 'Buscamos para cliente lotes de furgonetas Volkswagen Transporter (2019-2023) en buen estado. Preferiblemente con menos de 50.000 km. Compra directa y pago inmediato. Contacto: compras@euromobil.es',
+  'bulletinInfo.examples.services.title': 'Servicios Profesionales',
+  'bulletinInfo.examples.services.content': 'Ofrezco servicios de gestoría especializada en trámites de importación de vehículos a España desde cualquier país de la UE. Experiencia de 15 años y garantía de servicio. Contacto: tramites@autogestor.es',
+};

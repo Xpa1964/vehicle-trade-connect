@@ -1,0 +1,28 @@
+
+export default {
+  'commission.title': 'Commission Calculator',
+  'commission.description': 'Calculate commissions and applicable fees according to the operation type in the marketplace',
+  'commission.vehiclePrice': 'Vehicle price',
+  'commission.operationType': 'Operation type',
+  'commission.buyer': 'Importer/Buyer',
+  'commission.seller': 'Exporter/Seller',
+  'commission.costSummary': 'Cost Summary',
+  'commission.basePrice': 'Vehicle price',
+  'commission.commissionAmount': 'Commission',
+  'commission.maintenanceFee': 'Maintenance fee',
+  'commission.totalCosts': 'Total costs for',
+  'commission.importantInfo': 'Important information',
+  'commission.minCommissionInfo': 'Minimum commission: €100 (seller) / €80 (buyer) for vehicles up to €10,000',
+  'commission.maxPriceInfo': 'For vehicles over €55,000, the percentage of €55,000 applies',
+  'commission.maintenanceInfo': 'The €25 maintenance fee applies to all operations',
+  'commission.example': 'E.g. 25000',
+  'commission.trader': 'Traders/Intermediaries',
+  'commission.traderInfo': 'Trader commission: 0.6% with minimum of €100 and maximum of €150 (from €25,000)',
+  'commission.filteredByProfile': 'Options filtered according to your profile type',
+  'datasheet.title': 'Technical Data Sheet',
+  'datasheet.download': 'Download PDF',
+  'datasheet.description': 'Download the complete vehicle technical data sheet in PDF format.',
+  'datasheet.generating': 'Generating document...',
+  'datasheet.success': 'Technical data sheet generated successfully',
+  'datasheet.error': 'Error generating the technical data sheet'
+};

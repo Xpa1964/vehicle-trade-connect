@@ -1,0 +1,25 @@
+export default {
+  'bulletinInfo.title': 'Bulletin Board',
+  'bulletinInfo.subtitle': 'Connecting professionals from the international automotive sector',
+  'bulletinInfo.description': 'Our Bulletin Board is a platform where automotive industry professionals can post and find business opportunities, important announcements, and industry news.',
+  
+  'bulletinInfo.features.title': 'Key Features',
+  'bulletinInfo.features.categories.title': 'Specialized Categories',
+  'bulletinInfo.features.categories.description': 'Announcements organized by categories for efficient searching.',
+  'bulletinInfo.features.networking.title': 'Professional Networking',
+  'bulletinInfo.features.networking.description': 'Connect directly with other industry professionals.',
+  'bulletinInfo.features.companies.title': 'Company Profiles',
+  'bulletinInfo.features.companies.description': 'Detailed information about companies posting announcements.',
+  'bulletinInfo.features.events.title': 'Industry Events',
+  'bulletinInfo.features.events.description': 'Stay informed about relevant fairs, exhibitions, and events.',
+  
+  'bulletinInfo.examples.title': 'Announcement Examples',
+  'bulletinInfo.examples.business.title': 'Business Opportunities',
+  'bulletinInfo.examples.business.content': 'Looking for distributors for BMW original spare parts line in Spain and Portugal. Special conditions for wholesalers. Contact: distribucion@autopartsplus.com',
+  'bulletinInfo.examples.vehicles.title': 'Available Vehicles',
+  'bulletinInfo.examples.vehicles.content': 'Batch of 15 Mercedes-Benz C-Class (2023) available for immediate export from Germany. All with less than 10,000 km. Complete documentation and competitive price. Ref: MB-C23-LOT15.',
+  'bulletinInfo.examples.search.title': 'Vehicle Search',
+  'bulletinInfo.examples.search.content': 'We are looking for batches of Volkswagen Transporter vans (2019-2023) in good condition for a client. Preferably with less than 50,000 km. Direct purchase and immediate payment. Contact: compras@euromobil.es',
+  'bulletinInfo.examples.services.title': 'Professional Services',
+  'bulletinInfo.examples.services.content': 'I offer specialized management services for vehicle import procedures to Spain from any EU country. 15 years of experience and service guarantee. Contact: tramites@autogestor.es',
+};

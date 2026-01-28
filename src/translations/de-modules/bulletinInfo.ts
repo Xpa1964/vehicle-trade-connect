@@ -1,0 +1,25 @@
+export default {
+  'bulletinInfo.title': 'Schwarzes Brett',
+  'bulletinInfo.subtitle': 'Verbindung von Fachleuten aus der internationalen Automobilbranche',
+  'bulletinInfo.description': 'Unser Schwarzes Brett ist eine Plattform, auf der Fachleute der Automobilindustrie Geschäftsmöglichkeiten, wichtige Ankündigungen und Branchenneuigkeiten veröffentlichen und finden können.',
+  
+  'bulletinInfo.features.title': 'Hauptmerkmale',
+  'bulletinInfo.features.categories.title': 'Spezialisierte Kategorien',
+  'bulletinInfo.features.categories.description': 'Ankündigungen nach Kategorien organisiert für effiziente Suche.',
+  'bulletinInfo.features.networking.title': 'Professionelles Networking',
+  'bulletinInfo.features.networking.description': 'Verbinden Sie sich direkt mit anderen Branchenfachleuten.',
+  'bulletinInfo.features.companies.title': 'Unternehmensprofile',
+  'bulletinInfo.features.companies.description': 'Detaillierte Informationen über Unternehmen, die Ankündigungen veröffentlichen.',
+  'bulletinInfo.features.events.title': 'Branchenveranstaltungen',
+  'bulletinInfo.features.events.description': 'Bleiben Sie über relevante Messen, Ausstellungen und Veranstaltungen informiert.',
+  
+  'bulletinInfo.examples.title': 'Ankündigungsbeispiele',
+  'bulletinInfo.examples.business.title': 'Geschäftsmöglichkeiten',
+  'bulletinInfo.examples.business.content': 'Suche Vertriebspartner für BMW Original-Ersatzteilelinie in Spanien und Portugal. Sonderkonditionen für Großhändler. Kontakt: distribucion@autopartsplus.com',
+  'bulletinInfo.examples.vehicles.title': 'Verfügbare Fahrzeuge',
+  'bulletinInfo.examples.vehicles.content': 'Charge von 15 Mercedes-Benz C-Klasse (2023) verfügbar für sofortigen Export aus Deutschland. Alle mit weniger als 10.000 km. Komplette Dokumentation und wettbewerbsfähiger Preis. Ref: MB-C23-LOT15.',
+  'bulletinInfo.examples.search.title': 'Fahrzeugsuche',
+  'bulletinInfo.examples.search.content': 'Wir suchen für einen Kunden Chargen von Volkswagen Transporter Transportern (2019-2023) in gutem Zustand. Vorzugsweise mit weniger als 50.000 km. Direktkauf und sofortige Zahlung. Kontakt: compras@euromobil.es',
+  'bulletinInfo.examples.services.title': 'Professionelle Dienstleistungen',
+  'bulletinInfo.examples.services.content': 'Ich biete spezialisierte Verwaltungsdienstleistungen für Fahrzeugimportverfahren nach Spanien aus jedem EU-Land. 15 Jahre Erfahrung und Servicegarantie. Kontakt: tramites@autogestor.es',
+};

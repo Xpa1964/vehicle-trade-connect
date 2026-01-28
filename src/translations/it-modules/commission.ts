@@ -1,0 +1,28 @@
+
+export default {
+  'commission.title': 'Calcolatore Commissioni',
+  'commission.description': 'Calcola le commissioni e le tariffe applicabili secondo il tipo di operazione nel marketplace',
+  'commission.vehiclePrice': 'Prezzo del veicolo',
+  'commission.operationType': 'Tipo di operazione',
+  'commission.buyer': 'Importatore/Compratore',
+  'commission.seller': 'Esportatore/Venditore',
+  'commission.costSummary': 'Riepilogo Costi',
+  'commission.basePrice': 'Prezzo del veicolo',
+  'commission.commissionAmount': 'Commissione',
+  'commission.maintenanceFee': 'Tassa di manutenzione',
+  'commission.totalCosts': 'Costi totali per',
+  'commission.importantInfo': 'Informazioni importanti',
+  'commission.minCommissionInfo': 'Commissione minima: €100 (venditore) / €80 (compratore) per veicoli fino a €10.000',
+  'commission.maxPriceInfo': 'Per veicoli superiori a €55.000 si applica la percentuale di €55.000',
+  'commission.maintenanceInfo': 'La tassa di manutenzione di €25 si applica a tutte le operazioni',
+  'commission.example': 'Es: 25000',
+  'commission.trader': 'Traders/Intermediari',
+  'commission.traderInfo': 'Commissione trader: 0,6% con minimo di €100 e massimo di €150 (da €25.000)',
+  'commission.filteredByProfile': 'Opzioni filtrate secondo il tuo tipo di profilo',
+  'datasheet.title': 'Scheda Tecnica',
+  'datasheet.download': 'Scarica PDF',
+  'datasheet.description': 'Scarica la scheda tecnica completa del veicolo in formato PDF.',
+  'datasheet.generating': 'Generazione documento...',
+  'datasheet.success': 'Scheda tecnica generata correttamente',
+  'datasheet.error': 'Errore nella generazione della scheda tecnica'
+};

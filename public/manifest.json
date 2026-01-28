@@ -1,0 +1,85 @@
+
+{
+  "name": "KONTACT VO - Automotive Marketplace",
+  "short_name": "KONTACT VO",
+  "description": "Professional B2B automotive marketplace for used vehicle trading, auctions, and business networking",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a8a",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity", "shopping"],
+  "lang": "es",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/lovable-uploads/d756e9c6-4a89-45dc-a824-7c846cdb6c2b.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "KONTACT VO Home"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Vehículos",
+      "short_name": "Vehículos",
+      "description": "Ver galería de vehículos",
+      "url": "/vehicle-gallery",
+      "icons": [{ "src": "/logo.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Subastas",
+      "short_name": "Subastas",
+      "description": "Ver subastas en vivo",
+      "url": "/auctions/live",
+      "icons": [{ "src": "/logo.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Tablón",
+      "short_name": "Tablón",
+      "description": "Ver tablón de anuncios",
+      "url": "/bulletin-board",
+      "icons": [{ "src": "/logo.svg", "sizes": "96x96" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

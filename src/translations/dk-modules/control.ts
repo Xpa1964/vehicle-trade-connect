@@ -1,0 +1,15 @@
+export default {
+  'control.title': 'Kontrolpanel',
+  'control.description': 'Administrer hovedfunktionerne i din konto',
+  'control.primaryFunctions': 'Primære Funktioner',
+  'control.communication': 'Kommunikation',
+  'control.services': 'Tjenester',
+  'control.professionalTools': 'Professionelle Værktøjer',
+  'control.vehiclesDescription': 'Adgang til køretøjsgalleriet med det største udbud af tilgængelige køretøjer',
+  'control.bulletinDescription': 'Her finder du de seneste meddelelser og opdateringer fra fællesskabet',
+  'control.publishAnnouncementDescription': 'Udgiv nye meddelelser og få adgang til hele fællesskabet med ét klik',
+  'control.transportQuotesDescription': 'Her kan du se dine express transport tilbud for køretøjer med chauffør',
+  'control.quoteTransportDescription': 'Anmod om express transport tilbud',
+  'control.auctionRoomDescription': 'Deltag i live auktioner af professionelle køretøjer',
+  'control.publishAuctionDescription': 'Opret og administrer dine egne køretøjsauktioner',
+};

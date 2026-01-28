@@ -1,0 +1,67 @@
+
+export default {
+  // Privacy Policy Headers
+  'privacy.subtitle': 'Please read our privacy policy to understand how we handle your data',
+  'privacy.introduction.title': 'Introduction',
+  'privacy.dataCollected.title': 'The Personal Data We Collect',
+  'privacy.dataCollection.title': 'How We Collect Data',
+  'privacy.dataUsage.title': 'How We Use Your Data',
+  'privacy.yourRights.title': 'Your Rights Regarding Your Personal Data',
+  'privacy.security.title': 'Security',
+  'privacy.contact.title': 'Contact',
+  
+  // Privacy Policy Content
+  'privacy.introduction.p1': 'This privacy statement applies to data that KONTACTVO S.L. Group collects when you use our services.',
+  'privacy.introduction.p2': 'This privacy statement is intended to inform you, the "data subject," of how we use your personal data. The protection of your personal data is important to us, and we recommend that you read this privacy statement. If you have difficulty reading this statement, please contact us (phone: +34 917811529) and we will assist you to the best of our ability.',
+  'privacy.introduction.p3': 'Your personal data is protected by law through the General Data Protection Regulation (REGULATION (EU) 2016/679 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation)).',
+  'privacy.introduction.p4': 'We may modify this statement when we deem appropriate. We recommend that you check this statement regularly, as changes will be published on this page.',
+  
+  'privacy.dataCollected.p1': 'We collect various types of data depending on how you interact with us and the services you use. However, this applies to all KONTACTVO S.L. services that only collect ordinary personal data.',
+  'privacy.dataCollected.subtitle1': 'Personal data that you provide to us',
+  'privacy.dataCollected.p2': 'When you register as a user of KONTACTVO S.L. services, you enter into a contract where KONTACTVO S.L. requires your contact information to be used for the provision of our services and to verify your identity.',
+  'privacy.dataCollected.subtitle2': 'Personal data collected when you visit our websites',
+  'privacy.dataCollected.p3': 'When you use our websites, we may automatically collect personal data, such as your IP address and other data collected by cookies, such as your location, how you navigate the websites, etc. You can find more information about the data collected by cookies here: Cookies',
+  'privacy.dataCollected.subtitle3': 'Personal data collected when using our services',
+  'privacy.dataCollected.p4': 'When you use our services, we collect the following personal data, among others:',
+  'privacy.dataCollected.allUsers': 'All users:',
+  'privacy.dataCollected.allUsers.list': 'IP Address;Name;Phone number;Email address;Age;Gender',
+  'privacy.dataCollected.proUsers': 'Additional data collected for professional users:',
+  'privacy.dataCollected.proUsers.list': 'Billing address;Payment data;VIN;Policy number',
+  'privacy.dataCollected.p5': 'We also collect usage data related to your use of our services, which may contain personal data.',
+  'privacy.dataCollected.p6': 'Payment and billing data is collected and used exclusively to process payments and deliver our products and services.',
+  'privacy.dataCollected.subtitle4': 'Sensitive data',
+  'privacy.dataCollected.p7': 'Since we do not use sensitive personal data, we ask you not to disclose any sensitive personal data unless we specifically request it due to a legal obligation or because the law requires us to do so.',
+  
+  'privacy.dataCollection.p1': 'As described above, we collect your personal data when you visit our website or when you use our services. Some of the data is provided by you and other data is collected as you navigate our websites.',
+  'privacy.dataCollection.subtitle1': 'Cookies',
+  'privacy.dataCollection.p2': 'At KONTACTVO S.L., we use cookies to collect data. Cookies are small files that are stored in your browser when you visit our website. Some cookies only last while you remain on the website; others may be stored for longer. These cookies can facilitate navigation by storing your password or your preferences regarding the use you make of the website. Cookies collect data such as the IP address of your computer, your browser settings, and information about how you use the website. Your general location can be determined from your IP address. Some cookies track user activity on our website, apps, and services to offer you personalized advertising on this and other websites.',
+  
+  'privacy.dataUsage.p1': 'We process your personal data for the following purposes:',
+  'privacy.dataUsage.list1': 'To provide our services.;To respond to your requests for information.;To contact you with updates about our services.;To market and advertise our services, including sending marketing communications, with your consent.;To analyze and improve our website and services.',
+  'privacy.dataUsage.subtitle1': 'Legal basis for data collection and processing',
+  'privacy.dataUsage.p2': 'We use the following legal bases for collecting and processing personal data:',
+  'privacy.dataUsage.consent.title': 'Consent',
+  'privacy.dataUsage.consent.text': 'We may collect and process data with your consent, such as when you subscribe to our newsletter, request information, or sign up for services.',
+  'privacy.dataUsage.contract.title': 'Necessary for entering into a contract',
+  'privacy.dataUsage.contract.text': 'We may collect and process the data we need to provide our services or fulfill contractual obligations to our clients. We may process a limited amount of personal data to develop and test features and services when strictly necessary to be able to provide our services.',
+  'privacy.dataUsage.legal.title': 'Necessary to comply with a legal obligation',
+  'privacy.dataUsage.legal.text': 'We may collect and process data to comply with a legal obligation.',
+  'privacy.dataUsage.legitimate.title': 'Legitimate interest',
+  'privacy.dataUsage.legitimate.text': 'We may collect and process data, as we have a legitimate interest in operating efficient and relevant marketing and sales activities, as well as providing and updating our service to maximize value for our clients and users, provided that your rights do not outweigh our legitimate interests. For this reason, we may use a limited amount of personal data to develop efficient and error-free services.',
+  'privacy.dataUsage.subtitle2': 'How we share data',
+  'privacy.dataUsage.p3': 'There are certain cases where we share your personal data collected when using KONTACTVO S.L. services with third parties to provide the agreed service. These cases include, but are not limited to, when you sell or buy vehicles or goods, when you do not pay legitimate invoices from KONTACTVO S.L., when we refund your payment, and when requested by authorities in connection with criminal investigations.',
+  'privacy.dataUsage.recipients': 'The categories of recipients are:',
+  'privacy.dataUsage.recipients.list': 'Auditors;Buyer of vehicles or goods you sell;Seller of vehicles or goods you buy;Our bank;Our debt collection company;Our debt recovery company;Digital contract signing company;Authorities;Our partners hosting our websites and internet services;Our data backup partners;SMS service providers;Parking lots where you pick up or deliver vehicles or goods;Transport companies that transport vehicles to or from you;Third-party support system;Function registration system',
+  
+  'privacy.yourRights.p1': 'As an EU/EEA resident, you have certain rights regarding your personal data. You have the right to access the personal data we have about you and to have inaccurate data rectified. You also have the right to request the permanent deletion of your personal data, and we can do so, unless KONTACTVO S.L. is legally obligated to retain the data. Additionally, you have the right to limit the processing of your personal data and to object to specific types of processing of your personal data. If you have given us consent to collect or process your personal data, you can revoke that consent at any time.',
+  'privacy.yourRights.p2': 'If you wish to exercise any of the rights mentioned above, please send a request to gdpr@KONTACTVO S.L..com.',
+  
+  'privacy.security.p1': 'We take all reasonable measures to protect the information we receive and prevent its accidental or unlawful destruction, loss, alteration, and unauthorized disclosure or access. We have implemented appropriate physical, technical, and administrative measures to safeguard and protect your information, but no security measure is perfect; there is a risk of a data breach.',
+  'privacy.security.measures': 'Below is a list of some of the security measures in place:',
+  'privacy.security.measures.list': 'Personal data is encrypted during transmission.;Personal data is encrypted while in our data centers.;Employees only have access to users\' personal data when "necessary".;All employees must receive training on GDPR and information security.;All employees who have access to personal data must sign a binding confidentiality agreement.',
+  'privacy.security.p2': 'Before sharing personal data with our suppliers, we ensure they have implemented security procedures to protect your data. Our suppliers and partners cannot use or share your information for any purpose other than to provide the services for which they were contracted.',
+  
+  'privacy.contact.p1': 'If you have any questions about this privacy statement or if you wish to exercise your privacy rights as described above, please contact us:',
+  'privacy.contact.email': 'Email: gdpr@kontact-automotive.com',
+  'privacy.contact.phone': 'Phone: +34 91 123 45 67',
+};

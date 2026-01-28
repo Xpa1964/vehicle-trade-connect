@@ -1,0 +1,21 @@
+export default {
+  'commission.title': 'Kalkulator Prowizji',
+  'commission.description': 'Oblicz prowizje i opłaty zgodnie z typem operacji na marketplace',
+  'commission.vehiclePrice': 'Cena pojazdu',
+  'commission.operationType': 'Typ operacji',
+  'commission.buyer': 'Importer/Kupujący',
+  'commission.seller': 'Eksporter/Sprzedający',
+  'commission.costSummary': 'Podsumowanie Kosztów',
+  'commission.basePrice': 'Cena pojazdu',
+  'commission.commissionAmount': 'Prowizja',
+  'commission.maintenanceFee': 'Opłata za utrzymanie',
+  'commission.totalCosts': 'Całkowite koszty dla',
+  'commission.importantInfo': 'Ważne informacje',
+  'commission.minCommissionInfo': 'Minimalna prowizja: 100€ (sprzedający) / 80€ (kupujący) dla pojazdów do 10.000€',
+  'commission.maxPriceInfo': 'Dla pojazdów powyżej 55.000€ obowiązuje procent od 55.000€',
+  'commission.maintenanceInfo': 'Opłata za utrzymanie w wysokości 25€ obowiązuje we wszystkich operacjach',
+  'commission.example': 'Np.: 25000',
+  'commission.trader': 'Traders/Pośrednicy',
+  'commission.traderInfo': 'Prowizja trader: 0,6% z minimum 100€ i maksimum 150€ (od 25.000€)',
+  'commission.filteredByProfile': 'Opcje filtrowane według typu profilu'
+};

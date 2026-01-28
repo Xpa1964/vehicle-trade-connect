@@ -1,0 +1,31 @@
+
+export default {
+  'navigation.backToDashboard': 'Volver al Panel',
+  'navigation.backToHome': 'Volver a Inicio',
+  'navigation.back': 'Volver',
+  'navigation.vehicles': 'Vehículos',
+  'navigation.messages': 'Mensajes',
+  'navigation.auctions': 'Subastas',
+  'navigation.exchanges': 'Intercambios',
+  'navigation.bulletinBoard': 'Tablón de Anuncios',
+  'navigation.importCalculator': 'Calculadora de Importación',
+  'navigation.profile': 'Perfil',
+  'navigation.settings': 'Configuración',
+  // Nuevas traducciones para el panel de control
+  'nav.vehicles': 'Vehículos',
+  'nav.auctions': 'Subastas',
+  'nav.exchanges': 'Intercambios',
+  'nav.messages': 'Mensajes',
+  'nav.bulletinBoard': 'Tablón de Anuncios',
+  'nav.vehicleReports': 'Entrega de Informes',
+  'nav.transportQuotes': 'Presupuestos de Transporte',
+  'nav.importCalculator': 'Calculadora de Importación',
+  'nav.commissionCalculator': 'Calculadora de Comisiones',
+  'nav.blog': 'Blog',
+  'nav.mediationSystem': 'Sistema de Mediación',
+  'nav.dashboard': 'Panel de Control',
+  'nav.auctionRoom': 'Sala de Subastas',
+  'nav.publishAuction': 'Publicar Subasta',
+  'navigation.backToAuction': 'Volver a la Subasta',
+  'navigation.backToControlPanel': 'Volver a Panel de Control'
+};

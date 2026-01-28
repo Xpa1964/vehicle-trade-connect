@@ -1,0 +1,25 @@
+export default {
+  'bulletinInfo.title': 'Opslagstavle',
+  'bulletinInfo.subtitle': 'Forbinder professionelle fra den internationale bilsektor',
+  'bulletinInfo.description': 'Vores Opslagstavle er en platform, hvor professionelle fra bilindustrien kan offentliggøre og finde forretningsmuligheder, vigtige meddelelser og branchenyheder.',
+  
+  'bulletinInfo.features.title': 'Hovedfunktioner',
+  'bulletinInfo.features.categories.title': 'Specialiserede Kategorier',
+  'bulletinInfo.features.categories.description': 'Meddelelser organiseret efter kategorier for effektiv søgning.',
+  'bulletinInfo.features.networking.title': 'Professionelt Netværk',
+  'bulletinInfo.features.networking.description': 'Forbind direkte med andre brancheprofessionelle.',
+  'bulletinInfo.features.companies.title': 'Virksomhedsprofiler',
+  'bulletinInfo.features.companies.description': 'Detaljerede oplysninger om virksomheder, der offentliggør meddelelser.',
+  'bulletinInfo.features.events.title': 'Branchebegivenheder',
+  'bulletinInfo.features.events.description': 'Hold dig informeret om relevante messer, udstillinger og begivenheder.',
+  
+  'bulletinInfo.examples.title': 'Eksempler på Meddelelser',
+  'bulletinInfo.examples.business.title': 'Forretningsmuligheder',
+  'bulletinInfo.examples.business.content': 'Søger distributører til BMW originale reservedelslinje i Spanien og Portugal. Særlige betingelser for grossister. Kontakt: distribucion@autopartsplus.com',
+  'bulletinInfo.examples.vehicles.title': 'Tilgængelige Køretøjer',
+  'bulletinInfo.examples.vehicles.content': 'Parti på 15 Mercedes-Benz C-Klasse (2023) tilgængelig til øjeblikkelig eksport fra Tyskland. Alle med mindre end 10.000 km. Komplet dokumentation og konkurrencedygtig pris. Ref: MB-C23-LOT15.',
+  'bulletinInfo.examples.search.title': 'Køretøjssøgning',
+  'bulletinInfo.examples.search.content': 'Vi søger for en kunde partier af Volkswagen Transporter varevogne (2019-2023) i god stand. Helst med mindre end 50.000 km. Direkte køb og øjeblikkelig betaling. Kontakt: compras@euromobil.es',
+  'bulletinInfo.examples.services.title': 'Professionelle Tjenester',
+  'bulletinInfo.examples.services.content': 'Jeg tilbyder specialiserede administrationstjenester til importprocedurer for køretøjer til Spanien fra ethvert EU-land. 15 års erfaring og servicegaranti. Kontakt: tramites@autogestor.es',
+};

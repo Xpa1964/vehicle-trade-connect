@@ -1,0 +1,30 @@
+
+export default {
+  'navigation.backToDashboard': 'Back to Dashboard',
+  'navigation.backToHome': 'Back to Home',
+  'navigation.back': 'Back',
+  'navigation.vehicles': 'Vehicles',
+  'navigation.messages': 'Messages',
+  'navigation.auctions': 'Auctions',
+  'navigation.exchanges': 'Exchanges',
+  'navigation.bulletinBoard': 'Bulletin Board',
+  'navigation.importCalculator': 'Import Calculator',
+  'navigation.profile': 'Profile',
+  'navigation.settings': 'Settings',
+  // New translations for control panel
+  'nav.vehicles': 'Vehicles',
+  'nav.auctions': 'Auctions',
+  'nav.exchanges': 'Exchanges',
+  'nav.messages': 'Messages',
+  'nav.bulletinBoard': 'Bulletin Board',
+  'nav.vehicleReports': 'Report Delivery',
+  'nav.transportQuotes': 'Transport Quotes',
+  'nav.importCalculator': 'Import Calculator',
+  'nav.commissionCalculator': 'Commission Calculator',
+  'nav.blog': 'Blog',
+  'nav.mediationSystem': 'Mediation System',
+  'nav.dashboard': 'Dashboard',
+  'nav.auctionRoom': 'Auction Room',
+  'nav.publishAuction': 'Publish Auction',
+  'navigation.backToControlPanel': 'Back to Control Panel'
+};

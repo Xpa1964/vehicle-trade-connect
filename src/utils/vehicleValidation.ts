@@ -1,0 +1,35 @@
+
+import { z } from 'zod';
+import { getCurrentYear } from './dateUtils';
+
+// Generic validation messages
+const REQUIRED_MESSAGE = 'This field is required';
+const POSITIVE_NUMBER = 'Must be a positive number';
+const NONNEGATIVE_NUMBER = 'Must be zero or greater';
+
+// Vehicle validation schema
+export const vehicleValidationSchema = {
+  brand: z.string().min(1, REQUIRED_MESSAGE),
+  model: z.string().min(1, REQUIRED_MESSAGE),
+  year: z.coerce
+    .number()
+    .min(1900, 'Year must be 1900 or later')
+    .max(getCurrentYear() + 1, 'Year cannot be in the future'),
+  price: z.coerce.number().positive(POSITIVE_NUMBER),
+  currency: z.string().default('EUR'),
+  mileage: z.coerce.number().nonnegative(NONNEGATIVE_NUMBER),
+  mileageUnit: z.enum(['km', 'mi']).default('km'),
+  units: z.coerce.number().int().nonnegative(NONNEGATIVE_NUMBER),
+  fuel: z.string().min(1, REQUIRED_MESSAGE),
+  transmission: z.string().min(1, REQUIRED_MESSAGE),
+  location: z.string().min(1, REQUIRED_MESSAGE),
+  country: z.string().min(1, REQUIRED_MESSAGE),
+  countryCode: z.string().min(1, REQUIRED_MESSAGE),
+  ivaStatus: z.enum(['included', 'notIncluded', 'deductible']),
+  cocStatus: z.boolean(),
+  status: z.enum(['available', 'reserved', 'sold']).default('available'),
+  images: z.instanceof(FileList).optional(),
+  additionalFiles: z.instanceof(FileList).optional(),
+  equipment: z.array(z.string()).default([]),
+  description: z.string().max(2000, 'Description must be less than 2000 characters').optional(),
+};

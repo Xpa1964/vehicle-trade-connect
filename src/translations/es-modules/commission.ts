@@ -1,0 +1,28 @@
+
+export default {
+  'commission.title': 'Calculadora de Comisiones',
+  'commission.description': 'Calcula las comisiones y tasas aplicables según el tipo de operación en el marketplace',
+  'commission.vehiclePrice': 'Precio del vehículo',
+  'commission.operationType': 'Tipo de operación',
+  'commission.buyer': 'Importador/Comprador',
+  'commission.seller': 'Exportador/Vendedor',
+  'commission.costSummary': 'Resumen de Costes',
+  'commission.basePrice': 'Precio del vehículo',
+  'commission.commissionAmount': 'Comisión',
+  'commission.maintenanceFee': 'Tasa de mantenimiento',
+  'commission.totalCosts': 'Total costes para',
+  'commission.importantInfo': 'Información importante',
+  'commission.minCommissionInfo': 'Comisión mínima: 100€ (vendedor) / 80€ (comprador) para vehículos hasta 10.000€',
+  'commission.maxPriceInfo': 'Para vehículos superiores a 55.000€ se aplica el porcentaje de 55.000€',
+  'commission.maintenanceInfo': 'La tasa de mantenimiento de 25€ se aplica en todas las operaciones',
+  'commission.example': 'Ej: 25000',
+  'commission.trader': 'Traders/Intermediarios',
+  'commission.traderInfo': 'Comisión trader: 0,6% con mínimo de 100€ y máximo de 150€ (a partir de 25.000€)',
+  'commission.filteredByProfile': 'Opciones filtradas según tu tipo de perfil',
+  'datasheet.title': 'Ficha Técnica',
+  'datasheet.download': 'Descargar PDF',
+  'datasheet.description': 'Descarga la ficha técnica completa del vehículo en formato PDF.',
+  'datasheet.generating': 'Generando documento...',
+  'datasheet.success': 'Ficha técnica generada correctamente',
+  'datasheet.error': 'Error al generar la ficha técnica'
+};

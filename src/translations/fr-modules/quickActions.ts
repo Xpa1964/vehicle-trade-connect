@@ -1,0 +1,23 @@
+
+export default {
+  'quickActions.title': 'Actions Rapides',
+  'quickActions.description': 'Accéder aux fonctions principales',
+  'quickActions.generateAuction': 'Générer une Enchère',
+  'quickActions.generateAuctionDescription': 'Créer de nouvelles enchères de véhicules',
+  'quickActions.publishVehicle': 'Publier un Véhicule',
+  'quickActions.publishVehicleDescription': 'Gérez votre inventaire de véhicules',
+  'quickActions.professionalBlog': 'Blog Professionnel',
+  'quickActions.professionalBlogDescription': 'Articles et tendances du secteur automobile',
+  'quickActions.publishAnnouncement': 'Publier une Annonce',
+  'quickActions.publishAnnouncementDescription': 'Créer de nouvelles annonces sur le tableau',
+  'quickActions.publishExchange': 'Publier un Échange',
+  'quickActions.publishExchangeDescription': 'Proposer des échanges de véhicules',
+  'quickActions.messages': 'Messages',
+  'quickActions.messagesDescription': 'Centre de messagerie et communications',
+  'quickActions.requestReport': 'Demander un Rapport',
+  'quickActions.requestReportDescription': 'Rapports techniques de véhicules',
+  'quickActions.quoteTransport': 'Devis Transport',
+  'quickActions.quoteTransportDescription': 'Calculateur de coûts de transport',
+  'api.integration.title': 'Intégration API',
+  'api.integration.bulkDescription': 'Automatisez le téléchargement de véhicules depuis votre système avec notre API REST.',
+};

@@ -1,0 +1,25 @@
+export default {
+  'bulletinInfo.title': 'Prikbord',
+  'bulletinInfo.subtitle': 'Professionals uit de internationale automobielsector verbinden',
+  'bulletinInfo.description': 'Ons Prikbord is een platform waar professionals uit de auto-industrie zakelijke kansen, belangrijke aankondigingen en nieuwsberichten kunnen plaatsen en vinden.',
+  
+  'bulletinInfo.features.title': 'Belangrijkste Kenmerken',
+  'bulletinInfo.features.categories.title': 'Gespecialiseerde Categorieën',
+  'bulletinInfo.features.categories.description': 'Aankondigingen georganiseerd per categorie voor efficiënt zoeken.',
+  'bulletinInfo.features.networking.title': 'Professioneel Netwerken',
+  'bulletinInfo.features.networking.description': 'Maak direct contact met andere professionals uit de sector.',
+  'bulletinInfo.features.companies.title': 'Bedrijfsprofielen',
+  'bulletinInfo.features.companies.description': 'Gedetailleerde informatie over bedrijven die aankondigingen plaatsen.',
+  'bulletinInfo.features.events.title': 'Sector Evenementen',
+  'bulletinInfo.features.events.description': 'Blijf op de hoogte van relevante beurzen, tentoonstellingen en evenementen.',
+  
+  'bulletinInfo.examples.title': 'Voorbeelden van Aankondigingen',
+  'bulletinInfo.examples.business.title': 'Zakelijke Kansen',
+  'bulletinInfo.examples.business.content': 'Op zoek naar distributeurs voor BMW originele onderdelenlijn in Spanje en Portugal. Speciale voorwaarden voor groothandelaren. Contact: distribucion@autopartsplus.com',
+  'bulletinInfo.examples.vehicles.title': 'Beschikbare Voertuigen',
+  'bulletinInfo.examples.vehicles.content': 'Partij van 15 Mercedes-Benz C-Klasse (2023) beschikbaar voor directe export vanuit Duitsland. Allemaal met minder dan 10.000 km. Volledige documentatie en concurrerende prijs. Ref: MB-C23-LOT15.',
+  'bulletinInfo.examples.search.title': 'Voertuig Zoeken',
+  'bulletinInfo.examples.search.content': 'We zoeken voor een klant partijen Volkswagen Transporter bestelwagens (2019-2023) in goede staat. Bij voorkeur met minder dan 50.000 km. Directe aankoop en onmiddellijke betaling. Contact: compras@euromobil.es',
+  'bulletinInfo.examples.services.title': 'Professionele Diensten',
+  'bulletinInfo.examples.services.content': 'Ik bied gespecialiseerde beheerdiensten voor voertuig importprocedures naar Spanje vanuit elk EU-land. 15 jaar ervaring en servicegarantie. Contact: tramites@autogestor.es',
+};

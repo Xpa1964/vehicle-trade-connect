@@ -1,0 +1,21 @@
+export default {
+  'commission.title': 'Provisionsberegner',
+  'commission.description': 'Beregn provisioner og gebyrer efter type af operation på markedspladsen',
+  'commission.vehiclePrice': 'Køretøjspris',
+  'commission.operationType': 'Operationstype',
+  'commission.buyer': 'Importør/Køber',
+  'commission.seller': 'Eksportør/Sælger',
+  'commission.costSummary': 'Omkostningsoversigt',
+  'commission.basePrice': 'Køretøjspris',
+  'commission.commissionAmount': 'Provision',
+  'commission.maintenanceFee': 'Vedligeholdelsesgebyr',
+  'commission.totalCosts': 'Samlede omkostninger for',
+  'commission.importantInfo': 'Vigtig information',
+  'commission.minCommissionInfo': 'Minimumsprovision: €100 (sælger) / €80 (køber) for køretøjer op til €10.000',
+  'commission.maxPriceInfo': 'For køretøjer over €55.000 anvendes procentdelen af €55.000',
+  'commission.maintenanceInfo': 'Vedligeholdelsesgebyret på €25 gælder for alle operationer',
+  'commission.example': 'F.eks.: 25000',
+  'commission.trader': 'Traders/Formidlere',
+  'commission.traderInfo': 'Trader provision: 0,6% med minimum €100 og maksimum €150 (fra €25.000)',
+  'commission.filteredByProfile': 'Muligheder filtreret efter din profiltype'
+};

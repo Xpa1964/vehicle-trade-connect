@@ -1,0 +1,15 @@
+export default {
+  "form.required": "Dit veld is verplicht",
+  "form.invalidEmail": "Voer een geldig e-mailadres in",
+  "form.maxLength": "Te veel tekens",
+  "form.minLength": "Te weinig tekens",
+  "form.invalid": "Ongeldige waarde",
+  "form.submit": "Verzenden",
+  "form.reset": "Herstellen",
+  "form.success": "Succesvol verzonden",
+  "form.error": "Er is een fout opgetreden. Probeer het opnieuw",
+  "form.privacyConsent": "Ik accepteer het privacybeleid en de verwerking van mijn persoonlijke gegevens",
+  "common.backToHome": "Terug naar Home",
+  "common.returnHome": "Terug naar Home",
+  "common.loading": "Laden...",
+};

@@ -1,0 +1,25 @@
+export default {
+  'bulletinInfo.title': 'Tablica Ogłoszeń',
+  'bulletinInfo.subtitle': 'Łączenie profesjonalistów z międzynarodowego sektora motoryzacyjnego',
+  'bulletinInfo.description': 'Nasza Tablica Ogłoszeń to platforma, na której profesjonaliści z branży motoryzacyjnej mogą publikować i znajdować możliwości biznesowe, ważne ogłoszenia i wiadomości branżowe.',
+  
+  'bulletinInfo.features.title': 'Główne Funkcje',
+  'bulletinInfo.features.categories.title': 'Wyspecjalizowane Kategorie',
+  'bulletinInfo.features.categories.description': 'Ogłoszenia zorganizowane według kategorii dla efektywnego wyszukiwania.',
+  'bulletinInfo.features.networking.title': 'Profesjonalny Networking',
+  'bulletinInfo.features.networking.description': 'Połącz się bezpośrednio z innymi profesjonalistami z branży.',
+  'bulletinInfo.features.companies.title': 'Profile Firm',
+  'bulletinInfo.features.companies.description': 'Szczegółowe informacje o firmach publikujących ogłoszenia.',
+  'bulletinInfo.features.events.title': 'Wydarzenia Branżowe',
+  'bulletinInfo.features.events.description': 'Bądź na bieżąco z odpowiednimi targami, wystawami i wydarzeniami.',
+  
+  'bulletinInfo.examples.title': 'Przykłady Ogłoszeń',
+  'bulletinInfo.examples.business.title': 'Możliwości Biznesowe',
+  'bulletinInfo.examples.business.content': 'Poszukuję dystrybutorów linii oryginalnych części zamiennych BMW w Hiszpanii i Portugalii. Specjalne warunki dla hurtowników. Kontakt: distribucion@autopartsplus.com',
+  'bulletinInfo.examples.vehicles.title': 'Dostępne Pojazdy',
+  'bulletinInfo.examples.vehicles.content': 'Partia 15 Mercedes-Benz Klasy C (2023) dostępna do natychmiastowego eksportu z Niemiec. Wszystkie z przebiegiem poniżej 10 000 km. Kompletna dokumentacja i konkurencyjna cena. Ref: MB-C23-LOT15.',
+  'bulletinInfo.examples.search.title': 'Poszukiwanie Pojazdów',
+  'bulletinInfo.examples.search.content': 'Poszukujemy dla klienta partii samochodów dostawczych Volkswagen Transporter (2019-2023) w dobrym stanie. Najlepiej z przebiegiem poniżej 50 000 km. Zakup bezpośredni i natychmiastowa płatność. Kontakt: compras@euromobil.es',
+  'bulletinInfo.examples.services.title': 'Usługi Profesjonalne',
+  'bulletinInfo.examples.services.content': 'Oferuję specjalistyczne usługi zarządzania procedurami importu pojazdów do Hiszpanii z dowolnego kraju UE. 15 lat doświadczenia i gwarancja usług. Kontakt: tramites@autogestor.es',
+};

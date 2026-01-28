@@ -1,0 +1,35 @@
+export default {
+  // Vehicle Actions
+  'vehicleActions.addToFavorites': 'Toevoegen aan Favorieten',
+  'vehicleActions.removeFromFavorites': 'Verwijderen uit Favorieten',
+  'vehicleActions.share': 'Delen',
+  'vehicleActions.report': 'Rapporteren',
+  'vehicleActions.contact': 'Contact Verkoper',
+  'vehicleActions.scheduleViewing': 'Bezichtiging Inplannen',
+  'vehicleActions.requestInfo': 'Info Aanvragen',
+  'vehicleActions.makeOffer': 'Bod Uitbrengen',
+  'vehicleActions.addToCompare': 'Toevoegen aan Vergelijking',
+  'vehicleActions.removeFromCompare': 'Verwijderen uit Vergelijking',
+  'vehicleActions.downloadBrochure': 'Brochure Downloaden',
+  'vehicleActions.requestTestDrive': 'Proefrit Aanvragen',
+  'vehicleActions.saveSearch': 'Zoekopdracht Opslaan',
+  'vehicleActions.print': 'Printen',
+  
+  // Status Actions
+  'vehicles.statusActions.question': 'Wat is er gebeurd met dit voertuig?',
+  'vehicles.statusActions.reserved': 'GERESERVEERD',
+  'vehicles.statusActions.sold': 'VERKOCHT',
+  'vehicles.statusActions.available': 'BESCHIKBAAR',
+  'vehicles.statusActions.release': 'VRIJGEVEN',
+  'vehicles.statusActions.reactivate': 'REACTIVEREN',
+  'vehicles.statusActions.emailInfo': 'U ontvangt een e-mail met contactgegevens van geïnteresseerden',
+  'vehicles.statusActions.confirmTitle': 'Markeren als {{status}}?',
+  'vehicles.statusActions.confirmDescription': 'De voertuigstatus wordt bijgewerkt en u ontvangt een e-mail met contactgegevens van geïnteresseerde personen.',
+  'vehicles.statusActions.emailSentWithContacts': 'Status bijgewerkt naar {{status}}. E-mail verzonden met {{count}} contacten.',
+  'vehicles.statusActions.emailSentNoContacts': 'Status bijgewerkt naar {{status}}. Geen geïnteresseerde contacten gevonden.',
+  'vehicles.statusActions.reactivated': 'Voertuig opnieuw geactiveerd en weer beschikbaar',
+  'vehicles.statusActions.error': 'Fout bij het bijwerken van de voertuigstatus',
+  
+  'common.cancel': 'Annuleren',
+  'common.confirm': 'Bevestigen',
+};

@@ -1,0 +1,20 @@
+export default {
+  'seller.contactSeller': 'Verkäufer kontaktieren',
+  'seller.viewProfile': 'Profil anzeigen und bewerten',
+  'seller.memberSince': 'Mitglied seit',
+  'seller.contact': 'Kontakt',
+  'seller.loadingInfo': 'Verkäuferinformationen werden geladen...',
+  'seller.infoNotAvailable': 'Verkäuferinformationen nicht verfügbar',
+  'seller.businessTypes.dealer': 'Händler',
+  'seller.businessTypes.multibrand_used': 'Multimarca Gebrauchtwagen',
+  'seller.businessTypes.buy_sell': 'Kauf/Verkauf',
+  'seller.businessTypes.rent_a_car': 'Autovermietung',
+  'seller.businessTypes.renting': 'Leasing',
+  'seller.businessTypes.workshop': 'Werkstatt',
+  'seller.businessTypes.importer': 'Importeur',
+  'seller.businessTypes.exporter': 'Exporteur',
+  'seller.businessTypes.trader': 'Händler',
+  'seller.businessTypes.other': 'Andere',
+  'seller.ratings': 'Bewertungen',
+  'seller.verified': 'verifiziert'
+};

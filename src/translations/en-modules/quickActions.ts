@@ -1,0 +1,23 @@
+
+export default {
+  'quickActions.title': 'Quick Actions',
+  'quickActions.description': 'Access main functions',
+  'quickActions.generateAuction': 'Generate Auction',
+  'quickActions.generateAuctionDescription': 'Create new vehicle auctions',
+  'quickActions.publishVehicle': 'Publish Vehicle',
+  'quickActions.publishVehicleDescription': 'Manage your vehicle inventory',
+  'quickActions.professionalBlog': 'Professional Blog',
+  'quickActions.professionalBlogDescription': 'Articles and trends in the automotive sector',
+  'quickActions.publishAnnouncement': 'Publish Announcement',
+  'quickActions.publishAnnouncementDescription': 'Create new announcements on the board',
+  'quickActions.publishExchange': 'Publish Exchange',
+  'quickActions.publishExchangeDescription': 'Propose vehicle exchanges',
+  'quickActions.messages': 'Messages',
+  'quickActions.messagesDescription': 'Messaging and communications center',
+  'quickActions.requestReport': 'Request Report',
+  'quickActions.requestReportDescription': 'Vehicle technical reports',
+  'quickActions.quoteTransport': 'Quote Transport',
+  'quickActions.quoteTransportDescription': 'Transport cost calculator',
+  'api.integration.title': 'API Integration',
+  'api.integration.bulkDescription': 'Automate vehicle uploads from your system using our REST API.',
+};

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard Image</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+    <h1>Test API Key OpenAI</h1>
+    <button id="testBtn">Probar Generación de Imagen</button>
+    <div id="result"></div>
+    <div id="logs"></div>
+
+    <script>
+        const { createClient } = supabase;
+        const supabaseClient = createClient(
+            'https://inqqnsvlimtpjxjxuzaf.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlucXFuc3ZsaW10cGp4anh1emFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwMDIyNzksImV4cCI6MjA2MDU3ODI3OX0.crFcbhfMi7w9BxpBHbzRMSfuvzmUZY1B_MS8r8gucfw'
+        );
+
+        document.getElementById('testBtn').addEventListener('click', async () => {
+            const resultDiv = document.getElementById('result');
+            const logsDiv = document.getElementById('logs');
+            
+            resultDiv.innerHTML = '<p>Generando imagen de prueba...</p>';
+            logsDiv.innerHTML = '';
+            
+            try {
+                console.log('Invocando función Edge...');
+                const { data, error } = await supabaseClient.functions.invoke('generate-dashboard-images', {
+                    body: { imageType: 'blog' }
+                });
+                
+                console.log('Respuesta:', { data, error });
+                
+                if (error) {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${JSON.stringify(error, null, 2)}</p>`;
+                    logsDiv.innerHTML = `<pre style="color: red; background: #f5f5f5; padding: 10px;">${JSON.stringify(error, null, 2)}</pre>`;
+                } else if (data?.imageUrl) {
+                    resultDiv.innerHTML = `
+                        <p style="color: green;">✅ ¡Imagen generada correctamente!</p>
+                        <p>URL: ${data.imageUrl}</p>
+                        <img src="${data.imageUrl}" alt="Imagen generada" style="max-width: 200px; height: auto; border: 1px solid #ccc;">
+                    `;
+                    logsDiv.innerHTML = `<pre style="color: green; background: #f0f8f0; padding: 10px;">${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: orange;">Respuesta inesperada: ${JSON.stringify(data, null, 2)}</p>`;
+                }
+            } catch (err) {
+                console.error('Error al probar la función:', err);
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${err.message}</p>`;
+                logsDiv.innerHTML = `<pre style="color: red; background: #f8f0f0; padding: 10px;">${err.stack}</pre>`;
+            }
+        });
+    </script>
+</body>
+</html>

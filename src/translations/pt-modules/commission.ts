@@ -1,0 +1,21 @@
+export default {
+  'commission.title': 'Calculadora de Comissões',
+  'commission.description': 'Calcule comissões e taxas aplicáveis segundo o tipo de operação no marketplace',
+  'commission.vehiclePrice': 'Preço do veículo',
+  'commission.operationType': 'Tipo de operação',
+  'commission.buyer': 'Importador/Comprador',
+  'commission.seller': 'Exportador/Vendedor',
+  'commission.costSummary': 'Resumo de Custos',
+  'commission.basePrice': 'Preço do veículo',
+  'commission.commissionAmount': 'Comissão',
+  'commission.maintenanceFee': 'Taxa de manutenção',
+  'commission.totalCosts': 'Custos totais para',
+  'commission.importantInfo': 'Informações importantes',
+  'commission.minCommissionInfo': 'Comissão mínima: €100 (vendedor) / €80 (comprador) para veículos até €10.000',
+  'commission.maxPriceInfo': 'Para veículos superiores a €55.000 aplica-se a porcentagem de €55.000',
+  'commission.maintenanceInfo': 'A taxa de manutenção de €25 aplica-se em todas as operações',
+  'commission.example': 'Ex: 25000',
+  'commission.trader': 'Traders/Intermediários',
+  'commission.traderInfo': 'Comissão trader: 0,6% com mínimo de €100 e máximo de €150 (a partir de €25.000)',
+  'commission.filteredByProfile': 'Opções filtradas de acordo com seu tipo de perfil'
+};

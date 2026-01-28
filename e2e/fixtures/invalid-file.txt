@@ -1,0 +1,5 @@
+This is an invalid file for testing file upload validation.
+It should be rejected because it's not an image file.
+File size: small
+File type: text/plain
+Expected behavior: Upload should fail with appropriate error message.

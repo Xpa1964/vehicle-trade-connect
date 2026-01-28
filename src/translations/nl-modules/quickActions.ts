@@ -1,0 +1,27 @@
+export default {
+  // Quick Actions
+  'quickActions.title': 'Snelle Acties',
+  'quickActions.addVehicle': 'Voertuig Toevoegen',
+  'quickActions.searchVehicles': 'Voertuigen Zoeken',
+  'quickActions.viewMessages': 'Berichten Bekijken',
+  'quickActions.createAuction': 'Veiling Maken',
+  'quickActions.requestTransport': 'Transport Aanvragen',
+  'quickActions.viewReports': 'Rapporten Bekijken',
+  'quickActions.manageProfile': 'Profiel Beheren',
+  'quickActions.viewStatistics': 'Statistieken Bekijken',
+  // New keys for carousel
+  'quickActions.publishVehicle': 'Voertuig Publiceren',
+  'quickActions.publishVehicleDescription': 'Nieuw voertuig uploaden',
+  'quickActions.messages': 'Berichten',
+  'quickActions.messagesDescription': 'Conversaties bekijken',
+  'quickActions.publishExchange': 'Uitwisselingen',
+  'quickActions.publishExchangeDescription': 'Uitwisseling voorstellen',
+  'quickActions.publishAnnouncement': 'Aankondiging',
+  'quickActions.publishAnnouncementDescription': 'Aankondiging publiceren',
+  'quickActions.requestReport': 'Rapporten',
+  'quickActions.requestReportDescription': 'Rapport aanvragen',
+  'quickActions.quoteTransport': 'Transport',
+  'quickActions.quoteTransportDescription': 'Transport quoteren',
+  'api.integration.title': 'API Integratie',
+  'api.integration.bulkDescription': 'Automatiseer voertuiguploads vanuit uw systeem met onze REST API.',
+};

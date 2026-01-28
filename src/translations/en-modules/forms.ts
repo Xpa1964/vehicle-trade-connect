@@ -1,0 +1,15 @@
+export default {
+  "form.required": "This field is required",
+  "form.invalidEmail": "Please enter a valid email",
+  "form.maxLength": "Too many characters",
+  "form.minLength": "Too few characters",
+  "form.invalid": "Invalid value",
+  "form.submit": "Submit",
+  "form.reset": "Reset",
+  "form.success": "Successfully submitted",
+  "form.error": "An error occurred. Please try again",
+  "form.privacyConsent": "I accept the privacy policy and the processing of my personal data",
+  "common.backToHome": "Back to Home",
+  "common.returnHome": "Return Home",
+  "common.loading": "Loading...",
+};

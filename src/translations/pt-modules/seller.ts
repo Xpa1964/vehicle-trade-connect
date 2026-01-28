@@ -1,0 +1,20 @@
+export default {
+  'seller.contactSeller': 'Contatar Vendedor',
+  'seller.viewProfile': 'Ver Perfil e Avaliar',
+  'seller.memberSince': 'Membro desde',
+  'seller.contact': 'Contato',
+  'seller.loadingInfo': 'Carregando informações do vendedor...',
+  'seller.infoNotAvailable': 'Informações do vendedor não disponíveis',
+  'seller.businessTypes.dealer': 'Concessionária',
+  'seller.businessTypes.multibrand_used': 'Multimarca Usados',
+  'seller.businessTypes.buy_sell': 'Compra-Venda',
+  'seller.businessTypes.rent_a_car': 'Rent a Car',
+  'seller.businessTypes.renting': 'Aluguel',
+  'seller.businessTypes.workshop': 'Oficina',
+  'seller.businessTypes.importer': 'Importador',
+  'seller.businessTypes.exporter': 'Exportador',
+  'seller.businessTypes.trader': 'Comerciante',
+  'seller.businessTypes.other': 'Outro',
+  'seller.ratings': 'avaliações',
+  'seller.verified': 'verificadas'
+};

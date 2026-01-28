@@ -1,0 +1,21 @@
+export default {
+  'commission.title': 'Provisionsrechner',
+  'commission.description': 'Berechnen Sie Provisionen und anfallende Gebühren je nach Geschäftstyp im Marktplatz',
+  'commission.vehiclePrice': 'Fahrzeugpreis',
+  'commission.operationType': 'Geschäftstyp',
+  'commission.buyer': 'Importeur/Käufer',
+  'commission.seller': 'Exporteur/Verkäufer',
+  'commission.costSummary': 'Kostenzusammenfassung',
+  'commission.basePrice': 'Fahrzeugpreis',
+  'commission.commissionAmount': 'Provision',
+  'commission.maintenanceFee': 'Wartungsgebühr',
+  'commission.totalCosts': 'Gesamtkosten für',
+  'commission.importantInfo': 'Wichtige Informationen',
+  'commission.minCommissionInfo': 'Mindestprovision: 100€ (Verkäufer) / 80€ (Käufer) für Fahrzeuge bis 10.000€',
+  'commission.maxPriceInfo': 'Für Fahrzeuge über 55.000€ wird der Prozentsatz von 55.000€ angewendet',
+  'commission.maintenanceInfo': 'Die Wartungsgebühr von 25€ wird bei allen Geschäften angewendet',
+  'commission.example': 'Z.B.: 25000',
+  'commission.trader': 'Traders/Vermittler',
+  'commission.traderInfo': 'Händlerprovision: 0,6% mit Minimum von 100€ und Maximum von 150€ (ab 25.000€)',
+  'commission.filteredByProfile': 'Optionen nach Ihrem Profiltyp gefiltert'
+};

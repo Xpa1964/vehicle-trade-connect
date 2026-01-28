@@ -1,0 +1,15 @@
+export default {
+  "form.required": "Ce champ est obligatoire",
+  "form.invalidEmail": "Veuillez saisir un email valide",
+  "form.maxLength": "Trop de caractères",
+  "form.minLength": "Trop peu de caractères",
+  "form.invalid": "Valeur non valide",
+  "form.submit": "Envoyer",
+  "form.reset": "Réinitialiser",
+  "form.success": "Envoyé avec succès",
+  "form.error": "Une erreur s'est produite. Veuillez réessayer",
+  "form.privacyConsent": "J'accepte la politique de confidentialité et le traitement de mes données personnelles",
+  "common.backToHome": "Retour à l'accueil",
+  "common.returnHome": "Retour à l'accueil",
+  "common.loading": "Chargement...",
+};

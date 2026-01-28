@@ -1,0 +1,76 @@
+
+# KONTACT VO - Robots.txt
+# Professional B2B Automotive Marketplace
+
+User-agent: *
+Allow: /
+
+# Allow major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# Allow social media crawlers
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /messages/
+Disallow: /api/
+
+# Disallow authentication pages
+Disallow: /login
+Disallow: /register
+Disallow: /reset-password
+
+# Disallow dynamic query parameters
+Disallow: /*?*utm_source
+Disallow: /*?*utm_medium
+Disallow: /*?*utm_campaign
+Disallow: /*?*ref=
+Disallow: /*?*token=
+Disallow: /*?*session=
+
+# Allow important static resources
+Allow: /assets/
+Allow: /lovable-uploads/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.gif
+Allow: /*.svg
+Allow: /*.webp
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://kontact-vo.lovable.app/sitemap.xml

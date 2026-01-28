@@ -1,0 +1,67 @@
+
+export default {
+  // Política de Privacidad
+  'privacy.subtitle': 'Por favor, lea nuestra política de privacidad para comprender cómo manejamos sus datos',
+  'privacy.introduction.title': 'Introducción',
+  'privacy.dataCollected.title': 'Los Datos Personales que Recopilamos',
+  'privacy.dataCollection.title': 'Cómo Recopilamos los Datos',
+  'privacy.dataUsage.title': 'Cómo Utilizamos sus Datos',
+  'privacy.yourRights.title': 'Sus Derechos Respecto a sus Datos Personales',
+  'privacy.security.title': 'Seguridad',
+  'privacy.contact.title': 'Contacto',
+  
+  // Contenido de la Política de Privacidad
+  'privacy.introduction.p1': 'Esta declaración de privacidad se aplica a los datos que KONTACTVO S.L. Group recopila cuando usted utiliza nuestros servicios.',
+  'privacy.introduction.p2': 'Esta declaración de privacidad tiene por objeto informarle a usted, el «interesado», de la forma en la que utilizamos sus datos personales. La protección de sus datos personales es importante para nosotros y le recomendamos que lea esta declaración de privacidad. Si tiene problemas para leer esta declaración, póngase en contacto con nosotros (teléfono: +34 917811529) y le ayudaremos en la medida de nuestras posibilidades.',
+  'privacy.introduction.p3': 'Sus datos personales están protegidos por ley a través del Reglamento General de Protección de Datos (REGLAMENTO (UE) 2016/679 DEL PARLAMENTO EUROPEO Y DEL CONSEJO de 27 de abril de 2016 relativo a la protección de las personas físicas en lo que respecta al tratamiento de datos personales y a la libre circulación de estos datos y por el que se deroga la Directiva 95/46/CE (Reglamento general de protección de datos)).',
+  'privacy.introduction.p4': 'Podemos modificar esta declaración cuando lo consideremos oportuno. Le recomendamos que consulte esta declaración periódicamente, ya que los cambios se publicarán en esta página.',
+  
+  'privacy.dataCollected.p1': 'Recopilamos varios tipos de datos en función de cómo interactúe con nosotros y de los servicios que utilice. Sin embargo, esto se aplica a todos los servicios de KONTACTVO S.L. que solo recopilen datos personales ordinarios.',
+  'privacy.dataCollected.subtitle1': 'Los datos personales que usted nos proporciona',
+  'privacy.dataCollected.p2': 'Al registrarse como usuario de los servicios de KONTACTVO S.L., usted formaliza un contrato en el que KONTACTVO S.L. requiere sus datos de contacto que se utilizarán para la prestación de nuestros servicios y para verificar su identidad.',
+  'privacy.dataCollected.subtitle2': 'Los datos personales recopilados cuando visita nuestros sitios web',
+  'privacy.dataCollected.p3': 'Cuando utiliza nuestros sitios web, podemos recopilar automáticamente datos personales, como la dirección IP y otros datos recopilados por cookies, como su ubicación, cómo navega por los sitios web, etc. Encontrará más información sobre los datos recopilados por las cookies aquí: Cookies',
+  'privacy.dataCollected.subtitle3': 'Los datos personales recopilados al utilizar nuestros servicios',
+  'privacy.dataCollected.p4': 'Cuando utiliza nuestros servicios, recopilamos los siguientes datos personales, entre otros:',
+  'privacy.dataCollected.allUsers': 'Todos los usuarios:',
+  'privacy.dataCollected.allUsers.list': 'Dirección IP;Nombre;Número de teléfono;Dirección de correo electrónico;Edad;Género',
+  'privacy.dataCollected.proUsers': 'Datos adicionales recopilados para usuarios profesionales:',
+  'privacy.dataCollected.proUsers.list': 'Dirección de facturación;Datos de pago;VIN;Número de póliza',
+  'privacy.dataCollected.p5': 'También recopilamos datos de uso relacionados con el uso que hace de nuestros servicios, que pueden contener datos personales.',
+  'privacy.dataCollected.p6': 'Los datos de pago y facturación se recopilan y utilizan exclusivamente para procesar pagos y entregar nuestros productos y servicios.',
+  'privacy.dataCollected.subtitle4': 'Datos sensibles',
+  'privacy.dataCollected.p7': 'Dado que no utilizamos datos personales sensibles, le pedimos que no desvele ningún dato personal sensible a menos que se lo solicitemos específicamente debido a una obligación legal o a que la ley así nos lo exija.',
+  
+  'privacy.dataCollection.p1': 'Tal y como se describe anteriormente, recopilamos sus datos personales cuando visita nuestro sitio web o cuando utiliza nuestros servicios. Algunos de los datos nos los proporciona usted y otros se recopilan mientras navega por nuestros sitios web.',
+  'privacy.dataCollection.subtitle1': 'Cookies',
+  'privacy.dataCollection.p2': 'En KONTACTVO S.L., hacemos uso de cookies para recopilar datos. Las cookies son pequeños archivos que se almacenan en su navegador cuando visita nuestro sitio web. Algunas cookies solo duran mientras permanezca en el sitio web; otras pueden almacenarse durante más tiempo. Estas cookies pueden facilitar la navegación al almacenar su contraseña o sus preferencias con respecto al uso que hace del sitio web. Las cookies recopilan datos como la dirección IP de su ordenador, la configuración de su navegador y la información sobre cómo utiliza el sitio web. Su ubicación general puede determinarse a partir de su dirección IP. Algunas cookies rastrean la actividad de los usuarios en nuestro sitio web, apps y servicios para ofrecerle publicidad personalizada en este y en otros sitios web.',
+  
+  'privacy.dataUsage.p1': 'Tratamos sus datos personales para los siguientes fines:',
+  'privacy.dataUsage.list1': 'Prestar nuestros servicios.;Responder a sus solicitudes de información.;Ponernos en contacto con usted con actualizaciones de nuestros servicios.;Comercializar y publicitar nuestros servicios, incluido el envío de comunicaciones de marketing, con su consentimiento.;Analizar y mejorar nuestro sitio web y servicios.',
+  'privacy.dataUsage.subtitle1': 'La base legal para la recopilación y el tratamiento de datos',
+  'privacy.dataUsage.p2': 'Utilizamos las siguientes bases legales para la recopilación y el tratamiento de datos personales:',
+  'privacy.dataUsage.consent.title': 'Consentimiento',
+  'privacy.dataUsage.consent.text': 'Podemos recopilar y tratar datos con su consentimiento, como cuando se suscribe a nuestro boletín de noticias, solicita información o se inscribe a servicios.',
+  'privacy.dataUsage.contract.title': 'Necesario para formalizar un contrato',
+  'privacy.dataUsage.contract.text': 'Podemos recopilar y tratar los datos que necesitamos para prestar nuestros servicios o cumplir las obligaciones contractuales con nuestros clientes. Podemos tratar una cantidad limitada de datos personales para desarrollar y probar funciones y servicios cuando sea estrictamente necesario para poder prestar nuestros servicios.',
+  'privacy.dataUsage.legal.title': 'Necesario para cumplir con una obligación legal',
+  'privacy.dataUsage.legal.text': 'Podemos recopilar y tratar datos para cumplir con una obligación legal.',
+  'privacy.dataUsage.legitimate.title': 'Interés legítimo',
+  'privacy.dataUsage.legitimate.text': 'Podemos recopilar y tratar datos, puesto que tenemos un interés legítimo en operar actividades de marketing y ventas eficientes y relevantes, así como proporcionar y actualizar nuestro servicio para maximizar el valor para nuestros clientes y usuarios, siempre que sus derechos no pesen más que nuestros intereses legítimos. Por ese motivo, podemos utilizar una cantidad limitada de datos personales para desarrollar servicios eficientes y sin errores.',
+  'privacy.dataUsage.subtitle2': 'Cómo compartimos los datos',
+  'privacy.dataUsage.p3': 'Existen ciertos casos en los que compartimos sus datos personales recopilados al utilizar los servicios de KONTACTVO S.L. con terceros para prestar el servicio acordado. Estos casos incluyen, entre otros, cuando venda o compre vehículos o mercancías, cuando no pague facturas legítimas de KONTACTVO S.L., cuando le devolvamos el pago y cuando así lo soliciten las autoridades en relación con investigaciones por la comisión de delitos.',
+  'privacy.dataUsage.recipients': 'Las categorías de destinatarios son:',
+  'privacy.dataUsage.recipients.list': 'Auditores de cuentas;Comprador de los vehículos o mercancías que usted vende;Vendedor de los vehículos o mercancías que usted compra;Nuestro banco;Nuestra empresa de cobro de deudas;Nuestra empresa de recuperación de deudas;Empresa para la firma digital del contrato;Las autoridades;Nuestros socios que alojan nuestros sitios web y servicios de internet;Nuestros socios encargados de las copias de seguridad de los datos;Proveedores de servicios de SMS;Aparcamientos en los que recoge o entrega vehículos o mercancías;Empresas de transporte que transportan vehículos hacia o desde usted;Sistema de soporte de terceros;Sistema de registro de funciones',
+  
+  'privacy.yourRights.p1': 'Como residente de la UE/EEE, le amparan ciertos derechos con respecto a sus datos personales. Tiene derecho a acceder a los datos personales que tenemos sobre usted y a que se rectifiquen los datos inexactos. También tiene derecho a solicitar la supresión permanente de sus datos personales, y podemos hacerlo, a menos que KONTACTVO S.L. esté obligada por ley a conservar los datos. Además, tiene derecho a limitar el tratamiento de sus datos personales y a oponerse a tipos específicos de tratamiento de sus datos personales. Si nos ha dado su consentimiento para recopilar o tratar sus datos personales, puede revocar dicho consentimiento en cualquier momento.',
+  'privacy.yourRights.p2': 'Si desea ejercer alguno de los derechos mencionados anteriormente, envíe una solicitud a gdpr@KONTACTVO S.L..com.',
+  
+  'privacy.security.p1': 'Adoptamos todas las medidas razonables para proteger la información que recibimos y evitar su destrucción accidental o ilícita, pérdida, alteración y divulgación o acceso no autorizado. Hemos puesto en marcha las medidas físicas, técnicas y administrativas adecuadas para salvaguardar y proteger su información, pero ninguna medida de seguridad es perfecta; existe un riesgo de una filtración de datos.',
+  'privacy.security.measures': 'A continuación se muestra una lista de algunas de las medidas de seguridad que se aplican:',
+  'privacy.security.measures.list': 'Los datos personales se encriptan durante la transmisión.;Los datos personales se encriptan mientras están en nuestros centros de datos.;Los empleados solo tienen acceso a los datos personales de los usuarios cuando "es necesario".;Todos los empleados deben recibir formación sobre el RGPD y la seguridad de la información.;Todos los empleados que tienen acceso a datos personales deben firmar un contrato de confidencialidad vinculante.',
+  'privacy.security.p2': 'Antes de compartir datos personales con nuestros proveedores, nos aseguramos de que hayan puesto en marcha procedimientos de seguridad para proteger sus datos. Nuestros proveedores y socios no pueden utilizar ni compartir su información para ningún otro fin que no sea prestar los servicios para los que han sido contratados.',
+  
+  'privacy.contact.p1': 'Si tiene alguna pregunta sobre esta declaración de privacidad o si desea ejercer sus derechos de privacidad como se describe anteriormente, comuníquese con nosotros:',
+  'privacy.contact.email': 'Email: gdpr@kontact-automotive.com',
+  'privacy.contact.phone': 'Teléfono: +34 91 123 45 67',
+};

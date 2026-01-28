@@ -1,0 +1,6 @@
+
+<!-- User avatar placeholder -->
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="100" r="100" fill="#D6BCFA"/>
+  <text x="50%" y="50%" font-family="Arial" font-size="24px" fill="#1A1F2C" text-anchor="middle">User</text>
+</svg>

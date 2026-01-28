@@ -1,0 +1,15 @@
+export default {
+  "form.required": "Dieses Feld ist erforderlich",
+  "form.invalidEmail": "Bitte geben Sie eine gültige E-Mail ein",
+  "form.maxLength": "Zu viele Zeichen",
+  "form.minLength": "Zu wenige Zeichen",
+  "form.invalid": "Ungültiger Wert",
+  "form.submit": "Absenden",
+  "form.reset": "Zurücksetzen",
+  "form.success": "Erfolgreich gesendet",
+  "form.error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut",
+  "form.privacyConsent": "Ich akzeptiere die Datenschutzrichtlinie und die Verarbeitung meiner persönlichen Daten",
+  "common.backToHome": "Zurück zur Startseite",
+  "common.returnHome": "Zurück zur Startseite",
+  "common.loading": "Wird geladen...",
+};

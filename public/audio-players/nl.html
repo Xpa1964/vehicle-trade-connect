@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Presentatie - KONTACT VO</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+      position: relative;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    /* Logo difuminado de fondo */
+    .background-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60%;
+      max-width: 600px;
+      opacity: 0.08;
+      filter: blur(3px);
+      z-index: 1;
+      pointer-events: none;
+    }
+    
+    /* Contenedor del reproductor */
+    .audio-container {
+      background: rgba(255, 255, 255, 0.98);
+      padding: 50px 40px;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+      max-width: 700px;
+      width: 90%;
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo-header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+    
+    .logo-header img {
+      height: 70px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
+    }
+    
+    .logo-header h1 {
+      color: #1e3a8a;
+      font-size: 28px;
+      margin: 0 0 8px 0;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    .logo-header p {
+      color: #64748b;
+      font-size: 16px;
+      margin: 0;
+      font-weight: 400;
+    }
+    
+    .audio-wrapper {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      padding: 30px;
+      border-radius: 16px;
+      margin-top: 25px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    audio {
+      width: 100%;
+      height: 54px;
+      border-radius: 12px;
+      outline: none;
+    }
+    
+    audio::-webkit-media-controls-panel {
+      background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+      border-radius: 12px;
+    }
+    
+    .info-text {
+      text-align: center;
+      color: #475569;
+      font-size: 15px;
+      margin-top: 25px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+    
+    .duration {
+      display: inline-block;
+      background: #3b82f6;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+    
+    @media (max-width: 640px) {
+      .audio-container {
+        padding: 35px 25px;
+      }
+      
+      .logo-header img {
+        height: 55px;
+      }
+      
+      .logo-header h1 {
+        font-size: 24px;
+      }
+      
+      .logo-header p {
+        font-size: 14px;
+      }
+      
+      .audio-wrapper {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img class="background-logo" 
+       src="/lovable-uploads/865135a7-9f1d-44e9-9386-623ae7f90529.png" 
+       alt="KONTACT VO Background"
+       loading="lazy">
+  
+  <div class="audio-container">
+    <div class="logo-header">
+      <img src="/lovable-uploads/865135a7-9f1d-44e9-9386-623ae7f90529.png" 
+           alt="KONTACT VO Logo"
+           loading="eager">
+      <h1>KONTACT VO</h1>
+      <p>Europese B2B Marketplace</p>
+    </div>
+    
+    <div class="audio-wrapper">
+      <audio controls autoplay controlsList="nodownload">
+        <source src="https://inqqnsvlimtpjxjxuzaf.supabase.co/storage/v1/object/public/audio-files/marketplace-nl-presentation.m4a" type="audio/mp4">
+        Uw browser ondersteunt geen audio-afspelen.
+      </audio>
+    </div>
+    
+    <div class="info-text">
+      Presentatie van de Nieuwe Europese B2B<br>
+      Marketplace voor Vrije Voertuigen
+      <div class="duration">⏱️ 6:32 min</div>
+    </div>
+  </div>
+</body>
+</html>

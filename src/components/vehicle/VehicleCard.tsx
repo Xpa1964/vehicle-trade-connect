@@ -1,0 +1,173 @@
+
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { MapPin, Calendar, Fuel, Gauge, Users, Settings, User, Star } from 'lucide-react';
+import { Vehicle } from '@/types/vehicle';
+import { formatPrice } from '@/utils/formatters';
+import { Link } from 'react-router-dom';
+import UserRatingBadge from '@/components/shared/UserRatingBadge';
+import { useRatings } from '@/hooks/useRatings';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+
+interface VehicleCardProps {
+  vehicle: Vehicle;
+  showUserRating?: boolean;
+  linkTo?: string;
+}
+
+const VehicleCard: React.FC<VehicleCardProps> = ({ 
+  vehicle, 
+  showUserRating = true,
+  linkTo 
+}) => {
+  const { ratingSummary } = useRatings(vehicle.user_id);
+  const { user } = useAuth();
+  const { t } = useLanguage();
+  
+  // CORREGIDO: Solo verificar una condición para determinar si es el propietario
+  const isOwner = user?.id === vehicle.user_id;
+  
+  console.log('🔍 VehicleCard Debug:', {
+    currentUserId: user?.id,
+    vehicleUserId: vehicle.user_id,
+    isOwner,
+    vehicleId: vehicle.id
+  });
+  
+  const cardContent = (
+    <Card className="hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+      <div className="relative">
+        <img
+          src={vehicle.thumbnailUrl || vehicle.thumbnailurl || '/placeholder.svg'}
+          alt={`${vehicle.brand} ${vehicle.model}`}
+          className="w-full h-48 object-cover rounded-t-lg"
+          onError={(e) => {
+            e.currentTarget.src = '/placeholder.svg';
+          }}
+        />
+        {vehicle.status === 'reserved' && (
+          <Badge className="absolute top-2 right-2 bg-red-500 text-white">
+            {t('vehicles.statusReserved')}
+          </Badge>
+        )}
+        {vehicle.status === 'in_auction' && (
+          <Badge className="absolute top-2 right-2 bg-orange-500 text-white">
+            {t('vehicles.statusInAuction')}
+          </Badge>
+        )}
+        {isOwner && (
+          <Badge className="absolute top-2 left-2 bg-green-500 text-white">
+            {t('vehicles.yourVehicle')}
+          </Badge>
+        )}
+      </div>
+      
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg font-semibold truncate">
+          {vehicle.brand} {vehicle.model}
+        </CardTitle>
+        <div className="flex justify-between items-center">
+          <span className="text-2xl font-bold text-blue-600">
+            {formatPrice(vehicle.price)}
+          </span>
+          <Badge variant="outline" className="text-xs">
+            {vehicle.year}
+          </Badge>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="space-y-3">
+        {/* Vehicle Details */}
+        <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-1">
+            <Gauge className="w-4 h-4" />
+            <span>{vehicle.mileage?.toLocaleString()} km</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Fuel className="w-4 h-4" />
+            <span className="capitalize">{vehicle.fuel}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Settings className="w-4 h-4" />
+            <span className="capitalize">{vehicle.transmission}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Users className="w-4 h-4" />
+            <span>{vehicle.doors} {t('vehicles.doors').toLowerCase()}</span>
+          </div>
+        </div>
+        
+        {/* Location */}
+        <div className="flex items-center gap-1 text-sm text-gray-600">
+          <MapPin className="w-4 h-4" />
+          <span>{vehicle.location}, {vehicle.country}</span>
+        </div>
+        
+        {/* MEJORADO: Seller Section - Solo si NO es el propietario */}
+        {!isOwner && vehicle.user_id && (
+          <>
+            <div className="pt-2 border-t border-gray-100 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-500 font-medium">{t('vehicles.seller')}:</span>
+                {showUserRating && ratingSummary && ratingSummary.total_ratings > 0 && (
+                  <UserRatingBadge
+                    averageRating={Number(ratingSummary.average_rating)}
+                    totalRatings={Number(ratingSummary.total_ratings)}
+                    verifiedRatings={Number(ratingSummary.verified_ratings)}
+                    compact
+                    showVerified={false}
+                  />
+                )}
+              </div>
+              
+              <Link to={`/user/${vehicle.user_id}`} onClick={(e) => e.stopPropagation()}>
+                <Button variant="outline" size="sm" className="w-full text-xs bg-blue-50 hover:bg-blue-100 border-blue-200">
+                  <User className="w-3 h-3 mr-1" />
+                  {t('vehicles.viewSellerProfile')}
+                </Button>
+              </Link>
+              
+              <div className="text-center">
+                <p className="text-xs text-blue-600 font-medium">
+                  💫 {t('vehicles.ratingInfo')}
+                </p>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* NUEVO: Mensaje para propios vehículos */}
+        {isOwner && (
+          <div className="pt-2 border-t border-gray-100">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
+              <p className="text-xs text-green-700 font-medium">
+                📝 {t('vehicles.thisIsYourVehicle')}
+              </p>
+            </div>
+          </div>
+        )}
+        
+        {/* Creation Date */}
+        <div className="flex items-center gap-1 text-xs text-gray-500">
+          <Calendar className="w-3 h-3" />
+          <span>{t('vehicles.published')} {new Date(vehicle.created_at).toLocaleDateString()}</span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  if (linkTo) {
+    return (
+      <Link to={linkTo} className="block">
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return cardContent;
+};
+
+export default VehicleCard;

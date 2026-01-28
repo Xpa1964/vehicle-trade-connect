@@ -1,0 +1,15 @@
+export default {
+  'control.title': 'Panel Kontrolny',
+  'control.description': 'Zarządzaj głównymi funkcjami swojego konta',
+  'control.primaryFunctions': 'Główne Funkcje',
+  'control.communication': 'Komunikacja',
+  'control.services': 'Usługi',
+  'control.professionalTools': 'Narzędzia Profesjonalne',
+  'control.vehiclesDescription': 'Dostęp do galerii pojazdów z największą ofertą dostępnych pojazdów',
+  'control.bulletinDescription': 'Tutaj znajdziesz najnowsze ogłoszenia i aktualizacje społeczności',
+  'control.publishAnnouncementDescription': 'Publikuj nowe ogłoszenia i uzyskaj dostęp do całej społeczności jednym kliknięciem',
+  'control.transportQuotesDescription': 'Tutaj możesz zobaczyć swoje oferty ekspresowego transportu pojazdów z kierowcą',
+  'control.quoteTransportDescription': 'Poproś o oferty ekspresowego transportu',
+  'control.auctionRoomDescription': 'Weź udział w aukcjach na żywo profesjonalnych pojazdów',
+  'control.publishAuctionDescription': 'Twórz i zarządzaj własnymi aukcjami pojazdów',
+};

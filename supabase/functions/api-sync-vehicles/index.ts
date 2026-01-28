@@ -1,0 +1,538 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { checkGlobalRateLimit, getClientIdentifier, createRateLimitResponse } from "../_shared/globalRateLimiter.ts";
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-api-key',
+};
+
+serve(async (req) => {
+  // Handle CORS preflight requests
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Check global rate limit first (100 req/min, 5000 req/hour for API sync)
+    const clientId = getClientIdentifier(req);
+    const rateLimitResult = await checkGlobalRateLimit(
+      supabase,
+      clientId,
+      'api-sync-vehicles',
+      { perMinute: 100, perHour: 5000 }
+    );
+    
+    if (!rateLimitResult.allowed) {
+      return createRateLimitResponse(rateLimitResult, corsHeaders);
+    }
+
+    // Get API key from header
+    const apiKey = req.headers.get('x-api-key');
+    if (!apiKey) {
+      return new Response(
+        JSON.stringify({ error: 'API key is required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate API key with rate limiting
+    const { data: validationResult, error: validationError } = await supabase.rpc(
+      'validate_partner_api_key_with_rate_limit',
+      { p_api_key: apiKey }
+    );
+
+    if (validationError || !validationResult?.valid) {
+      console.error('API key validation error:', validationError || validationResult);
+      
+      if (validationResult?.error === 'rate_limit_exceeded') {
+        return new Response(
+          JSON.stringify({ 
+            error: 'Rate limit exceeded',
+            limit: validationResult.limit,
+            retry_after: validationResult.retry_after
+          }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Retry-After': validationResult.retry_after.toString() } }
+        );
+      }
+      
+      return new Response(
+        JSON.stringify({ error: 'Invalid or expired API key' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const userId = validationResult.user_id;
+    const apiKeyId = validationResult.key_id;
+    console.log(`✅ API key validated for user: ${userId}, Requests remaining: ${validationResult.requests_remaining}`);
+
+    // Handle different methods
+    if (req.method === 'POST') {
+      return await handleBulkSync(req, supabase, userId, apiKeyId);
+    } else if (req.method === 'DELETE') {
+      return await handleDelete(req, supabase, userId);
+    } else {
+      return new Response(
+        JSON.stringify({ error: 'Method not allowed' }),
+        { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+  } catch (error) {
+    console.error('Error in api-sync-vehicles:', error);
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+});
+
+async function handleBulkSync(req: Request, supabase: any, userId: string, apiKeyId?: string) {
+  const { vehicles } = await req.json();
+
+  if (!vehicles || !Array.isArray(vehicles)) {
+    return new Response(
+      JSON.stringify({ error: 'Invalid request: vehicles array is required' }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  console.log(`📦 Processing ${vehicles.length} vehicles for user ${userId}`);
+
+  const results = {
+    total: vehicles.length,
+    successful: 0,
+    failed: 0,
+    errors: [] as any[]
+  };
+
+  for (const vehicle of vehicles) {
+    try {
+      const { external_id, images, ...vehicleData } = vehicle;
+
+      if (!external_id) {
+        results.errors.push({ external_id: 'missing', error: 'external_id is required' });
+        results.failed++;
+        continue;
+      }
+
+      // Check if vehicle exists
+      const { data: existingVehicle } = await supabase
+        .from('vehicles')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('external_id', external_id)
+        .maybeSingle();
+
+      // Normalize and prepare vehicle data
+      const dbVehicleData = {
+        user_id: userId,
+        external_id,
+        brand: vehicleData.brand || '',
+        model: vehicleData.model || '',
+        version: vehicleData.version || '',
+        color: vehicleData.color || '',
+        license_plate: vehicleData.license_plate || '',
+        price: vehicleData.price || 0,
+        currency: vehicleData.currency || 'EUR',
+        status: normalizeStatus(vehicleData.status),
+        fuel_type: normalizeFuelType(vehicleData.fuel_type),
+        transmission: normalizeTransmission(vehicleData.transmission),
+        body_type: normalizeBodyType(vehicleData.body_type),
+        year: vehicleData.year,
+        mileage: vehicleData.mileage,
+        doors: vehicleData.doors,
+        seats: vehicleData.seats,
+        description: vehicleData.description,
+      };
+
+      let vehicleId: string;
+
+      if (existingVehicle) {
+        // Update existing vehicle
+        const { error: updateError } = await supabase
+          .from('vehicles')
+          .update(dbVehicleData)
+          .eq('id', existingVehicle.id);
+
+        if (updateError) throw updateError;
+        vehicleId = existingVehicle.id;
+        console.log(`✅ Updated vehicle ${external_id}`);
+      } else {
+        // Insert new vehicle
+        const { data: newVehicle, error: insertError } = await supabase
+          .from('vehicles')
+          .insert(dbVehicleData)
+          .select('id')
+          .single();
+
+        if (insertError) throw insertError;
+        vehicleId = newVehicle.id;
+        console.log(`✅ Created vehicle ${external_id}`);
+      }
+
+      // Handle images if provided (limit 10-25)
+      if (images && Array.isArray(images) && images.length > 0) {
+        const MAX_IMAGES = 25;
+        const imagesToProcess = images.slice(0, MAX_IMAGES);
+        
+        if (images.length > MAX_IMAGES) {
+          console.warn(`Vehicle ${external_id}: Limited to ${MAX_IMAGES} images (received ${images.length})`);
+        }
+        
+        await processImages(supabase, vehicleId, imagesToProcess);
+      }
+
+      results.successful++;
+    } catch (error) {
+      console.error(`Error processing vehicle ${vehicle.external_id}:`, error);
+      results.errors.push({
+        external_id: vehicle.external_id,
+        error: error.message
+      });
+      results.failed++;
+    }
+  }
+
+  // Log sync activity
+  await supabase.from('api_sync_logs').insert({
+    user_id: userId,
+    api_key_id: apiKeyId,
+    action: 'bulk_sync',
+    vehicle_count: results.total,
+    success_count: results.successful,
+    error_count: results.failed,
+    errors: results.errors.length > 0 ? results.errors : null
+  });
+
+  console.log(`📊 Sync complete: ${results.successful}/${results.total} successful`);
+
+  return new Response(
+    JSON.stringify({
+      success: true,
+      results
+    }),
+    { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  );
+}
+
+async function handleDelete(req: Request, supabase: any, userId: string) {
+  const url = new URL(req.url);
+  const externalId = url.pathname.split('/').pop();
+
+  if (!externalId) {
+    return new Response(
+      JSON.stringify({ error: 'external_id is required' }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  const { error } = await supabase
+    .from('vehicles')
+    .delete()
+    .eq('user_id', userId)
+    .eq('external_id', externalId);
+
+  if (error) {
+    console.error('Error deleting vehicle:', error);
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  console.log(`🗑️ Deleted vehicle ${externalId}`);
+
+  return new Response(
+    JSON.stringify({ success: true, message: 'Vehicle deleted successfully' }),
+    { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  );
+}
+
+// Normalization functions for common value variations across 9 European languages
+function normalizeFuelType(fuel: string | undefined): string | undefined {
+  if (!fuel) return undefined;
+  const normalized = fuel.toLowerCase().trim();
+  
+  const fuelMap: { [key: string]: string } = {
+    // Spanish
+    'gasolina': 'gasoline',
+    'diesel': 'diesel',
+    'gasoil': 'diesel',
+    'electrico': 'electric',
+    'eléctrico': 'electric',
+    'hibrido': 'hybrid',
+    'híbrido': 'hybrid',
+    'glp': 'lpg',
+    'gas': 'lpg',
+    
+    // English
+    'petrol': 'gasoline',
+    'gasoline': 'gasoline',
+    'electric': 'electric',
+    'hybrid': 'hybrid',
+    'lpg': 'lpg',
+    
+    // French
+    'essence': 'gasoline',
+    'gazole': 'diesel',
+    'électrique': 'electric',
+    'hybride': 'hybrid',
+    'gpl': 'lpg',
+    
+    // Italian
+    'benzina': 'gasoline',
+    'gasolio': 'diesel',
+    'elettrico': 'electric',
+    'ibrido': 'hybrid',
+    
+    // German
+    'benzin': 'gasoline',
+    'elektrisch': 'electric',
+    
+    // Dutch
+    'brandstof': 'gasoline',
+    'elektrisch': 'electric',
+    
+    // Portuguese
+    'gasóleo': 'diesel',
+    'elétrico': 'electric',
+    
+    // Polish
+    'benzyna': 'gasoline',
+    'olej napędowy': 'diesel',
+    'elektryczny': 'electric',
+    'hybrydowy': 'hybrid',
+    
+    // Danish
+    'benzin': 'gasoline',
+    'elektrisk': 'electric',
+  };
+  
+  return fuelMap[normalized] || fuel;
+}
+
+function normalizeTransmission(transmission: string | undefined): string | undefined {
+  if (!transmission) return undefined;
+  const normalized = transmission.toLowerCase().trim();
+  
+  const transMap: { [key: string]: string } = {
+    // Spanish
+    'manual': 'manual',
+    'automatica': 'automatic',
+    'automática': 'automatic',
+    'semiautomatica': 'semi-automatic',
+    'semiautomática': 'semi-automatic',
+    
+    // English
+    'automatic': 'automatic',
+    'auto': 'automatic',
+    'semi-automatic': 'semi-automatic',
+    
+    // French
+    'manuelle': 'manual',
+    'automatique': 'automatic',
+    'semi-automatique': 'semi-automatic',
+    
+    // Italian
+    'manuale': 'manual',
+    'automatico': 'automatic',
+    'semiautomatico': 'semi-automatic',
+    
+    // German
+    'schaltgetriebe': 'manual',
+    'automatik': 'automatic',
+    'halbautomatik': 'semi-automatic',
+    
+    // Dutch
+    'handgeschakeld': 'manual',
+    'automaat': 'automatic',
+    'semi-automaat': 'semi-automatic',
+    
+    // Portuguese
+    'automática': 'automatic',
+    'semiautomática': 'semi-automatic',
+    
+    // Polish
+    'manualna': 'manual',
+    'automatyczna': 'automatic',
+    'półautomatyczna': 'semi-automatic',
+    
+    // Danish
+    'manuel': 'manual',
+    'automatisk': 'automatic',
+    'semi-automatisk': 'semi-automatic',
+  };
+  
+  return transMap[normalized] || transmission;
+}
+
+function normalizeBodyType(bodyType: string | undefined): string | undefined {
+  if (!bodyType) return undefined;
+  const normalized = bodyType.toLowerCase().trim();
+  
+  const bodyMap: { [key: string]: string } = {
+    // Spanish
+    'sedan': 'sedan',
+    'berlina': 'sedan',
+    'suv': 'suv',
+    'todoterreno': 'suv',
+    'hatchback': 'hatchback',
+    'compacto': 'hatchback',
+    'coupe': 'coupe',
+    'coupé': 'coupe',
+    'familiar': 'wagon',
+    'monovolumen': 'minivan',
+    
+    // English
+    'wagon': 'wagon',
+    'minivan': 'minivan',
+    'pickup': 'pickup',
+    'truck': 'pickup',
+    
+    // French
+    'berline': 'sedan',
+    'break': 'wagon',
+    'monospace': 'minivan',
+    
+    // Italian
+    'station wagon': 'wagon',
+    'monovolume': 'minivan',
+    
+    // German
+    'limousine': 'sedan',
+    'kombi': 'wagon',
+    'van': 'minivan',
+    
+    // Dutch
+    'stationwagen': 'wagon',
+    'mpv': 'minivan',
+    
+    // Portuguese
+    'carrinha': 'wagon',
+    'cupê': 'coupe',
+    
+    // Polish
+    'kombi': 'wagon',
+    
+    // Danish
+    'stationcar': 'wagon',
+  };
+  
+  return bodyMap[normalized] || bodyType;
+}
+
+function normalizeStatus(status: string | undefined): string {
+  if (!status) return 'available';
+  const normalized = status.toLowerCase().trim();
+  
+  const statusMap: { [key: string]: string } = {
+    // Spanish
+    'disponible': 'available',
+    'vendido': 'sold',
+    'reservado': 'reserved',
+    
+    // English
+    'available': 'available',
+    'sold': 'sold',
+    'reserved': 'reserved',
+    
+    // French
+    'disponible': 'available',
+    'vendu': 'sold',
+    'réservé': 'reserved',
+    
+    // Italian
+    'disponibile': 'available',
+    'venduto': 'sold',
+    'riservato': 'reserved',
+    
+    // German
+    'verfügbar': 'available',
+    'verkauft': 'sold',
+    'reserviert': 'reserved',
+    
+    // Dutch
+    'beschikbaar': 'available',
+    'verkocht': 'sold',
+    'gereserveerd': 'reserved',
+    
+    // Portuguese
+    'disponível': 'available',
+    'vendido': 'sold',
+    
+    // Polish
+    'dostępny': 'available',
+    'sprzedany': 'sold',
+    'zarezerwowany': 'reserved',
+    
+    // Danish
+    'tilgængelig': 'available',
+    'solgt': 'sold',
+    'reserveret': 'reserved',
+  };
+  
+  return statusMap[normalized] || 'available';
+}
+
+async function processImages(supabase: any, vehicleId: string, imageUrls: string[]) {
+  console.log(`🖼️ Processing ${imageUrls.length} images for vehicle ${vehicleId}`);
+
+  for (let i = 0; i < imageUrls.length; i++) {
+    try {
+      const imageUrl = imageUrls[i];
+      
+      // Download image from URL
+      const imageResponse = await fetch(imageUrl);
+      if (!imageResponse.ok) {
+        console.error(`Failed to download image: ${imageUrl}`);
+        continue;
+      }
+
+      const imageBlob = await imageResponse.blob();
+      const fileExt = imageUrl.split('.').pop()?.split('?')[0] || 'jpg';
+      const fileName = `${vehicleId}/${Date.now()}_${i}.${fileExt}`;
+
+      // Upload to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('Vehicles Images')
+        .upload(fileName, imageBlob, {
+          contentType: imageBlob.type || 'image/jpeg',
+          upsert: false
+        });
+
+      if (uploadError) {
+        console.error('Error uploading image:', uploadError);
+        continue;
+      }
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('Vehicles Images')
+        .getPublicUrl(fileName);
+
+      // Insert into vehicle_images table
+      await supabase.from('vehicle_images').insert({
+        vehicle_id: vehicleId,
+        image_url: publicUrl,
+        display_order: i,
+        is_primary: i === 0
+      });
+
+      // Update vehicle thumbnail if first image
+      if (i === 0) {
+        await supabase
+          .from('vehicles')
+          .update({ image: publicUrl })
+          .eq('id', vehicleId);
+      }
+
+      console.log(`✅ Processed image ${i + 1}/${imageUrls.length}`);
+    } catch (error) {
+      console.error(`Error processing image ${i}:`, error);
+    }
+  }
+}

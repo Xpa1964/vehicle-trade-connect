@@ -1,0 +1,25 @@
+export default {
+  'bulletinInfo.title': 'Tableau d\'Annonces',
+  'bulletinInfo.subtitle': 'Connecter les professionnels du secteur automobile international',
+  'bulletinInfo.description': 'Notre Tableau d\'Annonces est une plateforme où les professionnels de l\'industrie automobile peuvent publier et trouver des opportunités commerciales, des annonces importantes et des actualités de l\'industrie.',
+  
+  'bulletinInfo.features.title': 'Caractéristiques Principales',
+  'bulletinInfo.features.categories.title': 'Catégories Spécialisées',
+  'bulletinInfo.features.categories.description': 'Annonces organisées par catégories pour une recherche efficace.',
+  'bulletinInfo.features.networking.title': 'Réseautage Professionnel',
+  'bulletinInfo.features.networking.description': 'Connectez-vous directement avec d\'autres professionnels du secteur.',
+  'bulletinInfo.features.companies.title': 'Profils d\'Entreprise',
+  'bulletinInfo.features.companies.description': 'Informations détaillées sur les entreprises qui publient des annonces.',
+  'bulletinInfo.features.events.title': 'Événements du Secteur',
+  'bulletinInfo.features.events.description': 'Restez informé sur les foires, expositions et événements pertinents.',
+  
+  'bulletinInfo.examples.title': 'Exemples d\'Annonces',
+  'bulletinInfo.examples.business.title': 'Opportunités Commerciales',
+  'bulletinInfo.examples.business.content': 'Recherche des distributeurs pour la ligne de pièces détachées d\'origine BMW en Espagne et au Portugal. Conditions spéciales pour les grossistes. Contact: distribucion@autopartsplus.com',
+  'bulletinInfo.examples.vehicles.title': 'Véhicules Disponibles',
+  'bulletinInfo.examples.vehicles.content': 'Lot de 15 Mercedes-Benz Classe C (2023) disponible pour exportation immédiate depuis l\'Allemagne. Tous avec moins de 10 000 km. Documentation complète et prix compétitif. Réf: MB-C23-LOT15.',
+  'bulletinInfo.examples.search.title': 'Recherche de Véhicules',
+  'bulletinInfo.examples.search.content': 'Nous recherchons pour un client des lots de fourgons Volkswagen Transporter (2019-2023) en bon état. De préférence avec moins de 50 000 km. Achat direct et paiement immédiat. Contact: compras@euromobil.es',
+  'bulletinInfo.examples.services.title': 'Services Professionnels',
+  'bulletinInfo.examples.services.content': 'Je propose des services de gestion spécialisés dans les procédures d\'importation de véhicules en Espagne depuis n\'importe quel pays de l\'UE. 15 ans d\'expérience et garantie de service. Contact: tramites@autogestor.es',
+};
