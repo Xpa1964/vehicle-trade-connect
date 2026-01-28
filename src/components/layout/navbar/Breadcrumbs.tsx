@@ -50,7 +50,7 @@ const Breadcrumbs: React.FC = () => {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/" className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-600 transition-colors">
+            <Link to="/" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors">
               <Home className="h-3 w-3" />
               <span>Inicio</span>
             </Link>
@@ -72,14 +72,14 @@ const Breadcrumbs: React.FC = () => {
               </BreadcrumbSeparator>
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage className="text-sm font-medium text-blue-600">
+                  <BreadcrumbPage className="text-sm font-medium text-primary">
                     {label}
                   </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild>
                     <Link 
                       to={routeTo} 
-                      className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       {label}
                     </Link>

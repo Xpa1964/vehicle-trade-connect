@@ -52,10 +52,10 @@ const VehicleFilters: React.FC<VehicleFiltersProps> = ({
   };
 
   return (
-    <Card>
+    <Card className="bg-card border-border">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">Filtros</CardTitle>
+          <CardTitle className="text-lg text-foreground">Filtros</CardTitle>
           <Button
             variant="outline"
             size="sm"

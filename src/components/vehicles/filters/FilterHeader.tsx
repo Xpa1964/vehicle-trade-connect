@@ -21,7 +21,7 @@ const FilterHeader: React.FC<FilterHeaderProps> = ({ vehicleCount, onClearFilter
       </div>
 
       {/* Results count */}
-      <div className="text-xs text-gray-600 bg-gray-50 p-2 rounded">
+      <div className="text-xs text-muted-foreground bg-secondary p-2 rounded border border-border">
         {vehicleCount} vehículos encontrados
       </div>
     </>
