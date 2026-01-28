@@ -20,7 +20,7 @@ const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 px-2 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background py-4 px-2 sm:px-6 lg:px-8">
       {/* Header Corporativo */}
       <ContactCorporateHeader />
 
@@ -37,33 +37,33 @@ const ContactPage: React.FC = () => {
         {/* Grid de dos columnas para desktop, apilado en móvil */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Bloque Izquierdo: Infos de contacto */}
-          <div className="bg-white shadow-sm rounded-lg p-6 sm:p-8 h-fit flex flex-col justify-between">
-            <h2 className="text-2xl font-semibold mb-8 text-gray-900">{t('contact.title')}</h2>
+          <div className="bg-card shadow-sm rounded-lg p-6 sm:p-8 h-fit flex flex-col justify-between border border-border">
+            <h2 className="text-2xl font-semibold mb-8 text-foreground">{t('contact.title')}</h2>
             <div className="space-y-7">
               {/* Email */}
               <div className="flex items-start gap-4">
-                <Mail className="h-6 w-6 text-blue-600 mt-1" />
+                <Mail className="h-6 w-6 text-primary mt-1" />
                 <div>
-                  <h3 className="font-semibold mb-1">{t('contact.email')}</h3>
-                  <p className="text-gray-600">contacto@kontactvo.com</p>
-                  <p className="text-gray-600">soporte@kontactvo.com</p>
+                  <h3 className="font-semibold mb-1 text-foreground">{t('contact.email')}</h3>
+                  <p className="text-muted-foreground">contacto@kontactvo.com</p>
+                  <p className="text-muted-foreground">soporte@kontactvo.com</p>
                 </div>
               </div>
               {/* Teléfono */}
               <div className="flex items-start gap-4">
-                <Phone className="h-6 w-6 text-blue-600 mt-1" />
+                <Phone className="h-6 w-6 text-primary mt-1" />
                 <div>
-                  <h3 className="font-semibold mb-1">{t('contact.phone')}</h3>
-                  <p className="text-gray-600">+34 XXX XXX XXX</p>
-                  <p className="text-sm text-gray-500">{t('contact.phoneSchedule')}</p>
+                  <h3 className="font-semibold mb-1 text-foreground">{t('contact.phone')}</h3>
+                  <p className="text-muted-foreground">+34 XXX XXX XXX</p>
+                  <p className="text-sm text-muted-foreground">{t('contact.phoneSchedule')}</p>
                 </div>
               </div>
               {/* Oficina */}
               <div className="flex items-start gap-4">
-                <MapPin className="h-6 w-6 text-blue-600 mt-1" />
+                <MapPin className="h-6 w-6 text-primary mt-1" />
                 <div>
-                  <h3 className="font-semibold mb-1">{t('contact.mainOffice')}</h3>
-                  <p className="text-gray-600">
+                  <h3 className="font-semibold mb-1 text-foreground">{t('contact.mainOffice')}</h3>
+                  <p className="text-muted-foreground">
                     KONTACT VO<br />
                     [Dirección por confirmar]<br />
                     España
@@ -72,10 +72,10 @@ const ContactPage: React.FC = () => {
               </div>
               {/* Chat en vivo */}
               <div className="flex items-start gap-4">
-                <MessageSquare className="h-6 w-6 text-blue-600 mt-1" />
+                <MessageSquare className="h-6 w-6 text-primary mt-1" />
                 <div>
-                  <h3 className="font-semibold mb-1">{t('contact.liveChat')}</h3>
-                  <p className="text-gray-600">
+                  <h3 className="font-semibold mb-1 text-foreground">{t('contact.liveChat')}</h3>
+                  <p className="text-muted-foreground">
                     {t('contact.liveChatDescription')}
                   </p>
                   <Button variant="outline" size="sm" className="mt-2" asChild>
@@ -85,16 +85,16 @@ const ContactPage: React.FC = () => {
               </div>
             </div>
             {/* Bloque info usuarios */}
-            <div className="mt-8 p-4 bg-amber-50 rounded-lg">
-              <p className="text-sm text-amber-800">
+            <div className="mt-8 p-4 bg-warning/10 border border-warning/30 rounded-lg">
+              <p className="text-sm text-amber-400">
                 {t('contact.registeredUserInfo')}
               </p>
             </div>
           </div>
 
           {/* Bloque Derecho: Formulario + Horarios */}
-          <div className="bg-white shadow-sm rounded-lg p-6 sm:p-8 flex flex-col justify-between h-fit">
-            <h2 className="text-2xl font-bold mb-6">{t('contact.sendMessage')}</h2>
+          <div className="bg-card shadow-sm rounded-lg p-6 sm:p-8 flex flex-col justify-between h-fit border border-border">
+            <h2 className="text-2xl font-bold mb-6 text-foreground">{t('contact.sendMessage')}</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -129,10 +129,10 @@ const ContactPage: React.FC = () => {
                 />
               </div>
               <div className="flex items-center gap-2">
-                <input type="checkbox" id="privacy" required className="rounded" />
-                <Label htmlFor="privacy" className="text-sm">
+                <input type="checkbox" id="privacy" required className="rounded border-border" />
+                <Label htmlFor="privacy" className="text-sm text-muted-foreground">
                   {t('contact.privacyAccept')}{' '}
-                  <Link to="/privacy-policy" className="text-blue-600 hover:underline">
+                  <Link to="/privacy-policy" className="text-primary hover:underline">
                     {t('common.privacyPolicy')}
                   </Link>{' '}
                   {t('contact.privacyAnd')}
@@ -144,9 +144,9 @@ const ContactPage: React.FC = () => {
             </form>
 
             {/* Horarios de Atención bajo el formulario */}
-            <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-              <h3 className="font-semibold mb-2 text-blue-900">{t('contact.businessHours')}</h3>
-              <div className="text-sm text-blue-800 space-y-1">
+            <div className="mt-8 p-4 bg-info/10 border border-info/30 rounded-lg">
+              <h3 className="font-semibold mb-2 text-[#0EA5E9]">{t('contact.businessHours')}</h3>
+              <div className="text-sm text-[#0EA5E9]/80 space-y-1">
                 <p>{t('contact.mondayFriday')}</p>
                 <p>{t('contact.saturday')}</p>
                 <p>{t('contact.sunday')}</p>

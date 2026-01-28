@@ -58,7 +58,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, isHomePage, isScrolled 
   return (
     <div 
       id="mobile-menu"
-      className={`md:hidden absolute top-full left-0 right-0 bg-white shadow-xl border-t border-gray-200 z-50 transition-all duration-300 ${
+      className={`md:hidden absolute top-full left-0 right-0 bg-card shadow-xl border-t border-border z-50 transition-all duration-300 ${
         isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
       }`}
       role="menu"
@@ -67,12 +67,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, isHomePage, isScrolled 
       <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 space-y-1">
         {/* User Info Section - Solo si está logueado */}
         {user && (
-          <div className="border-b border-gray-100 pb-4 mb-4">
+          <div className="border-b border-border pb-4 mb-4">
             <div className="flex items-center gap-3 px-4 py-2">
-              <User className="h-5 w-5 text-gray-500" />
+              <User className="h-5 w-5 text-muted-foreground" />
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-gray-900 truncate">{displayName}</div>
-                <div className="text-xs text-gray-500 truncate">{user.email}</div>
+                <div className="text-sm font-medium text-foreground truncate">{displayName}</div>
+                <div className="text-xs text-muted-foreground truncate">{user.email}</div>
               </div>
             </div>
           </div>
@@ -83,7 +83,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, isHomePage, isScrolled 
           <Link 
             key={item.to}
             to={item.to}
-            className={`block py-3 px-4 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors touch-manipulation min-h-[48px] ${
+            className={`block py-3 px-4 text-base font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors touch-manipulation min-h-[48px] ${
               location.pathname === item.to ? 'bg-primary/5 text-primary border-l-4 border-primary' : ''
             }`}
             role="menuitem"
@@ -93,11 +93,11 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, isHomePage, isScrolled 
         ))}
 
         {/* Language Selector - MOVIDO ARRIBA Y MEJORADO */}
-        <div className="border-t border-gray-100 pt-4 mt-4">
+        <div className="border-t border-border pt-4 mt-4">
           <div className="px-4 pb-3">
             <div className="flex items-center gap-2 mb-3">
-              <Globe className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+              <Globe className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                 {t('navigation.language', { fallback: 'Idioma' })}
               </span>
             </div>
@@ -108,14 +108,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, isHomePage, isScrolled 
                   onClick={() => changeLanguage(lang.code as any)}
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left text-base font-medium rounded-lg transition-colors touch-manipulation min-h-[48px] ${
                     currentLanguage === lang.code 
-                      ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500' 
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-primary/10 text-primary border-l-4 border-primary' 
+                      : 'text-foreground hover:bg-primary/10 hover:text-foreground'
                   }`}
                 >
                   <img src={getCountryFlagUrl(lang.countryCode)} alt={lang.name} className="w-6 h-4 object-cover rounded-sm" />
                   <span className="flex-1">{lang.name}</span>
                   {currentLanguage === lang.code && (
-                    <span className="text-sm text-blue-600">✓</span>
+                    <span className="text-sm text-primary">✓</span>
                   )}
                 </button>
               ))}
@@ -124,7 +124,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, isHomePage, isScrolled 
         </div>
 
         {/* User Authentication - MOVIDO ABAJO */}
-        <div className="border-t border-gray-100 pt-4 mt-4">
+        <div className="border-t border-border pt-4 mt-4">
           {user ? (
             <div className="space-y-2 px-4">
               {/* Botón de Logout Destacado */}
@@ -132,16 +132,16 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, isHomePage, isScrolled 
                 onClick={logout}
                 variant="outline"
                 size="default" 
-                className="w-full h-14 text-lg touch-manipulation bg-red-50 border-red-200 text-red-600 hover:bg-red-100 hover:border-red-300 font-semibold mb-6"
+                className="w-full h-14 text-lg touch-manipulation bg-destructive/10 border-destructive/30 text-destructive hover:bg-destructive/20 hover:border-destructive font-semibold mb-6"
               >
                 <LogOut className="mr-3 h-5 w-5" />
                 {t('auth.logout', { fallback: 'Cerrar Sesión' })}
               </Button>
               
               {/* Enlaces del perfil */}
-              <div className="pt-4 border-t border-gray-100">
+              <div className="pt-4 border-t border-border">
                 <div className="px-0 pb-2">
-                  <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                  <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                     {t('navigation.account', { fallback: 'Cuenta' })}
                   </span>
                 </div>
@@ -160,7 +160,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, isHomePage, isScrolled 
           ) : (
             <div className="space-y-2 px-4">
               <div className="px-0 pb-2">
-                <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                   {t('navigation.authentication', { fallback: 'Autenticación' })}
                 </span>
               </div>

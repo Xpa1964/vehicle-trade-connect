@@ -40,10 +40,10 @@ export const MobileTabNavigation: React.FC<MobileTabNavigationProps> = ({
         </Button>
         
         <div className="text-center flex-1 min-w-0 px-2">
-          <span className="text-sm font-medium block truncate">
+          <span className="text-sm font-medium block truncate text-foreground">
             {tabs[currentTabIndex]?.label}
           </span>
-          <div className="text-xs text-gray-500 mt-1">
+          <div className="text-xs text-muted-foreground mt-1">
             {currentTabIndex + 1} de {tabs.length}
           </div>
         </div>
@@ -61,9 +61,9 @@ export const MobileTabNavigation: React.FC<MobileTabNavigationProps> = ({
         </Button>
       </div>
       
-      <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3 overflow-hidden">
+      <div className="w-full bg-secondary rounded-full h-2 sm:h-3 overflow-hidden">
         <div 
-          className="bg-blue-500 h-2 sm:h-3 rounded-full transition-all duration-300 relative overflow-hidden"
+          className="bg-primary h-2 sm:h-3 rounded-full transition-all duration-300 relative overflow-hidden"
           style={{ width: `${((currentTabIndex + 1) / tabs.length) * 100}%` }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>

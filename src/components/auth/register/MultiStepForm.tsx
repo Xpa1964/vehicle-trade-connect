@@ -94,8 +94,8 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   className={`
                     flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all
                     ${isCurrent ? 'bg-primary/10 border-primary shadow-lg scale-105' : ''}
-                    ${isCompleted ? 'bg-green-50 border-green-500' : ''}
-                    ${isPending ? 'bg-gray-50 border-gray-300 opacity-60' : ''}
+                    ${isCompleted ? 'bg-success/10 border-[#22C55E]' : ''}
+                    ${isPending ? 'bg-secondary border-border opacity-60' : ''}
                     ${(index <= currentStepIndex || completedSteps[step.id]) ? 'cursor-pointer hover:shadow-md' : 'cursor-not-allowed'}
                     flex-1 min-w-0
                   `}
@@ -103,9 +103,9 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   {/* Phase number and icon */}
                   <div className={`
                     w-10 h-10 rounded-full flex items-center justify-center mb-2 font-bold text-lg
-                    ${isCurrent ? 'bg-primary text-white' : ''}
-                    ${isCompleted ? 'bg-green-500 text-white' : ''}
-                    ${isPending ? 'bg-gray-300 text-gray-600' : ''}
+                    ${isCurrent ? 'bg-primary text-primary-foreground' : ''}
+                    ${isCompleted ? 'bg-[#22C55E] text-white' : ''}
+                    ${isPending ? 'bg-secondary text-muted-foreground' : ''}
                   `}>
                     {isCompleted ? '✓' : index + 1}
                   </div>
@@ -114,16 +114,16 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   <PhaseIcon className={`
                     h-5 w-5 mb-1
                     ${isCurrent ? 'text-primary' : ''}
-                    ${isCompleted ? 'text-green-600' : ''}
-                    ${isPending ? 'text-gray-400' : ''}
+                    ${isCompleted ? 'text-[#22C55E]' : ''}
+                    ${isPending ? 'text-muted-foreground' : ''}
                   `} />
                   
                   {/* Phase name */}
                   <span className={`
                     text-xs font-medium text-center line-clamp-2
                     ${isCurrent ? 'text-primary' : ''}
-                    ${isCompleted ? 'text-green-700' : ''}
-                    ${isPending ? 'text-gray-500' : ''}
+                    ${isCompleted ? 'text-[#22C55E]' : ''}
+                    ${isPending ? 'text-muted-foreground' : ''}
                   `}>
                     {step.label}
                   </span>
@@ -137,7 +137,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   
                   {/* Completed indicator */}
                   {isCompleted && !isCurrent && (
-                    <span className="text-[10px] font-medium text-green-600 mt-1 uppercase">
+                    <span className="text-[10px] font-medium text-[#22C55E] mt-1 uppercase">
                       {t('auth.register.completed')}
                     </span>
                   )}
@@ -145,7 +145,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
                 
                 {/* Arrow between phases */}
                 {index < steps.length - 1 && (
-                  <ArrowRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 )}
               </React.Fragment>
             );
@@ -170,7 +170,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
       </div>
       
       {/* Navigation buttons */}
-      <div className="flex justify-between pt-4 border-t">
+      <div className="flex justify-between pt-4 border-t border-border">
         <Button
           type="button"
           variant="outline"
