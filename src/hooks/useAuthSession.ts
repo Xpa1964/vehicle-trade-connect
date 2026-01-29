@@ -6,6 +6,7 @@ import { UserWithMeta } from '@/types/auth';
 import { enhanceUser } from '@/utils/userEnhancement';
 import { toast } from 'sonner';
 import { detectDesynchronization, autoRecovery } from '@/utils/sessionSynchronizer';
+import { clearCachedRole } from '@/utils/roles/roleCache';
 
 export const useAuthSession = () => {
   const [user, setUser] = useState<UserWithMeta | null>(null);
@@ -86,6 +87,9 @@ export const useAuthSession = () => {
                 
                 try {
                   console.log("[useAuthSession] Enhancing user from auth state change");
+
+                  // Ensure we don't keep a stale role after promotions (e.g., user -> admin)
+                  clearCachedRole(session.user.id);
                   
                   // NUEVA VALIDACIÓN: Verificar sincronización antes de enhancement
                   console.log('🔍 [useAuthSession] Verificando sincronización frontend-backend...');
@@ -176,6 +180,9 @@ export const useAuthSession = () => {
           
           try {
             console.log("[useAuthSession] Enhancing initial user");
+
+            // Ensure we don't keep a stale role after promotions (e.g., user -> admin)
+            clearCachedRole(session.user.id);
             
             // NUEVA VALIDACIÓN: Verificar sincronización al inicio
             console.log('🔍 [useAuthSession] Verificando sincronización inicial...');
