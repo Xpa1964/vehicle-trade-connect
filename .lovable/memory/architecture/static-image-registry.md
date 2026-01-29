@@ -1,48 +1,40 @@
 # Memory: architecture/static-image-registry
 Updated: just now
 
-Static UI images are centralized in `src/config/staticImageRegistry.ts` to provide a single source of truth for assets like logos, banners, and hero backgrounds. This registry tracks metadata—including ID, path, usage, and AI-editability—to facilitate a future AI-powered image management dashboard while strictly excluding dynamic content such as vehicle listings, auctions, or user-uploaded documents.
+The Static Image Platform is a **core infrastructure primitive** that centralizes ALL product/UI images. It is NOT a feature - it is foundational architecture that CANNOT be bypassed.
 
-## Key Features
-- **source: "product"** field enforces separation from user-generated content
-- **Path validation** rejects forbidden patterns (`/uploads/`, `/vehicles/`, `/auctions/`, `/user-content/`)
-- **Admin dashboard** at `/admin/static-images` for image management
-- **Global style prompt** system for visual consistency across AI-generated images
-- **Version history** stored in localStorage for tracking changes
+## Platform Enforcement Layers
+
+1. **ESLint Rule** (`eslint-rules/no-unregistered-images.cjs`) - Compile-time blocking of direct paths
+2. **Runtime Guard** (`src/lib/devImageGuard.ts`) - Dev-only detection of unregistered images
+3. **Auto-Preload** (`src/lib/criticalImagePreloader.ts`) - Critical images preload on boot
+4. **Registry Freeze** - Production `Object.freeze(STATIC_IMAGE_REGISTRY)`
+5. **Type Safety** - `StaticImageId` and `StaticImageKey` types for compile-time validation
+
+## Core Files
+
+| File | Purpose |
+|------|---------|
+| `src/config/staticImageRegistry.ts` | Source of truth |
+| `src/components/shared/SafeImage.tsx` | Production-grade component |
+| `src/hooks/useStaticImage.ts` | React hook |
+| `docs/STATIC_IMAGE_PLATFORM.md` | Full documentation |
 
 ## Forbidden Paths (User Content - NEVER Include)
-- `/uploads/`
-- `/vehicles/`
-- `/auctions/`
-- `/user-content/`
-- `/user-uploads/`
-- `/attachments/`
-- `/documents/`
-- `/avatars/`
-- External storage URLs
+- `/uploads/`, `/vehicles/`, `/auctions/`, `/user-content/`
+- All external storage URLs
 
 ## Usage
 
-### Hook-based (for React components)
 ```typescript
-import { useStaticImage } from '@/hooks/useStaticImage';
+// Component usage
+<SafeImage imageId="home.hero" alt="Hero" />
 
-const { src, fallback, isValid } = useStaticImage('home.hero');
-<img src={src} onError={(e) => e.currentTarget.src = fallback} />
-```
+// Hook usage
+const { src, fallback } = useStaticImage('home.hero');
 
-### Component-based (simplest)
-```typescript
-import RegistryImage from '@/components/shared/RegistryImage';
-
-<RegistryImage imageId="home.hero" alt="Hero background" className="w-full" />
-```
-
-### Non-hook (for data files)
-```typescript
-import { getStaticImagePath } from '@/hooks/useStaticImage';
-
-const bgImage = getStaticImagePath('services.showroom');
+// Non-hook (data files)
+const path = getStaticImagePath('services.showroom');
 ```
 
 ## Migrated Components (Phase 1)
