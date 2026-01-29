@@ -9,7 +9,7 @@ const CookiesPage: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
           <Button variant="outline" asChild>
@@ -20,47 +20,47 @@ const CookiesPage: React.FC = () => {
           </Button>
         </div>
 
-        <div className="bg-white shadow-sm rounded-lg p-6 sm:p-8">
-          <h1 className="text-3xl font-bold mb-8 text-center">
+        <div className="bg-card shadow-sm rounded-lg p-6 sm:p-8 border border-border">
+          <h1 className="text-3xl font-bold mb-8 text-center text-foreground">
             Política de Cookies
           </h1>
           
           <div className="prose max-w-none">
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">¿Qué son las cookies?</h2>
-              <p className="text-gray-700 leading-relaxed">
+              <h2 className="text-2xl font-semibold mb-4 text-foreground">¿Qué son las cookies?</h2>
+              <p className="text-muted-foreground leading-relaxed">
                 Las cookies son pequeños archivos de texto que se almacenan en su dispositivo cuando visita nuestro sitio web. Nos ayudan a mejorar su experiencia de usuario y el funcionamiento del sitio.
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Tipos de cookies que utilizamos</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-foreground">Tipos de cookies que utilizamos</h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-medium mb-2">Cookies esenciales</h3>
-                  <p className="text-gray-700">Necesarias para el funcionamiento básico del sitio web y la autenticación de usuarios.</p>
+                  <h3 className="text-lg font-medium mb-2 text-foreground">Cookies esenciales</h3>
+                  <p className="text-muted-foreground">Necesarias para el funcionamiento básico del sitio web y la autenticación de usuarios.</p>
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-2">Cookies de rendimiento</h3>
-                  <p className="text-gray-700">Nos ayudan a entender cómo los usuarios interactúan con nuestro sitio web.</p>
+                  <h3 className="text-lg font-medium mb-2 text-foreground">Cookies de rendimiento</h3>
+                  <p className="text-muted-foreground">Nos ayudan a entender cómo los usuarios interactúan con nuestro sitio web.</p>
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-2">Cookies de preferencias</h3>
-                  <p className="text-gray-700">Recuerdan sus configuraciones y preferencias, como el idioma seleccionado.</p>
+                  <h3 className="text-lg font-medium mb-2 text-foreground">Cookies de preferencias</h3>
+                  <p className="text-muted-foreground">Recuerdan sus configuraciones y preferencias, como el idioma seleccionado.</p>
                 </div>
               </div>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Control de cookies</h2>
-              <p className="text-gray-700 leading-relaxed">
+              <h2 className="text-2xl font-semibold mb-4 text-foreground">Control de cookies</h2>
+              <p className="text-muted-foreground leading-relaxed">
                 Puede controlar y eliminar las cookies a través de la configuración de su navegador. Sin embargo, tenga en cuenta que deshabilitar ciertas cookies puede afectar la funcionalidad del sitio.
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Actualizaciones de esta política</h2>
-              <p className="text-gray-700 leading-relaxed">
+              <h2 className="text-2xl font-semibold mb-4 text-foreground">Actualizaciones de esta política</h2>
+              <p className="text-muted-foreground leading-relaxed">
                 Podemos actualizar esta política de cookies ocasionalmente. Le recomendamos revisar esta página periódicamente para estar al tanto de cualquier cambio.
               </p>
             </section>
