@@ -2634,6 +2634,10 @@ export type Database = {
         Returns: string
       }
       get_user_rating_summary: { Args: { p_user_id: string }; Returns: Json }
+      get_user_role: {
+        Args: { p_user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
       log_activity: {
         Args: {
           p_action_type: string
