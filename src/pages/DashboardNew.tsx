@@ -10,26 +10,15 @@ import QuickActions from '@/components/dashboard/QuickActions';
 import StatsSection from '@/components/dashboard/StatsSection';
 import ControlPanel from '@/components/dashboard/ControlPanel';
 
-// CACHE BUSTER - Timestamp: 2025-01-04-14:30:00
-// Componente completamente nuevo para evitar problemas de caché
 const DashboardNew: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const { t } = useLanguage();
   
-  // Componente de diagnóstico para verificar carga correcta
-  const debugInfo = {
-    loadTime: new Date().toISOString(),
-    componentVersion: 'v2.0-cache-fix',
-    layoutType: 'control-panel-4col-quickactions-1col'
-  };
-  
-  console.log('[Dashboard Cache Fix] Cargando componente:', debugInfo);
-  
   if (!isAuthenticated) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <h2 className="text-2xl font-bold text-gray-800">{t('auth.sessionRequired', { fallback: 'Sesión no iniciada' })}</h2>
-        <p className="text-gray-600">{t('auth.loginRequired', { fallback: 'Debes iniciar sesión para ver el dashboard.' })}</p>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 bg-background">
+        <h2 className="text-2xl font-bold text-foreground">{t('auth.sessionRequired', { fallback: 'Sesión no iniciada' })}</h2>
+        <p className="text-muted-foreground">{t('auth.loginRequired', { fallback: 'Debes iniciar sesión para ver el dashboard.' })}</p>
         <Button variant="gold" asChild>
           <Link to="/login">{t('auth.login', { fallback: 'Iniciar Sesión' })}</Link>
         </Button>
@@ -38,12 +27,7 @@ const DashboardNew: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full">
-      {/* Indicador de diagnóstico temporal - REMOVER DESPUÉS */}
-      <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 text-xs">
-        🔄 Dashboard Cache Fix - Cargado: {debugInfo.loadTime} | Layout: ControlPanel(4/5) + QuickActions(1/5)
-      </div>
-      
+    <div className="min-h-screen bg-background w-full">
       <div className="w-full px-4 py-6 space-y-6">
         {/* Header Section - Full Width */}
         <DashboardHeader user={user} />
@@ -54,7 +38,7 @@ const DashboardNew: React.FC = () => {
         {/* Statistics Section - Full Width */}
         <StatsSection />
         
-        {/* Layout CORREGIDO: Control Panel (4/5) + Quick Actions (1/5) */}
+        {/* Layout: Control Panel (4/5) + Quick Actions (1/5) */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Control Panel - 4 de 5 columnas (80% del ancho) */}
           <div className="lg:col-span-4">

@@ -25,7 +25,7 @@ const PublishAnnouncementPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary">
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {/* Navigation */}
         <div className="flex justify-between items-center mb-6">
@@ -49,7 +49,7 @@ const PublishAnnouncementPage: React.FC = () => {
         </div>
 
         {/* Header with Image */}
-        <div className="bg-white rounded-xl shadow-sm border p-8 mb-6">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-8 mb-6">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="flex-shrink-0">
               <img 
@@ -61,11 +61,11 @@ const PublishAnnouncementPage: React.FC = () => {
             <div className="text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start mb-2">
                 <Megaphone className="h-8 w-8 mr-3 text-primary" />
-                <h1 className="text-3xl font-light text-gray-800">
+                <h1 className="text-3xl font-light text-foreground">
                   {t('bulletin.form.submit')}
                 </h1>
               </div>
-              <p className="text-lg text-gray-600 font-light">
+              <p className="text-lg text-muted-foreground font-light">
                 {t('bulletin.publishAnnouncement')}
               </p>
             </div>
@@ -73,7 +73,7 @@ const PublishAnnouncementPage: React.FC = () => {
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-xl shadow-sm border p-8">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-8">
           <AnnouncementForm onAnnouncementAdded={handleAnnouncementAdded} />
         </div>
       </div>

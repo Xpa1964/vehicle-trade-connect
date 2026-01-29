@@ -173,44 +173,44 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
           name="category"
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>{t('bulletin.form.category')}</FormLabel>
+              <FormLabel className="text-foreground">{t('bulletin.form.category')}</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   className="grid grid-cols-1 md:grid-cols-2 gap-4"
                 >
-                  <div className="flex items-center space-x-2 p-3 border rounded-md hover:bg-gray-50">
+                  <div className="flex items-center space-x-2 p-3 border border-border rounded-md hover:bg-secondary">
                     <RadioGroupItem value="business_opportunities" id="business_opportunities" />
-                    <FormLabel htmlFor="business_opportunities" className="flex items-center cursor-pointer w-full">
-                      <Briefcase className="h-4 w-4 mr-2 text-blue-500" />
+                    <FormLabel htmlFor="business_opportunities" className="flex items-center cursor-pointer w-full text-foreground">
+                      <Briefcase className="h-4 w-4 mr-2 text-blue-400" />
                       {t('bulletin.business_opportunities')}
                     </FormLabel>
                   </div>
-                  <div className="flex items-center space-x-2 p-3 border rounded-md hover:bg-gray-50">
+                  <div className="flex items-center space-x-2 p-3 border border-border rounded-md hover:bg-secondary">
                     <RadioGroupItem value="vehicle_search" id="vehicle_search" />
-                    <FormLabel htmlFor="vehicle_search" className="flex items-center cursor-pointer w-full">
-                      <Search className="h-4 w-4 mr-2 text-green-500" />
+                    <FormLabel htmlFor="vehicle_search" className="flex items-center cursor-pointer w-full text-foreground">
+                      <Search className="h-4 w-4 mr-2 text-green-400" />
                       {t('bulletin.vehicle_search')}
                     </FormLabel>
                   </div>
-                  <div className="flex items-center space-x-2 p-3 border rounded-md hover:bg-gray-50">
+                  <div className="flex items-center space-x-2 p-3 border border-border rounded-md hover:bg-secondary">
                     <RadioGroupItem value="available_vehicles" id="available_vehicles" />
-                    <FormLabel htmlFor="available_vehicles" className="flex items-center cursor-pointer w-full">
-                      <Car className="h-4 w-4 mr-2 text-red-500" />
+                    <FormLabel htmlFor="available_vehicles" className="flex items-center cursor-pointer w-full text-foreground">
+                      <Car className="h-4 w-4 mr-2 text-red-400" />
                       {t('bulletin.available_vehicles')}
                     </FormLabel>
                   </div>
-                  <div className="flex items-center space-x-2 p-3 border rounded-md hover:bg-gray-50">
+                  <div className="flex items-center space-x-2 p-3 border border-border rounded-md hover:bg-secondary">
                     <RadioGroupItem value="professional_services" id="professional_services" />
-                    <FormLabel htmlFor="professional_services" className="flex items-center cursor-pointer w-full">
-                      <Wrench className="h-4 w-4 mr-2 text-purple-500" />
+                    <FormLabel htmlFor="professional_services" className="flex items-center cursor-pointer w-full text-foreground">
+                      <Wrench className="h-4 w-4 mr-2 text-purple-400" />
                       {t('bulletin.professional_services')}
                     </FormLabel>
                   </div>
                 </RadioGroup>
               </FormControl>
-              <FormDescription>
+              <FormDescription className="text-muted-foreground">
                 {t('bulletin.form.categoryDescription')}
               </FormDescription>
               <FormMessage />
@@ -224,14 +224,14 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('bulletin.form.title')}</FormLabel>
+              <FormLabel className="text-foreground">{t('bulletin.form.title')}</FormLabel>
               <FormControl>
                 <Input 
                   placeholder={t('bulletin.form.titlePlaceholder')} 
                   {...field} 
                 />
               </FormControl>
-              <FormDescription>
+              <FormDescription className="text-muted-foreground">
                 {t('bulletin.form.titleDescription')}
               </FormDescription>
               <FormMessage />
@@ -245,7 +245,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
           name="content"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('bulletin.form.content')}</FormLabel>
+              <FormLabel className="text-foreground">{t('bulletin.form.content')}</FormLabel>
               <FormControl>
                 <Textarea 
                   placeholder={t('bulletin.form.contentPlaceholder')} 
@@ -253,7 +253,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
                   {...field} 
                 />
               </FormControl>
-              <FormDescription>
+              <FormDescription className="text-muted-foreground">
                 {t('bulletin.form.contentDescription')}
               </FormDescription>
               <FormMessage />
@@ -266,7 +266,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
           control={form.control}
           name="is_featured"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-border p-4 bg-secondary/30">
               <FormControl>
                 <Checkbox
                   checked={field.value}
@@ -274,11 +274,11 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
-                <FormLabel className="flex items-center">
-                  <Star className="h-4 w-4 mr-2 text-yellow-500" />
+                <FormLabel className="flex items-center text-foreground">
+                  <Star className="h-4 w-4 mr-2 text-amber-400" />
                   Anuncio Destacado
                 </FormLabel>
-                <FormDescription>
+                <FormDescription className="text-muted-foreground">
                   Los anuncios destacados aparecen al principio de la lista y tienen mayor visibilidad durante 30 días.
                 </FormDescription>
               </div>
@@ -288,14 +288,14 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
         
         {/* File Attachments */}
         <FormItem>
-          <FormLabel>Archivos adjuntos</FormLabel>
+          <FormLabel className="text-foreground">Archivos adjuntos</FormLabel>
           <PendingFileUpload
             onFilesChange={handlePendingFilesChange}
             acceptedTypes=".xlsx,.xls,.docx,.doc,.pdf,.jpg,.jpeg,.png,.gif,.webp"
             maxFiles={5}
             className="w-full"
           />
-          <FormDescription>
+          <FormDescription className="text-muted-foreground">
             Puedes seleccionar hasta 5 archivos. Se subirán después de crear el anuncio. Las imágenes se mostrarán en el anuncio, otros archivos estarán disponibles para descarga.
           </FormDescription>
         </FormItem>
@@ -306,7 +306,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
           name="status"
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>{t('bulletin.form.status')}</FormLabel>
+              <FormLabel className="text-foreground">{t('bulletin.form.status')}</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
@@ -315,15 +315,15 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="active" id="active" />
-                    <FormLabel htmlFor="active" className="flex items-center cursor-pointer">
-                      <Check className="h-4 w-4 mr-2 text-green-500" />
+                    <FormLabel htmlFor="active" className="flex items-center cursor-pointer text-foreground">
+                      <Check className="h-4 w-4 mr-2 text-green-400" />
                       {t('bulletin.statusActive')}
                     </FormLabel>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="finished" id="finished" />
-                    <FormLabel htmlFor="finished" className="flex items-center cursor-pointer">
-                      <X className="h-4 w-4 mr-2 text-gray-500" />
+                    <FormLabel htmlFor="finished" className="flex items-center cursor-pointer text-foreground">
+                      <X className="h-4 w-4 mr-2 text-muted-foreground" />
                       {t('bulletin.statusFinished')}
                     </FormLabel>
                   </div>

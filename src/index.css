@@ -11,7 +11,7 @@
     --card-foreground: 210 40% 98%; /* #F8FAFC */
     --popover: 222 33% 13%; /* #161B2A */
     --popover-foreground: 210 40% 98%; /* #F8FAFC */
-    --primary: 25 95% 53%; /* #F97316 - Accent Orange */
+    --primary: 28 80% 52%; /* Softer Orange - less saturated */
     --primary-foreground: 0 0% 100%;
     --secondary: 222 26% 17%; /* #1E2436 */
     --secondary-foreground: 210 40% 98%; /* #F8FAFC */
@@ -23,7 +23,7 @@
     --destructive-foreground: 0 0% 100%;
     --border: 217 19% 27%; /* #2D3748 */
     --input: 217 19% 27%; /* #2D3748 */
-    --ring: 25 95% 53%; /* #F97316 */
+    --ring: 28 80% 52%; /* Softer Orange */
     --radius: 0.5rem;
     --auto-blue: 221 83% 53%;
     --auto-blue-dark: 221 83% 45%;
@@ -41,9 +41,9 @@
     --brand-green-light: 142 76% 48%;
     --brand-green-subtle: 222 33% 13%;
     
-    --brand-orange: 25 95% 53%; /* #F97316 */
-    --brand-orange-dark: 25 95% 45%;
-    --brand-orange-light: 25 95% 65%;
+    --brand-orange: 28 80% 52%; /* Softer Orange */
+    --brand-orange-dark: 28 80% 44%;
+    --brand-orange-light: 28 80% 62%;
     --brand-orange-subtle: 222 33% 13%;
     
     --brand-purple: 262 83% 58%;
@@ -99,7 +99,7 @@
     --card-foreground: 210 40% 98%; /* #F8FAFC */
     --popover: 222 33% 13%; /* #161B2A */
     --popover-foreground: 210 40% 98%; /* #F8FAFC */
-    --primary: 25 95% 53%; /* #F97316 - Accent Orange */
+    --primary: 28 80% 52%; /* Softer Orange */
     --primary-foreground: 0 0% 100%;
     --secondary: 222 26% 17%; /* #1E2436 */
     --secondary-foreground: 210 40% 98%; /* #F8FAFC */
@@ -111,7 +111,7 @@
     --destructive-foreground: 0 85% 97%;
     --border: 217 19% 27%; /* #2D3748 */
     --input: 217 19% 27%; /* #2D3748 */
-    --ring: 25 95% 53%; /* #F97316 */
+    --ring: 28 80% 52%; /* Softer Orange */
     --auto-blue: 221 83% 53%;
     --auto-blue-dark: 221 83% 45%;
     --auto-gold: 45 96% 64%;
@@ -128,9 +128,9 @@
     --brand-green-light: 142 76% 54%;
     --brand-green-subtle: 222 33% 13%;
     
-    --brand-orange: 25 95% 58%;
-    --brand-orange-dark: 25 95% 48%;
-    --brand-orange-light: 25 95% 70%;
+    --brand-orange: 28 80% 55%;
+    --brand-orange-dark: 28 80% 45%;
+    --brand-orange-light: 28 80% 65%;
     --brand-orange-subtle: 222 33% 13%;
     
     --brand-purple: 262 83% 64%;

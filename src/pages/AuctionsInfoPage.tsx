@@ -329,57 +329,57 @@ const AuctionsInfoPage: React.FC = () => {
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="bg-white border-gray-200 hover:shadow-lg transition-shadow">
+              <Card className="bg-card border-border hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     <div className="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-4">
                       1
                     </div>
-                    <Users className="h-8 w-8 text-blue-600" />
+                    <Users className="h-8 w-8 text-blue-400" />
               </div>
-              <p className="text-gray-700">
+              <p className="text-muted-foreground">
                 {translations.howItWorks.step1[lang] || translations.howItWorks.step1.es}
               </p>
             </CardContent>
           </Card>
 
-              <Card className="bg-white border-gray-200 hover:shadow-lg transition-shadow">
+              <Card className="bg-card border-border hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     <div className="bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-4">
                       2
                     </div>
-                    <CheckCircle2 className="h-8 w-8 text-green-600" />
+                    <CheckCircle2 className="h-8 w-8 text-green-400" />
               </div>
-              <p className="text-gray-700">
+              <p className="text-muted-foreground">
                 {translations.howItWorks.step2[lang] || translations.howItWorks.step2.es}
               </p>
             </CardContent>
           </Card>
 
-              <Card className="bg-white border-gray-200 hover:shadow-lg transition-shadow">
+              <Card className="bg-card border-border hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     <div className="bg-purple-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-4">
                       3
                     </div>
-                    <Gavel className="h-8 w-8 text-purple-600" />
+                    <Gavel className="h-8 w-8 text-purple-400" />
               </div>
-              <p className="text-gray-700">
+              <p className="text-muted-foreground">
                 {translations.howItWorks.step3[lang] || translations.howItWorks.step3.es}
               </p>
             </CardContent>
           </Card>
 
-              <Card className="bg-white border-gray-200 hover:shadow-lg transition-shadow">
+              <Card className="bg-card border-border hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     <div className="bg-amber-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg mr-4">
                       4
                     </div>
-                    <Award className="h-8 w-8 text-amber-600" />
+                    <Award className="h-8 w-8 text-amber-400" />
               </div>
-              <p className="text-gray-700">
+              <p className="text-muted-foreground">
                 {translations.howItWorks.step4[lang] || translations.howItWorks.step4.es}
               </p>
             </CardContent>

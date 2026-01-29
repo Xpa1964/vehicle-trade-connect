@@ -249,20 +249,20 @@ const VehicleReports: React.FC = () => {
         </CardHeader>
         <CardContent>
           {loading ? (
-            <div className="text-center py-8 text-gray-500">
-              <FileText className="h-16 w-16 mx-auto mb-4 text-gray-300 animate-pulse" />
+            <div className="text-center py-8 text-muted-foreground">
+              <FileText className="h-16 w-16 mx-auto mb-4 text-muted-foreground animate-pulse" />
               <p>Cargando informes...</p>
             </div>
           ) : reports.length > 0 ? (
             <div className="space-y-4">
               {reports.map((report) => (
-                <div key={report.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                <div key={report.id} className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-secondary transition-colors">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900">
+                    <h3 className="font-semibold text-foreground">
                       {report.vehicle_brand} {report.vehicle_model} {report.vehicle_year} - {report.vehicle_plate}
                     </h3>
-                    <p className="text-gray-600">{getReportTypeName(report.report_type)}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-muted-foreground">{getReportTypeName(report.report_type)}</p>
+                    <p className="text-sm text-muted-foreground">
                       Solicitado el: {new Date(report.created_at).toLocaleDateString('es-ES')}
                     </p>
                   </div>
