@@ -9,7 +9,7 @@
  * - Bulk actions (generate missing, delete all)
  */
 
-import React, { useState, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -55,15 +55,23 @@ const CATEGORY_LABELS: Record<ImageCategory, string> = {
 };
 
 const ImageControlCenter: React.FC = () => {
-  // Global style prompt
-  const [globalStyle, setGlobalStyle] = useState<string>(() => {
-    try {
-      return localStorage.getItem(GLOBAL_STYLE_KEY) || DEFAULT_GLOBAL_STYLE;
-    } catch {
-      return DEFAULT_GLOBAL_STYLE;
-    }
-  });
+  // Global style prompt - load from localStorage on mount
+  const [globalStyle, setGlobalStyle] = useState<string>(DEFAULT_GLOBAL_STYLE);
   const [globalStyleDirty, setGlobalStyleDirty] = useState(false);
+  const [isGlobalStyleLoaded, setIsGlobalStyleLoaded] = useState(false);
+
+  // Load global style from localStorage on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(GLOBAL_STYLE_KEY);
+      if (stored && stored.trim() !== '') {
+        setGlobalStyle(stored);
+      }
+    } catch (e) {
+      console.error('Error loading global style from localStorage:', e);
+    }
+    setIsGlobalStyleLoaded(true);
+  }, []);
 
   // Zoom levels per image
   const [zoomLevels, setZoomLevels] = useState<Record<string, number>>(() => {
@@ -84,6 +92,7 @@ const ImageControlCenter: React.FC = () => {
 
   // Modal state
   const [selectedImageForGeneration, setSelectedImageForGeneration] = useState<StaticImageEntry | null>(null);
+  const [selectedImageCurrentUrl, setSelectedImageCurrentUrl] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Loading states
@@ -228,9 +237,10 @@ const ImageControlCenter: React.FC = () => {
     }
   }, [allImages]);
 
-  // Open AI generation modal
-  const handleOpenGenerateModal = useCallback((image: StaticImageEntry) => {
+  // Open AI generation modal with current image URL
+  const handleOpenGenerateModal = useCallback(async (image: StaticImageEntry, currentUrl?: string) => {
     setSelectedImageForGeneration(image);
+    setSelectedImageCurrentUrl(currentUrl || null);
     setIsModalOpen(true);
   }, []);
 
@@ -238,6 +248,7 @@ const ImageControlCenter: React.FC = () => {
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
     setSelectedImageForGeneration(null);
+    setSelectedImageCurrentUrl(null);
   }, []);
 
   // Image replaced callback
@@ -491,6 +502,7 @@ const ImageControlCenter: React.FC = () => {
         image={selectedImageForGeneration}
         globalStylePrompt={globalStyle}
         onImageReplaced={handleImageReplaced}
+        currentImageUrl={selectedImageCurrentUrl}
       />
     </div>
   );
