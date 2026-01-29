@@ -249,7 +249,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_VEHICLES: {
     id: "dashboard.vehicles",
-    currentPath: "src/assets/dashboard/vehicles.png",
+    currentPath: "/assets/vehicle-gallery-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Vehicles section card image",
     critical: true,
@@ -260,7 +260,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_PUBLISH_VEHICLE: {
     id: "dashboard.publish.vehicle",
-    currentPath: "src/assets/dashboard/publish-vehicle.png",
+    currentPath: "/assets/publish-vehicle-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Publish vehicle card image",
     critical: true,
@@ -271,7 +271,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_BULLETIN: {
     id: "dashboard.bulletin",
-    currentPath: "src/assets/dashboard/bulletin-board.png",
+    currentPath: "/images/bulletin-board.png",
     usage: "ControlPanel.tsx",
     purpose: "Bulletin board card image",
     critical: true,
@@ -282,7 +282,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_PUBLISH_ANNOUNCEMENT: {
     id: "dashboard.publish.announcement",
-    currentPath: "src/assets/dashboard/publish-announcement.png",
+    currentPath: "/assets/announcement-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Publish announcement card image",
     critical: true,
@@ -293,7 +293,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_EXCHANGES: {
     id: "dashboard.exchanges",
-    currentPath: "src/assets/dashboard/exchanges.png",
+    currentPath: "/lovable-uploads/exchange-new.png",
     usage: "ControlPanel.tsx",
     purpose: "Exchanges section card image",
     critical: true,
@@ -304,7 +304,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_PUBLISH_EXCHANGE: {
     id: "dashboard.publish.exchange",
-    currentPath: "src/assets/dashboard/publish-exchange.png",
+    currentPath: "/lovable-uploads/exchange-new.png",
     usage: "ControlPanel.tsx",
     purpose: "Publish exchange card image",
     critical: true,
@@ -315,7 +315,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_TRANSPORT: {
     id: "dashboard.transport",
-    currentPath: "src/assets/dashboard/transport-quotes.png",
+    currentPath: "/assets/transport-quotes-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Transport quotes card image",
     critical: true,
@@ -326,7 +326,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_QUOTE_TRANSPORT: {
     id: "dashboard.quote.transport",
-    currentPath: "src/assets/dashboard/quote-transport.png",
+    currentPath: "/assets/transport-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Quote transport card image",
     critical: true,
@@ -337,7 +337,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_REPORTS: {
     id: "dashboard.reports",
-    currentPath: "src/assets/dashboard/vehicle-reports.png",
+    currentPath: "/assets/report-delivery-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Vehicle reports card image",
     critical: true,
@@ -348,7 +348,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_REQUEST_REPORT: {
     id: "dashboard.request.report",
-    currentPath: "src/assets/dashboard/request-report.png",
+    currentPath: "/assets/request-report-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Request report card image",
     critical: true,
@@ -359,7 +359,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_IMPORT_CALCULATOR: {
     id: "dashboard.import.calculator",
-    currentPath: "src/assets/dashboard/import-calculator.png",
+    currentPath: "/assets/import-calculator-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Import calculator card image",
     critical: true,
@@ -370,7 +370,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_COMMISSION_CALCULATOR: {
     id: "dashboard.commission.calculator",
-    currentPath: "src/assets/dashboard/commission-calculator.png",
+    currentPath: "/assets/commission-calculator-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Commission calculator card image",
     critical: true,
@@ -381,7 +381,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_BLOG: {
     id: "dashboard.blog",
-    currentPath: "src/assets/dashboard/blog.png",
+    currentPath: "/assets/blog-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Blog section card image",
     critical: true,
@@ -392,7 +392,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   DASHBOARD_AUCTIONS: {
     id: "dashboard.auctions",
-    currentPath: "src/assets/dashboard/auctions.png",
+    currentPath: "/assets/auction-room-image.png",
     usage: "ControlPanel.tsx",
     purpose: "Auctions section card image",
     critical: true,

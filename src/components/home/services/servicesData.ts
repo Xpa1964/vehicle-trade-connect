@@ -10,6 +10,7 @@ import {
   MessageSquare,
   Gavel
 } from 'lucide-react';
+import { getStaticImagePath } from '@/hooks/useStaticImage';
 
 export interface ServiceItem {
   icon: any;
@@ -19,8 +20,14 @@ export interface ServiceItem {
   gradient: string;
   backgroundImage?: string;
   badge?: string;
+  /** Registry image ID for centralized management */
+  registryId?: string;
 }
 
+/**
+ * Services data with images resolved from STATIC_IMAGE_REGISTRY
+ * All backgroundImage paths are now controlled centrally
+ */
 export const servicesData: ServiceItem[] = [
   {
     icon: Car,
@@ -28,7 +35,8 @@ export const servicesData: ServiceItem[] = [
     descriptionKey: 'services.vehicleGalleryDesc',
     link: '/vehicle-gallery-info',
     gradient: '',
-    backgroundImage: '/images/showroom-gallery.png'
+    backgroundImage: getStaticImagePath('services.showroom'),
+    registryId: 'services.showroom'
   },
   {
     icon: MessageSquare,
@@ -36,7 +44,8 @@ export const servicesData: ServiceItem[] = [
     descriptionKey: 'services.messagingDesc',
     link: '/messaging-info',
     gradient: '',
-    backgroundImage: '/images/messaging-chat.png'
+    backgroundImage: getStaticImagePath('services.messaging'),
+    registryId: 'services.messaging'
   },
   {
     icon: FileText,
@@ -44,7 +53,8 @@ export const servicesData: ServiceItem[] = [
     descriptionKey: 'services.vehicleReportsDesc',
     link: '/vehicle-reports-info',
     gradient: '',
-    backgroundImage: '/images/vehicle-inspection.png'
+    backgroundImage: getStaticImagePath('services.inspection'),
+    registryId: 'services.inspection'
   },
   {
     icon: RefreshCw,
@@ -52,7 +62,8 @@ export const servicesData: ServiceItem[] = [
     descriptionKey: 'services.exchangesDesc',
     link: '/exchanges-info',
     gradient: '',
-    backgroundImage: '/images/vehicle-exchanges.png'
+    backgroundImage: getStaticImagePath('services.exchanges'),
+    registryId: 'services.exchanges'
   },
   {
     icon: Gavel,
@@ -60,7 +71,8 @@ export const servicesData: ServiceItem[] = [
     descriptionKey: 'services.auctionsDesc',
     link: '/auctions-info',
     gradient: '',
-    backgroundImage: '/images/auctions-hero.png'
+    backgroundImage: getStaticImagePath('services.auctions'),
+    registryId: 'services.auctions'
   },
   {
     icon: Volume2,
@@ -68,7 +80,8 @@ export const servicesData: ServiceItem[] = [
     descriptionKey: 'services.bulletinBoardDesc',
     link: '/bulletin-info',
     gradient: '',
-    backgroundImage: '/images/bulletin-board.png'
+    backgroundImage: getStaticImagePath('services.bulletin'),
+    registryId: 'services.bulletin'
   },
   {
     icon: Truck,
@@ -76,7 +89,8 @@ export const servicesData: ServiceItem[] = [
     descriptionKey: 'services.transportDesc',
     link: '/transport-express',
     gradient: '',
-    backgroundImage: '/images/transport-highway.png'
+    backgroundImage: getStaticImagePath('services.transport'),
+    registryId: 'services.transport'
   },
   {
     icon: Calculator,
@@ -84,7 +98,8 @@ export const servicesData: ServiceItem[] = [
     descriptionKey: 'services.importCalculatorDesc',
     link: '/import-calculator',
     gradient: '',
-    backgroundImage: '/images/import-calculator.png'
+    backgroundImage: getStaticImagePath('services.calculator'),
+    registryId: 'services.calculator'
   },
   {
     icon: BookOpen,
@@ -92,6 +107,7 @@ export const servicesData: ServiceItem[] = [
     descriptionKey: 'services.blogDesc',
     link: '/blog',
     gradient: '',
-    backgroundImage: '/images/blog.png'
+    backgroundImage: getStaticImagePath('services.blog'),
+    registryId: 'services.blog'
   }
 ];

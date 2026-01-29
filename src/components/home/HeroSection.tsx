@@ -2,12 +2,17 @@ import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import SimpleImage from '@/components/shared/SimpleImage';
 import { useImagePreload } from '@/hooks/useImagePreload';
+import { useStaticImage } from '@/hooks/useStaticImage';
 
 const HeroSection: React.FC = () => {
   const { t, currentLanguage } = useLanguage();
   
-  // Preload critical LCP image
-  useImagePreload(['/lovable-uploads/d756e9c6-4a89-45dc-a824-7c846cdb6c2b.png']);
+  // Get images from registry
+  const heroBackground = useStaticImage('home.hero');
+  const heroLogo = useStaticImage('home.logo.hero');
+  
+  // Preload critical LCP image from registry
+  useImagePreload([heroBackground.src]);
   
   // Check if current language is Spanish or French
   const isSpanishOrFrench = currentLanguage === 'es' || currentLanguage === 'fr';
@@ -17,15 +22,21 @@ const HeroSection: React.FC = () => {
       className="relative w-full h-screen overflow-hidden print:hidden"
       aria-label="Hero section"
     >
-      {/* Hero Image Layer */}
+      {/* Hero Image Layer - Using Registry */}
       <div className="absolute inset-0 w-full h-full" aria-hidden="true">
         <SimpleImage
-          src="/lovable-uploads/d756e9c6-4a89-45dc-a824-7c846cdb6c2b.png"
+          src={heroBackground.src}
           alt="Fondo de vehículos de lujo profesionales"
           className="w-full h-full object-cover object-center"
           loading="eager"
           width={1818}
           height={1280}
+          onError={(e) => {
+            // Fallback from registry
+            if (heroBackground.fallback) {
+              e.currentTarget.src = heroBackground.fallback;
+            }
+          }}
         />
       </div>
 
@@ -38,15 +49,20 @@ const HeroSection: React.FC = () => {
             
             {/* Logo and text container - responsive layout */}
             <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 lg:flex-row lg:gap-8 lg:items-center">
-              {/* Responsive logo */}
+              {/* Responsive logo - Using Registry */}
               <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 flex-shrink-0">
                 <SimpleImage
-                  src="/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png"
+                  src={heroLogo.src}
                   alt="Logo de KONTACT VO - Marketplace Automotriz Profesional"
                   className="w-full h-full object-contain"
                   loading="eager"
                   width={192}
                   height={192}
+                  onError={(e) => {
+                    if (heroLogo.fallback) {
+                      e.currentTarget.src = heroLogo.fallback;
+                    }
+                  }}
                 />
               </div>
               
