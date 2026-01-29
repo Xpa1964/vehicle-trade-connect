@@ -86,7 +86,7 @@ export const mapVehicleToFormData = (vehicle: Vehicle): VehicleFormData => {
     vehicleType: vehicle.vehicleType || '',
     transactionType: (vehicle.transactionType as 'national' | 'import' | 'export') || 'national',
     acceptsExchange: vehicle.acceptsExchange || false,
-    engineSize: vehicle.engineSize || undefined,
+    engineSize: typeof vehicle.engineSize === 'string' ? parseFloat(vehicle.engineSize) || undefined : vehicle.engineSize || undefined,
     enginePower: vehicle.enginePower || undefined,
     color: vehicle.color || '',
     doors: vehicle.doors || undefined,
