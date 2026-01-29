@@ -80,10 +80,21 @@ const ImageCard: React.FC<ImageCardProps> = ({
   const [isCheckingStorage, setIsCheckingStorage] = useState(true);
   const [imageSource, setImageSource] = useState<'storage' | 'original' | 'none'>('none');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Use ref to avoid infinite loops with onStatusChange
+  const onStatusChangeRef = useRef(onStatusChange);
+  onStatusChangeRef.current = onStatusChange;
+  
+  // Stable timestamp for cache busting - only changes on mount
+  const cacheBustRef = useRef(Date.now());
 
   // Check for image in Supabase Storage first, then fall back to original path
+  // Only runs once on mount or when image.id changes
   useEffect(() => {
+    let isMounted = true;
+    
     const checkStorageForImage = async () => {
+      if (!isMounted) return;
       setIsCheckingStorage(true);
       
       try {
@@ -98,6 +109,8 @@ const ImageCard: React.FC<ImageCardProps> = ({
             sortBy: { column: 'created_at', order: 'desc' }
           });
 
+        if (!isMounted) return;
+
         if (!error && files && files.length > 0) {
           // Found files in storage - use the most recent one
           const latestFile = files[0];
@@ -107,12 +120,12 @@ const ImageCard: React.FC<ImageCardProps> = ({
             .from('static-images')
             .getPublicUrl(storagePath);
           
-          // Add cache buster to force refresh
-          const urlWithCacheBuster = `${publicUrl}?t=${Date.now()}`;
+          // Add stable cache buster
+          const urlWithCacheBuster = `${publicUrl}?t=${cacheBustRef.current}`;
           setDisplayUrl(urlWithCacheBuster);
           setImageSource('storage');
           setImageLoaded(true);
-          onStatusChange?.(image.id, true);
+          onStatusChangeRef.current?.(image.id, true);
         } else {
           // No files in storage - try original path
           setDisplayUrl(image.currentPath);
@@ -120,16 +133,21 @@ const ImageCard: React.FC<ImageCardProps> = ({
         }
       } catch (err) {
         console.error('Error checking storage:', err);
+        if (!isMounted) return;
         // Fall back to original path
         setDisplayUrl(image.currentPath);
         setImageSource('original');
       } finally {
-        setIsCheckingStorage(false);
+        if (isMounted) {
+          setIsCheckingStorage(false);
+        }
       }
     };
 
     checkStorageForImage();
-  }, [image.id, image.currentPath, onStatusChange]);
+    
+    return () => { isMounted = false; };
+  }, [image.id, image.currentPath]);
 
   const handleImageLoad = () => {
     setImageLoaded(true);
