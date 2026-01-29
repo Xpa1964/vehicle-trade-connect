@@ -72,11 +72,20 @@ La migración del tema oscuro continúa. Se ha suavizado el color naranja primar
 | Superficies secundarias | `bg-secondary` (#1E2436) |
 | Bordes | `border-border` (#2D3748) |
 | Texto principal | `text-foreground` (#F8FAFC) |
-| Texto secundario | `text-muted-foreground` (#94A3B8) |
-| Acento primario | `text-primary` / `bg-primary` |
+| Texto secundario | `text-muted-foreground` (75% luminosidad - más claro) |
+| Acento primario | `text-primary` / `bg-primary` (naranja suavizado) |
 | Estados error | `bg-destructive/10`, `text-destructive` |
 | Estados éxito | `bg-success/10`, `text-[#22C55E]` |
 | Estados warning | `bg-amber-400/10`, `text-amber-400` |
+
+## Guía de Iconografía (Basado en Mockup)
+
+| Propiedad | Valor Recomendado |
+|-----------|-------------------|
+| Tamaño base | `h-10 w-10` (en vez de h-12 w-12) |
+| Grosor de trazo | `strokeWidth={1.5}` (más sutil) |
+| Colores | Tonos -400 (blue-400, green-400, etc.) |
+| Estilo | Minimalista, líneas finas |
 
 ---
 
