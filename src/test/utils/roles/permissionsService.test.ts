@@ -64,13 +64,13 @@ describe('permissionsService', () => {
       consoleSpy.mockRestore();
     });
 
-    it('returns false when moderator lacks settings.edit permission', () => {
-      const result = hasPermission('moderator', 'settings.edit');
+    it('returns false when analyst lacks settings.edit permission', () => {
+      const result = hasPermission('analyst', 'settings.edit');
       expect(result).toBe(false);
     });
 
-    it('returns true when moderator has users.view permission', () => {
-      const result = hasPermission('moderator', 'users.view');
+    it('returns true when analyst has analytics.view permission', () => {
+      const result = hasPermission('analyst', 'analytics.view');
       expect(result).toBe(true);
     });
   });
@@ -110,17 +110,7 @@ describe('permissionsService', () => {
       expect(permissions).not.toContain('users.delete');
     });
 
-    it('returns correct permissions array for moderator', () => {
-      const permissions = getRolePermissions('moderator');
-      
-      expect(permissions).toContain('users.view');
-      expect(permissions).toContain('users.edit');
-      expect(permissions).toContain('vehicles.view');
-      expect(permissions).not.toContain('users.delete');
-      expect(permissions).not.toContain('settings.edit');
-    });
-
-    it('returns correct permissions for content_manager', () => {
+    it('returns correct permissions array for content_manager', () => {
       const permissions = getRolePermissions('content_manager');
       
       expect(permissions).toContain('content.view');
@@ -128,15 +118,6 @@ describe('permissionsService', () => {
       expect(permissions).toContain('content.edit');
       expect(permissions).toContain('content.delete');
       expect(permissions).toContain('announcements.view');
-    });
-
-    it('returns correct permissions for support', () => {
-      const permissions = getRolePermissions('support');
-      
-      expect(permissions).toContain('users.view');
-      expect(permissions).toContain('vehicles.view');
-      expect(permissions).toContain('logs.view');
-      expect(permissions).not.toContain('users.edit');
     });
 
     it('returns correct permissions for analyst', () => {
@@ -193,8 +174,8 @@ describe('permissionsService', () => {
       expect(result).toBe(false);
     });
 
-    it('returns true when moderator has users.view from list', () => {
-      const result = hasAnyPermission('moderator', ['users.view', 'settings.edit']);
+    it('returns true when analyst has analytics.view from list', () => {
+      const result = hasAnyPermission('analyst', ['analytics.view', 'settings.edit']);
       expect(result).toBe(true);
     });
   });
@@ -204,8 +185,6 @@ describe('permissionsService', () => {
       const roles = getRolesWithPermission('users.view');
       
       expect(roles).toContain('admin');
-      expect(roles).toContain('moderator');
-      expect(roles).toContain('support');
       expect(roles).toContain('analyst');
       expect(roles).not.toContain('user');
     });
@@ -220,10 +199,8 @@ describe('permissionsService', () => {
       const roles = getRolesWithPermission('vehicles.view');
       
       expect(roles).toContain('admin');
-      expect(roles).toContain('moderator');
       expect(roles).toContain('user');
       expect(roles).toContain('dealer');
-      expect(roles).toContain('support');
       expect(roles).toContain('analyst');
     });
 
@@ -237,7 +214,6 @@ describe('permissionsService', () => {
       const roles = getRolesWithPermission('content.edit');
       
       expect(roles).toContain('admin');
-      expect(roles).toContain('moderator');
       expect(roles).toContain('content_manager');
       expect(roles).not.toContain('user');
       expect(roles).not.toContain('dealer');
@@ -249,7 +225,6 @@ describe('permissionsService', () => {
       expect(roles).toContain('admin');
       expect(roles).toContain('analyst');
       expect(roles).not.toContain('user');
-      expect(roles).not.toContain('moderator');
     });
 
     it('returns empty array for non-existent permission', () => {

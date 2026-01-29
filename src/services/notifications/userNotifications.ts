@@ -26,13 +26,13 @@ export const userNotificationService = {
     try {
       console.log('[userNotificationService] Creating notification:', data);
       
-      // Use system function with notification_history_id parameter
+      // Use system function
       const { data: result, error } = await supabase.rpc('create_system_notification', {
         p_user_id: data.user_id,
+        p_title: data.subject,
         p_subject: data.subject,
         p_content: data.content,
-        p_type: data.type || 'info',
-        p_notification_history_id: data.notification_history_id || null
+        p_type: data.type || 'info'
       });
       
       if (error) {
@@ -53,8 +53,8 @@ export const userNotificationService = {
         return null;
       }
       
-      console.log('[userNotificationService] ✅ Notification created successfully with history_id:', notification.notification_history_id);
-      return notification;
+      console.log('[userNotificationService] ✅ Notification created successfully');
+      return notification as UserNotification;
     } catch (error) {
       console.error('[userNotificationService] Unexpected error:', error);
       return null;

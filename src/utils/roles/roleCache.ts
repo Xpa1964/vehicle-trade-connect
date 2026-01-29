@@ -104,7 +104,7 @@ export const setCachedRole = (userId: string, role: AppRole): void => {
       return;
     }
     
-    const validRoles: AppRole[] = ['admin', 'user', 'moderator', 'support', 'content_manager', 'analyst'];
+    const validRoles: AppRole[] = ['admin', 'user', 'dealer', 'professional', 'individual', 'fleet_manager', 'transporter', 'workshop', 'analyst', 'content_manager'];
     if (!validRoles.includes(role)) {
       console.error('[setCachedRole] Invalid role:', role);
       return;
