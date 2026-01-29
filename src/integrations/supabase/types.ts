@@ -2638,6 +2638,7 @@ export type Database = {
         Args: { p_user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
       }
+      is_admin: { Args: { p_user_id: string }; Returns: boolean }
       log_activity: {
         Args: {
           p_action_type: string
