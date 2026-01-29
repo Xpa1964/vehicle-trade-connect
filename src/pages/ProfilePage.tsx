@@ -32,10 +32,10 @@ const ProfilePage: React.FC = () => {
   if (!id) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <Alert className="max-w-md mx-auto">
+        <Alert className="max-w-md mx-auto bg-card border-border">
           <Info className="h-4 w-4" />
-          <AlertDescription>
-            ID de usuario no encontrado. <Button variant="link" onClick={() => navigate('/users')} className="p-0 h-auto">Ver directorio de usuarios</Button>
+          <AlertDescription className="text-foreground">
+            ID de usuario no encontrado. <Button variant="link" onClick={() => navigate('/users')} className="p-0 h-auto text-primary">Ver directorio de usuarios</Button>
           </AlertDescription>
         </Alert>
       </div>
@@ -91,7 +91,7 @@ const ProfilePage: React.FC = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <div className="text-lg font-medium">{t('profile.loading')}</div>
+          <div className="text-lg font-medium text-foreground">{t('profile.loading')}</div>
           {isLoading && <div className="text-sm text-muted-foreground">{t('profile.loadingUser')}</div>}
           {ratingsLoading && <div className="text-sm text-muted-foreground">{t('profile.loadingRatingsData')}</div>}
         </div>
@@ -103,10 +103,10 @@ const ProfilePage: React.FC = () => {
     console.error('🔍 ProfilePage error:', error);
     return (
       <div className="container mx-auto px-4 py-8">
-        <Alert className="max-w-md mx-auto">
+        <Alert className="max-w-md mx-auto bg-card border-border">
           <Info className="h-4 w-4" />
-          <AlertDescription>
-            Error al cargar el perfil: {error.message}. <Button variant="link" onClick={() => navigate('/users')} className="p-0 h-auto">Ver directorio de usuarios</Button>
+          <AlertDescription className="text-foreground">
+            Error al cargar el perfil: {error.message}. <Button variant="link" onClick={() => navigate('/users')} className="p-0 h-auto text-primary">Ver directorio de usuarios</Button>
           </AlertDescription>
         </Alert>
       </div>
@@ -116,10 +116,10 @@ const ProfilePage: React.FC = () => {
   if (!profile) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <Alert className="max-w-md mx-auto">
+        <Alert className="max-w-md mx-auto bg-card border-border">
           <Info className="h-4 w-4" />
-          <AlertDescription>
-            Perfil no encontrado para el ID: {id}. <Button variant="link" onClick={() => navigate('/users')} className="p-0 h-auto">Ver directorio de usuarios</Button>
+          <AlertDescription className="text-foreground">
+            Perfil no encontrado para el ID: {id}. <Button variant="link" onClick={() => navigate('/users')} className="p-0 h-auto text-primary">Ver directorio de usuarios</Button>
           </AlertDescription>
         </Alert>
       </div>
@@ -162,7 +162,7 @@ const ProfilePage: React.FC = () => {
               e.currentTarget.style.display = 'none';
             }}
           />
-          <span className="text-xl font-bold text-auto-blue">KONTACT VO</span>
+          <span className="text-xl font-bold text-primary">KONTACT VO</span>
         </div>
         <BackButton />
       </div>
@@ -170,9 +170,9 @@ const ProfilePage: React.FC = () => {
       {/* Header con información más clara */}
       <div className="mb-6">
         {isOwnProfile ? (
-          <Alert className="bg-green-50 border-green-200">
-            <User className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-800">
+          <Alert className="bg-primary/10 border-primary/20">
+            <User className="h-4 w-4 text-primary" />
+            <AlertDescription className="text-foreground">
               <strong>📝 {t('profile.user', { fallback: 'Este es tu perfil personal.' })}</strong> Otros usuarios pueden encontrarte y valorarte desde aquí.
               <div className="mt-2">
                 <Button variant="outline" size="sm" onClick={() => navigate('/dashboard')}>
@@ -188,9 +188,9 @@ const ProfilePage: React.FC = () => {
             </AlertDescription>
           </Alert>
         ) : (
-          <Alert className="bg-blue-50 border-blue-200">
-            <Info className="h-4 w-4 text-blue-600" />
-            <AlertDescription className="text-blue-800">
+          <Alert className="bg-info/10 border-info/20">
+            <Info className="h-4 w-4 text-info" />
+            <AlertDescription className="text-foreground">
               <strong>🌟 {t('profile.info', { fallback: 'Perfil de' })} {displayName}.</strong> Puedes valorar a este usuario para compartir tu experiencia.
             </AlertDescription>
           </Alert>

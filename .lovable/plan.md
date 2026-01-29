@@ -1,15 +1,15 @@
 # Plan de Unificación Visual: Tema Oscuro Profesional
 
-## ✅ Estado: IMPLEMENTACIÓN EN PROGRESO (Fase 3)
+## ✅ Estado: IMPLEMENTACIÓN EN PROGRESO (Fase 4)
 
-La migración del tema oscuro continúa. Se ha suavizado el color naranja primario para reducir la intensidad visual.
+La migración del tema oscuro continúa. Se han migrado páginas legales y de perfil.
 
-### 🔧 Correcciones Recientes (Fase 3):
-- **Color primario suavizado**: De `25 95% 53%` a `28 80% 52%` (menos saturado)
-- **Bulletin components migrados**: `PublishAnnouncementPage`, `AnnouncementList`, `AnnouncementItem`, `AnnouncementForm`
-- **AuctionsInfoPage**: Cards migradas a `bg-card` con `border-border`
-- **VehicleReports**: Estados de carga y filas migradas a tokens oscuros
-- **DashboardNew**: Fondo y texto migrados a tokens semánticos
+### 🔧 Correcciones Recientes (Fase 4):
+- **PrivacyPolicyPage**: Migrado a `bg-card`, `bg-secondary`, `text-foreground`
+- **TermsAndConditionsPage**: Migrado a tema oscuro con tokens semánticos
+- **CookiesPage**: Migrado a `bg-card`, `bg-background`
+- **ProfilePage**: Alertas actualizadas de `bg-green-50` a `bg-primary/10`, `bg-info/10`
+- **MessagesWithDeletion**: Cards y fondos migrados a tokens oscuros
 
 ---
 
