@@ -1,234 +1,187 @@
 
-# Image Control Center - Plan de Implementación
+# Image Control Center - Rediseño a Grid de Tarjetas
 
-## Resumen Ejecutivo
+## Resumen
 
-Crear un panel de control de imágenes de producto ubicado en `/admin/image-control` que permite:
-
-1. Visualizar todas las imágenes estáticas del producto
-2. Generar reemplazos usando AI (Lovable AI Gateway)
-3. Reemplazar imágenes en storage con el mismo URL para actualización instantánea
+Rediseñar el Image Control Center para mostrar **todas las imágenes en un grid de tarjetas** (similar al diseño de referencia), donde cada imagen tiene sus propios controles de generación, eliminación y carga manual.
 
 ---
 
-## Arquitectura del Sistema
+## Diseño Visual (Basado en Screenshots de Referencia)
 
 ```text
-┌─────────────────────────────────────────────────────────────────┐
-│                    IMAGE CONTROL CENTER                          │
-│                    /admin/image-control                          │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │  GLOBAL STYLE PROMPT                                        │ │
-│  │  "dark UI, premium lighting, cinematic, high contrast..."   │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-│                                                                  │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐        │
-│  │ IMAGE    │  │ IMAGE    │  │ IMAGE    │  │ IMAGE    │  ...   │
-│  │ CARD     │  │ CARD     │  │ CARD     │  │ CARD     │        │
-│  │          │  │          │  │          │  │          │        │
-│  │ [Preview]│  │ [Preview]│  │ [Preview]│  │ [Preview]│        │
-│  │ ID       │  │ ID       │  │ ID       │  │ ID       │        │
-│  │ Usage    │  │ Usage    │  │ Usage    │  │ Usage    │        │
-│  │ [Edit]   │  │ [Edit]   │  │ [Edit]   │  │ [Edit]   │        │
-│  └──────────┘  └──────────┘  └──────────┘  └──────────┘        │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    GENERATION MODAL                              │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌─────────────────────┐     ┌─────────────────────┐            │
-│  │   CURRENT IMAGE     │     │  GENERATED PREVIEW  │            │
-│  │                     │     │                     │            │
-│  │                     │     │                     │            │
-│  └─────────────────────┘     └─────────────────────┘            │
-│                                                                  │
-│  [Prompt textarea: "Luxury automotive showroom..."]             │
-│                                                                  │
-│  [✓ Replace]  [↻ Regenerate]  [✕ Cancel]                        │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              EDGE FUNCTION: generate-static-image               │
-├─────────────────────────────────────────────────────────────────┤
-│  1. Recibe: imageId, prompt, globalStylePrompt                  │
-│  2. Combina: globalStyle + localPrompt                          │
-│  3. Llama: Lovable AI Gateway (gemini-2.5-flash-image)          │
-│  4. Retorna: base64 imageData                                   │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              EDGE FUNCTION: replace-static-image                │
-├─────────────────────────────────────────────────────────────────┤
-│  1. Recibe: imageId, base64Data, originalPath                   │
-│  2. Sube: a bucket "static-images" con mismo nombre             │
-│  3. Actualiza: cache headers para invalidación                  │
-│  4. Retorna: publicUrl (mismo path, archivo nuevo)              │
-└─────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────┐
+│  🎨 IMAGE CONTROL CENTER                                                   │
+│  Gestiona y regenera imágenes estáticas del producto                       │
+├────────────────────────────────────────────────────────────────────────────┤
+│                                                                            │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  ◉ Probar Nuevo Estilo (Sin guardar)                                │   │
+│  │  Prueba diferentes prompts para ver el resultado antes de aplicar   │   │
+│  │                                                                      │   │
+│  │  Prompt Global:                                                      │   │
+│  │  ┌───────────────────────────────────────────────────────────────┐  │   │
+│  │  │ Dark, cinematic automotive marketplace style, premium...       │  │   │
+│  │  └───────────────────────────────────────────────────────────────┘  │   │
+│  │                                                                      │   │
+│  │  Categoría de Prueba:  [▼ Home Page        ]                        │   │
+│  │                                                                      │   │
+│  │  [            ◉ Probar Estilo             ]                         │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                            │
+│  ─────────────────────────────────────────────────────────────────────     │
+│                                                                            │
+│  Estado de las Imágenes:  45 de 52 imágenes tienen archivo                 │
+│                                                                            │
+│  [ 🎨 Generar Todas las Faltantes ] [ 🗑️ Eliminar Todas las Imágenes ]    │
+│                                                                            │
+├────────────────────────────────────────────────────────────────────────────┤
+│  GRID DE IMÁGENES (2-4 columnas responsive)                               │
+│                                                                            │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐         │
+│  │  home.hero       │  │  services.show   │  │  dashboard.veh   │         │
+│  │  ✓ Con imagen    │  │  ✓ Con imagen    │  │  ⚠ Sin imagen    │         │
+│  │ ┌──────────────┐ │  │ ┌──────────────┐ │  │ ┌──────────────┐ │         │
+│  │ │              │ │  │ │              │ │  │ │  placeholder │ │         │
+│  │ │   [imagen]   │ │  │ │   [imagen]   │ │  │ │              │ │         │
+│  │ │              │ │  │ │              │ │  │ │              │ │         │
+│  │ └──────────────┘ │  │ └──────────────┘ │  │ └──────────────┘ │         │
+│  │                  │  │                  │  │                  │         │
+│  │ Zoom: ──●── 100% │  │ Zoom: ──●── 100% │  │ Zoom: ──●── 100% │         │
+│  │ [Guardar zoom  ] │  │ [Guardar zoom  ] │  │ [Guardar zoom  ] │         │
+│  │                  │  │                  │  │                  │         │
+│  │ [🗑️ Eliminar   ] │  │ [🗑️ Eliminar   ] │  │ [🗑️ Eliminar   ] │         │
+│  │ [📤 Subir      ] │  │ [📤 Subir      ] │  │ [📤 Subir      ] │         │
+│  │ [✨ Generar IA ] │  │ [✨ Generar IA ] │  │ [✨ Generar IA ] │         │
+│  └──────────────────┘  └──────────────────┘  └──────────────────┘         │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Fuente de Datos: Static Image Registry
+## Componentes del Nuevo Diseño
 
-Ya existe `src/config/staticImageRegistry.ts` con todas las imágenes de producto registradas. Este archivo será la fuente de datos:
+### 1. Sección Superior: Probar Nuevo Estilo
 
-- 50+ imágenes registradas
-- Cada una tiene: id, currentPath, usage, purpose, aiEditable
-- Solo imágenes con `aiEditable: true` aparecerán en el panel
-- Ninguna imagen de usuario (vehicles, uploads, avatars, etc.)
+- **Prompt Global** - Textarea con el estilo común para todas las generaciones
+- **Categoría de Prueba** - Dropdown para seleccionar qué categoría probar
+- **Botón "Probar Estilo"** - Genera una imagen de ejemplo de esa categoría
 
----
+### 2. Estado y Acciones Masivas
 
-## Componentes a Crear
+- **Contador** - "X de Y imágenes tienen archivo"
+- **Generar Todas las Faltantes** - Genera con IA todas las que no tienen imagen
+- **Eliminar Todas** - Elimina todas las imágenes (con confirmación)
 
-### 1. Página Principal: ImageControlCenter.tsx
+### 3. Grid de Tarjetas de Imagen
 
-**Ubicación:** `src/pages/admin/ImageControlCenter.tsx`
+Cada tarjeta incluye:
 
-**Estructura:**
-- Header con título "Image Control Center"
-- Global Style Prompt (textarea persistente en localStorage)
-- Grid de tarjetas de imagen (responsive: 2-4 columnas)
-- Cada tarjeta muestra: thumbnail, ID, ubicación de uso
-- Botón "Edit" en cada tarjeta abre el modal de generación
-
-### 2. Modal de Generación: ImageGenerationModal.tsx
-
-**Ubicación:** `src/components/admin/ImageGenerationModal.tsx`
-
-**Flujo:**
-1. Vista lado a lado: Current vs Generated
-2. Textarea para prompt específico
-3. Botón "Generate" → llama edge function
-4. Preview del resultado
-5. Acciones: Replace | Regenerate | Cancel
-
-### 3. Edge Function: replace-static-image
-
-**Ubicación:** `supabase/functions/replace-static-image/index.ts`
-
-**Responsabilidades:**
-- Recibir base64 + metadata
-- Convertir a archivo binario
-- Subir a Supabase Storage bucket "static-images"
-- Usar `upsert: true` para sobrescribir
-- Retornar URL pública
+| Elemento | Descripción |
+|----------|-------------|
+| **ID** | Nombre técnico (ej: `home.hero`) |
+| **Categoría** | Badge con la categoría |
+| **Badge estado** | "✓ Con imagen" (verde) o "⚠ Sin imagen" (naranja) |
+| **Preview** | La imagen actual o placeholder |
+| **Slider de Zoom** | Control 0-200% para ajustar visualización |
+| **Botón Guardar zoom** | Persiste el nivel de zoom |
+| **Botón Eliminar** | Elimina la imagen actual (rojo) |
+| **Botón Subir** | Permite subir imagen manualmente (input file) |
+| **Botón Generar IA** | Abre modal para escribir prompt específico y generar |
 
 ---
 
-## Flujo de Reemplazo de Imagen
+## Modal de Generación Individual
+
+Cuando el usuario hace clic en "Generar IA" en una tarjeta:
 
 ```text
-1. Admin escribe prompt
-2. Click "Generate"
-3. Edge function llama Lovable AI → base64
-4. Se muestra preview lado a lado
-5. Admin click "Replace"
-6. Edge function sube a storage con upsert
-7. URL permanece igual, archivo es nuevo
-8. Cache invalidation automática
-9. Toda la plataforma ve la nueva imagen
+┌─────────────────────────────────────────────────────────────┐
+│  ✨ Generar imagen: home.hero                               │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌────────────────────┐     ┌────────────────────┐         │
+│  │   IMAGEN ACTUAL    │     │  IMAGEN GENERADA   │         │
+│  │                    │     │                    │         │
+│  └────────────────────┘     └────────────────────┘         │
+│                                                             │
+│  Prompt específico para esta imagen:                        │
+│  ┌───────────────────────────────────────────────────────┐ │
+│  │ Luxury sports car in dramatic spotlight...             │ │
+│  └───────────────────────────────────────────────────────┘ │
+│                                                             │
+│  ℹ️ El prompt global se añade automáticamente              │
+│                                                             │
+│  [ Cancelar ]  [ Regenerar ]  [ ✓ Aceptar y Reemplazar ]   │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Storage Bucket: static-images
+## Flujo de Trabajo
 
-Se creará un nuevo bucket público para almacenar las imágenes de producto:
-
-```sql
-INSERT INTO storage.buckets (id, name, public, file_size_limit)
-VALUES ('static-images', 'static-images', true, 10485760)
-ON CONFLICT (id) DO NOTHING;
-```
-
-Políticas RLS:
-- Lectura pública (cualquier usuario puede ver)
-- Escritura solo para admins autenticados
+1. **Ver todas las imágenes** → Grid muestra estado actual de cada una
+2. **Identificar faltantes** → Badge naranja "Sin imagen"
+3. **Generar individual** → Clic en "Generar IA" → Modal con prompt → Generar → Aceptar/Rechazar
+4. **Subir manual** → Clic en "Subir" → Selector de archivos → Upload
+5. **Eliminar** → Clic en "Eliminar" → Confirmación → Elimina de storage
+6. **Acciones masivas** → Generar todas las faltantes o eliminar todas
 
 ---
 
-## Archivos a Crear/Modificar
+## Archivos a Modificar
 
-| Archivo | Acción | Descripción |
-|---------|--------|-------------|
-| `src/pages/admin/ImageControlCenter.tsx` | **Crear** | Página principal del panel |
-| `src/components/admin/ImageGenerationModal.tsx` | **Crear** | Modal de generación y preview |
-| `supabase/functions/replace-static-image/index.ts` | **Crear** | Edge function para upload a storage |
-| `supabase/config.toml` | **Modificar** | Registrar nueva edge function |
-| `src/routes/AppRoutes.tsx` | **Modificar** | Agregar ruta /admin/image-control |
-| `supabase/migrations/[timestamp].sql` | **Crear** | Bucket y políticas RLS |
+| Archivo | Cambios |
+|---------|---------|
+| `src/pages/admin/ImageControlCenter.tsx` | Rediseño completo: Grid de tarjetas + sección superior + modal de generación |
+| `src/components/admin/ImageGenerationModal.tsx` | Ya existe, se reutiliza para el modal individual |
 
 ---
 
-## Estilo Visual
+## Persistencia de Datos
 
-Diseño premium inspirado en Stripe/Linear/Vercel:
-
-- Fondo oscuro con cards elevadas
-- Bordes sutiles, shadows suaves
-- Tipografía limpia y espaciosa
-- Transiciones suaves en hover
-- Loading states con skeleton/spinner
-- Feedback visual claro (toasts)
-
----
-
-## Lo Que NO Se Modificará
-
-- Ningún componente de UI existente
-- Ninguna ruta de usuario
-- Ningún sistema de almacenamiento de vehículos/auctions
-- Ningún archivo fuera del alcance admin
-- Cero efectos secundarios en el producto principal
+| Dato | Almacenamiento |
+|------|----------------|
+| Prompt global | localStorage (`imageControlCenter_globalStyle`) |
+| Prompts individuales | localStorage (`imageControlCenter_imagePrompts`) |
+| Niveles de zoom | localStorage (`imageControlCenter_zoomLevels`) |
+| Imágenes | Supabase Storage (`static-images` bucket) |
 
 ---
 
 ## Sección Técnica
 
-### Edge Function: generate-static-image (existente)
+### Detección de "Con imagen" vs "Sin imagen"
 
-Ya existe y funciona correctamente. Usa:
-- `LOVABLE_API_KEY` (auto-configurado)
-- `google/gemini-2.5-flash-image`
-- Retorna base64 imageData
-
-### Edge Function: replace-static-image (nueva)
+Se validará si la imagen carga correctamente:
 
 ```typescript
-// Pseudocódigo
-serve(async (req) => {
-  const { imageId, base64Data, targetPath } = await req.json();
-  
-  // Convertir base64 a blob
-  const blob = base64ToBlob(base64Data);
-  
-  // Subir a storage con upsert
-  const { data, error } = await supabase.storage
-    .from('static-images')
-    .upload(targetPath, blob, {
-      upsert: true,
-      contentType: 'image/png',
-      cacheControl: '0' // Sin cache para ver cambios inmediatos
-    });
-  
-  // Retornar URL pública
-  return { publicUrl: supabase.storage.from('static-images').getPublicUrl(targetPath) };
-});
+const [imageStatus, setImageStatus] = useState<Record<string, boolean>>({});
+
+// Al cargar cada imagen
+<img 
+  onLoad={() => setImageStatus(prev => ({...prev, [img.id]: true}))}
+  onError={() => setImageStatus(prev => ({...prev, [img.id]: false}))}
+/>
 ```
 
-### Persistencia del Global Style
+### Upload Manual de Imagen
 
-- Almacenado en localStorage
-- Key: `imageControlCenter_globalStyle`
-- Se precarga al abrir la página
-- Se aplica automáticamente a cada generación
+```typescript
+const handleManualUpload = async (file: File, imageId: string) => {
+  const { data, error } = await supabase.storage
+    .from('static-images')
+    .upload(`manual/${imageId}/${file.name}`, file, { upsert: true });
+  // Actualizar registry path...
+};
+```
 
+### Slider de Zoom (CSS Transform)
+
+```typescript
+<div style={{ transform: `scale(${zoomLevel / 100})` }}>
+  <img src={imagePath} />
+</div>
+```
