@@ -3,9 +3,11 @@
  * 
  * Individual card for displaying and managing a single static image
  * in the Image Control Center grid.
+ * 
+ * Priority: Supabase Storage > Original Path
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,9 +21,11 @@ import {
   ZoomIn,
   Save,
   ImageIcon,
-  AlertTriangle
+  AlertTriangle,
+  Loader2
 } from 'lucide-react';
 import { StaticImageEntry, ImageCategory } from '@/config/staticImageRegistry';
+import { supabase } from '@/integrations/supabase/client';
 
 const CATEGORY_LABELS: Record<ImageCategory, string> = {
   home: 'Home',
@@ -55,6 +59,7 @@ interface ImageCardProps {
   onGenerateAI: (image: StaticImageEntry) => void;
   isDeleting?: boolean;
   isUploading?: boolean;
+  onStatusChange?: (imageId: string, hasImage: boolean) => void;
 }
 
 const ImageCard: React.FC<ImageCardProps> = ({
@@ -66,18 +71,81 @@ const ImageCard: React.FC<ImageCardProps> = ({
   onUpload,
   onGenerateAI,
   isDeleting = false,
-  isUploading = false
+  isUploading = false,
+  onStatusChange
 }) => {
   const [imageLoaded, setImageLoaded] = useState<boolean | null>(null);
   const [localZoom, setLocalZoom] = useState(zoomLevel);
+  const [displayUrl, setDisplayUrl] = useState<string | null>(null);
+  const [isCheckingStorage, setIsCheckingStorage] = useState(true);
+  const [imageSource, setImageSource] = useState<'storage' | 'original' | 'none'>('none');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Check for image in Supabase Storage first, then fall back to original path
+  useEffect(() => {
+    const checkStorageForImage = async () => {
+      setIsCheckingStorage(true);
+      
+      try {
+        // Storage path pattern: imageId with dots replaced by slashes
+        const storagePrefix = image.id.replace(/\./g, '/');
+        
+        // List files in the storage folder for this image
+        const { data: files, error } = await supabase.storage
+          .from('static-images')
+          .list(storagePrefix, {
+            limit: 10,
+            sortBy: { column: 'created_at', order: 'desc' }
+          });
+
+        if (!error && files && files.length > 0) {
+          // Found files in storage - use the most recent one
+          const latestFile = files[0];
+          const storagePath = `${storagePrefix}/${latestFile.name}`;
+          
+          const { data: { publicUrl } } = supabase.storage
+            .from('static-images')
+            .getPublicUrl(storagePath);
+          
+          // Add cache buster to force refresh
+          const urlWithCacheBuster = `${publicUrl}?t=${Date.now()}`;
+          setDisplayUrl(urlWithCacheBuster);
+          setImageSource('storage');
+          setImageLoaded(true);
+          onStatusChange?.(image.id, true);
+        } else {
+          // No files in storage - try original path
+          setDisplayUrl(image.currentPath);
+          setImageSource('original');
+        }
+      } catch (err) {
+        console.error('Error checking storage:', err);
+        // Fall back to original path
+        setDisplayUrl(image.currentPath);
+        setImageSource('original');
+      } finally {
+        setIsCheckingStorage(false);
+      }
+    };
+
+    checkStorageForImage();
+  }, [image.id, image.currentPath, onStatusChange]);
 
   const handleImageLoad = () => {
     setImageLoaded(true);
+    onStatusChange?.(image.id, true);
   };
 
   const handleImageError = () => {
-    setImageLoaded(false);
+    if (imageSource === 'storage') {
+      // Storage image failed, try original path
+      setDisplayUrl(image.currentPath);
+      setImageSource('original');
+    } else {
+      // Both failed
+      setImageLoaded(false);
+      onStatusChange?.(image.id, false);
+    }
   };
 
   const handleZoomChange = (value: number[]) => {
@@ -115,19 +183,23 @@ const ImageCard: React.FC<ImageCardProps> = ({
         </div>
 
         {/* Status Badge */}
-        <div className="flex items-center gap-2">
-          {imageLoaded === true && (
+        <div className="flex items-center gap-2 flex-wrap">
+          {isCheckingStorage ? (
+            <Badge variant="outline" className="text-[10px] bg-muted text-muted-foreground">
+              <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+              Verificando...
+            </Badge>
+          ) : imageLoaded === true ? (
             <Badge variant="outline" className="text-[10px] bg-green-500/10 text-green-400 border-green-500/30">
               <Check className="h-3 w-3 mr-1" />
-              Con imagen
+              {imageSource === 'storage' ? 'Generada (Storage)' : 'Original'}
             </Badge>
-          )}
-          {imageLoaded === false && (
+          ) : imageLoaded === false ? (
             <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-400 border-amber-500/30">
               <AlertTriangle className="h-3 w-3 mr-1" />
               Sin imagen
             </Badge>
-          )}
+          ) : null}
           {image.critical && (
             <Badge variant="outline" className="text-[10px] bg-red-500/10 text-red-400 border-red-500/30">
               Crítica
@@ -137,28 +209,34 @@ const ImageCard: React.FC<ImageCardProps> = ({
 
         {/* Image Preview */}
         <div className="aspect-video bg-muted/50 rounded-lg overflow-hidden border border-border relative">
-          <div 
-            className="w-full h-full flex items-center justify-center overflow-hidden"
-            style={{ 
-              transform: `scale(${localZoom / 100})`,
-              transformOrigin: 'center center'
-            }}
-          >
-            {imageLoaded === false ? (
-              <div className="text-center text-muted-foreground p-2">
-                <ImageIcon className="h-8 w-8 mx-auto mb-1 opacity-40" />
-                <p className="text-[10px]">Sin archivo</p>
-              </div>
-            ) : (
-              <img
-                src={image.currentPath}
-                alt={image.purpose}
-                className="w-full h-full object-cover"
-                onLoad={handleImageLoad}
-                onError={handleImageError}
-              />
-            )}
-          </div>
+          {isCheckingStorage ? (
+            <div className="w-full h-full flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <div 
+              className="w-full h-full flex items-center justify-center overflow-hidden"
+              style={{ 
+                transform: `scale(${localZoom / 100})`,
+                transformOrigin: 'center center'
+              }}
+            >
+              {imageLoaded === false ? (
+                <div className="text-center text-muted-foreground p-2">
+                  <ImageIcon className="h-8 w-8 mx-auto mb-1 opacity-40" />
+                  <p className="text-[10px]">Sin archivo</p>
+                </div>
+              ) : displayUrl ? (
+                <img
+                  src={displayUrl}
+                  alt={image.purpose}
+                  className="w-full h-full object-cover"
+                  onLoad={handleImageLoad}
+                  onError={handleImageError}
+                />
+              ) : null}
+            </div>
+          )}
         </div>
 
         {/* Zoom Control */}
