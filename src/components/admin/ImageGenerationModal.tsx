@@ -63,6 +63,12 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
     setGeneratedImage(null);
 
     try {
+      console.log('Calling generate-static-image with:', { 
+        imageId: image.id, 
+        prompt: localPrompt.substring(0, 50) + '...',
+        hasGlobalStyle: !!globalStylePrompt 
+      });
+      
       const { data, error: fnError } = await supabase.functions.invoke('generate-static-image', {
         body: {
           imageId: image.id,
@@ -74,7 +80,18 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
       });
 
       if (fnError) {
-        throw new Error(fnError.message);
+        console.error('Edge function error:', fnError);
+        // Provide more specific error messages
+        if (fnError.message?.includes('Failed to send')) {
+          throw new Error('No se pudo conectar con el servicio de IA. Verifica tu conexión.');
+        }
+        if (fnError.message?.includes('rate limit') || fnError.message?.includes('429')) {
+          throw new Error('Límite de solicitudes alcanzado. Espera un momento y vuelve a intentar.');
+        }
+        if (fnError.message?.includes('402') || fnError.message?.includes('credits')) {
+          throw new Error('Créditos de IA agotados. Añade más créditos para continuar.');
+        }
+        throw new Error(fnError.message || 'Error desconocido en la función');
       }
 
       if (data?.error) {
@@ -83,14 +100,15 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
 
       if (data?.imageData) {
         setGeneratedImage(data.imageData);
-        toast.success('Image generated successfully!');
+        toast.success('¡Imagen generada correctamente!');
       } else {
-        throw new Error('No image data received');
+        throw new Error('No se recibieron datos de imagen');
       }
     } catch (err: any) {
       console.error('Generation error:', err);
-      setError(err.message || 'Failed to generate image');
-      toast.error(err.message || 'Failed to generate image');
+      const errorMessage = err.message || 'Error al generar la imagen';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsGenerating(false);
     }

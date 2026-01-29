@@ -99,8 +99,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     usage: "HeroSection.tsx",
     purpose: "KONTACT VO logo displayed in hero section",
     critical: true,
-    aiEditable: false,
-    category: "home",
+    aiEditable: false, // Logo branding - no editable por IA
+    category: "layout", // Moved to layout as it's a logo, not home content
     source: "product"
   },
 
@@ -111,7 +111,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Headphones illustration for audio presentation",
     critical: true,
     aiEditable: true,
-    category: "home",
+    category: "marketing", // Moved to marketing - specific feature illustration
     source: "product"
   },
 
