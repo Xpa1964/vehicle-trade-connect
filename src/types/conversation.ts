@@ -7,7 +7,7 @@ export interface Message {
   created_at: string | null;
   read_at?: string | null;
   original_language?: string | null;
-  translated_content?: string | null;
+  translated_content?: string | Record<string, string> | null;
   message_type?: string | null;
 }
 

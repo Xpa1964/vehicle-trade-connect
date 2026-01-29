@@ -71,20 +71,21 @@ const AdminUsers = () => {
       
       // Obtener emails y roles para cada usuario
       const usersWithDetails = await Promise.all(
-        (data || []).map(async (profile) => {
+        (data || []).map(async (profile: any) => {
           // Obtener email del usuario
-          const { data: authUser } = await supabase.auth.admin.getUserById(profile.id);
+          const { data: authUser } = await supabase.auth.admin.getUserById(profile.user_id || profile.id);
           
           // Obtener rol del usuario
           const { data: userRole } = await supabase
             .from('user_roles')
             .select('role')
-            .eq('user_id', profile.id)
+            .eq('user_id', profile.user_id || profile.id)
             .single();
           
           return {
             ...profile,
-            email: authUser?.user?.email || 'No disponible',
+            id: profile.user_id || profile.id,
+            email: authUser?.user?.email || profile.email || 'No disponible',
             role: userRole?.role || 'user'
           } as AdminUser;
         })

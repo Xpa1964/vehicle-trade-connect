@@ -34,7 +34,7 @@ export const useVehicleUpdater = () => {
       
       // Update main vehicle record
       console.log('💾 [useVehicleUpdater] Updating main vehicle record...');
-      const { error: vehicleError, data: updatedVehicle } = await supabase
+      const { error: vehicleError, data: updatedVehicle } = await (supabase as any)
         .from('vehicles')
         .update(vehicleData)
         .eq('id', id)

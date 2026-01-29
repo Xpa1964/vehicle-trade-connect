@@ -7,10 +7,10 @@ import { AppRole } from '@/types/auth';
  * Enhanced to better handle PostgreSQL enum values and support extended roles
  */
 export const validateRole = (role: any): AppRole => {
-  // Extended list of valid roles with more granular admin roles
+  // Extended list of valid roles matching database enum
   const validRoles: AppRole[] = [
-    'admin', 'dealer', 'user', 'moderator', 
-    'support', 'content_manager', 'analyst'
+    'admin', 'dealer', 'professional', 'individual', 'user',
+    'fleet_manager', 'transporter', 'workshop', 'analyst', 'content_manager'
   ];
   
   console.log('[validateRole] Validating role:', role, 'Type:', typeof role);

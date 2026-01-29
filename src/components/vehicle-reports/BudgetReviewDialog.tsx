@@ -65,7 +65,8 @@ const BudgetReviewDialog: React.FC<BudgetReviewDialogProps> = ({
 
       // Notify admin about the response (optional but helpful)
       const { error: notificationError } = await supabase.rpc('create_system_notification', {
-        p_user_id: (await supabase.auth.getUser()).data.user?.id,
+        p_user_id: (await supabase.auth.getUser()).data.user?.id || '',
+        p_title: accepted ? 'Presupuesto Aceptado' : 'Presupuesto Rechazado',
         p_subject: accepted ? 'Presupuesto Aceptado' : 'Presupuesto Rechazado',
         p_content: `El usuario ha ${accepted ? 'aceptado' : 'rechazado'} el presupuesto de €${budgetAmount.toFixed(2)} para el informe premium.`,
         p_type: 'info',

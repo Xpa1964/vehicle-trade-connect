@@ -27,7 +27,7 @@ const isValidCachedRole = (data: any): data is CachedRole => {
   if (!data.timestamp || typeof data.timestamp !== 'number') return false;
   
   // Validate role is one of the allowed values
-  const validRoles: AppRole[] = ['admin', 'user', 'moderator', 'support', 'content_manager', 'analyst'];
+  const validRoles: AppRole[] = ['admin', 'user', 'dealer', 'professional', 'individual', 'fleet_manager', 'transporter', 'workshop', 'analyst', 'content_manager'];
   if (!validRoles.includes(data.role as AppRole)) return false;
   
   // Validate timestamp is reasonable (not in the future, not too old)

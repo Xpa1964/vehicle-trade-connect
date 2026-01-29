@@ -115,7 +115,7 @@ const AdminExchanges: React.FC = () => {
 
       // Combine data - solo crear propuestas con datos válidos
       const enrichedProposals = exchangesData
-        .map(exchange => {
+        .map((exchange: any) => {
           const profile = profilesData.find(p => p.id === exchange.initiator_id);
           const offeredVehicle = vehiclesData.find(v => v.id === exchange.offered_vehicle_id);
           const requestedVehicle = vehiclesData.find(v => v.id === exchange.requested_vehicle_id);

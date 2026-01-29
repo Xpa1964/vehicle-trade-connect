@@ -147,10 +147,11 @@ const BudgetFormCard: React.FC<BudgetFormCardProps> = ({ requestId, onBudgetSent
       }
 
       // Create user notification
-      const { error: notificationError } = await supabase
+      const { error: notificationError } = await (supabase as any)
         .from('user_notifications')
         .insert({
           user_id: request.user_id,
+          title: 'Presupuesto de Informe Premium Disponible',
           subject: 'Presupuesto de Informe Premium Disponible',
           content: messageContent,
           type: 'info',

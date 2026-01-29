@@ -23,8 +23,8 @@ const APIManagement: React.FC = () => {
   }
   
   const isAdmin = currentRole === 'admin' || 
-                 currentRole === 'moderator' || 
-                 currentRole === 'support';
+                 currentRole === 'analyst' || 
+                 currentRole === 'content_manager';
                   
   if (!isAdmin) {
     return (

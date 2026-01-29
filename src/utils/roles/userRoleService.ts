@@ -23,7 +23,7 @@ export const fetchUserRole = async (userId: string): Promise<AppRole> => {
     console.log('[fetchUserRole] Using get_user_role function for user_id:', userId);
     
     // Using the security definer function to prevent recursion
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .rpc('get_user_role', { p_user_id: userId });
     
     if (error) {
@@ -70,7 +70,7 @@ export const reloadUserRole = async (userId: string): Promise<AppRole | undefine
     // Use the security definer function
     console.log('[reloadUserRole] Using get_user_role function');
     
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .rpc('get_user_role', { p_user_id: userId });
     
     if (error) {

@@ -72,10 +72,11 @@ export default function TransportQuoteResponseCard({
       if (!user) throw new Error('No authenticated user');
 
       // 2. Insert quote response
-      const { error: responseError } = await supabase
+      const { error: responseError } = await (supabase as any)
         .from('transport_quote_responses')
         .insert({
           transport_quote_id: quote.id,
+          transporter_id: user.id,
           admin_user_id: user.id,
           quoted_price: responseData.quoted_price,
           estimated_pickup_date: responseData.estimated_pickup_date,
@@ -156,10 +157,11 @@ export default function TransportQuoteResponseCard({
       }
 
       // 6. Create user notification
-      const { error: notificationError } = await supabase
+      const { error: notificationError } = await (supabase as any)
         .from('user_notifications')
         .insert({
           user_id: quote.user_id,
+          title: t('transportQuotes.system.notificationSubject', { quoteNumber: quote.quote_number }),
           subject: t('transportQuotes.system.notificationSubject', { quoteNumber: quote.quote_number }),
           content: messageContent,
           type: 'info',

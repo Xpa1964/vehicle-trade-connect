@@ -24,7 +24,7 @@ const ActivityLogsPage: React.FC = () => {
   // Check if user has admin role or logs.view permission
   const canViewLogs = hasPermission('logs.view');
   const isAdmin = currentRole === 'admin' || 
-                 currentRole === 'moderator' || 
+                 currentRole === 'analyst' || 
                  hasPermission('logs.view');
                  
   if (!isAdmin) {

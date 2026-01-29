@@ -79,8 +79,9 @@ const AdminUserView = () => {
       
       const userData = {
         ...profile,
-        role: userRole?.role || 'user'
-      } as AdminUserDetail;
+        role: userRole?.role || 'user',
+        operations_breakdown: profile.operations_breakdown || {}
+      } as unknown as AdminUserDetail;
       
       console.log('[AdminUserView] User data fetched successfully:', userData);
       return userData;
