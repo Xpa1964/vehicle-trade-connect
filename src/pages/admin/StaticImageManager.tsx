@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { 
   Table, 
   TableBody, 
@@ -42,7 +41,6 @@ import { Separator } from '@/components/ui/separator';
 import { 
   Image as ImageIcon,
   Search,
-  Filter,
   Wand2,
   RefreshCw,
   Check,
@@ -53,12 +51,12 @@ import {
   History,
   Eye,
   Sparkles,
-  Settings,
-  ChevronDown
+  Download
 } from 'lucide-react';
 import { useStaticImageRegistry } from '@/hooks/useStaticImageRegistry';
 import { StaticImageEntry } from '@/config/staticImageRegistry';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 const StaticImageManager: React.FC = () => {
   const {
@@ -84,8 +82,12 @@ const StaticImageManager: React.FC = () => {
   const [showGlobalStyleDialog, setShowGlobalStyleDialog] = useState(false);
   const [globalStyleInput, setGlobalStyleInput] = useState(globalStyle.prompt);
   const [previewImage, setPreviewImage] = useState<StaticImageEntry | null>(null);
+  
+  // AI Generation state
+  const [generatedPreview, setGeneratedPreview] = useState<string | null>(null);
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false);
 
-  // Handle generate image (placeholder - would connect to AI)
+  // Generate image using Lovable AI Gateway
   const handleGenerateImage = async () => {
     if (!selectedImage || !localPrompt.trim()) {
       toast.error('Selecciona una imagen y proporciona un prompt');
@@ -93,29 +95,95 @@ const StaticImageManager: React.FC = () => {
     }
 
     setIsGenerating(true);
-    const finalPrompt = composeFinalPrompt(localPrompt);
-    
-    toast.info('Generando imagen...', { 
-      description: 'El sistema de generación AI se conectará aquí'
-    });
-    
-    // Simulate generation delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Add version record (path would come from actual generation)
+    setGeneratedPreview(null);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-static-image', {
+        body: {
+          imageId: selectedImage.id,
+          prompt: localPrompt,
+          globalStylePrompt: globalStyle.prompt,
+          width: 1024,
+          height: 1024
+        }
+      });
+
+      if (error) {
+        console.error('Generation error:', error);
+        toast.error('Error al generar imagen', {
+          description: error.message || 'Inténtalo de nuevo'
+        });
+        return;
+      }
+
+      if (data?.error) {
+        toast.error('Error de generación', {
+          description: data.error
+        });
+        return;
+      }
+
+      if (data?.imageData) {
+        setGeneratedPreview(data.imageData);
+        setShowPreviewDialog(true);
+        toast.success('Imagen generada', {
+          description: 'Revisa la preview y decide si aceptarla'
+        });
+      } else {
+        toast.error('No se generó ninguna imagen');
+      }
+    } catch (err) {
+      console.error('Generation failed:', err);
+      toast.error('Error de conexión', {
+        description: 'No se pudo conectar con el servicio de AI'
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  // Accept generated image
+  const handleAcceptImage = () => {
+    if (!selectedImage || !generatedPreview) return;
+
+    // Add version record
     addImageVersion(
       selectedImage.id,
-      selectedImage.currentPath, // Would be new path from generation
+      generatedPreview, // Store the base64 data as the path for now
       localPrompt,
       'admin'
     );
-    
-    toast.success('Versión registrada', {
-      description: 'La imagen será generada cuando se conecte el servicio AI'
+
+    toast.success('Imagen aceptada', {
+      description: `Versión guardada para ${selectedImage.id}. Nota: Para reemplazar permanentemente, descarga y sube la imagen.`
     });
-    
-    setIsGenerating(false);
+
+    setShowPreviewDialog(false);
+    setGeneratedPreview(null);
     setLocalPrompt('');
+  };
+
+  // Reject and regenerate
+  const handleRejectImage = () => {
+    setGeneratedPreview(null);
+    setShowPreviewDialog(false);
+    toast.info('Imagen rechazada', {
+      description: 'Modifica el prompt y genera otra versión'
+    });
+  };
+
+  // Download generated image
+  const handleDownloadImage = () => {
+    if (!generatedPreview || !selectedImage) return;
+
+    const link = document.createElement('a');
+    link.href = generatedPreview;
+    link.download = `${selectedImage.id.replace(/\./g, '-')}-generated.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast.success('Imagen descargada');
   };
 
   // Save global style
@@ -149,6 +217,9 @@ const StaticImageManager: React.FC = () => {
     );
   };
 
+  // Filter only AI-editable images for the main list
+  const aiEditableImages = filteredImages.filter(img => img.aiEditable);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -156,10 +227,10 @@ const StaticImageManager: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <ImageIcon className="h-6 w-6 text-primary" />
-            Gestor de Imágenes Estáticas
+            Gestor de Imágenes AI
           </h1>
           <p className="text-muted-foreground mt-1">
-            Control centralizado de imágenes de producto/UI
+            Genera y reemplaza imágenes de producto con AI
           </p>
         </div>
         
@@ -179,7 +250,6 @@ const StaticImageManager: React.FC = () => {
                 </DialogTitle>
                 <DialogDescription>
                   Define la dirección visual para todas las imágenes generadas por AI.
-                  Este prompt se combina con prompts individuales.
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
@@ -193,16 +263,6 @@ const StaticImageManager: React.FC = () => {
                   />
                   <p className="text-xs text-muted-foreground">
                     Última actualización: {new Date(globalStyle.lastUpdated).toLocaleString()}
-                  </p>
-                </div>
-                <div className="p-3 bg-secondary rounded-lg">
-                  <p className="text-xs font-medium text-muted-foreground mb-1">
-                    Ejemplo de prompt final:
-                  </p>
-                  <p className="text-sm text-foreground">
-                    <span className="text-primary">[GLOBAL]</span> {globalStyleInput.slice(0, 80)}...
-                    <br />
-                    <span className="text-primary">[LOCAL]</span> "Hero image of luxury car showroom"
                   </p>
                 </div>
               </div>
@@ -271,25 +331,6 @@ const StaticImageManager: React.FC = () => {
         </Card>
       </div>
 
-      {/* Validation Warnings */}
-      {!validation.valid && (
-        <Card className="border-warning/50 bg-warning/10">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-warning flex items-center gap-2 text-lg">
-              <AlertTriangle className="h-5 w-5" />
-              Advertencias de Validación
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="text-sm space-y-1">
-              {validation.errors.map((error, i) => (
-                <li key={i} className="text-warning-foreground">{error}</li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Main Content */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Image List */}
@@ -297,7 +338,7 @@ const StaticImageManager: React.FC = () => {
           <Card>
             <CardHeader>
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <CardTitle className="text-lg">Registro de Imágenes</CardTitle>
+                <CardTitle className="text-lg">Imágenes AI-Editables ({aiEditableImages.length})</CardTitle>
                 <div className="flex gap-2 flex-wrap">
                   <div className="relative flex-1 min-w-[200px]">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -342,13 +383,12 @@ const StaticImageManager: React.FC = () => {
                     <TableRow>
                       <TableHead className="w-[180px]">Preview</TableHead>
                       <TableHead>ID</TableHead>
-                      <TableHead>Uso</TableHead>
-                      <TableHead>Estado</TableHead>
+                      <TableHead>Categoría</TableHead>
                       <TableHead className="text-right">Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredImages.map((image) => (
+                    {aiEditableImages.map((image) => (
                       <TableRow 
                         key={image.id}
                         className={selectedImage?.id === image.id ? 'bg-primary/10' : ''}
@@ -369,20 +409,6 @@ const StaticImageManager: React.FC = () => {
                             {image.category}
                           </Badge>
                         </TableCell>
-                        <TableCell>
-                          <div className="flex gap-1">
-                            {image.critical && (
-                              <Badge variant="destructive" className="text-xs">
-                                Crítica
-                              </Badge>
-                            )}
-                            {image.aiEditable && (
-                              <Badge variant="default" className="text-xs bg-primary">
-                                AI
-                              </Badge>
-                            )}
-                          </div>
-                        </TableCell>
                         <TableCell className="text-right">
                           <div className="flex gap-1 justify-end">
                             <Button
@@ -392,15 +418,13 @@ const StaticImageManager: React.FC = () => {
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            {image.aiEditable && (
-                              <Button
-                                size="sm"
-                                variant={selectedImage?.id === image.id ? 'default' : 'outline'}
-                                onClick={() => setSelectedImage(image)}
-                              >
-                                <Wand2 className="h-4 w-4" />
-                              </Button>
-                            )}
+                            <Button
+                              size="sm"
+                              variant={selectedImage?.id === image.id ? 'default' : 'outline'}
+                              onClick={() => setSelectedImage(image)}
+                            >
+                              <Wand2 className="h-4 w-4" />
+                            </Button>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -408,9 +432,6 @@ const StaticImageManager: React.FC = () => {
                   </TableBody>
                 </Table>
               </ScrollArea>
-              <div className="mt-4 text-sm text-muted-foreground">
-                Mostrando {filteredImages.length} de {allImages.length} imágenes
-              </div>
             </CardContent>
           </Card>
         </div>
@@ -424,7 +445,7 @@ const StaticImageManager: React.FC = () => {
                 Generación AI
               </CardTitle>
               <CardDescription>
-                Genera nuevas versiones de imágenes con AI
+                Genera nuevas versiones con Lovable AI
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -468,7 +489,7 @@ const StaticImageManager: React.FC = () => {
                       ) : (
                         <Sparkles className="h-4 w-4" />
                       )}
-                      Generar
+                      {isGenerating ? 'Generando...' : 'Generar'}
                     </Button>
                     <Button 
                       variant="outline"
@@ -497,7 +518,7 @@ const StaticImageManager: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <History className="h-5 w-5" />
-                  Historial de Versiones
+                  Historial
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -568,26 +589,57 @@ const StaticImageManager: React.FC = () => {
                     <p className="font-medium text-muted-foreground">Uso</p>
                     <p>{previewImage.usage}</p>
                   </div>
-                  <div>
-                    <p className="font-medium text-muted-foreground">Categoría</p>
-                    <Badge variant="outline">{previewImage.category}</Badge>
-                  </div>
-                  <div>
-                    <p className="font-medium text-muted-foreground">Estado</p>
-                    <div className="flex gap-1 mt-1">
-                      {previewImage.critical && (
-                        <Badge variant="destructive">Crítica</Badge>
-                      )}
-                      {previewImage.aiEditable && (
-                        <Badge variant="default">AI Editable</Badge>
-                      )}
-                      <Badge variant="secondary">{previewImage.source}</Badge>
-                    </div>
-                  </div>
                 </div>
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Generated Image Preview Dialog */}
+      <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              Imagen Generada
+            </DialogTitle>
+            <DialogDescription>
+              {selectedImage?.id} - Revisa y decide si aceptar esta versión
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {generatedPreview && (
+              <div className="relative w-full aspect-square bg-secondary rounded-lg overflow-hidden max-h-[400px]">
+                <img 
+                  src={generatedPreview}
+                  alt="Generated preview"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            )}
+            
+            <div className="p-3 bg-secondary rounded-lg">
+              <p className="text-xs font-medium text-muted-foreground mb-1">Prompt utilizado:</p>
+              <p className="text-sm">{localPrompt}</p>
+            </div>
+          </div>
+          
+          <DialogFooter className="flex gap-2 sm:gap-2">
+            <Button variant="outline" onClick={handleDownloadImage} className="gap-2">
+              <Download className="h-4 w-4" />
+              Descargar
+            </Button>
+            <Button variant="outline" onClick={handleRejectImage} className="gap-2">
+              <X className="h-4 w-4" />
+              Rechazar
+            </Button>
+            <Button onClick={handleAcceptImage} className="gap-2">
+              <Check className="h-4 w-4" />
+              Aceptar
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

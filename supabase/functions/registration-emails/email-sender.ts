@@ -1,5 +1,5 @@
-
-import { Resend } from "npm:resend@2.0.0";
+// @ts-ignore - Deno npm import
+import { Resend } from "https://esm.sh/resend@2.0.0";
 import { EmailRequest } from "./email-templates.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
