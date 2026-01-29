@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/components/ui/use-toast';
+import { toast as sonnerToast } from 'sonner';
 import { AdminStatistic, AdminStats, RecentActivity } from './types';
 import { fetchUserStatistics } from './userStatsService';
 import { fetchVehicleStatistics } from './vehicleStatsService';
@@ -253,7 +253,11 @@ export const useAdminStatistics = () => {
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { toast } = useToast();
+  
+  // Use sonner toast directly - avoids useToast hook context issues
+  const showError = useCallback((message: string) => {
+    sonnerToast.error(message);
+  }, []);
   
   useEffect(() => {
     const fetchStatistics = async () => {
@@ -573,11 +577,7 @@ export const useAdminStatistics = () => {
         
       } catch (err: any) {
         console.error("[useAdminStatistics] Error fetching admin statistics:", err);
-        toast({
-          title: "Error al cargar estadísticas",
-          description: "Estamos experimentando problemas para cargar las estadísticas. Por favor, intenta de nuevo más tarde.",
-          variant: "destructive"
-        });
+        showError("Error al cargar estadísticas. Por favor, intenta de nuevo más tarde.");
         setError(err.message || "Error desconocido");
       } finally {
         setIsLoading(false);
@@ -585,7 +585,7 @@ export const useAdminStatistics = () => {
     };
     
     fetchStatistics();
-  }, [toast]);
+  }, [showError]);
   
   return { stats, structuredStats, extendedStats, recentActivity, isLoading, error };
 };
