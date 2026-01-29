@@ -43,13 +43,16 @@ export const useCreateAuction = () => {
         .from('auctions')
         .insert({
           vehicle_id: auctionData.vehicle_id,
+          seller_id: user.id,
           created_by: user.id,
           starting_price: auctionData.starting_price,
           reserve_price: auctionData.reserve_price || null,
           current_price: auctionData.starting_price,
           increment_minimum: auctionData.increment_minimum || 50,
           start_date: auctionData.start_date,
+          start_time: auctionData.start_date,
           end_date: auctionData.end_date,
+          end_time: auctionData.end_date,
           description: auctionData.description || null,
           terms_accepted: auctionData.terms_accepted,
           status: 'scheduled',

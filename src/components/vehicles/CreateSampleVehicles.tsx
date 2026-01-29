@@ -69,6 +69,7 @@ const CreateSampleVehicles: React.FC = () => {
 
       const vehiclesWithUser = sampleVehicles.map(vehicle => ({
         ...vehicle,
+        seller_id: user.id,
         user_id: user.id
       }));
 
