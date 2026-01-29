@@ -26,7 +26,8 @@ import {
   ScrollText,
   CreditCard,
   FileCheck,
-  Key
+  Key,
+  Image
 } from 'lucide-react';
 
 const ControlPanelPage: React.FC = () => {
@@ -165,6 +166,12 @@ const ControlPanelPage: React.FC = () => {
       title: 'Auditoría QA/UX/Seguridad',
       description: 'Reporte completo de auditoría con descarga PDF/Word',
       href: '/admin/audit-report'
+    },
+    {
+      icon: Image,
+      title: 'Image Control Center',
+      description: 'Gestiona y regenera imágenes estáticas del producto con IA',
+      href: '/admin/image-control'
     }
   ];
 
