@@ -3,9 +3,27 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Registry integrity check (dev only - silent in production)
+// ═══════════════════════════════════════════════════════════════
+// STATIC IMAGE PLATFORM INITIALIZATION
+// ═══════════════════════════════════════════════════════════════
+
+// 1. Registry integrity check (dev only - silent in production)
 import { initRegistryIntegrityCheck } from '@/lib/registryIntegrityCheck';
 initRegistryIntegrityCheck();
+
+// 2. Critical image auto-preload (runs on boot)
+import { initCriticalImagePreload } from '@/lib/criticalImagePreloader';
+initCriticalImagePreload();
+
+// 3. Development image guard (dev only - detects unregistered images)
+import { initDevImageGuard } from '@/lib/devImageGuard';
+initDevImageGuard();
+
+// 4. Registry freeze (production only - prevents runtime mutation)
+import { STATIC_IMAGE_REGISTRY } from '@/config/staticImageRegistry';
+if (!import.meta.env.DEV) {
+  Object.freeze(STATIC_IMAGE_REGISTRY);
+}
 
 // Make sure root element exists before rendering
 const root = document.getElementById("root");
