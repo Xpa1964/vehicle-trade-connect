@@ -62,7 +62,7 @@ export const useVehicleSubmit = () => {
       console.log('📝 [useVehicleSubmit] Vehicle data to insert:', vehicleData);
 
       // Insert vehicle data
-      const { data: insertedVehicle, error: vehicleError } = await supabase
+      const { data: insertedVehicle, error: vehicleError } = await (supabase as any)
         .from('vehicles')
         .insert(vehicleData)
         .select()

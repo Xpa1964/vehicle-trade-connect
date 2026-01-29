@@ -57,6 +57,7 @@ export const useBulkVehicleUpload = () => {
           mileage: vehicle.mileage,
           location: vehicle.location,
           user_id: user.id,
+          seller_id: user.id,
           status: vehicle.status || 'available',
           type: vehicle.fuel || 'gasoline',
           condition: 'new',

@@ -95,8 +95,8 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
           
           // Format the last message preview with proper translation if available
           const messagePreview = lastMessage
-            ? (lastMessage.translated_content && currentLanguage in lastMessage.translated_content
-                ? lastMessage.translated_content[currentLanguage]
+            ? (lastMessage.translated_content && typeof lastMessage.translated_content === 'object' && currentLanguage in (lastMessage.translated_content as Record<string, string>)
+                ? (lastMessage.translated_content as Record<string, string>)[currentLanguage]
                 : lastMessage.content || '')
             : t('messages.noMessages');
             

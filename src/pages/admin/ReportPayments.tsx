@@ -18,8 +18,7 @@ const ReportPaymentsPage: React.FC = () => {
   }
   
   const isAdmin = currentRole === 'admin' || 
-                 currentRole === 'moderator' || 
-                 currentRole === 'support';
+                 currentRole === 'analyst';
                   
   if (!isAdmin) {
     return (

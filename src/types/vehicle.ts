@@ -38,7 +38,7 @@ export interface Vehicle {
   transactionType?: 'national' | 'import' | 'export';
   acceptsExchange?: boolean;
   accepts_exchange?: boolean; // Added for DB compatibility
-  engineSize?: number;
+  engineSize?: number | string;
   enginePower?: number;
   color?: string;
   doors?: number;

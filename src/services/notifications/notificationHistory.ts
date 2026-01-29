@@ -17,7 +17,6 @@ export interface NotificationHistory {
   template?: {
     name: string;
   };
-  // New fields for recipient tracking
   has_recipients?: boolean;
   recipient_details?: {
     total: number;
@@ -38,11 +37,10 @@ export interface CreateNotificationData {
 }
 
 export const notificationHistoryService = {
-  // Get all notification history
   async getHistory(): Promise<NotificationHistory[]> {
     console.log('🔍 Fetching notification history from Supabase...');
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('notification_history')
         .select('*')
         .order('created_at', { ascending: false });
@@ -53,31 +51,17 @@ export const notificationHistoryService = {
       }
 
       console.log('✅ Fetched notification history:', data?.length || 0, 'items');
-      
-      // Enrich with recipient details
-      const enrichedHistory = await Promise.all(
-        (data || []).map(async (item) => {
-          const recipientStats = await recipientTrackingService.getRecipientStats(item.id);
-          return {
-            ...item,
-            has_recipients: recipientStats.total > 0,
-            recipient_details: recipientStats.total > 0 ? recipientStats : undefined
-          };
-        })
-      );
-
-      return enrichedHistory as NotificationHistory[];
+      return (data || []) as NotificationHistory[];
     } catch (error) {
       console.error('❌ Unexpected error in getHistory:', error);
       return [];
     }
   },
 
-  // Get history by ID
   async getHistoryById(id: string): Promise<NotificationHistory | null> {
     console.log('🔍 Fetching notification by ID from Supabase:', id);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('notification_history')
         .select('*')
         .eq('id', id)
@@ -89,18 +73,17 @@ export const notificationHistoryService = {
       }
 
       console.log('✅ Fetched notification by ID:', data);
-      return data as unknown as NotificationHistory;
+      return data as NotificationHistory;
     } catch (error) {
       console.error('❌ Unexpected error in getHistoryById:', error);
       return null;
     }
   },
 
-  // Create notification history entry
   async createHistory(notificationData: CreateNotificationData): Promise<NotificationHistory | null> {
     console.log('📝 Creating notification history in Supabase:', notificationData);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('notification_history')
         .insert({
           template_id: notificationData.template_id,
@@ -111,12 +94,6 @@ export const notificationHistoryService = {
           status: notificationData.status || 'pending',
           sent_count: 0,
           failed_count: 0,
-          recipient_details: {
-            total: notificationData.recipient_count,
-            sent: 0,
-            failed: 0,
-            pending: notificationData.recipient_count
-          }
         })
         .select()
         .single();
@@ -127,21 +104,17 @@ export const notificationHistoryService = {
       }
 
       console.log('✅ Created notification history:', data);
-      return {
-        ...data,
-        has_recipients: true
-      } as unknown as NotificationHistory;
+      return data as NotificationHistory;
     } catch (error) {
       console.error('❌ Unexpected error in createHistory:', error);
       return null;
     }
   },
 
-  // Update notification history
   async updateHistory(id: string, updates: Partial<NotificationHistory>): Promise<NotificationHistory | null> {
     console.log('📝 Updating notification history in Supabase:', id, updates);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('notification_history')
         .update(updates)
         .eq('id', id)
@@ -154,30 +127,23 @@ export const notificationHistoryService = {
       }
 
       console.log('✅ Updated notification history:', data);
-      return data as unknown as NotificationHistory;
+      return data as NotificationHistory;
     } catch (error) {
       console.error('❌ Unexpected error in updateHistory:', error);
       return null;
     }
   },
 
-  // Mark as sent
   async markAsSent(id: string, sentCount: number, failedCount: number = 0): Promise<boolean> {
     console.log('✅ Marking notification as sent in Supabase:', id, { sentCount, failedCount });
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('notification_history')
         .update({
           status: 'completed',
           sent_count: sentCount,
           failed_count: failedCount,
           sent_at: new Date().toISOString(),
-          recipient_details: {
-            total: sentCount + failedCount,
-            sent: sentCount,
-            failed: failedCount,
-            pending: 0
-          }
         })
         .eq('id', id);
 
@@ -194,11 +160,10 @@ export const notificationHistoryService = {
     }
   },
 
-  // Get statistics
   async getStatistics() {
     console.log('📊 Calculating statistics from Supabase...');
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('notification_history')
         .select('recipient_count, sent_count, failed_count, status');
 
@@ -207,7 +172,7 @@ export const notificationHistoryService = {
         return { total: 0, sent: 0, failed: 0, pending: 0 };
       }
 
-      const stats = (data || []).reduce((acc, item) => {
+      const stats = (data || []).reduce((acc: any, item: any) => {
         acc.total += item.recipient_count || 0;
         acc.sent += item.sent_count || 0;
         acc.failed += item.failed_count || 0;

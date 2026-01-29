@@ -94,8 +94,6 @@ const AuditReportPage: React.FC = () => {
   
   // Check if user has admin role
   const isAdmin = currentRole === 'admin' || 
-                 currentRole === 'moderator' || 
-                 currentRole === 'support' || 
                  currentRole === 'content_manager' || 
                  currentRole === 'analyst';
                  

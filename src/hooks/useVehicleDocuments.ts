@@ -10,6 +10,8 @@ export interface VehicleDocument {
   file_name: string | null;
   document_type: string;
   document_url: string | null;
+  file_url?: string | null;
+  file_size?: number | null;
   vehicle_id: string | null;
   created_at: string | null;
   expiry_date: string | null;

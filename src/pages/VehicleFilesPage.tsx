@@ -81,11 +81,11 @@ const VehicleFilesPage: React.FC = () => {
                     <FileText className="w-8 h-8 mr-4 text-auto-blue" />
                     <div>
                       <h4 className="font-medium">{doc.file_name}</h4>
-                      <p className="text-sm text-gray-500">{formatFileSize(doc.file_size)}</p>
+                      <p className="text-sm text-gray-500">{formatFileSize(doc.file_size || 0)}</p>
                     </div>
                   </div>
                   <Button variant="outline" size="sm" className="ml-4" asChild>
-                    <a href={doc.file_url} download target="_blank" rel="noopener noreferrer">
+                    <a href={doc.file_url || doc.document_url || '#'} download target="_blank" rel="noopener noreferrer">
                       <Download className="w-4 h-4 mr-2" /> {t('common.download')}
                     </a>
                   </Button>

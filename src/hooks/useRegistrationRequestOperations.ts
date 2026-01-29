@@ -142,7 +142,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
       console.log('Validating profile creation for registration:', registrationId);
       
       const { data, error } = await supabase
-        .rpc('validate_profile_data_transfer', { p_registration_id: registrationId });
+        .rpc('validate_profile_data_transfer', { p_user_id: registrationId, p_registration_id: registrationId });
 
       if (error) {
         console.error('Error validating profile creation:', error);

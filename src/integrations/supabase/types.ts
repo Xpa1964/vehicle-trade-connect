@@ -584,6 +584,103 @@ export type Database = {
           },
         ]
       }
+      dispute_cases: {
+        Row: {
+          case_number: string | null
+          complainant_id: string | null
+          created_at: string | null
+          defendant_id: string | null
+          description: string | null
+          dispute_type: string | null
+          id: string
+          priority: string | null
+          resolution: string | null
+          resolved_at: string | null
+          status: string | null
+          title: string | null
+          transaction_id: string | null
+          updated_at: string | null
+          vehicle_id: string | null
+        }
+        Insert: {
+          case_number?: string | null
+          complainant_id?: string | null
+          created_at?: string | null
+          defendant_id?: string | null
+          description?: string | null
+          dispute_type?: string | null
+          id?: string
+          priority?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          title?: string | null
+          transaction_id?: string | null
+          updated_at?: string | null
+          vehicle_id?: string | null
+        }
+        Update: {
+          case_number?: string | null
+          complainant_id?: string | null
+          created_at?: string | null
+          defendant_id?: string | null
+          description?: string | null
+          dispute_type?: string | null
+          id?: string
+          priority?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          title?: string | null
+          transaction_id?: string | null
+          updated_at?: string | null
+          vehicle_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispute_cases_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dispute_messages: {
+        Row: {
+          content: string
+          created_at: string | null
+          dispute_id: string | null
+          id: string
+          is_internal: boolean | null
+          sender_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          dispute_id?: string | null
+          id?: string
+          is_internal?: boolean | null
+          sender_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          dispute_id?: string | null
+          id?: string
+          is_internal?: boolean | null
+          sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispute_messages_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "dispute_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       equipment_categories: {
         Row: {
           created_at: string | null
@@ -646,6 +743,7 @@ export type Database = {
       exchanges: {
         Row: {
           cash_difference: number | null
+          conversation_id: string | null
           created_at: string | null
           id: string
           initiator_id: string
@@ -658,6 +756,7 @@ export type Database = {
         }
         Insert: {
           cash_difference?: number | null
+          conversation_id?: string | null
           created_at?: string | null
           id?: string
           initiator_id: string
@@ -670,6 +769,7 @@ export type Database = {
         }
         Update: {
           cash_difference?: number | null
+          conversation_id?: string | null
           created_at?: string | null
           id?: string
           initiator_id?: string
@@ -681,6 +781,13 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "exchanges_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "exchanges_offered_vehicle_id_fkey"
             columns: ["offered_vehicle_id"]
@@ -920,6 +1027,7 @@ export type Database = {
           alert_type: string
           created_at: string | null
           id: string
+          is_active: boolean | null
           message: string | null
           resolved: boolean | null
           resolved_at: string | null
@@ -929,6 +1037,7 @@ export type Database = {
           alert_type: string
           created_at?: string | null
           id?: string
+          is_active?: boolean | null
           message?: string | null
           resolved?: boolean | null
           resolved_at?: string | null
@@ -938,6 +1047,7 @@ export type Database = {
           alert_type?: string
           created_at?: string | null
           id?: string
+          is_active?: boolean | null
           message?: string | null
           resolved?: boolean | null
           resolved_at?: string | null
@@ -972,6 +1082,36 @@ export type Database = {
         }
         Relationships: []
       }
+      premium_report_batches: {
+        Row: {
+          batch_number: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          processed_at: string | null
+          report_ids: Json | null
+          status: string | null
+        }
+        Insert: {
+          batch_number?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          processed_at?: string | null
+          report_ids?: Json | null
+          status?: string | null
+        }
+        Update: {
+          batch_number?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          processed_at?: string | null
+          report_ids?: Json | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           address: string | null
@@ -988,6 +1128,7 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          operations_breakdown: Json | null
           phone: string | null
           postal_code: string | null
           province: string | null
@@ -1019,6 +1160,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          operations_breakdown?: Json | null
           phone?: string | null
           postal_code?: string | null
           province?: string | null
@@ -1050,6 +1192,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          operations_breakdown?: Json | null
           phone?: string | null
           postal_code?: string | null
           province?: string | null
@@ -1689,6 +1832,41 @@ export type Database = {
           },
         ]
       }
+      vehicle_damage_images: {
+        Row: {
+          created_at: string | null
+          damage_id: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string
+        }
+        Insert: {
+          created_at?: string | null
+          damage_id?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url: string
+        }
+        Update: {
+          created_at?: string | null
+          damage_id?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_damage_images_damage_id_fkey"
+            columns: ["damage_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_damages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vehicle_damages: {
         Row: {
           created_at: string | null
@@ -1740,6 +1918,8 @@ export type Database = {
           document_url: string | null
           expiry_date: string | null
           file_name: string | null
+          file_size: number | null
+          file_url: string | null
           id: string
           vehicle_id: string | null
           verified: boolean | null
@@ -1750,6 +1930,8 @@ export type Database = {
           document_url?: string | null
           expiry_date?: string | null
           file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
           id?: string
           vehicle_id?: string | null
           verified?: boolean | null
@@ -1760,6 +1942,8 @@ export type Database = {
           document_url?: string | null
           expiry_date?: string | null
           file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
           id?: string
           vehicle_id?: string | null
           verified?: boolean | null
@@ -1954,59 +2138,124 @@ export type Database = {
           },
         ]
       }
+      vehicle_report_deliveries: {
+        Row: {
+          created_at: string | null
+          delivered_by: string | null
+          delivery_type: string | null
+          file_name: string | null
+          file_url: string | null
+          id: string
+          notes: string | null
+          request_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          delivered_by?: string | null
+          delivery_type?: string | null
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          notes?: string | null
+          request_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          delivered_by?: string | null
+          delivery_type?: string | null
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          notes?: string | null
+          request_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_report_deliveries_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_report_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vehicle_report_requests: {
         Row: {
           admin_notes: string | null
+          base_price: number | null
           budget_amount: number | null
           budget_breakdown: Json | null
           budget_notes: string | null
           budget_sent_at: string | null
           created_at: string | null
           estimated_delivery_date: string | null
+          final_price: number | null
           id: string
           license_plate: string | null
+          observations: string | null
           report_type: string | null
           report_url: string | null
           status: string | null
           updated_at: string | null
           user_id: string
+          vehicle_brand: string | null
           vehicle_id: string | null
+          vehicle_location: string | null
+          vehicle_model: string | null
+          vehicle_plate: string | null
+          vehicle_year: number | null
           vin: string | null
         }
         Insert: {
           admin_notes?: string | null
+          base_price?: number | null
           budget_amount?: number | null
           budget_breakdown?: Json | null
           budget_notes?: string | null
           budget_sent_at?: string | null
           created_at?: string | null
           estimated_delivery_date?: string | null
+          final_price?: number | null
           id?: string
           license_plate?: string | null
+          observations?: string | null
           report_type?: string | null
           report_url?: string | null
           status?: string | null
           updated_at?: string | null
           user_id: string
+          vehicle_brand?: string | null
           vehicle_id?: string | null
+          vehicle_location?: string | null
+          vehicle_model?: string | null
+          vehicle_plate?: string | null
+          vehicle_year?: number | null
           vin?: string | null
         }
         Update: {
           admin_notes?: string | null
+          base_price?: number | null
           budget_amount?: number | null
           budget_breakdown?: Json | null
           budget_notes?: string | null
           budget_sent_at?: string | null
           created_at?: string | null
           estimated_delivery_date?: string | null
+          final_price?: number | null
           id?: string
           license_plate?: string | null
+          observations?: string | null
           report_type?: string | null
           report_url?: string | null
           status?: string | null
           updated_at?: string | null
           user_id?: string
+          vehicle_brand?: string | null
           vehicle_id?: string | null
+          vehicle_location?: string | null
+          vehicle_model?: string | null
+          vehicle_plate?: string | null
+          vehicle_year?: number | null
           vin?: string | null
         }
         Relationships: [
@@ -2058,6 +2307,9 @@ export type Database = {
           brand: string
           co2_emissions: number | null
           color: string | null
+          commission_amount: number | null
+          commission_query: string | null
+          commission_sale: boolean | null
           condition: string | null
           country: string | null
           country_code: string | null
@@ -2089,6 +2341,7 @@ export type Database = {
           power_hp: number | null
           previous_owners: number | null
           price: number | null
+          public_sale_price: number | null
           registration_date: string | null
           reserved: boolean | null
           seller_city: string | null
@@ -2117,6 +2370,9 @@ export type Database = {
           brand: string
           co2_emissions?: number | null
           color?: string | null
+          commission_amount?: number | null
+          commission_query?: string | null
+          commission_sale?: boolean | null
           condition?: string | null
           country?: string | null
           country_code?: string | null
@@ -2148,6 +2404,7 @@ export type Database = {
           power_hp?: number | null
           previous_owners?: number | null
           price?: number | null
+          public_sale_price?: number | null
           registration_date?: string | null
           reserved?: boolean | null
           seller_city?: string | null
@@ -2176,6 +2433,9 @@ export type Database = {
           brand?: string
           co2_emissions?: number | null
           color?: string | null
+          commission_amount?: number | null
+          commission_query?: string | null
+          commission_sale?: boolean | null
           condition?: string | null
           country?: string | null
           country_code?: string | null
@@ -2207,6 +2467,7 @@ export type Database = {
           power_hp?: number | null
           previous_owners?: number | null
           price?: number | null
+          public_sale_price?: number | null
           registration_date?: string | null
           reserved?: boolean | null
           seller_city?: string | null
@@ -2344,17 +2605,30 @@ export type Database = {
         Args: { p_request_id: string }
         Returns: boolean
       }
-      create_system_notification: {
-        Args: {
-          p_link?: string
-          p_message?: string
-          p_subject?: string
-          p_title: string
-          p_type?: string
-          p_user_id: string
-        }
-        Returns: string
-      }
+      create_system_notification:
+        | {
+            Args: {
+              p_link?: string
+              p_message?: string
+              p_subject?: string
+              p_title: string
+              p_type?: string
+              p_user_id: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              p_content?: string
+              p_link?: string
+              p_message?: string
+              p_subject?: string
+              p_title: string
+              p_type?: string
+              p_user_id: string
+            }
+            Returns: string
+          }
       generate_api_key: {
         Args: { p_name: string; p_user_id: string }
         Returns: string
@@ -2399,6 +2673,14 @@ export type Database = {
         | "workshop"
         | "analyst"
         | "content_manager"
+      dispute_priority: "low" | "medium" | "high" | "urgent"
+      dispute_status: "open" | "in_progress" | "resolved" | "closed"
+      dispute_type:
+        | "vehicle_issue"
+        | "payment"
+        | "communication"
+        | "fraud"
+        | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2537,6 +2819,15 @@ export const Constants = {
         "workshop",
         "analyst",
         "content_manager",
+      ],
+      dispute_priority: ["low", "medium", "high", "urgent"],
+      dispute_status: ["open", "in_progress", "resolved", "closed"],
+      dispute_type: [
+        "vehicle_issue",
+        "payment",
+        "communication",
+        "fraud",
+        "other",
       ],
     },
   },
