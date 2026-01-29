@@ -9,7 +9,7 @@
  * ⚠️ User-generated content is STRICTLY FORBIDDEN from this registry.
  * 
  * @created 2026-01-29
- * @version 2.0.0
+ * @version 3.0.0 - Type-locked with StaticImageId
  */
 
 // Forbidden path patterns - user-generated content
@@ -28,6 +28,8 @@ const FORBIDDEN_PATH_PATTERNS = [
 
 export type ImageSource = 'product';
 
+export type ImageCategory = 'home' | 'layout' | 'dashboard' | 'auth' | 'messaging' | 'legal' | 'services' | 'marketing';
+
 export interface StaticImageEntry {
   id: string;
   currentPath: string;
@@ -36,7 +38,7 @@ export interface StaticImageEntry {
   critical: boolean;
   aiEditable: boolean;
   fallback?: string;
-  category: 'home' | 'layout' | 'dashboard' | 'auth' | 'messaging' | 'legal' | 'services' | 'marketing';
+  category: ImageCategory;
   source: ImageSource;
 }
 
@@ -760,6 +762,48 @@ export const getRegistryStats = () => {
 /**
  * Get all categories
  */
-export const getAllCategories = (): StaticImageEntry['category'][] => {
+export const getAllCategories = (): ImageCategory[] => {
   return ['home', 'layout', 'dashboard', 'auth', 'messaging', 'legal', 'services', 'marketing'];
+};
+
+// ═══════════════════════════════════════════════════════════════
+// TYPE-SAFE IMAGE ID SYSTEM
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Type-safe registry keys - prevents typos at compile time
+ */
+export type StaticImageKey = keyof typeof STATIC_IMAGE_REGISTRY;
+
+/**
+ * Type-safe image IDs - derived from registry entries
+ * Use this type when referencing images by their semantic ID
+ */
+export type StaticImageId = typeof STATIC_IMAGE_REGISTRY[StaticImageKey]['id'];
+
+/**
+ * Get typed image by key (compile-time safe)
+ */
+export const getTypedImageByKey = <K extends StaticImageKey>(key: K): typeof STATIC_IMAGE_REGISTRY[K] => {
+  return STATIC_IMAGE_REGISTRY[key];
+};
+
+/**
+ * All valid image IDs for validation
+ */
+export const ALL_IMAGE_IDS: readonly string[] = Object.values(STATIC_IMAGE_REGISTRY).map(e => e.id);
+
+/**
+ * Runtime type guard for image IDs
+ */
+export const isValidImageId = (id: string): id is StaticImageId => {
+  return ALL_IMAGE_IDS.includes(id);
+};
+
+/**
+ * Get critical image paths for preloading
+ * Returns paths for images marked as critical: true
+ */
+export const getCriticalImagePaths = (): string[] => {
+  return getCriticalImages().map(img => img.currentPath);
 };

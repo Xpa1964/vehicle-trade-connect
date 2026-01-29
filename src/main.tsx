@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
+// Registry integrity check (dev only - silent in production)
+import { initRegistryIntegrityCheck } from '@/lib/registryIntegrityCheck';
+initRegistryIntegrityCheck();
+
 // Make sure root element exists before rendering
 const root = document.getElementById("root");
 

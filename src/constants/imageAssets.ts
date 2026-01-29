@@ -1,50 +1,41 @@
 
 /**
- * Centralized storage for all image paths used in the application
- * Includes primary and fallback paths for critical images
+ * LEGACY - Image assets module
+ * 
+ * ⚠️ DEPRECATED: Use STATIC_IMAGE_REGISTRY instead
+ * This file is kept for backward compatibility.
+ * 
+ * @see src/config/staticImageRegistry.ts
  */
 
-// Hero section images
-export const HERO_IMAGES = {
-  primary: "/lovable-uploads/d756e9c6-4a89-45dc-a824-7c846cdb6c2b.png",
-  fallbacks: [
-    "/assets/hero-fallback.jpg", 
-    "/assets/hero-backup.jpg",
-    "/assets/default-hero.jpg" // New default fallback
-  ]
-};
-
-// Logo images
-export const LOGO_IMAGES = {
-  primary: "/lovable-uploads/865135a7-9f1d-44e9-9386-623ae7f90529.png", // Logo real KONTACT VO
-  primaryPNG: "/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png", // Legacy PNG fallback
-  fallbacks: [
-    "/lovable-uploads/59ae08bc-72ed-4520-82be-9f9166f533ae.png",
-    "/logo.svg", // SVG genérico como fallback
-    "/assets/logo-fallback.png",
-    "/assets/default-logo.png"
-  ]
-};
-
-// Messages page images
-export const MESSAGES_IMAGES = {
-  emptyState: "/lovable-uploads/ca19ca42-addf-4a08-b9ff-8d70a611d23a.png",
-  fallbacks: [
-    "/assets/default-messages.jpg",
-    "/placeholder.svg"
-  ]
-};
+import { getCriticalImagePaths } from '@/config/staticImageRegistry';
 
 // Default fallback image for any image that fails to load
 export const DEFAULT_FALLBACK_IMAGE = "/placeholder.svg";
 
-// Static image preloading configuration
-export const CRITICAL_IMAGES = [
-  HERO_IMAGES.primary,
-  LOGO_IMAGES.primary,
-  MESSAGES_IMAGES.emptyState,
-  "/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png" // Add the new logo as critical image
-];
+/**
+ * Critical images for preloading - now powered by registry
+ * @deprecated Use getCriticalImagePaths() from staticImageRegistry.ts
+ */
+export const CRITICAL_IMAGES = getCriticalImagePaths();
+
+// Legacy exports kept for backward compatibility
+// @deprecated - Use registry instead
+export const HERO_IMAGES = {
+  primary: "/lovable-uploads/d756e9c6-4a89-45dc-a824-7c846cdb6c2b.png",
+  fallbacks: ["/placeholder.svg"]
+};
+
+export const LOGO_IMAGES = {
+  primary: "/lovable-uploads/865135a7-9f1d-44e9-9386-623ae7f90529.png",
+  primaryPNG: "/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png",
+  fallbacks: ["/placeholder.svg"]
+};
+
+export const MESSAGES_IMAGES = {
+  emptyState: "/lovable-uploads/ca19ca42-addf-4a08-b9ff-8d70a611d23a.png",
+  fallbacks: ["/placeholder.svg"]
+};
 
 // Vehicle-related fallback images
 export const VEHICLE_IMAGES = {
