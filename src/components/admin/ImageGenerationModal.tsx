@@ -29,6 +29,8 @@ interface ImageGenerationModalProps {
   image: StaticImageEntry | null;
   globalStylePrompt: string;
   onImageReplaced: () => void;
+  /** Current image URL from storage (if available) */
+  currentImageUrl?: string | null;
 }
 
 const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
@@ -37,12 +39,14 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
   image,
   globalStylePrompt,
   onImageReplaced,
+  currentImageUrl,
 }) => {
   const [localPrompt, setLocalPrompt] = useState('');
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isReplacing, setIsReplacing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [generationCount, setGenerationCount] = useState(0);
 
   // Reset state when modal opens with new image
   React.useEffect(() => {
@@ -50,6 +54,7 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
       setLocalPrompt(image.purpose);
       setGeneratedImage(null);
       setError(null);
+      setGenerationCount(0);
     }
   }, [image]);
 
@@ -112,7 +117,8 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
 
       if (data?.imageData) {
         setGeneratedImage(data.imageData);
-        toast.success('¡Imagen generada correctamente!');
+        setGenerationCount(prev => prev + 1);
+        toast.success(`¡Imagen #${generationCount + 1} generada! Pulsa "Otra variación" para más opciones o "Aceptar" para guardar.`);
       } else {
         throw new Error('No se recibieron datos de imagen');
       }
@@ -185,9 +191,12 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
   };
 
   const handleRegenerate = () => {
-    setGeneratedImage(null);
+    // Don't clear the previous image - keep it visible while generating
     handleGenerate();
   };
+
+  // Determine the image URL to display for "Current"
+  const currentDisplayUrl = currentImageUrl || image?.currentPath || '';
 
   if (!image) return null;
 
@@ -214,42 +223,63 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
             {/* Current Image */}
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Badge variant="outline">Current</Badge>
+                <Badge variant="outline">Actual</Badge>
+                {currentImageUrl && (
+                  <Badge variant="outline" className="text-[10px] bg-green-500/10 text-green-400 border-green-500/30">
+                    Storage
+                  </Badge>
+                )}
               </div>
               <div className="aspect-video bg-muted rounded-lg overflow-hidden border border-border">
-                <img
-                  src={image.currentPath}
-                  alt="Current"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+                {currentDisplayUrl ? (
+                  <img
+                    src={currentDisplayUrl}
+                    alt="Current"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                    <ImageIcon className="h-10 w-10 opacity-50" />
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Generated Image */}
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Badge variant="default" className="bg-primary">Generated</Badge>
+                <Badge variant="default" className="bg-primary">Nueva</Badge>
+                {generationCount > 0 && (
+                  <Badge variant="outline" className="text-[10px]">
+                    #{generationCount}
+                  </Badge>
+                )}
               </div>
-              <div className="aspect-video bg-muted rounded-lg overflow-hidden border border-border flex items-center justify-center">
-                {isGenerating ? (
-                  <div className="text-center">
-                    <Loader2 className="h-10 w-10 animate-spin text-primary mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">Generating image...</p>
-                    <p className="text-xs text-muted-foreground mt-1">This may take a moment</p>
-                  </div>
-                ) : generatedImage ? (
+              <div className="aspect-video bg-muted rounded-lg overflow-hidden border border-border flex items-center justify-center relative">
+                {/* Show previous generated image while loading new one */}
+                {generatedImage && (
                   <img
                     src={generatedImage}
                     alt="Generated"
-                    className="w-full h-full object-cover"
+                    className={`w-full h-full object-cover ${isGenerating ? 'opacity-50' : ''}`}
                   />
-                ) : (
+                )}
+                {isGenerating && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+                    <div className="text-center">
+                      <Loader2 className="h-10 w-10 animate-spin text-primary mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">Generando variación...</p>
+                      <p className="text-xs text-muted-foreground mt-1">Esto puede tardar un momento</p>
+                    </div>
+                  </div>
+                )}
+                {!generatedImage && !isGenerating && (
                   <div className="text-center text-muted-foreground p-4">
                     <ImageIcon className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">Click "Generate" to create a new image</p>
+                    <p className="text-sm">Pulsa "Generar" para crear una nueva imagen</p>
                   </div>
                 )}
               </div>
@@ -276,17 +306,17 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
           {/* Custom Prompt */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">
-              Image Description
+              Descripción de la imagen
             </label>
             <Textarea
               value={localPrompt}
               onChange={(e) => setLocalPrompt(e.target.value)}
-              placeholder="Describe the image you want to generate..."
+              placeholder="Describe la imagen que quieres generar..."
               className="min-h-[100px]"
               disabled={isGenerating || isReplacing}
             />
             <p className="text-xs text-muted-foreground">
-              Be specific about the composition, lighting, colors, and mood.
+              Sé específico con la composición, iluminación, colores y ambiente.
             </p>
           </div>
         </div>
@@ -298,7 +328,7 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
             disabled={isGenerating || isReplacing}
           >
             <X className="h-4 w-4 mr-1" />
-            Cancel
+            Cancelar
           </Button>
 
           {generatedImage ? (
@@ -307,9 +337,10 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
                 variant="outline"
                 onClick={handleRegenerate}
                 disabled={isGenerating || isReplacing}
+                className="border-primary/50 text-primary hover:bg-primary/10"
               >
                 <RefreshCw className={`h-4 w-4 mr-1 ${isGenerating ? 'animate-spin' : ''}`} />
-                Regenerate
+                Otra variación
               </Button>
               <Button
                 onClick={handleReplace}
@@ -321,7 +352,7 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
                 ) : (
                   <Check className="h-4 w-4 mr-1" />
                 )}
-                Replace Image
+                Aceptar y guardar
               </Button>
             </>
           ) : (
@@ -334,7 +365,7 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
               ) : (
                 <Wand2 className="h-4 w-4 mr-1" />
               )}
-              Generate
+              Generar
             </Button>
           )}
         </DialogFooter>

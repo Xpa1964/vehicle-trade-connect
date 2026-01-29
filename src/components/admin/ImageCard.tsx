@@ -56,7 +56,7 @@ interface ImageCardProps {
   onSaveZoom: (imageId: string) => void;
   onDelete: (imageId: string) => void;
   onUpload: (imageId: string, file: File) => void;
-  onGenerateAI: (image: StaticImageEntry) => void;
+  onGenerateAI: (image: StaticImageEntry, currentUrl?: string) => void;
   isDeleting?: boolean;
   isUploading?: boolean;
   onStatusChange?: (imageId: string, hasImage: boolean) => void;
@@ -312,7 +312,7 @@ const ImageCard: React.FC<ImageCardProps> = ({
             variant="default"
             size="sm"
             className="h-8 text-xs px-2"
-            onClick={() => onGenerateAI(image)}
+            onClick={() => onGenerateAI(image, displayUrl || undefined)}
             disabled={!image.aiEditable}
           >
             <Wand2 className="h-3 w-3 mr-1" />
