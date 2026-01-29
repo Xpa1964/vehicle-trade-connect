@@ -81,10 +81,10 @@ serve(async (req) => {
         { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error in api-sync-vehicles:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error instanceof Error ? error.message : String(error) }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
@@ -187,11 +187,11 @@ async function handleBulkSync(req: Request, supabase: any, userId: string, apiKe
       }
 
       results.successful++;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`Error processing vehicle ${vehicle.external_id}:`, error);
       results.errors.push({
         external_id: vehicle.external_id,
-        error: error.message
+        error: error instanceof Error ? error.message : String(error)
       });
       results.failed++;
     }
@@ -293,9 +293,9 @@ function normalizeFuelType(fuel: string | undefined): string | undefined {
     'benzin': 'gasoline',
     'elektrisch': 'electric',
     
-    // Dutch
+    // Dutch (using different keys to avoid duplicates)
     'brandstof': 'gasoline',
-    'elektrisch': 'electric',
+    // 'elektrisch' already defined in German
     
     // Portuguese
     'gasóleo': 'diesel',
@@ -307,8 +307,7 @@ function normalizeFuelType(fuel: string | undefined): string | undefined {
     'elektryczny': 'electric',
     'hybrydowy': 'hybrid',
     
-    // Danish
-    'benzin': 'gasoline',
+    // Danish (benzin already defined in German)
     'elektrisk': 'electric',
   };
   
@@ -352,9 +351,7 @@ function normalizeTransmission(transmission: string | undefined): string | undef
     'automaat': 'automatic',
     'semi-automaat': 'semi-automatic',
     
-    // Portuguese
-    'automática': 'automatic',
-    'semiautomática': 'semi-automatic',
+    // Portuguese (automática and semiautomática already defined in Spanish)
     
     // Polish
     'manualna': 'manual',
@@ -415,8 +412,7 @@ function normalizeBodyType(bodyType: string | undefined): string | undefined {
     'carrinha': 'wagon',
     'cupê': 'coupe',
     
-    // Polish
-    'kombi': 'wagon',
+    // Polish (kombi already defined in German)
     
     // Danish
     'stationcar': 'wagon',
@@ -440,8 +436,7 @@ function normalizeStatus(status: string | undefined): string {
     'sold': 'sold',
     'reserved': 'reserved',
     
-    // French
-    'disponible': 'available',
+    // French (disponible already defined in Spanish)
     'vendu': 'sold',
     'réservé': 'reserved',
     
@@ -462,7 +457,7 @@ function normalizeStatus(status: string | undefined): string {
     
     // Portuguese
     'disponível': 'available',
-    'vendido': 'sold',
+    // 'vendido' already defined in Spanish
     
     // Polish
     'dostępny': 'available',

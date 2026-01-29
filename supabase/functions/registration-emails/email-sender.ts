@@ -20,10 +20,10 @@ export async function sendEmail(template: { subject: string; html: string }, rec
     console.log(`=== RESEND: Email sent successfully ===`);
     console.log('Response:', JSON.stringify(emailResponse, null, 2));
     return emailResponse;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(`=== RESEND: Email send failed ===`);
-    console.error('Error type:', error.constructor.name);
-    console.error('Error message:', error.message);
+    console.error('Error type:', error instanceof Error ? error.constructor.name : 'Unknown');
+    console.error('Error message:', error instanceof Error ? error.message : String(error));
     console.error('Error details:', error);
     throw error;
   }

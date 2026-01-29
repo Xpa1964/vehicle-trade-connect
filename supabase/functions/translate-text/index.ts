@@ -249,14 +249,14 @@ serve(async (req) => {
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error processing translation request:", error);
     
     // Return a useful error response
     return new Response(
       JSON.stringify({ 
         error: "Failed to process translation request", 
-        details: error.message,
+        details: error instanceof Error ? error.message : String(error),
         fallbackMode: true
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }

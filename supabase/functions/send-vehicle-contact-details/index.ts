@@ -169,11 +169,11 @@ serve(async (req) => {
       }
     );
 
-  } catch (error) {
-    console.error('[Vehicle Contact Details] Error:', error.message);
+  } catch (error: unknown) {
+    console.error('[Vehicle Contact Details] Error:', error instanceof Error ? error.message : String(error));
     return new Response(
       JSON.stringify({ 
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         success: false 
       }),
       {

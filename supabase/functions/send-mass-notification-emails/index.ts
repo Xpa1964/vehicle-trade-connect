@@ -80,9 +80,9 @@ serve(async (req) => {
           });
           sentCount++;
           console.log(`[Mass Notification Emails] Sent to ${recipient.email}`);
-        } catch (error) {
+        } catch (error: unknown) {
           failedCount++;
-          const errorMsg = `Failed to send to ${recipient.email}: ${error.message}`;
+          const errorMsg = `Failed to send to ${recipient.email}: ${error instanceof Error ? error.message : String(error)}`;
           errors.push(errorMsg);
           console.error(`[Mass Notification Emails] ${errorMsg}`);
         }
@@ -111,11 +111,11 @@ serve(async (req) => {
       }
     );
     
-  } catch (error) {
-    console.error('[Mass Notification Emails] Error:', error.message);
+  } catch (error: unknown) {
+    console.error('[Mass Notification Emails] Error:', error instanceof Error ? error.message : String(error));
     return new Response(
       JSON.stringify({ 
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         success: false 
       }),
       {
