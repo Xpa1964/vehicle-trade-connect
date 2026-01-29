@@ -22,13 +22,30 @@ Static UI images are centralized in `src/config/staticImageRegistry.ts` to provi
 - External storage URLs
 
 ## Usage
+
+### Hook-based (for React components)
 ```typescript
-import { STATIC_IMAGE_REGISTRY, getImageById } from '@/config/staticImageRegistry';
-import { useStaticImageRegistry } from '@/hooks/useStaticImageRegistry';
+import { useStaticImage } from '@/hooks/useStaticImage';
 
-// Get image by ID
-const heroImage = getImageById('home.hero');
-
-// Use hook for full functionality
-const { filteredImages, globalStyle, composeFinalPrompt } = useStaticImageRegistry();
+const { src, fallback, isValid } = useStaticImage('home.hero');
+<img src={src} onError={(e) => e.currentTarget.src = fallback} />
 ```
+
+### Component-based (simplest)
+```typescript
+import RegistryImage from '@/components/shared/RegistryImage';
+
+<RegistryImage imageId="home.hero" alt="Hero background" className="w-full" />
+```
+
+### Non-hook (for data files)
+```typescript
+import { getStaticImagePath } from '@/hooks/useStaticImage';
+
+const bgImage = getStaticImagePath('services.showroom');
+```
+
+## Migrated Components (Phase 1)
+- ✅ HeroSection.tsx - Home hero + logo
+- ✅ servicesData.ts - All 9 service cards
+- ✅ ControlPanel.tsx - All dashboard action cards
