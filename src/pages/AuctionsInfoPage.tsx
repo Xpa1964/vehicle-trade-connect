@@ -260,7 +260,7 @@ const AuctionsInfoPage: React.FC = () => {
 
       {/* Descripción principal */}
       <div className="mb-12">
-        <p className="text-lg text-gray-700 leading-relaxed max-w-4xl mx-auto">
+        <p className="text-lg text-muted-foreground leading-relaxed max-w-4xl mx-auto">
           {translations.description[lang] || translations.description.es}
         </p>
       </div>
@@ -272,49 +272,49 @@ const AuctionsInfoPage: React.FC = () => {
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="hover:shadow-lg transition-shadow">
+          <Card className="bg-card border-border hover:shadow-lg transition-shadow">
             <CardContent className="p-6 flex flex-col items-center text-center">
-              <Calendar className="h-12 w-12 text-blue-600 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">
+              <Calendar className="h-10 w-10 text-blue-400 mb-4" strokeWidth={1.5} />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">
                 {translations.features.periodic.title[lang] || translations.features.periodic.title.es}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {translations.features.periodic.description[lang] || translations.features.periodic.description.es}
               </p>
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow">
+          <Card className="bg-card border-border hover:shadow-lg transition-shadow">
             <CardContent className="p-6 flex flex-col items-center text-center">
-              <TrendingUp className="h-12 w-12 text-green-600 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">
+              <TrendingUp className="h-10 w-10 text-green-400 mb-4" strokeWidth={1.5} />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">
                 {translations.features.competitive.title[lang] || translations.features.competitive.title.es}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {translations.features.competitive.description[lang] || translations.features.competitive.description.es}
               </p>
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow">
+          <Card className="bg-card border-border hover:shadow-lg transition-shadow">
             <CardContent className="p-6 flex flex-col items-center text-center">
-              <Shield className="h-12 w-12 text-purple-600 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">
+              <Shield className="h-10 w-10 text-purple-400 mb-4" strokeWidth={1.5} />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">
                 {translations.features.secure.title[lang] || translations.features.secure.title.es}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {translations.features.secure.description[lang] || translations.features.secure.description.es}
               </p>
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow">
+          <Card className="bg-card border-border hover:shadow-lg transition-shadow">
             <CardContent className="p-6 flex flex-col items-center text-center">
-              <Zap className="h-12 w-12 text-amber-600 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">
+              <Zap className="h-10 w-10 text-amber-400 mb-4" strokeWidth={1.5} />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">
                 {translations.features.fast.title[lang] || translations.features.fast.title.es}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {translations.features.fast.description[lang] || translations.features.fast.description.es}
               </p>
             </CardContent>
