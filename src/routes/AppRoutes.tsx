@@ -115,6 +115,7 @@ const AdminAPIManagement = lazy(() => import("../pages/admin/APIManagement").cat
 const APIManagement = lazy(() => import("../pages/APIManagement").catch(() => ({ default: () => <div>Error loading APIManagement page</div> })));
 const AdminAuditReport = lazy(() => import("../pages/admin/AuditReport").catch(() => ({ default: () => <div>Error loading AuditReport page</div> })));
 const AdminStaticImageManager = lazy(() => import("../pages/admin/StaticImageManager").catch(() => ({ default: () => <div>Error loading StaticImageManager page</div> })));
+const ImageControlCenter = lazy(() => import("../pages/admin/ImageControlCenter").catch(() => ({ default: () => <div>Error loading ImageControlCenter page</div> })));
 // Removed AdminDisputes page (mediation system disabled)
 
 const AppRoutes = () => {
@@ -296,6 +297,7 @@ const AppRoutes = () => {
           <Route path="api-management" element={<AdminAPIManagement />} />
           <Route path="audit-report" element={<AdminAuditReport />} />
           <Route path="static-images" element={<AdminStaticImageManager />} />
+          <Route path="image-control" element={<ImageControlCenter />} />
           
           {/* Admin disputes route removed - mediation system disabled */}
         </Route>
