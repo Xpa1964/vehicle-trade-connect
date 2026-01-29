@@ -84,8 +84,8 @@ serve(async (req) => {
     
     return createSuccessResponse(result, corsHeaders);
     
-  } catch (error) {
-    console.error('[Registration Emails] Error:', error.message);
+  } catch (error: unknown) {
+    console.error('[Registration Emails] Error:', error instanceof Error ? error.message : String(error));
     return createErrorResponse(error, corsHeaders);
   }
 });

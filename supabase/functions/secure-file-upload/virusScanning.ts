@@ -98,9 +98,9 @@ export async function scanFileWithVirusTotal(file: File): Promise<VirusTotalScan
     console.log('✅ File is clean - no threats detected');
     return { safe: true, scanId, detections: 0 };
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ VirusTotal scan error:', error);
     // On error, log but allow upload (fail open to not break functionality)
-    return { safe: true, error: error.message };
+    return { safe: true, error: error instanceof Error ? error.message : String(error) };
   }
 }

@@ -115,8 +115,8 @@ serve(async (req) => {
         
         canManageRequests = data;
         permissionError = error?.message;
-      } catch (error) {
-        permissionError = error.message;
+      } catch (error: unknown) {
+        permissionError = error instanceof Error ? error.message : String(error);
       }
 
       console.log(`Permission check results: {
@@ -156,8 +156,8 @@ serve(async (req) => {
   directError: ${directError?.message}
 }`);
         
-      } catch (error) {
-        roleError = error.message;
+      } catch (error: unknown) {
+        roleError = error instanceof Error ? error.message : String(error);
       }
 
       // Fallback permission check based on known admin emails
@@ -501,10 +501,10 @@ serve(async (req) => {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
 
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Error fetching user stats:', error);
         return new Response(
-          JSON.stringify({ error: error.message }),
+          JSON.stringify({ error: error instanceof Error ? error.message : String(error) }),
           {
             status: 500,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -521,10 +521,10 @@ serve(async (req) => {
       }
     );
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Unexpected error:', error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error', details: error.message }),
+      JSON.stringify({ error: 'Internal server error', details: error instanceof Error ? error.message : String(error) }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

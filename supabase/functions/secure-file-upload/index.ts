@@ -200,11 +200,11 @@ serve(async (req) => {
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ ERROR INESPERADO:', error);
-    console.error('❌ Stack trace:', error.stack);
+    console.error('❌ Stack trace:', error instanceof Error ? error.stack : 'No stack');
     return new Response(
-      JSON.stringify({ success: false, error: 'Internal server error', details: error.message }),
+      JSON.stringify({ success: false, error: 'Internal server error', details: error instanceof Error ? error.message : String(error) }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }

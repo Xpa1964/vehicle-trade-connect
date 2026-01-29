@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
     // En el futuro, esto se puede extender con queries específicas
     // El linter real de Supabase reporta falsos positivos para políticas que usan auth.uid()
     
-    const issues = [];
+    const issues: string[] = [];
 
     // Nota: El linter de Supabase reporta muchos falsos positivos
     // Las "Anonymous Access Policies" que requieren auth.uid() son seguras
@@ -67,14 +67,14 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('[Security Audit] Error running security audit:', error);
     
     // En caso de error, devolver estructura vacía 
     return new Response(JSON.stringify({ 
       success: true,
       results: [],
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       message: 'Security audit completed with errors - showing minimal results'
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

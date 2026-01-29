@@ -87,7 +87,7 @@ serve(async (req) => {
 
     // Get vehicles from visits to analyze preferences
     const visitedVehicleIds = visitHistory?.map(v => v.vehicle_id) || [];
-    let visitedVehicles = [];
+    let visitedVehicles: Array<{ id: string; brand?: string; model?: string; year?: number; price?: number; fuel_type?: string; country?: string; status?: string }> = [];
     
     if (visitedVehicleIds.length > 0) {
       const { data: vehicles } = await supabaseClient
@@ -266,11 +266,11 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error in vehicle-recommendations function:', error);
     return new Response(JSON.stringify({ 
       success: false, 
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       recommendations: [],
       reasoning: ['Error al generar recomendaciones']
     }), {
