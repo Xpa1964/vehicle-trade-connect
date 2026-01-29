@@ -1,14 +1,15 @@
 /**
  * Image Control Center - Admin Page
  * 
- * Unified interface for managing static product images with AI generation.
+ * Grid-based interface for managing ALL static product images.
  * Features:
- * - Dropdown to select specific image
- * - Individual prompt per image (with global style prepended)
- * - Generate, Delete, Accept actions per image
+ * - Grid display of all registered images
+ * - Individual controls per image (delete, upload, AI generate)
+ * - Global style prompt section
+ * - Bulk actions (generate missing, delete all)
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -23,20 +24,23 @@ import {
 import { 
   Wand2, 
   RefreshCw, 
-  Check, 
-  Trash2, 
-  Image as ImageIcon, 
   Settings,
   Loader2,
-  AlertCircle,
-  ChevronDown
+  Trash2,
+  Image as ImageIcon,
+  Sparkles,
+  AlertTriangle,
+  Check,
+  Filter
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { STATIC_IMAGE_REGISTRY, StaticImageEntry, ImageCategory } from '@/config/staticImageRegistry';
+import ImageCard from '@/components/admin/ImageCard';
+import ImageGenerationModal from '@/components/admin/ImageGenerationModal';
 
 const GLOBAL_STYLE_KEY = 'imageControlCenter_globalStyle';
-const IMAGE_PROMPTS_KEY = 'imageControlCenter_imagePrompts';
+const ZOOM_LEVELS_KEY = 'imageControlCenter_zoomLevels';
 const DEFAULT_GLOBAL_STYLE = 'Dark, cinematic automotive marketplace style, premium lighting, high contrast, modern UI-friendly compositions, professional product photography aesthetic.';
 
 const CATEGORY_LABELS: Record<ImageCategory, string> = {
@@ -50,17 +54,6 @@ const CATEGORY_LABELS: Record<ImageCategory, string> = {
   marketing: 'Marketing'
 };
 
-interface GeneratedImageState {
-  imageId: string;
-  base64Data: string;
-  prompt: string;
-  generatedAt: string;
-}
-
-interface ImagePrompts {
-  [imageId: string]: string;
-}
-
 const ImageControlCenter: React.FC = () => {
   // Global style prompt
   const [globalStyle, setGlobalStyle] = useState<string>(() => {
@@ -72,31 +65,42 @@ const ImageControlCenter: React.FC = () => {
   });
   const [globalStyleDirty, setGlobalStyleDirty] = useState(false);
 
-  // Individual image prompts
-  const [imagePrompts, setImagePrompts] = useState<ImagePrompts>(() => {
+  // Zoom levels per image
+  const [zoomLevels, setZoomLevels] = useState<Record<string, number>>(() => {
     try {
-      const stored = localStorage.getItem(IMAGE_PROMPTS_KEY);
+      const stored = localStorage.getItem(ZOOM_LEVELS_KEY);
       return stored ? JSON.parse(stored) : {};
     } catch {
       return {};
     }
   });
 
-  // Selected image
-  const [selectedImageId, setSelectedImageId] = useState<string>('');
-  
-  // Generation state
-  const [generatedImages, setGeneratedImages] = useState<Map<string, GeneratedImageState>>(new Map());
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [isReplacing, setIsReplacing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // Image status tracking (loaded vs error)
+  const [imageStatuses, setImageStatuses] = useState<Record<string, boolean>>({});
 
-  // Get only AI-editable images
-  const editableImages = useMemo(() => {
+  // Filter state
+  const [categoryFilter, setCategoryFilter] = useState<ImageCategory | 'all'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'with-image' | 'missing'>('all');
+
+  // Modal state
+  const [selectedImageForGeneration, setSelectedImageForGeneration] = useState<StaticImageEntry | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Loading states
+  const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
+  const [uploadingImageId, setUploadingImageId] = useState<string | null>(null);
+  const [isGeneratingAll, setIsGeneratingAll] = useState(false);
+  const [isDeletingAll, setIsDeletingAll] = useState(false);
+
+  // Test style state
+  const [testCategory, setTestCategory] = useState<ImageCategory>('home');
+  const [isTestingStyle, setIsTestingStyle] = useState(false);
+
+  // Get all editable images
+  const allImages = useMemo(() => {
     return Object.values(STATIC_IMAGE_REGISTRY)
       .filter(img => img.aiEditable)
       .sort((a, b) => {
-        // Sort by category first, then by id
         if (a.category !== b.category) {
           return a.category.localeCompare(b.category);
         }
@@ -104,431 +108,380 @@ const ImageControlCenter: React.FC = () => {
       });
   }, []);
 
-  // Group images by category for dropdown
-  const imagesByCategory = useMemo(() => {
-    const grouped: Record<ImageCategory, StaticImageEntry[]> = {
-      home: [],
-      layout: [],
-      dashboard: [],
-      auth: [],
-      messaging: [],
-      legal: [],
-      services: [],
-      marketing: []
+  // Filtered images
+  const filteredImages = useMemo(() => {
+    let result = allImages;
+    
+    if (categoryFilter !== 'all') {
+      result = result.filter(img => img.category === categoryFilter);
+    }
+    
+    if (statusFilter === 'with-image') {
+      result = result.filter(img => imageStatuses[img.id] === true);
+    } else if (statusFilter === 'missing') {
+      result = result.filter(img => imageStatuses[img.id] === false);
+    }
+    
+    return result;
+  }, [allImages, categoryFilter, statusFilter, imageStatuses]);
+
+  // Statistics
+  const stats = useMemo(() => {
+    const withImage = Object.values(imageStatuses).filter(Boolean).length;
+    const total = allImages.length;
+    return { withImage, total, missing: total - withImage };
+  }, [imageStatuses, allImages]);
+
+  // Categories with counts
+  const categoriesWithCounts = useMemo(() => {
+    const counts: Record<ImageCategory, number> = {
+      home: 0, layout: 0, dashboard: 0, auth: 0,
+      messaging: 0, legal: 0, services: 0, marketing: 0
     };
-    
-    editableImages.forEach(img => {
-      grouped[img.category].push(img);
+    allImages.forEach(img => {
+      counts[img.category]++;
     });
-    
-    return grouped;
-  }, [editableImages]);
-
-  // Get selected image object
-  const selectedImage = useMemo(() => {
-    return editableImages.find(img => img.id === selectedImageId) || null;
-  }, [editableImages, selectedImageId]);
-
-  // Get current prompt for selected image
-  const currentPrompt = useMemo(() => {
-    if (!selectedImage) return '';
-    return imagePrompts[selectedImage.id] || selectedImage.purpose;
-  }, [selectedImage, imagePrompts]);
-
-  // Get generated image for selected
-  const generatedImage = useMemo(() => {
-    if (!selectedImageId) return null;
-    return generatedImages.get(selectedImageId) || null;
-  }, [selectedImageId, generatedImages]);
+    return counts;
+  }, [allImages]);
 
   // Save global style
   const handleSaveGlobalStyle = useCallback(() => {
     try {
       localStorage.setItem(GLOBAL_STYLE_KEY, globalStyle);
       setGlobalStyleDirty(false);
-      toast.success('Global style prompt saved');
+      toast.success('Estilo global guardado');
     } catch {
-      toast.error('Failed to save global style');
+      toast.error('Error al guardar el estilo');
     }
   }, [globalStyle]);
 
-  // Update prompt for specific image
-  const handlePromptChange = useCallback((imageId: string, prompt: string) => {
-    setImagePrompts(prev => {
-      const updated = { ...prev, [imageId]: prompt };
-      localStorage.setItem(IMAGE_PROMPTS_KEY, JSON.stringify(updated));
-      return updated;
+  // Zoom handlers
+  const handleZoomChange = useCallback((imageId: string, zoom: number) => {
+    setZoomLevels(prev => ({ ...prev, [imageId]: zoom }));
+  }, []);
+
+  const handleSaveZoom = useCallback((imageId: string) => {
+    const updated = { ...zoomLevels };
+    localStorage.setItem(ZOOM_LEVELS_KEY, JSON.stringify(updated));
+    toast.success(`Zoom guardado para ${imageId}`);
+  }, [zoomLevels]);
+
+  // Delete image from storage
+  const handleDeleteImage = useCallback(async (imageId: string) => {
+    setDeletingImageId(imageId);
+    try {
+      const image = allImages.find(img => img.id === imageId);
+      if (!image) throw new Error('Imagen no encontrada');
+
+      // Extract file path from currentPath
+      const fileName = image.currentPath.split('/').pop();
+      if (!fileName) throw new Error('Ruta de archivo inválida');
+
+      const { error } = await supabase.storage
+        .from('static-images')
+        .remove([fileName]);
+
+      if (error) throw error;
+
+      setImageStatuses(prev => ({ ...prev, [imageId]: false }));
+      toast.success('Imagen eliminada');
+    } catch (err: any) {
+      console.error('Delete error:', err);
+      toast.error(err.message || 'Error al eliminar imagen');
+    } finally {
+      setDeletingImageId(null);
+    }
+  }, [allImages]);
+
+  // Upload image manually
+  const handleUploadImage = useCallback(async (imageId: string, file: File) => {
+    setUploadingImageId(imageId);
+    try {
+      const image = allImages.find(img => img.id === imageId);
+      if (!image) throw new Error('Imagen no encontrada');
+
+      const fileName = `${imageId.replace(/\./g, '-')}-${Date.now()}.${file.name.split('.').pop()}`;
+
+      const { error } = await supabase.storage
+        .from('static-images')
+        .upload(fileName, file, { 
+          cacheControl: '0',
+          upsert: true 
+        });
+
+      if (error) throw error;
+
+      setImageStatuses(prev => ({ ...prev, [imageId]: true }));
+      toast.success('Imagen subida correctamente');
+    } catch (err: any) {
+      console.error('Upload error:', err);
+      toast.error(err.message || 'Error al subir imagen');
+    } finally {
+      setUploadingImageId(null);
+    }
+  }, [allImages]);
+
+  // Open AI generation modal
+  const handleOpenGenerateModal = useCallback((image: StaticImageEntry) => {
+    setSelectedImageForGeneration(image);
+    setIsModalOpen(true);
+  }, []);
+
+  // Close modal
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+    setSelectedImageForGeneration(null);
+  }, []);
+
+  // Image replaced callback
+  const handleImageReplaced = useCallback(() => {
+    if (selectedImageForGeneration) {
+      setImageStatuses(prev => ({ ...prev, [selectedImageForGeneration.id]: true }));
+    }
+    handleCloseModal();
+  }, [selectedImageForGeneration, handleCloseModal]);
+
+  // Test style on a category
+  const handleTestStyle = useCallback(async () => {
+    setIsTestingStyle(true);
+    try {
+      const categoryImages = allImages.filter(img => img.category === testCategory);
+      if (categoryImages.length === 0) {
+        toast.error('No hay imágenes en esta categoría');
+        return;
+      }
+
+      // Pick first image from category
+      const testImage = categoryImages[0];
+      setSelectedImageForGeneration(testImage);
+      setIsModalOpen(true);
+    } finally {
+      setIsTestingStyle(false);
+    }
+  }, [allImages, testCategory]);
+
+  // Generate all missing images (placeholder - would need batch processing)
+  const handleGenerateAllMissing = useCallback(() => {
+    const missingImages = allImages.filter(img => imageStatuses[img.id] === false);
+    if (missingImages.length === 0) {
+      toast.info('No hay imágenes faltantes');
+      return;
+    }
+    toast.info(`${missingImages.length} imágenes faltantes. Usa el botón IA en cada tarjeta.`);
+  }, [allImages, imageStatuses]);
+
+  // Delete all images (placeholder - needs confirmation)
+  const handleDeleteAllImages = useCallback(() => {
+    toast.warning('Esta función eliminaría todas las imágenes. ¿Estás seguro?', {
+      action: {
+        label: 'Confirmar',
+        onClick: () => toast.error('Función deshabilitada por seguridad')
+      }
     });
   }, []);
 
-  // Generate image
-  const handleGenerate = useCallback(async () => {
-    if (!selectedImage || !currentPrompt.trim()) {
-      toast.error('Selecciona una imagen y escribe un prompt');
-      return;
-    }
-
-    setIsGenerating(true);
-    setError(null);
-
-    try {
-      const { data, error: fnError } = await supabase.functions.invoke('generate-static-image', {
-        body: {
-          imageId: selectedImage.id,
-          prompt: currentPrompt,
-          globalStylePrompt: globalStyle,
-          width: 1024,
-          height: 768,
-        },
-      });
-
-      if (fnError) throw new Error(fnError.message);
-      if (data?.error) throw new Error(data.error);
-
-      if (data?.imageData) {
-        setGeneratedImages(prev => {
-          const next = new Map(prev);
-          next.set(selectedImage.id, {
-            imageId: selectedImage.id,
-            base64Data: data.imageData,
-            prompt: currentPrompt,
-            generatedAt: new Date().toISOString()
-          });
-          return next;
-        });
-        toast.success('¡Imagen generada correctamente!');
-      } else {
-        throw new Error('No se recibieron datos de imagen');
-      }
-    } catch (err: any) {
-      console.error('Generation error:', err);
-      setError(err.message || 'Error al generar imagen');
-      toast.error(err.message || 'Error al generar imagen');
-    } finally {
-      setIsGenerating(false);
-    }
-  }, [selectedImage, currentPrompt, globalStyle]);
-
-  // Delete generated image (discard)
-  const handleDeleteGenerated = useCallback(() => {
-    if (!selectedImageId) return;
-    
-    setGeneratedImages(prev => {
-      const next = new Map(prev);
-      next.delete(selectedImageId);
-      return next;
-    });
-    toast.info('Imagen generada descartada');
-  }, [selectedImageId]);
-
-  // Accept and replace image
-  const handleAcceptReplace = useCallback(async () => {
-    if (!selectedImage || !generatedImage) {
-      toast.error('No hay imagen generada para reemplazar');
-      return;
-    }
-
-    setIsReplacing(true);
-    setError(null);
-
-    try {
-      const { data, error: fnError } = await supabase.functions.invoke('replace-static-image', {
-        body: {
-          imageId: selectedImage.id,
-          base64Data: generatedImage.base64Data,
-          targetPath: selectedImage.currentPath,
-          prompt: generatedImage.prompt,
-          globalStylePrompt: globalStyle,
-        },
-      });
-
-      if (fnError) throw new Error(fnError.message);
-      if (data?.error) throw new Error(data.error);
-
-      // Clear the generated image after successful replacement
-      setGeneratedImages(prev => {
-        const next = new Map(prev);
-        next.delete(selectedImage.id);
-        return next;
-      });
-
-      toast.success('¡Imagen reemplazada! Se actualizará en toda la plataforma.');
-    } catch (err: any) {
-      console.error('Replace error:', err);
-      setError(err.message || 'Error al reemplazar imagen');
-      toast.error(err.message || 'Error al reemplazar imagen');
-    } finally {
-      setIsReplacing(false);
-    }
-  }, [selectedImage, generatedImage, globalStyle]);
-
   return (
-    <div className="space-y-8 max-w-6xl mx-auto">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Image Control Center</h1>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight flex items-center gap-3">
+          <Sparkles className="h-8 w-8 text-primary" />
+          Image Control Center
+        </h1>
         <p className="text-muted-foreground">
-          Gestiona y regenera imágenes estáticas del producto usando IA. Los cambios se aplican instantáneamente.
+          Gestiona y regenera imágenes estáticas del producto usando IA.
         </p>
       </div>
 
-      {/* Global Style Prompt Section */}
-      <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
+      {/* Test Style Section */}
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <Settings className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">Global Style Prompt</CardTitle>
+            <CardTitle className="text-lg">Probar Nuevo Estilo (Sin guardar)</CardTitle>
           </div>
           <p className="text-sm text-muted-foreground">
-            Este prompt se añade automáticamente al inicio de cada generación de imagen.
+            Prueba diferentes prompts para ver el resultado antes de aplicar.
           </p>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <Textarea
-            value={globalStyle}
-            onChange={(e) => {
-              setGlobalStyle(e.target.value);
-              setGlobalStyleDirty(true);
-            }}
-            placeholder="Enter global style prompt..."
-            className="min-h-[80px] font-mono text-sm"
-          />
-          <div className="flex justify-between items-center">
-            <span className="text-xs text-muted-foreground">
-              {globalStyle.length} caracteres
-            </span>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Prompt Global:</label>
+            <Textarea
+              value={globalStyle}
+              onChange={(e) => {
+                setGlobalStyle(e.target.value);
+                setGlobalStyleDirty(true);
+              }}
+              placeholder="Estilo visual global para todas las imágenes..."
+              className="min-h-[80px] font-mono text-sm"
+            />
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-muted-foreground">
+                {globalStyle.length} caracteres
+              </span>
+              <Button
+                onClick={handleSaveGlobalStyle}
+                disabled={!globalStyleDirty}
+                size="sm"
+                variant={globalStyleDirty ? "default" : "outline"}
+              >
+                Guardar Estilo Global
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-end gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Categoría de Prueba:</label>
+              <Select value={testCategory} onValueChange={(v) => setTestCategory(v as ImageCategory)}>
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-popover z-50">
+                  {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
+                    <SelectItem key={key} value={key}>
+                      {label} ({categoriesWithCounts[key as ImageCategory]})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <Button
-              onClick={handleSaveGlobalStyle}
-              disabled={!globalStyleDirty}
-              size="sm"
+              onClick={handleTestStyle}
+              disabled={isTestingStyle}
             >
-              Guardar Estilo Global
+              {isTestingStyle ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Wand2 className="h-4 w-4 mr-2" />
+              )}
+              Probar Estilo
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Image Selection and Generation */}
-      <Card className="border-border">
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-2">
-            <ImageIcon className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">Generar Imagen</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Image Dropdown Selector */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">
-              Seleccionar Imagen
-            </label>
-            <Select value={selectedImageId} onValueChange={setSelectedImageId}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Selecciona una imagen del registro..." />
-              </SelectTrigger>
-              <SelectContent className="max-h-[400px] bg-popover z-50">
-                {Object.entries(imagesByCategory).map(([category, images]) => {
-                  if (images.length === 0) return null;
-                  return (
-                    <div key={category}>
-                      <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground bg-muted/50 sticky top-0">
-                        {CATEGORY_LABELS[category as ImageCategory]} ({images.length})
-                      </div>
-                      {images.map(img => (
-                        <SelectItem 
-                          key={img.id} 
-                          value={img.id}
-                          className="cursor-pointer"
-                        >
-                          <div className="flex items-center gap-2">
-                            <code className="text-xs font-mono text-primary">{img.id}</code>
-                            <span className="text-xs text-muted-foreground truncate max-w-[200px]">
-                              — {img.purpose}
-                            </span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </div>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Selected Image Details */}
-          {selectedImage && (
-            <div className="space-y-4">
-              {/* Image Info */}
-              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                <Badge variant="outline">{CATEGORY_LABELS[selectedImage.category]}</Badge>
-                <span className="text-sm text-muted-foreground">Usado en: {selectedImage.usage}</span>
-                {selectedImage.critical && (
-                  <Badge variant="destructive" className="text-xs">Critical</Badge>
-                )}
-              </div>
-
-              {/* Side by Side Comparison */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Current Image */}
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary">Actual</Badge>
-                  </div>
-                  <div className="aspect-video bg-muted rounded-lg overflow-hidden border border-border">
-                    <img
-                      src={selectedImage.currentPath}
-                      alt="Current"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  </div>
-                </div>
-
-                {/* Generated Image */}
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="default" className="bg-primary">Generada</Badge>
-                    {generatedImage && (
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(generatedImage.generatedAt).toLocaleTimeString()}
-                      </span>
-                    )}
-                  </div>
-                  <div className="aspect-video bg-muted rounded-lg overflow-hidden border border-border flex items-center justify-center relative">
-                    {isGenerating ? (
-                      <div className="text-center">
-                        <Loader2 className="h-10 w-10 animate-spin text-primary mx-auto mb-2" />
-                        <p className="text-sm text-muted-foreground">Generando imagen...</p>
-                      </div>
-                    ) : generatedImage ? (
-                      <>
-                        <img
-                          src={generatedImage.base64Data}
-                          alt="Generated"
-                          className="w-full h-full object-cover"
-                        />
-                        {/* Delete overlay button */}
-                        <Button
-                          size="icon"
-                          variant="destructive"
-                          className="absolute top-2 right-2 h-8 w-8 opacity-80 hover:opacity-100"
-                          onClick={handleDeleteGenerated}
-                          title="Descartar imagen generada"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </>
-                    ) : (
-                      <div className="text-center text-muted-foreground p-4">
-                        <ImageIcon className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                        <p className="text-sm">Escribe un prompt y genera</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Error Display */}
-              {error && (
-                <div className="flex items-start gap-2 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-                  <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium text-destructive">Error</p>
-                    <p className="text-xs text-destructive/80">{error}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Prompt Input */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">
-                  Prompt para esta imagen
-                </label>
-                <Textarea
-                  value={currentPrompt}
-                  onChange={(e) => handlePromptChange(selectedImage.id, e.target.value)}
-                  placeholder="Describe la imagen que quieres generar..."
-                  className="min-h-[100px]"
-                  disabled={isGenerating || isReplacing}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Sé específico sobre composición, iluminación, colores y mood. El estilo global se añade automáticamente.
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3 justify-end pt-2 border-t border-border">
-                {generatedImage ? (
-                  <>
-                    <Button
-                      variant="outline"
-                      onClick={handleGenerate}
-                      disabled={isGenerating || isReplacing}
-                    >
-                      <RefreshCw className={`h-4 w-4 mr-2 ${isGenerating ? 'animate-spin' : ''}`} />
-                      Regenerar
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      onClick={handleDeleteGenerated}
-                      disabled={isReplacing}
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Descartar
-                    </Button>
-                    <Button
-                      onClick={handleAcceptReplace}
-                      disabled={isReplacing}
-                      className="bg-primary hover:bg-primary/90"
-                    >
-                      {isReplacing ? (
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      ) : (
-                        <Check className="h-4 w-4 mr-2" />
-                      )}
-                      Aceptar y Reemplazar
-                    </Button>
-                  </>
-                ) : (
-                  <Button
-                    onClick={handleGenerate}
-                    disabled={isGenerating || !currentPrompt.trim()}
-                  >
-                    {isGenerating ? (
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    ) : (
-                      <Wand2 className="h-4 w-4 mr-2" />
-                    )}
-                    Generar Imagen
-                  </Button>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Empty State */}
-          {!selectedImage && (
-            <div className="text-center py-12">
-              <ChevronDown className="h-12 w-12 mx-auto text-muted-foreground/40 mb-4" />
-              <p className="text-muted-foreground">
-                Selecciona una imagen del dropdown para empezar
-              </p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Stats */}
-      <div className="text-sm text-muted-foreground text-center">
-        {editableImages.length} imágenes editables en el registro
-        {generatedImages.size > 0 && (
-          <span className="ml-2 text-primary">
-            • {generatedImages.size} pendiente{generatedImages.size > 1 ? 's' : ''} de aceptar
+      {/* Status & Bulk Actions */}
+      <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-muted/30 rounded-lg border border-border">
+        <div className="flex items-center gap-3">
+          <ImageIcon className="h-5 w-5 text-muted-foreground" />
+          <span className="text-sm">
+            Estado de las Imágenes: 
+            <span className="font-semibold text-foreground ml-1">
+              {stats.withImage} de {stats.total}
+            </span>
+            {stats.missing > 0 && (
+              <span className="text-amber-400 ml-2">
+                ({stats.missing} faltantes)
+              </span>
+            )}
           </span>
-        )}
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleGenerateAllMissing}
+            disabled={isGeneratingAll || stats.missing === 0}
+          >
+            {isGeneratingAll ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Wand2 className="h-4 w-4 mr-2" />
+            )}
+            Generar Faltantes
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-destructive hover:text-destructive"
+            onClick={handleDeleteAllImages}
+            disabled={isDeletingAll}
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Eliminar Todas
+          </Button>
+        </div>
       </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-2">
+          <Filter className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm text-muted-foreground">Filtrar:</span>
+        </div>
+        <Select value={categoryFilter} onValueChange={(v) => setCategoryFilter(v as ImageCategory | 'all')}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Categoría" />
+          </SelectTrigger>
+          <SelectContent className="bg-popover z-50">
+            <SelectItem value="all">Todas las categorías</SelectItem>
+            {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
+              <SelectItem key={key} value={key}>
+                {label} ({categoriesWithCounts[key as ImageCategory]})
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as 'all' | 'with-image' | 'missing')}>
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="Estado" />
+          </SelectTrigger>
+          <SelectContent className="bg-popover z-50">
+            <SelectItem value="all">Todos los estados</SelectItem>
+            <SelectItem value="with-image">
+              <span className="flex items-center gap-1">
+                <Check className="h-3 w-3 text-green-400" />
+                Con imagen
+              </span>
+            </SelectItem>
+            <SelectItem value="missing">
+              <span className="flex items-center gap-1">
+                <AlertTriangle className="h-3 w-3 text-amber-400" />
+                Sin imagen
+              </span>
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        <Badge variant="outline" className="ml-auto">
+          {filteredImages.length} imágenes
+        </Badge>
+      </div>
+
+      {/* Image Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {filteredImages.map(image => (
+          <ImageCard
+            key={image.id}
+            image={image}
+            zoomLevel={zoomLevels[image.id] || 100}
+            onZoomChange={handleZoomChange}
+            onSaveZoom={handleSaveZoom}
+            onDelete={handleDeleteImage}
+            onUpload={handleUploadImage}
+            onGenerateAI={handleOpenGenerateModal}
+            isDeleting={deletingImageId === image.id}
+            isUploading={uploadingImageId === image.id}
+          />
+        ))}
+      </div>
+
+      {filteredImages.length === 0 && (
+        <div className="text-center py-12 text-muted-foreground">
+          <ImageIcon className="h-12 w-12 mx-auto mb-4 opacity-30" />
+          <p>No hay imágenes que coincidan con los filtros.</p>
+        </div>
+      )}
+
+      {/* Generation Modal */}
+      <ImageGenerationModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        image={selectedImageForGeneration}
+        globalStylePrompt={globalStyle}
+        onImageReplaced={handleImageReplaced}
+      />
     </div>
   );
 };
