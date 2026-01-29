@@ -632,16 +632,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     source: "product"
   },
 
-  FALLBACK_HERO: {
-    id: "fallback.hero",
-    currentPath: "/assets/hero-fallback.jpg",
-    usage: "imageAssets.ts",
-    purpose: "Hero section fallback",
-    critical: false,
-    aiEditable: true,
-    category: "home",
-    source: "product"
-  },
+  // FALLBACK_HERO removed - using placeholder.svg as universal fallback
 
   FALLBACK_VEHICLE: {
     id: "fallback.vehicle",
