@@ -42,10 +42,8 @@ export const useVehicleDocumentUpload = () => {
           .insert({
             vehicle_id: vehicleId,
             file_name: file.name,
-            file_type: file.type,
-            file_size: file.size,
-            file_url: publicUrl,
-            uploaded_by: user?.id
+            document_type: file.type || 'other',
+            document_url: publicUrl
           });
           
         if (docInsertError) {

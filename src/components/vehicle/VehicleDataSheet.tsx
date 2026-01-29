@@ -69,14 +69,14 @@ const VehicleDataSheet: React.FC<VehicleDataSheetProps> = ({ vehicle }) => {
           ${damages.map(damage => `
             <div class="damage-item" style="border-left-color: ${getSeverityColor(damage.severity)};">
               <div class="damage-header">
-                <h4 class="damage-title">${damage.title}</h4>
+                <h4 class="damage-title">${damage.damage_type || 'Daño'}</h4>
                 <span class="damage-severity" style="background-color: ${getSeverityColor(damage.severity)};">${getSeverityText(damage.severity)}</span>
               </div>
               <div class="damage-details">
                  <p><strong>${t('vehicles.damages')}:</strong> ${damage.damage_type}</p>
                  ${damage.location ? `<p><strong>${t('vehicles.location')}:</strong> ${damage.location}</p>` : ''}
                  ${damage.description ? `<p><strong>${t('vehicles.description')}:</strong> ${damage.description}</p>` : ''}
-                 ${damage.estimated_cost ? `<p><strong>${t('vehicles.price')}:</strong> ${formatPrice(damage.estimated_cost)}</p>` : ''}
+                 ${damage.repair_cost ? `<p><strong>${t('vehicles.price')}:</strong> ${formatPrice(damage.repair_cost)}</p>` : ''}
               </div>
             </div>
           `).join('')}

@@ -66,7 +66,7 @@ export const useAdminConversationDetail = (conversationId: string | undefined) =
       }
       
       console.log(`Successfully fetched ${data?.length || 0} messages for admin`);
-      return data as Message[];
+      return (data || []) as unknown as Message[];
     },
     enabled: !!conversationId
   });

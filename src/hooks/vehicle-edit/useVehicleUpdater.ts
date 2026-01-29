@@ -95,7 +95,8 @@ export const useVehicleUpdater = () => {
         // Add new equipment
         const equipmentItems = formData.equipment.map(equipmentId => ({
           vehicle_id: id,
-          equipment_id: equipmentId
+          equipment_id: equipmentId,
+          name: equipmentId // Required field
         }));
         
         const { error: equipmentError } = await supabase

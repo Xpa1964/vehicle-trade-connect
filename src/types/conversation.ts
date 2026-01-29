@@ -2,12 +2,13 @@
 export interface Message {
   id: string;
   content: string;
-  conversation_id: string;
+  conversation_id: string | null;
   sender_id: string;
-  created_at: string;
+  created_at: string | null;
   read_at?: string | null;
-  original_language?: string;
-  translated_content?: Record<string, string> | null;
+  original_language?: string | null;
+  translated_content?: string | null;
+  message_type?: string | null;
 }
 
 export interface ExchangeProposal {

@@ -25,35 +25,19 @@ export const usePlaceBid = () => {
 
       if (error) throw error;
 
-      // Verificar si la respuesta indica error
-      if (data && typeof data === 'object' && 'success' in data && !data.success) {
-        const message = 'message' in data && typeof data.message === 'string' 
-          ? data.message 
-          : 'Error al realizar la puja';
-        throw new Error(message);
-      }
-
+      // The place_bid function returns a UUID, not an object
       return data;
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_data, variables) => {
       // Invalidar queries para actualizar datos
       queryClient.invalidateQueries({ queryKey: ['auction', variables.auctionId] });
       queryClient.invalidateQueries({ queryKey: ['auctions'] });
       
-      // Mostrar mensaje apropiado
-      if (data && typeof data === 'object' && 'extended' in data && data.extended) {
-        toast.success(
-          t('auctions.bidPlacedExtended', { 
-            fallback: '¡Puja realizada! La subasta se ha extendido por anti-sniping.' 
-          })
-        );
-      } else {
-        toast.success(
-          t('auctions.bidPlacedSuccess', { 
-            fallback: '¡Puja realizada con éxito!' 
-          })
-        );
-      }
+      toast.success(
+        t('auctions.bidPlacedSuccess', { 
+          fallback: '¡Puja realizada con éxito!' 
+        })
+      );
     },
     onError: (error: Error) => {
       toast.error(error.message || t('auctions.bidError', { fallback: 'Error al realizar la puja' }));

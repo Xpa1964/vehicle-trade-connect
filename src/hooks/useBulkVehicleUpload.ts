@@ -65,7 +65,7 @@ export const useBulkVehicleUpload = () => {
 
         const { data: insertedVehicle, error: insertError } = await supabase
           .from('vehicles')
-          .insert(vehicleData)
+          .insert([vehicleData])
           .select()
           .single();
 

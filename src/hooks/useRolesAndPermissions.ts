@@ -52,7 +52,7 @@ export const useRolesAndPermissions = () => {
         
         setAllPermissions(mockPermissionsData);
         
-        // Mock role-permission mappings aligned with data in src/utils/roles/permissionsService.ts
+        // Mock role-permission mappings aligned with DB enum values
         const mockRolePermissionMappings: RolePermissionMapping[] = [
           {
             role: 'admin',
@@ -65,17 +65,6 @@ export const useRolesAndPermissions = () => {
               'analytics.view', 'analytics.export',
               'settings.view', 'settings.edit',
               'logs.view', 'logs.export'
-            ]
-          },
-          {
-            role: 'moderator',
-            permissions: [
-              'users.view',
-              'vehicles.view', 'vehicles.edit',
-              'auctions.view',
-              'announcements.view', 'announcements.edit',
-              'content.view', 'content.edit',
-              'logs.view'
             ]
           },
           {
@@ -95,17 +84,6 @@ export const useRolesAndPermissions = () => {
             ]
           },
           {
-            role: 'support',
-            permissions: [
-              'users.view',
-              'vehicles.view',
-              'auctions.view',
-              'announcements.view',
-              'content.view',
-              'logs.view'
-            ]
-          },
-          {
             role: 'content_manager',
             permissions: [
               'content.view', 'content.create', 'content.edit', 'content.delete',
@@ -121,6 +99,43 @@ export const useRolesAndPermissions = () => {
               'announcements.view',
               'analytics.view', 'analytics.export',
               'logs.view', 'logs.export'
+            ]
+          },
+          {
+            role: 'professional',
+            permissions: [
+              'vehicles.view', 'vehicles.create', 'vehicles.edit',
+              'auctions.view',
+              'announcements.view', 'announcements.create'
+            ]
+          },
+          {
+            role: 'individual',
+            permissions: [
+              'vehicles.view', 'vehicles.create',
+              'auctions.view',
+              'announcements.view'
+            ]
+          },
+          {
+            role: 'fleet_manager',
+            permissions: [
+              'vehicles.view', 'vehicles.create', 'vehicles.edit', 'vehicles.delete',
+              'auctions.view'
+            ]
+          },
+          {
+            role: 'transporter',
+            permissions: [
+              'vehicles.view',
+              'announcements.view'
+            ]
+          },
+          {
+            role: 'workshop',
+            permissions: [
+              'vehicles.view',
+              'announcements.view'
             ]
           }
         ];

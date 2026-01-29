@@ -115,7 +115,7 @@ const VehicleDamagesPage: React.FC = () => {
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-medium text-lg">{damage.title}</h4>
+                        <h4 className="font-medium text-lg">{damage.damage_type || 'Daño'}</h4>
                         <Badge className={getSeverityColor(damage.severity)}>
                           {damage.severity === 'minor' ? 'Menor' : 
                            damage.severity === 'moderate' ? 'Moderado' : 'Severo'}
@@ -126,9 +126,9 @@ const VehicleDamagesPage: React.FC = () => {
                           <strong>Ubicación:</strong> {damage.location}
                         </p>
                       )}
-                      {damage.estimated_cost && (
+                      {damage.repair_cost && (
                         <p className="text-sm text-muted-foreground mb-2">
-                          <strong>Costo estimado:</strong> €{damage.estimated_cost}
+                          <strong>Costo estimado:</strong> €{damage.repair_cost}
                         </p>
                       )}
                     </div>

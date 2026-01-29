@@ -7,11 +7,13 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 export interface VehicleDocument {
   id: string;
-  file_name: string;
-  file_type: string;
-  file_size: number;
-  file_url: string;
-  created_at: string;
+  file_name: string | null;
+  document_type: string;
+  document_url: string | null;
+  vehicle_id: string | null;
+  created_at: string | null;
+  expiry_date: string | null;
+  verified: boolean | null;
 }
 
 export const useVehicleDocuments = (vehicleId: string) => {
@@ -20,7 +22,7 @@ export const useVehicleDocuments = (vehicleId: string) => {
 
   const { data: documents, refetch, isLoading } = useQuery({
     queryKey: ['vehicle-documents', vehicleId],
-    queryFn: async () => {
+    queryFn: async (): Promise<VehicleDocument[]> => {
       console.log('Fetching documents for vehicle:', vehicleId);
       if (!vehicleId) return [];
       
@@ -37,7 +39,7 @@ export const useVehicleDocuments = (vehicleId: string) => {
       }
       
       console.log('Documents found:', data?.length || 0, data);
-      return data as VehicleDocument[];
+      return data || [];
     },
     enabled: !!vehicleId
   });
@@ -79,10 +81,8 @@ export const useVehicleDocuments = (vehicleId: string) => {
         .insert({
           vehicle_id: vehicleId,
           file_name: file.name,
-          file_type: file.type,
-          file_size: file.size,
-          file_url: publicUrl,
-          uploaded_by: (await supabase.auth.getUser()).data.user?.id
+          document_type: file.type || 'other',
+          document_url: publicUrl
         })
         .select()
         .single();
@@ -124,8 +124,8 @@ export const useVehicleDocuments = (vehicleId: string) => {
       }
       
       // Extract storage path from URL
-      if (document && document.file_url) {
-        const url = new URL(document.file_url);
+      if (document && document.document_url) {
+        const url = new URL(document.document_url);
         const pathParts = url.pathname.split('/');
         // The last two segments typically represent the storage path in our case
         const storagePath = `${vehicleId}/${pathParts[pathParts.length - 1]}`;

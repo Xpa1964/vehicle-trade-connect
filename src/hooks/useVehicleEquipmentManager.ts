@@ -36,10 +36,11 @@ export const useVehicleEquipmentManager = () => {
         return;
       }
       
-      // Prepare equipment records
+      // Prepare equipment records - include name field which is required
       const equipmentData = validEquipmentIds.map(equipmentId => ({
         vehicle_id: vehicleId,
         equipment_id: equipmentId,
+        name: equipmentId // Use equipment_id as name placeholder
       }));
 
       console.log('Equipment data to insert:', equipmentData);

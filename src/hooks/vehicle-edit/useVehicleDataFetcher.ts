@@ -129,12 +129,12 @@ export const useVehicleDataFetcher = (
       if (damagesData && damagesData.length > 0) {
         mappedData.damages = damagesData.map(damage => ({
           id: damage.id,
-          damage_type: damage.damage_type as 'exterior' | 'interior' | 'mechanical',
-          title: damage.title,
+          damage_type: (damage.damage_type || 'exterior') as 'exterior' | 'interior' | 'mechanical',
+          title: damage.damage_type || 'Daño',
           description: damage.description || undefined,
-          severity: damage.severity as 'minor' | 'moderate' | 'severe',
+          severity: (damage.severity || 'minor') as 'minor' | 'moderate' | 'severe',
           location: damage.location || undefined,
-          estimated_cost: damage.estimated_cost || undefined
+          estimated_cost: damage.repair_cost || undefined
         }));
       }
       
