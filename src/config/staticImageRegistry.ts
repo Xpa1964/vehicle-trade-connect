@@ -2,14 +2,31 @@
  * STATIC IMAGE REGISTRY
  * 
  * Centralized source of truth for ALL static UI images.
- * This registry powers the future AI image control dashboard.
+ * This registry powers the AI image control dashboard.
  * 
  * ⚠️ DO NOT manually edit image paths in components.
  * ⚠️ All static image management should reference this registry.
+ * ⚠️ User-generated content is STRICTLY FORBIDDEN from this registry.
  * 
  * @created 2026-01-29
- * @version 1.0.0
+ * @version 2.0.0
  */
+
+// Forbidden path patterns - user-generated content
+const FORBIDDEN_PATH_PATTERNS = [
+  '/uploads/',
+  '/vehicles/',
+  '/auctions/',
+  '/user-content/',
+  '/user-uploads/',
+  '/attachments/',
+  '/documents/',
+  '/avatars/',
+  'storage.googleapis.com',
+  'supabase.co/storage'
+] as const;
+
+export type ImageSource = 'product';
 
 export interface StaticImageEntry {
   id: string;
@@ -20,7 +37,43 @@ export interface StaticImageEntry {
   aiEditable: boolean;
   fallback?: string;
   category: 'home' | 'layout' | 'dashboard' | 'auth' | 'messaging' | 'legal' | 'services' | 'marketing';
+  source: ImageSource;
 }
+
+export interface ImageVersion {
+  id: string;
+  imageId: string;
+  path: string;
+  prompt?: string;
+  globalStylePrompt?: string;
+  createdAt: string;
+  createdBy: string;
+  isActive: boolean;
+}
+
+export interface GlobalStyleConfig {
+  prompt: string;
+  lastUpdated: string;
+  updatedBy: string;
+}
+
+/**
+ * Validates that a path is not user-generated content
+ */
+export const isProductImagePath = (path: string): boolean => {
+  const lowerPath = path.toLowerCase();
+  return !FORBIDDEN_PATH_PATTERNS.some(pattern => lowerPath.includes(pattern.toLowerCase()));
+};
+
+/**
+ * Throws if path contains forbidden patterns
+ */
+export const validateProductImagePath = (path: string, imageId: string): void => {
+  if (!isProductImagePath(path)) {
+    console.error(`[StaticImageRegistry] WARNING: Image "${imageId}" has user-content path: ${path}`);
+    throw new Error(`Image path "${path}" appears to be user-generated content. Product images only.`);
+  }
+};
 
 export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
   // ═══════════════════════════════════════════════════════════════
@@ -34,7 +87,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Main hero background - luxury vehicles",
     critical: true,
     aiEditable: true,
-    category: "home"
+    category: "home",
+    source: "product"
   },
 
   HOME_LOGO_HERO: {
@@ -44,7 +98,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "KONTACT VO logo displayed in hero section",
     critical: true,
     aiEditable: false,
-    category: "home"
+    category: "home",
+    source: "product"
   },
 
   HOME_HEADPHONES: {
@@ -54,7 +109,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Headphones illustration for audio presentation",
     critical: true,
     aiEditable: true,
-    category: "home"
+    category: "home",
+    source: "product"
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -69,7 +125,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     critical: true,
     aiEditable: false,
     fallback: "/lovable-uploads/59ae08bc-72ed-4520-82be-9f9166f533ae.png",
-    category: "layout"
+    category: "layout",
+    source: "product"
   },
 
   NAVBAR_LOGO_FALLBACK: {
@@ -79,7 +136,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Fallback navbar logo",
     critical: false,
     aiEditable: false,
-    category: "layout"
+    category: "layout",
+    source: "product"
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -93,7 +151,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Vehicle gallery service card background",
     critical: true,
     aiEditable: true,
-    category: "services"
+    category: "services",
+    source: "product"
   },
 
   SERVICE_MESSAGING: {
@@ -103,7 +162,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Messaging service card background",
     critical: true,
     aiEditable: true,
-    category: "services"
+    category: "services",
+    source: "product"
   },
 
   SERVICE_INSPECTION: {
@@ -113,7 +173,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Vehicle reports service card background",
     critical: true,
     aiEditable: true,
-    category: "services"
+    category: "services",
+    source: "product"
   },
 
   SERVICE_EXCHANGES: {
@@ -123,7 +184,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Exchanges service card background",
     critical: true,
     aiEditable: true,
-    category: "services"
+    category: "services",
+    source: "product"
   },
 
   SERVICE_AUCTIONS: {
@@ -133,7 +195,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Auctions service card background",
     critical: true,
     aiEditable: true,
-    category: "services"
+    category: "services",
+    source: "product"
   },
 
   SERVICE_BULLETIN: {
@@ -143,7 +206,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Bulletin board service card background",
     critical: true,
     aiEditable: true,
-    category: "services"
+    category: "services",
+    source: "product"
   },
 
   SERVICE_TRANSPORT: {
@@ -153,7 +217,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Transport service card background",
     critical: true,
     aiEditable: true,
-    category: "services"
+    category: "services",
+    source: "product"
   },
 
   SERVICE_CALCULATOR: {
@@ -163,7 +228,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Import calculator service card background",
     critical: true,
     aiEditable: true,
-    category: "services"
+    category: "services",
+    source: "product"
   },
 
   SERVICE_BLOG: {
@@ -173,7 +239,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Blog service card background",
     critical: true,
     aiEditable: true,
-    category: "services"
+    category: "services",
+    source: "product"
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -187,7 +254,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Vehicles section card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_PUBLISH_VEHICLE: {
@@ -197,7 +265,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Publish vehicle card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_BULLETIN: {
@@ -207,7 +276,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Bulletin board card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_PUBLISH_ANNOUNCEMENT: {
@@ -217,7 +287,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Publish announcement card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_EXCHANGES: {
@@ -227,7 +298,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Exchanges section card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_PUBLISH_EXCHANGE: {
@@ -237,7 +309,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Publish exchange card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_TRANSPORT: {
@@ -247,7 +320,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Transport quotes card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_QUOTE_TRANSPORT: {
@@ -257,7 +331,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Quote transport card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_REPORTS: {
@@ -267,7 +342,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Vehicle reports card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_REQUEST_REPORT: {
@@ -277,7 +353,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Request report card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_IMPORT_CALCULATOR: {
@@ -287,7 +364,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Import calculator card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_COMMISSION_CALCULATOR: {
@@ -297,7 +375,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Commission calculator card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_BLOG: {
@@ -307,7 +386,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Blog section card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_AUCTIONS: {
@@ -317,7 +397,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Auctions section card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_CREATE_AUCTION: {
@@ -327,7 +408,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Create auction card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_MESSAGES: {
@@ -337,7 +419,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Messages section card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_FAVORITES: {
@@ -347,7 +430,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Favorites section card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   DASHBOARD_PROFILE: {
@@ -357,7 +441,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Profile section card image",
     critical: true,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -371,7 +456,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Empty state placeholder for messaging",
     critical: true,
     aiEditable: true,
-    category: "messaging"
+    category: "messaging",
+    source: "product"
   },
 
   MESSAGING_PLACEHOLDER_ES: {
@@ -381,7 +467,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Spanish chat placeholder illustration",
     critical: false,
     aiEditable: true,
-    category: "messaging"
+    category: "messaging",
+    source: "product"
   },
 
   MESSAGING_PLACEHOLDER_EN: {
@@ -391,7 +478,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "English chat placeholder illustration",
     critical: false,
     aiEditable: true,
-    category: "messaging"
+    category: "messaging",
+    source: "product"
   },
 
   MESSAGING_PLACEHOLDER_FR: {
@@ -401,7 +489,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "French chat placeholder illustration",
     critical: false,
     aiEditable: true,
-    category: "messaging"
+    category: "messaging",
+    source: "product"
   },
 
   MESSAGING_PLACEHOLDER_IT: {
@@ -411,7 +500,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Italian chat placeholder illustration",
     critical: false,
     aiEditable: true,
-    category: "messaging"
+    category: "messaging",
+    source: "product"
   },
 
   MESSAGING_PLACEHOLDER_PT: {
@@ -421,7 +511,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Portuguese chat placeholder illustration",
     critical: false,
     aiEditable: true,
-    category: "messaging"
+    category: "messaging",
+    source: "product"
   },
 
   MESSAGING_PLACEHOLDER_DE: {
@@ -431,7 +522,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "German chat placeholder illustration",
     critical: false,
     aiEditable: true,
-    category: "messaging"
+    category: "messaging",
+    source: "product"
   },
 
   MESSAGING_PLACEHOLDER_NL: {
@@ -441,7 +533,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Dutch chat placeholder illustration",
     critical: false,
     aiEditable: true,
-    category: "messaging"
+    category: "messaging",
+    source: "product"
   },
 
   MESSAGING_PLACEHOLDER_PL: {
@@ -451,7 +544,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Polish chat placeholder illustration",
     critical: false,
     aiEditable: true,
-    category: "messaging"
+    category: "messaging",
+    source: "product"
   },
 
   MESSAGING_PLACEHOLDER_DK: {
@@ -461,7 +555,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Danish chat placeholder illustration",
     critical: false,
     aiEditable: true,
-    category: "messaging"
+    category: "messaging",
+    source: "product"
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -475,7 +570,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Legal pages header logo",
     critical: true,
     aiEditable: false,
-    category: "legal"
+    category: "legal",
+    source: "product"
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -489,7 +585,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Contact page logo",
     critical: true,
     aiEditable: false,
-    category: "marketing"
+    category: "marketing",
+    source: "product"
   },
 
   VEHICLE_FORM_LOGO: {
@@ -499,7 +596,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Vehicle form header logo",
     critical: true,
     aiEditable: false,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -513,7 +611,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "API keys admin section illustration",
     critical: false,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -527,7 +626,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Global fallback placeholder",
     critical: true,
     aiEditable: false,
-    category: "layout"
+    category: "layout",
+    source: "product"
   },
 
   FALLBACK_HERO: {
@@ -537,7 +637,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Hero section fallback",
     critical: false,
     aiEditable: true,
-    category: "home"
+    category: "home",
+    source: "product"
   },
 
   FALLBACK_VEHICLE: {
@@ -547,7 +648,8 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Vehicle image fallback",
     critical: false,
     aiEditable: true,
-    category: "dashboard"
+    category: "dashboard",
+    source: "product"
   },
 
   FALLBACK_AVATAR: {
@@ -557,12 +659,13 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "User avatar fallback",
     critical: false,
     aiEditable: false,
-    category: "auth"
+    category: "auth",
+    source: "product"
   }
 };
 
 // ═══════════════════════════════════════════════════════════════
-// REGISTRY UTILITIES (Read-Only)
+// REGISTRY UTILITIES
 // ═══════════════════════════════════════════════════════════════
 
 /**
@@ -594,14 +697,53 @@ export const getImageById = (id: string): StaticImageEntry | undefined => {
 };
 
 /**
+ * Get image by registry key
+ */
+export const getImageByKey = (key: string): StaticImageEntry | undefined => {
+  return STATIC_IMAGE_REGISTRY[key];
+};
+
+/**
+ * Validate all registry entries
+ */
+export const validateRegistry = (): { valid: boolean; errors: string[] } => {
+  const errors: string[] = [];
+  
+  Object.entries(STATIC_IMAGE_REGISTRY).forEach(([key, entry]) => {
+    // Check source field
+    if (entry.source !== 'product') {
+      errors.push(`[${key}] Invalid source: ${entry.source}. Must be 'product'.`);
+    }
+    
+    // Check for user-content paths
+    if (!isProductImagePath(entry.currentPath)) {
+      errors.push(`[${key}] Forbidden path detected: ${entry.currentPath}`);
+    }
+    
+    // Check fallback paths
+    if (entry.fallback && !isProductImagePath(entry.fallback)) {
+      errors.push(`[${key}] Forbidden fallback path: ${entry.fallback}`);
+    }
+  });
+  
+  return {
+    valid: errors.length === 0,
+    errors
+  };
+};
+
+/**
  * Registry statistics
  */
 export const getRegistryStats = () => {
   const all = Object.values(STATIC_IMAGE_REGISTRY);
+  const validation = validateRegistry();
+  
   return {
     total: all.length,
     critical: all.filter(i => i.critical).length,
     aiEditable: all.filter(i => i.aiEditable).length,
+    validationErrors: validation.errors.length,
     byCategory: {
       home: all.filter(i => i.category === 'home').length,
       layout: all.filter(i => i.category === 'layout').length,
@@ -613,4 +755,11 @@ export const getRegistryStats = () => {
       marketing: all.filter(i => i.category === 'marketing').length
     }
   };
+};
+
+/**
+ * Get all categories
+ */
+export const getAllCategories = (): StaticImageEntry['category'][] => {
+  return ['home', 'layout', 'dashboard', 'auth', 'messaging', 'legal', 'services', 'marketing'];
 };
