@@ -170,28 +170,35 @@ const ImageControlCenter: React.FC = () => {
   const handleDeleteImage = useCallback(async (imageId: string) => {
     setDeletingImageId(imageId);
     try {
-      const image = allImages.find(img => img.id === imageId);
-      if (!image) throw new Error('Imagen no encontrada');
-
-      // Extract file path from currentPath
-      const fileName = image.currentPath.split('/').pop();
-      if (!fileName) throw new Error('Ruta de archivo inválida');
-
-      const { error } = await supabase.storage
+      // Storage path pattern: imageId with dots replaced by slashes
+      const storagePrefix = imageId.replace(/\./g, '/');
+      
+      // List all files in the storage folder for this image
+      const { data: files, error: listError } = await supabase.storage
         .from('static-images')
-        .remove([fileName]);
+        .list(storagePrefix, { limit: 100 });
 
-      if (error) throw error;
+      if (listError) throw listError;
+
+      if (files && files.length > 0) {
+        // Delete all files in the folder
+        const filesToDelete = files.map(f => `${storagePrefix}/${f.name}`);
+        const { error: deleteError } = await supabase.storage
+          .from('static-images')
+          .remove(filesToDelete);
+
+        if (deleteError) throw deleteError;
+      }
 
       setImageStatuses(prev => ({ ...prev, [imageId]: false }));
-      toast.success('Imagen eliminada');
+      toast.success('Imagen eliminada del storage');
     } catch (err: any) {
       console.error('Delete error:', err);
       toast.error(err.message || 'Error al eliminar imagen');
     } finally {
       setDeletingImageId(null);
     }
-  }, [allImages]);
+  }, []);
 
   // Upload image manually
   const handleUploadImage = useCallback(async (imageId: string, file: File) => {
@@ -463,6 +470,9 @@ const ImageControlCenter: React.FC = () => {
             onGenerateAI={handleOpenGenerateModal}
             isDeleting={deletingImageId === image.id}
             isUploading={uploadingImageId === image.id}
+            onStatusChange={(imageId, hasImage) => {
+              setImageStatuses(prev => ({ ...prev, [imageId]: hasImage }));
+            }}
           />
         ))}
       </div>
