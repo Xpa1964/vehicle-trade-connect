@@ -104,15 +104,15 @@ const AnnouncementItem: React.FC<AnnouncementItemProps> = ({
   const getCategoryColor = () => {
     switch(announcement.category) {
       case 'business_opportunities':
-        return 'bg-blue-50 text-blue-700 border border-blue-100';
+        return 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
       case 'vehicle_search':
-        return 'bg-green-50 text-green-700 border border-green-100';
+        return 'bg-green-500/10 text-green-400 border border-green-500/20';
       case 'available_vehicles':
-        return 'bg-red-50 text-red-700 border border-red-100';
+        return 'bg-red-500/10 text-red-400 border border-red-500/20';
       case 'professional_services':
-        return 'bg-purple-50 text-purple-700 border border-purple-100';
+        return 'bg-purple-500/10 text-purple-400 border border-purple-500/20';
       default:
-        return 'bg-gray-50 text-gray-700 border border-gray-100';
+        return 'bg-secondary text-muted-foreground border border-border';
     }
   };
 
@@ -125,8 +125,8 @@ const AnnouncementItem: React.FC<AnnouncementItemProps> = ({
     new Date(announcement.featured_until) > new Date();
 
   return (
-    <div className={`grid grid-cols-12 gap-2 p-3 hover:bg-gray-50 border-b last:border-b-0 items-center ${
-      isFeatured ? 'bg-yellow-50 border-l-4 border-l-yellow-400' : ''
+    <div className={`grid grid-cols-12 gap-2 p-3 hover:bg-secondary/50 border-b border-border last:border-b-0 items-center ${
+      isFeatured ? 'bg-amber-500/10 border-l-4 border-l-amber-400' : ''
     }`}>
       {/* Category */}
       <div className="col-span-1 flex justify-center">
@@ -136,7 +136,7 @@ const AnnouncementItem: React.FC<AnnouncementItemProps> = ({
             <span className="hidden sm:inline">{getCategoryName()}</span>
           </span>
           {isFeatured && (
-            <Badge variant="default" className="bg-yellow-500 text-white">
+            <Badge variant="default" className="bg-amber-500 text-white">
               <Star className="h-2 w-2 mr-1" />
               <span className="text-xs">Premium</span>
             </Badge>
@@ -147,7 +147,7 @@ const AnnouncementItem: React.FC<AnnouncementItemProps> = ({
       {/* Title with truncated content */}
       <div className="col-span-6 pr-4 overflow-hidden">
         <div className="flex items-center gap-2 mb-1">
-          <h3 className="font-medium truncate">
+          <h3 className="font-medium truncate text-foreground">
             <TranslatedContent 
               originalText={announcement.title} 
               originalLanguage={announcement.original_language || "es"} 
@@ -166,7 +166,7 @@ const AnnouncementItem: React.FC<AnnouncementItemProps> = ({
             </Button>
           )}
         </div>
-        <p className="text-xs text-gray-500 line-clamp-1">
+        <p className="text-xs text-muted-foreground line-clamp-1">
           <TranslatedContent 
             originalText={announcement.content} 
             originalLanguage={announcement.original_language || "es"} 
@@ -175,14 +175,14 @@ const AnnouncementItem: React.FC<AnnouncementItemProps> = ({
         </p>
         {announcement.view_count !== undefined && announcement.view_count > 0 && (
           <div className="flex items-center mt-1">
-            <Eye className="h-3 w-3 mr-1 text-gray-400" />
-            <span className="text-xs text-gray-400">{announcement.view_count} {t('bulletin.views')}</span>
+            <Eye className="h-3 w-3 mr-1 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">{announcement.view_count} {t('bulletin.views')}</span>
           </div>
         )}
       </div>
       
       {/* Date */}
-      <div className="col-span-2 text-xs text-gray-500 flex items-center">
+      <div className="col-span-2 text-xs text-muted-foreground flex items-center">
         <CalendarIcon className="h-3 w-3 mr-1" />
         {new Date(announcement.created_at).toLocaleDateString()}
       </div>
@@ -190,7 +190,9 @@ const AnnouncementItem: React.FC<AnnouncementItemProps> = ({
       {/* Status */}
       <div className="col-span-1">
         <span className={`text-xs px-2 py-0.5 rounded-full ${
-          announcement.status === 'active' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-gray-50 text-gray-600 border border-gray-100'
+          announcement.status === 'active' 
+            ? 'bg-green-500/10 text-green-400 border border-green-500/20' 
+            : 'bg-secondary text-muted-foreground border border-border'
         }`}>
           {announcement.status === 'active' ? t('bulletin.statusActive') : t('bulletin.statusFinished')}
         </span>

@@ -1,13 +1,15 @@
 # Plan de Unificación Visual: Tema Oscuro Profesional
 
-## ✅ Estado: IMPLEMENTACIÓN COMPLETADA (Fase 2)
+## ✅ Estado: IMPLEMENTACIÓN EN PROGRESO (Fase 3)
 
-La migración del tema oscuro ha sido aplicada exitosamente a los componentes principales del proyecto.
+La migración del tema oscuro continúa. Se ha suavizado el color naranja primario para reducir la intensidad visual.
 
-### 🔧 Correcciones Adicionales (Fase 2):
-- Arreglado error crítico "useContext null" en hooks de auth
-- `useLogout.ts` y `useRegister.ts` refactorizados para evitar `useNavigate()` problemático
-- Más de 15 archivos adicionales migrados a tema oscuro
+### 🔧 Correcciones Recientes (Fase 3):
+- **Color primario suavizado**: De `25 95% 53%` a `28 80% 52%` (menos saturado)
+- **Bulletin components migrados**: `PublishAnnouncementPage`, `AnnouncementList`, `AnnouncementItem`, `AnnouncementForm`
+- **AuctionsInfoPage**: Cards migradas a `bg-card` con `border-border`
+- **VehicleReports**: Estados de carga y filas migradas a tokens oscuros
+- **DashboardNew**: Fondo y texto migrados a tokens semánticos
 
 ---
 
