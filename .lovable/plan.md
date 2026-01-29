@@ -1,95 +1,164 @@
-# Plan de Unificación Visual: Tema Oscuro Profesional
 
-## ✅ Estado: IMPLEMENTACIÓN EN PROGRESO (Fase 4)
+# Plan para Resolver el Error "Cannot read properties of null (reading 'useState')"
 
-La migración del tema oscuro continúa. Se han migrado páginas legales y de perfil.
+## Diagnóstico del Problema
 
-### 🔧 Correcciones Recientes (Fase 4):
-- **PrivacyPolicyPage**: Migrado a `bg-card`, `bg-secondary`, `text-foreground`
-- **TermsAndConditionsPage**: Migrado a tema oscuro con tokens semánticos
-- **CookiesPage**: Migrado a `bg-card`, `bg-background`
-- **ProfilePage**: Alertas actualizadas de `bg-green-50` a `bg-primary/10`, `bg-info/10`
-- **MessagesWithDeletion**: Cards y fondos migrados a tokens oscuros
+El error `Cannot read properties of null (reading 'useState')` ocurre cuando React intenta usar hooks pero su estado interno (dispatcher) no está inicializado. Basándome en el análisis del código, el problema tiene **dos causas principales**:
 
----
+### Causa 1: Inicializaciones Síncronas en main.tsx
 
-## Fases Completadas
+En `src/main.tsx` líneas 11-26, hay código que se ejecuta **antes** de que React se monte:
 
-### ✅ Fase 1: Componentes Base UI
-- `input.tsx` - Estados de error con `border-destructive bg-destructive/10`
-- `card.tsx`, `button.tsx`, `badge.tsx` - Ya correctos
+```text
+┌─────────────────────────────────────────────────────────┐
+│  ORDEN DE EJECUCIÓN ACTUAL (PROBLEMÁTICO)               │
+├─────────────────────────────────────────────────────────┤
+│  1. import React                                        │
+│  2. import App                                          │
+│  3. initRegistryIntegrityCheck()  ← Ejecuta ANTES      │
+│  4. initCriticalImagePreload()    ← de que React       │
+│  5. initDevImageGuard()           ← esté listo         │
+│  6. Object.freeze(REGISTRY)                             │
+│  7. createRoot().render()         ← React se monta     │
+└─────────────────────────────────────────────────────────┘
+```
 
-### ✅ Fase 2: Layout Principal  
-- `Footer.tsx` - `bg-card`, `text-muted-foreground`, `border-border`
-- `NavbarContainer.tsx` - Tokens consistentes
-- `UserMenu.tsx` - `hover:bg-secondary`, `text-foreground`
-- `MobileMenu.tsx` - Tema oscuro aplicado
-- `AdminLayout.tsx` - `bg-background`, `bg-card`
+### Causa 2: useToast dentro de useAdminStatistics
 
-### ✅ Fase 3: Páginas Principales
-- `Register.tsx` - `bg-background`, alertas con `bg-primary/10`
-- `DashboardMainPage.tsx` - `bg-background`, `text-foreground`
-- `ContactPage.tsx`, `CommunityPage.tsx` - Tokens globales
-
-### ✅ Fase 4: Componentes de Mensajería
-- `PageHeader.tsx` - `bg-card`, `text-primary`
-- `MessageInput.tsx` - `border-border`, `bg-card`
-- `ConversationsList.tsx` - `bg-card`, `border-border`
-- `ConversationsListOptimized.tsx` - Secciones con tokens
-- `MessageItem.tsx`, `MessageItemOptimized.tsx` - Burbujas con `bg-primary`/`bg-secondary`
-- `NavigationHeader.tsx` - `bg-card`
-- `EmptyChatPlaceholder.tsx` - `bg-secondary`, alertas con `bg-primary/10`
-- `ConversationHeader.tsx` - Actualizado
-
-### ✅ Fase 5: Componentes Admin
-- `AdminDashboard.tsx` - Cards con colores semánticos de opacity
-- `ActivityLogTable.tsx` - Badges con tokens de severity
-
-### ✅ Fase 6: Componentes de Vehículos
-- `SearchFilters.tsx` - `bg-card`, `border-border`
-- `VehicleGalleryContent.tsx` - `text-muted-foreground`
-
-### ✅ Fase 7: Componentes Home
-- `CallToAction.tsx` - Gradientes con `from-secondary to-card`
-- `FeaturesSection.tsx` - `bg-background`, cards con `bg-card`
-- `ServiceCard.tsx` - `bg-card`, `border-border`
-- `SectionHeader.tsx` - `text-muted-foreground`
-- `AudioPresentationSection.tsx` - Botones con tokens
-
-### ✅ Fase 8: Dashboard Components
-- `DashboardMessaging.tsx` - Gradientes oscuros
-- `UserInfoCard.tsx` - `bg-card`, `border-primary`
-- `QuickActions.tsx` - `bg-card`, iconos con colores semánticos
+El hook `useAdminStatistics` (línea 256) usa `useToast()` que internamente llama a `useState`. Si hay cualquier problema de timing con React, este hook falla.
 
 ---
 
-## Tokens Aplicados
+## Solución Propuesta
 
-| Uso | Token |
-|-----|-------|
-| Fondo base | `bg-background` (#0B0F1A) |
-| Cards/contenedores | `bg-card` (#161B2A) |
-| Superficies secundarias | `bg-secondary` (#1E2436) |
-| Bordes | `border-border` (#2D3748) |
-| Texto principal | `text-foreground` (#F8FAFC) |
-| Texto secundario | `text-muted-foreground` (75% luminosidad - más claro) |
-| Acento primario | `text-primary` / `bg-primary` (naranja suavizado) |
-| Estados error | `bg-destructive/10`, `text-destructive` |
-| Estados éxito | `bg-success/10`, `text-[#22C55E]` |
-| Estados warning | `bg-amber-400/10`, `text-amber-400` |
+### Paso 1: Mover las inicializaciones DESPUÉS del render
 
-## Guía de Iconografía (Basado en Mockup)
+Las funciones de inicialización del Static Image Platform deben ejecutarse **después** de que React se monte, no antes. Se moverán dentro de un `useEffect` en el componente `App`.
 
-| Propiedad | Valor Recomendado |
-|-----------|-------------------|
-| Tamaño base | `h-10 w-10` (en vez de h-12 w-12) |
-| Grosor de trazo | `strokeWidth={1.5}` (más sutil) |
-| Colores | Tonos -400 (blue-400, green-400, etc.) |
-| Estilo | Minimalista, líneas finas |
+**Archivo:** `src/main.tsx`
+
+Cambios:
+- Eliminar las llamadas a `initRegistryIntegrityCheck()`, `initCriticalImagePreload()`, `initDevImageGuard()`
+- Mantener solo los imports y el `createRoot().render()`
+
+**Archivo:** `src/App.tsx`
+
+Cambios:
+- Mover todas las inicializaciones del Static Image Platform dentro de un `useEffect` separado
+- Esto garantiza que React ya está completamente montado
+
+### Paso 2: Proteger useAdminStatistics contra errores de contexto
+
+**Archivo:** `src/hooks/admin-statistics/index.ts`
+
+Cambios:
+- Envolver el uso de `useToast` en un try-catch
+- Usar `console.error` como fallback si `useToast` falla
+- Agregar una guarda de seguridad al inicio del hook
+
+### Paso 3: Agregar guarda defensiva en AdminDashboard
+
+**Archivo:** `src/components/admin/AdminDashboard.tsx`
+
+Cambios:
+- Agregar verificación temprana de que React está correctamente inicializado
+- Usar ErrorBoundary específico para este componente si es necesario
 
 ---
 
-## Excepciones Mantenidas
-- Contenido para impresión (`print:bg-white`) - legibilidad
-- Elementos sobre imágenes hero (`bg-black/50`, `text-white`) - contraste
-- Indicadores de estado online (punto verde) - señal visual
+## Detalle Técnico de los Cambios
+
+### main.tsx - Antes vs Después
+
+```text
+ANTES:
+─────────────────────────────────
+import { initRegistryIntegrityCheck } from '...';
+initRegistryIntegrityCheck();  // ← Se ejecuta inmediatamente
+
+import { initCriticalImagePreload } from '...';
+initCriticalImagePreload();    // ← Se ejecuta inmediatamente
+
+import { initDevImageGuard } from '...';
+initDevImageGuard();           // ← Se ejecuta inmediatamente
+
+createRoot(root).render(<App />);
+
+DESPUÉS:
+─────────────────────────────────
+// Solo imports, sin llamadas inmediatas
+import { STATIC_IMAGE_REGISTRY } from '...';
+
+createRoot(root).render(<App />);
+// Las inicializaciones se mueven a App.tsx
+```
+
+### App.tsx - Nuevo useEffect
+
+```text
+useEffect(() => {
+  // Static Image Platform - se ejecuta DESPUÉS de que React esté listo
+  const initStaticImagePlatform = async () => {
+    const { initRegistryIntegrityCheck } = await import('@/lib/registryIntegrityCheck');
+    const { initCriticalImagePreload } = await import('@/lib/criticalImagePreloader');
+    const { initDevImageGuard } = await import('@/lib/devImageGuard');
+    
+    initRegistryIntegrityCheck();
+    initCriticalImagePreload();
+    initDevImageGuard();
+    
+    // Freeze en producción
+    if (!import.meta.env.DEV) {
+      Object.freeze(STATIC_IMAGE_REGISTRY);
+    }
+  };
+  
+  initStaticImagePlatform();
+}, []);
+```
+
+### useAdminStatistics - Guarda defensiva
+
+```text
+export const useAdminStatistics = () => {
+  // Guarda defensiva para contexto de React
+  let toastFn: ReturnType<typeof useToast>['toast'] | null = null;
+  
+  try {
+    const { toast } = useToast();
+    toastFn = toast;
+  } catch (error) {
+    console.warn('[useAdminStatistics] Toast not available, using fallback');
+  }
+  
+  // ... resto del hook
+};
+```
+
+---
+
+## Archivos a Modificar
+
+| Archivo | Acción |
+|---------|--------|
+| `src/main.tsx` | Eliminar inicializaciones síncronas del Static Image Platform |
+| `src/App.tsx` | Mover inicializaciones a useEffect con imports dinámicos |
+| `src/hooks/admin-statistics/index.ts` | Agregar guarda defensiva para useToast |
+
+---
+
+## Por Qué Esta Solución Funciona
+
+1. **Respeta el ciclo de vida de React**: Las inicializaciones solo ocurren cuando React ya está completamente montado
+2. **Imports dinámicos**: Evitan que el código se ejecute durante la carga del módulo
+3. **Guardas defensivas**: Previenen cascadas de errores si algo falla
+4. **Cero impacto visual**: No hay cambios en la UI, solo en el orden de ejecución
+
+---
+
+## Lo Que NO Se Modificará
+
+- No se cambia ninguna funcionalidad del Static Image Platform
+- No se modifican los componentes de UI
+- No se tocan rutas ni navegación
+- No se alteran otros hooks o contextos
