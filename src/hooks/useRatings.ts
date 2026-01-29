@@ -152,14 +152,15 @@ export const useRatings = (userId?: string) => {
 
       console.log('📡 RPC response data:', data);
 
-      if (data && data.length > 0) {
-        const summaryData = data[0];
+      // The RPC returns a jsonb object directly, not an array
+      if (data && typeof data === 'object') {
+        const summaryData = data as Record<string, unknown>;
         console.log('📡 RPC summary object:', summaryData);
         
         const result: RatingSummary = {
           average_rating: Number(summaryData.average_rating) || 0,
           total_ratings: Number(summaryData.total_ratings) || 0,
-          verified_ratings: Number(summaryData.verified_ratings) || 0
+          verified_ratings: 0
         };
         
         console.log('📡 RPC final result:', result);
@@ -190,8 +191,8 @@ export const useRatings = (userId?: string) => {
       const { data, error } = await supabase
         .from('ratings')
         .insert({
-          from_user_id: user.id,
-          to_user_id: toUserId,
+          rater_id: user.id,
+          rated_id: toUserId,
           rating: ratingData.rating,
           comment: ratingData.comment,
           transaction_type: ratingData.transactionType,

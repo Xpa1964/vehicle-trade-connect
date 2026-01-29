@@ -1,9 +1,9 @@
 
 import { User } from '@supabase/supabase-js';
-import { Enums } from '@/integrations/supabase/types';
+import { Database } from '@/integrations/supabase/types';
 
-// Extend the AppRole type to include more granular admin roles
-export type AppRole = Enums<'app_role'> | 'moderator' | 'support' | 'content_manager' | 'analyst';
+// Use the exact app_role enum from the database
+export type AppRole = Database['public']['Enums']['app_role'];
 
 // Define permissions for granular access control
 export type Permission = 

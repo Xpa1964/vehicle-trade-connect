@@ -101,7 +101,8 @@ export const useVehicleSubmit = () => {
         console.log('🔧 [useVehicleSubmit] Processing equipment:', data.equipment);
         const equipmentItems = data.equipment.map(equipmentId => ({
           vehicle_id: vehicleId,
-          equipment_id: equipmentId
+          equipment_id: equipmentId,
+          name: equipmentId // Use equipment_id as name for now
         }));
         
         const { error: equipmentError } = await supabase

@@ -1,7 +1,9 @@
 
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { AppRole } from '@/types/auth';
+import { Database } from '@/integrations/supabase/types';
+
+type DbAppRole = Database['public']['Enums']['app_role'];
 
 interface UserProfileUpdate {
   full_name: string;
@@ -12,12 +14,6 @@ interface UserProfileUpdate {
   business_type: string;
   trader_type: string;
 }
-
-type SupabaseRpcResponse = {
-  success?: boolean;
-  message?: string;
-  [key: string]: any;
-};
 
 export const useAdminUserEdit = () => {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -30,24 +26,12 @@ export const useAdminUserEdit = () => {
       
       const { data, error } = await supabase.rpc('admin_update_user_profile', {
         p_user_id: userId,
-        p_full_name: profileData.full_name,
-        p_company_name: profileData.company_name,
-        p_contact_phone: profileData.contact_phone,
-        p_country: profileData.country,
-        p_address: profileData.address,
-        p_business_type: profileData.business_type,
-        p_trader_type: profileData.trader_type
+        p_profile_data: profileData as unknown as Database['public']['Functions']['admin_update_user_profile']['Args']['p_profile_data']
       });
-
-      const d = data as SupabaseRpcResponse;
 
       if (error) {
         console.error('[useAdminUserEdit] Error updating profile:', error);
         throw error;
-      }
-
-      if (!d?.success) {
-        throw new Error(d?.message || 'Failed to update profile');
       }
 
       // Log the action for audit trail
@@ -59,8 +43,7 @@ export const useAdminUserEdit = () => {
         p_details: JSON.stringify({
           updated_by: (await supabase.auth.getUser()).data.user?.id,
           changes: profileData
-        }),
-        p_severity: 'info'
+        })
       });
 
       console.log('[useAdminUserEdit] Profile updated successfully');
@@ -73,7 +56,7 @@ export const useAdminUserEdit = () => {
     }
   };
 
-  const updateRole = async (userId: string, newRole: AppRole) => {
+  const updateRole = async (userId: string, newRole: DbAppRole) => {
     setIsUpdating(true);
     
     try {
@@ -84,15 +67,9 @@ export const useAdminUserEdit = () => {
         p_new_role: newRole
       });
 
-      const d = data as SupabaseRpcResponse;
-
       if (error) {
         console.error('[useAdminUserEdit] Error updating role:', error);
         throw error;
-      }
-
-      if (!d?.success) {
-        throw new Error(d?.message || 'Failed to update role');
       }
 
       // Log the action for audit trail
@@ -105,8 +82,7 @@ export const useAdminUserEdit = () => {
           updated_by: (await supabase.auth.getUser()).data.user?.id,
           new_role: newRole,
           timestamp: new Date().toISOString()
-        }),
-        p_severity: 'info'
+        })
       });
 
       console.log('[useAdminUserEdit] Role updated successfully');

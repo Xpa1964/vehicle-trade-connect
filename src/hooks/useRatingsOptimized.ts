@@ -136,8 +136,8 @@ export const useRatingsOptimized = (userId?: string) => {
       const { data, error } = await supabase
         .from('ratings')
         .insert({
-          from_user_id: user.id,
-          to_user_id: toUserId,
+          rater_id: user.id,
+          rated_id: toUserId,
           rating: ratingData.rating,
           comment: ratingData.comment,
           transaction_type: ratingData.transactionType,

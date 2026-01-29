@@ -3,29 +3,25 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface VehicleDamage {
   id: string;
-  vehicle_id: string;
-  damage_type: string;
-  title: string;
+  vehicle_id: string | null;
+  damage_type: string | null;
   description: string | null;
-  severity: string;
+  severity: string | null;
   location: string | null;
-  estimated_cost: number | null;
-  created_at: string;
-  vehicle_damage_images?: any[];
+  repair_cost: number | null;
+  image_url: string | null;
+  created_at: string | null;
 }
 
 export const useVehicleDamages = (vehicleId: string | undefined) => {
   return useQuery({
     queryKey: ['vehicle-damages', vehicleId],
-    queryFn: async () => {
+    queryFn: async (): Promise<VehicleDamage[]> => {
       if (!vehicleId) return [];
 
       const { data, error } = await supabase
         .from('vehicle_damages')
-        .select(`
-          *,
-          vehicle_damage_images (*)
-        `)
+        .select('*')
         .eq('vehicle_id', vehicleId)
         .order('created_at', { ascending: true });
 
@@ -34,7 +30,7 @@ export const useVehicleDamages = (vehicleId: string | undefined) => {
         return [];
       }
 
-      return data as VehicleDamage[];
+      return data || [];
     },
     enabled: !!vehicleId
   });

@@ -1287,6 +1287,7 @@ export type Database = {
       transport_quote_responses: {
         Row: {
           admin_notes: string | null
+          admin_user_id: string | null
           company_name: string | null
           created_at: string | null
           estimated_days: number | null
@@ -1305,6 +1306,7 @@ export type Database = {
         }
         Insert: {
           admin_notes?: string | null
+          admin_user_id?: string | null
           company_name?: string | null
           created_at?: string | null
           estimated_days?: number | null
@@ -1323,6 +1325,7 @@ export type Database = {
         }
         Update: {
           admin_notes?: string | null
+          admin_user_id?: string | null
           company_name?: string | null
           created_at?: string | null
           estimated_days?: number | null
@@ -1654,6 +1657,38 @@ export type Database = {
         }
         Relationships: []
       }
+      user_vehicle_visits: {
+        Row: {
+          created_at: string | null
+          id: string
+          user_id: string
+          vehicle_id: string | null
+          visited_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          user_id: string
+          vehicle_id?: string | null
+          visited_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          user_id?: string
+          vehicle_id?: string | null
+          visited_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_vehicle_visits_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vehicle_damages: {
         Row: {
           created_at: string | null
@@ -1743,6 +1778,7 @@ export type Database = {
         Row: {
           category: string | null
           created_at: string | null
+          equipment_id: string | null
           id: string
           is_standard: boolean | null
           name: string
@@ -1751,6 +1787,7 @@ export type Database = {
         Insert: {
           category?: string | null
           created_at?: string | null
+          equipment_id?: string | null
           id?: string
           is_standard?: boolean | null
           name: string
@@ -1759,12 +1796,20 @@ export type Database = {
         Update: {
           category?: string | null
           created_at?: string | null
+          equipment_id?: string | null
           id?: string
           is_standard?: boolean | null
           name?: string
           vehicle_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "vehicle_equipment_equipment_id_fkey"
+            columns: ["equipment_id"]
+            isOneToOne: false
+            referencedRelation: "equipment_items"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "vehicle_equipment_vehicle_id_fkey"
             columns: ["vehicle_id"]
@@ -1816,6 +1861,7 @@ export type Database = {
           id: string
           maintenance_history: Json | null
           technical_specs: Json | null
+          updated_at: string | null
           vehicle_id: string | null
         }
         Insert: {
@@ -1824,6 +1870,7 @@ export type Database = {
           id?: string
           maintenance_history?: Json | null
           technical_specs?: Json | null
+          updated_at?: string | null
           vehicle_id?: string | null
         }
         Update: {
@@ -1832,6 +1879,7 @@ export type Database = {
           id?: string
           maintenance_history?: Json | null
           technical_specs?: Json | null
+          updated_at?: string | null
           vehicle_id?: string | null
         }
         Relationships: [
@@ -2019,6 +2067,7 @@ export type Database = {
           destination_city: string | null
           destination_country: string | null
           doors: number | null
+          engine_power: number | null
           engine_size: string | null
           features: Json | null
           first_registration_date: string | null
@@ -2040,6 +2089,7 @@ export type Database = {
           power_hp: number | null
           previous_owners: number | null
           price: number | null
+          registration_date: string | null
           reserved: boolean | null
           seller_city: string | null
           seller_country: string | null
@@ -2049,10 +2099,12 @@ export type Database = {
           sold_date: string | null
           status: string | null
           thumbnailurl: string | null
+          transaction_type: string | null
           transmission: string | null
           type: string | null
           updated_at: string | null
           user_id: string | null
+          vehicle_type: string | null
           version: string | null
           views_count: number | null
           vin: string | null
@@ -2074,6 +2126,7 @@ export type Database = {
           destination_city?: string | null
           destination_country?: string | null
           doors?: number | null
+          engine_power?: number | null
           engine_size?: string | null
           features?: Json | null
           first_registration_date?: string | null
@@ -2095,6 +2148,7 @@ export type Database = {
           power_hp?: number | null
           previous_owners?: number | null
           price?: number | null
+          registration_date?: string | null
           reserved?: boolean | null
           seller_city?: string | null
           seller_country?: string | null
@@ -2104,10 +2158,12 @@ export type Database = {
           sold_date?: string | null
           status?: string | null
           thumbnailurl?: string | null
+          transaction_type?: string | null
           transmission?: string | null
           type?: string | null
           updated_at?: string | null
           user_id?: string | null
+          vehicle_type?: string | null
           version?: string | null
           views_count?: number | null
           vin?: string | null
@@ -2129,6 +2185,7 @@ export type Database = {
           destination_city?: string | null
           destination_country?: string | null
           doors?: number | null
+          engine_power?: number | null
           engine_size?: string | null
           features?: Json | null
           first_registration_date?: string | null
@@ -2150,6 +2207,7 @@ export type Database = {
           power_hp?: number | null
           previous_owners?: number | null
           price?: number | null
+          registration_date?: string | null
           reserved?: boolean | null
           seller_city?: string | null
           seller_country?: string | null
@@ -2159,10 +2217,12 @@ export type Database = {
           sold_date?: string | null
           status?: string | null
           thumbnailurl?: string | null
+          transaction_type?: string | null
           transmission?: string | null
           type?: string | null
           updated_at?: string | null
           user_id?: string | null
+          vehicle_type?: string | null
           version?: string | null
           views_count?: number | null
           vin?: string | null

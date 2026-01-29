@@ -28,8 +28,8 @@ const RolesView = ({ rolePermissions }: RolesViewProps) => {
             <Card key={roleMapping.role} className="overflow-hidden">
               <CardHeader className={`
                 ${roleMapping.role === 'admin' ? 'bg-blue-50' : 
-                  roleMapping.role === 'moderator' ? 'bg-green-50' : 
-                  roleMapping.role === 'support' ? 'bg-yellow-50' :
+                  roleMapping.role === 'dealer' ? 'bg-green-50' : 
+                  roleMapping.role === 'professional' ? 'bg-yellow-50' :
                   roleMapping.role === 'content_manager' ? 'bg-purple-50' :
                   roleMapping.role === 'analyst' ? 'bg-indigo-50' :
                   'bg-gray-50'}

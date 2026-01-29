@@ -13,38 +13,44 @@ export function useStatistics() {
         throw new Error('User ID is required');
       }
 
-      // FASE 3: Usar RPC function optimizada para obtener todas las stats en 1 query
+      console.log('📊 [useStatistics] Fetching stats via direct queries');
       const startTime = Date.now();
-      console.log('📊 [useStatistics] Fetching stats via RPC function');
 
-      const { data, error } = await supabase
-        .rpc('get_user_dashboard_stats', { user_uuid: user.id });
+      // Query vehicles count
+      const { count: vehiclesCount } = await supabase
+        .from('vehicles')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id);
 
-      if (error) {
-        console.error('❌ [useStatistics] Error:', error);
-        throw error;
-      }
+      // Query announcements count
+      const { count: announcementsCount } = await supabase
+        .from('announcements')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id);
+
+      // Query unread messages count
+      const { count: messagesCount } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .is('read_at', null);
+
+      // Query exchanges count
+      const { count: exchangesCount } = await supabase
+        .from('exchanges')
+        .select('*', { count: 'exact', head: true })
+        .or(`initiator_id.eq.${user.id},receiver_id.eq.${user.id}`);
 
       const duration = Date.now() - startTime;
       console.log(`✅ [useStatistics] Stats loaded in ${duration}ms`);
 
-      // Parse la respuesta JSON con casting adecuado
-      const stats = data as {
-        vehicles: { count: number };
-        announcements: { count: number };
-        messages: { count: number };
-        exchanges: { count: number };
-      };
-
       return {
-        vehicles: stats?.vehicles || { count: 0 },
-        announcements: stats?.announcements || { count: 0 },
-        messages: stats?.messages || { count: 0 },
-        exchanges: stats?.exchanges || { count: 0 },
+        vehicles: { count: vehiclesCount || 0 },
+        announcements: { count: announcementsCount || 0 },
+        messages: { count: messagesCount || 0 },
+        exchanges: { count: exchangesCount || 0 },
       };
     },
     enabled: !!user?.id,
-    // FASE 3: Usar configuración DYNAMIC optimizada
     ...QUERY_CONFIG.DYNAMIC,
     retry: 1,
   });
