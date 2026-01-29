@@ -14,8 +14,12 @@ export const usePlaceBid = () => {
 
   return useMutation({
     mutationFn: async ({ auctionId, amount }: PlaceBidParams) => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error('User not authenticated');
+      
       const { data, error } = await supabase.rpc('place_bid', {
         p_auction_id: auctionId,
+        p_bidder_id: userData.user.id,
         p_amount: amount,
       });
 

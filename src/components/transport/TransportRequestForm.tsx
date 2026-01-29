@@ -43,6 +43,7 @@ const TransportRequestForm: React.FC = () => {
       const { error } = await supabase
         .from('transport_quotes')
         .insert({
+          requester_id: user.user.id,
           user_id: user.user.id,
           brand: data.brand,
           model: data.model,
