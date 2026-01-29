@@ -15,9 +15,12 @@ import { useMemo } from 'react';
 import {
   STATIC_IMAGE_REGISTRY,
   StaticImageEntry,
+  StaticImageId,
+  StaticImageKey,
   getImageById,
   isProductImagePath,
-  validateRegistry
+  validateRegistry,
+  isValidImageId
 } from '@/config/staticImageRegistry';
 
 const FALLBACK_IMAGE = '/placeholder.svg';
@@ -39,6 +42,8 @@ export interface UseStaticImageResult {
   isAIEditable: boolean;
 }
 
+const isDev = import.meta.env.DEV;
+
 /**
  * Hook to retrieve a static image from the registry
  * @param imageId The image ID (e.g., 'home.hero', 'services.showroom')
@@ -46,10 +51,18 @@ export interface UseStaticImageResult {
  */
 export const useStaticImage = (imageId: string): UseStaticImageResult => {
   return useMemo(() => {
+    // Validate ID format in dev
+    if (isDev && !isValidImageId(imageId)) {
+      console.warn(`[useStaticImage] Image ID not in registry: ${imageId}`);
+    }
+
     const entry = getImageById(imageId);
     
     if (!entry) {
-      console.warn(`[useStaticImage] Image not found in registry: ${imageId}`);
+      // Only warn in dev, silent in production
+      if (isDev) {
+        console.warn(`[useStaticImage] Image not found in registry: ${imageId}`);
+      }
       return {
         src: FALLBACK_IMAGE,
         isValid: false,
@@ -64,7 +77,7 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
     // Validate that this is a product image path
     const isProductPath = isProductImagePath(entry.currentPath);
     
-    if (!isProductPath) {
+    if (!isProductPath && isDev) {
       console.error(`[useStaticImage] WARNING: Image "${imageId}" has user-content path: ${entry.currentPath}`);
     }
     
@@ -96,12 +109,14 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
  * Get static image by registry key (not ID)
  * @param registryKey The key in STATIC_IMAGE_REGISTRY (e.g., 'HOME_HERO')
  */
-export const useStaticImageByKey = (registryKey: string): UseStaticImageResult => {
+export const useStaticImageByKey = (registryKey: StaticImageKey | string): UseStaticImageResult => {
   return useMemo(() => {
-    const entry = STATIC_IMAGE_REGISTRY[registryKey];
+    const entry = STATIC_IMAGE_REGISTRY[registryKey as StaticImageKey];
     
     if (!entry) {
-      console.warn(`[useStaticImageByKey] Key not found: ${registryKey}`);
+      if (isDev) {
+        console.warn(`[useStaticImageByKey] Key not found: ${registryKey}`);
+      }
       return {
         src: FALLBACK_IMAGE,
         isValid: false,
@@ -191,11 +206,13 @@ export const getStaticImagePath = (imageId: string): string => {
   const entry = getImageById(imageId);
   
   if (!entry) {
-    console.warn(`[getStaticImagePath] Image not found: ${imageId}`);
+    if (isDev) {
+      console.warn(`[getStaticImagePath] Image not found: ${imageId}`);
+    }
     return FALLBACK_IMAGE;
   }
   
-  if (!isProductImagePath(entry.currentPath)) {
+  if (!isProductImagePath(entry.currentPath) && isDev) {
     console.error(`[getStaticImagePath] User-content path detected: ${imageId}`);
   }
   
