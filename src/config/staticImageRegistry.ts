@@ -111,7 +111,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Headphones illustration for audio presentation",
     critical: true,
     aiEditable: true,
-    category: "marketing", // Moved to marketing - specific feature illustration
+    category: "home", // Part of home page content
     source: "product"
   },
 
