@@ -41,7 +41,19 @@ import ImageGenerationModal from '@/components/admin/ImageGenerationModal';
 
 const GLOBAL_STYLE_KEY = 'imageControlCenter_globalStyle';
 const ZOOM_LEVELS_KEY = 'imageControlCenter_zoomLevels';
-const DEFAULT_GLOBAL_STYLE = 'Dark, cinematic automotive marketplace style, premium lighting, high contrast, modern UI-friendly compositions, professional product photography aesthetic.';
+
+// Helper function to get global style from localStorage
+const getStoredGlobalStyle = (): string => {
+  try {
+    const stored = localStorage.getItem(GLOBAL_STYLE_KEY);
+    if (stored && stored.trim() !== '') {
+      return stored;
+    }
+  } catch (e) {
+    console.error('Error loading global style from localStorage:', e);
+  }
+  return '';
+};
 
 const CATEGORY_LABELS: Record<ImageCategory, string> = {
   home: 'Home Page',
@@ -55,23 +67,10 @@ const CATEGORY_LABELS: Record<ImageCategory, string> = {
 };
 
 const ImageControlCenter: React.FC = () => {
-  // Global style prompt - load from localStorage on mount
-  const [globalStyle, setGlobalStyle] = useState<string>(DEFAULT_GLOBAL_STYLE);
+  // Global style prompt - ALWAYS load from localStorage on init, NO default
+  const [globalStyle, setGlobalStyle] = useState<string>(() => getStoredGlobalStyle());
   const [globalStyleDirty, setGlobalStyleDirty] = useState(false);
-  const [isGlobalStyleLoaded, setIsGlobalStyleLoaded] = useState(false);
-
-  // Load global style from localStorage on mount
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(GLOBAL_STYLE_KEY);
-      if (stored && stored.trim() !== '') {
-        setGlobalStyle(stored);
-      }
-    } catch (e) {
-      console.error('Error loading global style from localStorage:', e);
-    }
-    setIsGlobalStyleLoaded(true);
-  }, []);
+  const [isGlobalStyleLoaded, setIsGlobalStyleLoaded] = useState(true); // Already loaded in useState init
 
   // Zoom levels per image
   const [zoomLevels, setZoomLevels] = useState<Record<string, number>>(() => {

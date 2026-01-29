@@ -27,32 +27,38 @@ export const detectDesynchronization = async (): Promise<boolean> => {
       return false; // No hay desincronización si no hay sesión
     }
     
-    // Probar auth.uid() en backend con query simple
+    // LESS AGGRESSIVE: Solo detectar desincronización si hay un error explícito de RLS
+    // No forzar recovery en casos ambiguos para evitar logouts innecesarios
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
         .select('id')
         .eq('id', session.user.id)
         .limit(1);
       
-      if (error && (error.message.includes('row-level security') || 
-                   error.message.includes('RLS') || 
-                   error.message.includes('policy'))) {
-        console.warn('⚠️ [SYNC] Desincronización detectada: frontend tiene sesión pero backend auth.uid() es null');
+      // Solo considerar desincronización si hay error explícito de RLS Y no hay datos
+      if (error && !data && 
+          (error.message.includes('row-level security') || 
+           error.message.includes('RLS') || 
+           error.message.includes('policy'))) {
+        console.warn('⚠️ [SYNC] Posible desincronización detectada');
         return true;
       }
       
+      // Si hay datos o no hay error, consideramos sincronizado
       console.log('✅ [SYNC] Frontend y backend sincronizados correctamente');
       return false;
       
     } catch (testError) {
-      console.warn('⚠️ [SYNC] Error en test de sincronización:', testError);
-      return true; // Asumir desincronización en caso de error
+      // NO asumir desincronización en caso de error de red u otros
+      // Esto evita logouts innecesarios por problemas temporales
+      console.warn('⚠️ [SYNC] Error en test de sincronización (ignorando):', testError);
+      return false; // NO asumir desincronización
     }
     
   } catch (error) {
     console.error('❌ [SYNC] Error detectando desincronización:', error);
-    return true; // Asumir desincronización en caso de error
+    return false; // NO asumir desincronización en caso de error
   }
 };
 
