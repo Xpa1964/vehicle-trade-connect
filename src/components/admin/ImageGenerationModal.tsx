@@ -21,6 +21,7 @@ import { Loader2, Wand2, RefreshCw, Check, X, Image as ImageIcon, AlertCircle } 
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { StaticImageEntry } from '@/config/staticImageRegistry';
+import { FunctionsFetchError, FunctionsHttpError, FunctionsRelayError } from '@supabase/supabase-js';
 
 interface ImageGenerationModalProps {
   isOpen: boolean;
@@ -81,16 +82,27 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
 
       if (fnError) {
         console.error('Edge function error:', fnError);
-        // Provide more specific error messages
-        if (fnError.message?.includes('Failed to send')) {
-          throw new Error('No se pudo conectar con el servicio de IA. Verifica tu conexión.');
+
+        // Show real backend error when available
+        if (fnError instanceof FunctionsHttpError) {
+          try {
+            const payload = await fnError.context.json();
+            throw new Error(payload?.error || fnError.message);
+          } catch {
+            throw new Error(fnError.message);
+          }
         }
-        if (fnError.message?.includes('rate limit') || fnError.message?.includes('429')) {
-          throw new Error('Límite de solicitudes alcanzado. Espera un momento y vuelve a intentar.');
+
+        if (fnError instanceof FunctionsRelayError) {
+          throw new Error(`Error del relay: ${fnError.message}`);
         }
-        if (fnError.message?.includes('402') || fnError.message?.includes('credits')) {
-          throw new Error('Créditos de IA agotados. Añade más créditos para continuar.');
+
+        if (fnError instanceof FunctionsFetchError) {
+          // Usually CORS/preflight or network
+          throw new Error('No se pudo conectar con la función (CORS/red). Recarga y prueba de nuevo.');
         }
+
+        // Fallback
         throw new Error(fnError.message || 'Error desconocido en la función');
       }
 
@@ -135,6 +147,25 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
       });
 
       if (fnError) {
+        console.error('Edge function error:', fnError);
+
+        if (fnError instanceof FunctionsHttpError) {
+          try {
+            const payload = await fnError.context.json();
+            throw new Error(payload?.error || fnError.message);
+          } catch {
+            throw new Error(fnError.message);
+          }
+        }
+
+        if (fnError instanceof FunctionsRelayError) {
+          throw new Error(`Error del relay: ${fnError.message}`);
+        }
+
+        if (fnError instanceof FunctionsFetchError) {
+          throw new Error('No se pudo conectar con la función (CORS/red). Recarga y prueba de nuevo.');
+        }
+
         throw new Error(fnError.message);
       }
 
