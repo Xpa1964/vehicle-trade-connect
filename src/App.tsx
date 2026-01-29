@@ -44,6 +44,31 @@ function App() {
 
     // Initialize Core Web Vitals monitoring
     reportWebVitals();
+
+    // Static Image Platform - runs AFTER React is mounted
+    const initStaticImagePlatform = async () => {
+      try {
+        const { initRegistryIntegrityCheck } = await import('@/lib/registryIntegrityCheck');
+        const { initCriticalImagePreload } = await import('@/lib/criticalImagePreloader');
+        const { initDevImageGuard } = await import('@/lib/devImageGuard');
+        const { STATIC_IMAGE_REGISTRY } = await import('@/config/staticImageRegistry');
+        
+        initRegistryIntegrityCheck();
+        initCriticalImagePreload();
+        initDevImageGuard();
+        
+        // Freeze registry in production
+        if (!import.meta.env.DEV) {
+          Object.freeze(STATIC_IMAGE_REGISTRY);
+        }
+        
+        console.log('[App] Static Image Platform inicializado');
+      } catch (error) {
+        console.error('[App] Error inicializando Static Image Platform:', error);
+      }
+    };
+    
+    initStaticImagePlatform();
   }, []);
 
   console.log('🚀 [App] Renderizando...');
