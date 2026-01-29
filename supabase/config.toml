@@ -56,6 +56,9 @@ verify_jwt = true
 [functions.generate-static-image]
 verify_jwt = true
 
+[functions.replace-static-image]
+verify_jwt = true
+
 [db]
 enabled = true
 port = 54322
