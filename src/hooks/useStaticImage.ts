@@ -52,8 +52,16 @@ export interface UseStaticImageResult {
 const isDev = import.meta.env.DEV;
 
 // Cache for storage URLs to avoid repeated API calls
-const storageUrlCache = new Map<string, { url: string | null; timestamp: number }>();
+// NOTE: For critical images we use a much shorter TTL + background polling so tablet users
+// can see updates without a hard refresh.
+const storageUrlCache = new Map<
+  string,
+  { url: string | null; timestamp: number; fileName?: string }
+>();
+
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CRITICAL_CACHE_TTL = 15 * 1000; // 15 seconds
+const CRITICAL_POLL_MS = 20 * 1000; // 20 seconds
 
 /**
  * Convert image ID to storage path prefix
@@ -66,10 +74,10 @@ const getStoragePrefix = (imageId: string): string => {
 /**
  * Check if a cached URL is still valid
  */
-const isCacheValid = (imageId: string): boolean => {
+const isCacheValid = (imageId: string, ttlMs: number): boolean => {
   const cached = storageUrlCache.get(imageId);
   if (!cached) return false;
-  return Date.now() - cached.timestamp < CACHE_TTL;
+  return Date.now() - cached.timestamp < ttlMs;
 };
 
 /**
@@ -83,7 +91,8 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFromStorage, setIsFromStorage] = useState(false);
   const mountedRef = useRef(true);
-  const checkedRef = useRef(false);
+  const lastFileNameRef = useRef<string | null>(null);
+  const [refreshTick, setRefreshTick] = useState(0);
 
   // Get registry entry (memoized)
   const registryData = useMemo(() => {
@@ -132,6 +141,23 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
     };
   }, [imageId]);
 
+  // Allow other parts of the app (admin) to force-refresh a specific image without page reload
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const ce = e as CustomEvent<{ imageId?: string }>;
+      if (!ce?.detail?.imageId) return;
+      if (ce.detail.imageId !== imageId) return;
+
+      // Drop cache + trigger a refresh
+      storageUrlCache.delete(imageId);
+      lastFileNameRef.current = null;
+      setRefreshTick((x) => x + 1);
+    };
+
+    window.addEventListener('static-image-updated', handler as EventListener);
+    return () => window.removeEventListener('static-image-updated', handler as EventListener);
+  }, [imageId]);
+
   // Check Supabase Storage for AI-generated images
   useEffect(() => {
     mountedRef.current = true;
@@ -142,25 +168,25 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
       return;
     }
 
-    // Check cache first
-    if (isCacheValid(imageId)) {
-      const cached = storageUrlCache.get(imageId);
-      if (cached) {
-        setStorageUrl(cached.url);
-        setIsFromStorage(cached.url !== null);
-        setIsLoading(false);
-        return;
-      }
-    }
+    const ttlMs = registryData.isCritical ? CRITICAL_CACHE_TTL : CACHE_TTL;
 
-    // Don't re-check if already checked in this mount
-    if (checkedRef.current) {
-      return;
-    }
-    checkedRef.current = true;
+    const checkStorage = async (opts?: { force?: boolean; silent?: boolean }) => {
+      const force = Boolean(opts?.force);
+      const silent = Boolean(opts?.silent);
 
-    const checkStorage = async () => {
       try {
+        if (!force && isCacheValid(imageId, ttlMs)) {
+          const cached = storageUrlCache.get(imageId);
+          if (cached && mountedRef.current) {
+            setStorageUrl(cached.url);
+            setIsFromStorage(cached.url !== null);
+            setIsLoading(false);
+          }
+          return;
+        }
+
+        if (!silent) setIsLoading(true);
+
         const prefix = getStoragePrefix(imageId);
         
         // List files in the storage path
@@ -181,27 +207,44 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
         }
 
         // Filter out folders (no metadata means it's a folder)
-        const imageFiles = files?.filter(f => f.metadata && f.name) || [];
+        const imageFiles = files?.filter((f) => f.metadata && f.name) || [];
 
         if (imageFiles.length > 0) {
           const latestFile = imageFiles[0];
+          // If nothing changed (same file), avoid state churn
+          if (lastFileNameRef.current && lastFileNameRef.current === latestFile.name) {
+            storageUrlCache.set(imageId, {
+              url: storageUrlCache.get(imageId)?.url ?? null,
+              timestamp: Date.now(),
+              fileName: latestFile.name
+            });
+            return;
+          }
+
           const { data: urlData } = supabase.storage
             .from(STORAGE_BUCKET)
             .getPublicUrl(`${prefix}${latestFile.name}`);
 
           if (urlData?.publicUrl && mountedRef.current) {
-            // Add cache buster for fresh images
-            const urlWithCacheBuster = `${urlData.publicUrl}?t=${Date.now()}`;
-            storageUrlCache.set(imageId, { url: urlWithCacheBuster, timestamp: Date.now() });
-            setStorageUrl(urlWithCacheBuster);
+            // IMPORTANT: use file name as version so mobile browsers update reliably
+            const urlWithVersion = `${urlData.publicUrl}?v=${encodeURIComponent(latestFile.name)}`;
+            storageUrlCache.set(imageId, {
+              url: urlWithVersion,
+              timestamp: Date.now(),
+              fileName: latestFile.name
+            });
+            lastFileNameRef.current = latestFile.name;
+            setStorageUrl(urlWithVersion);
             setIsFromStorage(true);
           }
         } else {
           storageUrlCache.set(imageId, { url: null, timestamp: Date.now() });
+          lastFileNameRef.current = null;
         }
       } catch (err) {
         console.warn(`[useStaticImage] Error checking storage for ${imageId}:`, err);
         storageUrlCache.set(imageId, { url: null, timestamp: Date.now() });
+        lastFileNameRef.current = null;
       } finally {
         if (mountedRef.current) {
           setIsLoading(false);
@@ -209,12 +252,22 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
       }
     };
 
-    checkStorage();
+    // Initial check
+    checkStorage({ force: true, silent: false });
+
+    // Critical images: poll so tablets see updates without hard refresh
+    let interval: number | undefined;
+    if (registryData.isCritical) {
+      interval = window.setInterval(() => {
+        void checkStorage({ force: true, silent: true });
+      }, CRITICAL_POLL_MS);
+    }
 
     return () => {
       mountedRef.current = false;
+      if (interval) window.clearInterval(interval);
     };
-  }, [imageId, registryData.isAIEditable, registryData.entry]);
+  }, [imageId, registryData.isAIEditable, registryData.entry, registryData.isCritical, refreshTick]);
 
   // Return final result - prioritize storage URL if available
   return useMemo(() => ({
