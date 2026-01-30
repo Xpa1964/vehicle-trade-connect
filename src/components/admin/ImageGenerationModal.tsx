@@ -180,6 +180,12 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
       }
 
       toast.success('Image replaced successfully!');
+      
+      // Dispatch event to invalidate cache in all components using this image
+      window.dispatchEvent(new CustomEvent('static-image-updated', {
+        detail: { imageId: image.id }
+      }));
+      
       onImageReplaced();
     } catch (err: any) {
       console.error('Replace error:', err);

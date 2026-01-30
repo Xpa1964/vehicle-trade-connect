@@ -82,9 +82,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static assets - Cache first
+  // Static assets - Cache first (EXCEPT Supabase storage which needs Network First)
+  // Images from Supabase storage should always fetch fresh to show AI-generated replacements
   if (
-    url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf|eot)$/)
+    url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf|eot)$/) &&
+    !url.origin.includes('supabase.co')
   ) {
     event.respondWith(cacheFirst(request));
     return;

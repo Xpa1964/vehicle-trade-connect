@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useAudioSession } from '@/hooks/useAudioSession';
 import VideoPlayerModal from './VideoPlayerModal';
-import headphonesImage from '@/assets/headphones-listen.png';
+import { useStaticImage } from '@/hooks/useStaticImage';
+import headphonesFallback from '@/assets/headphones-listen.png';
 
 const AudioPresentationSection: React.FC = () => {
   const { t } = useLanguage();
@@ -14,6 +15,9 @@ const AudioPresentationSection: React.FC = () => {
   const { startAudioSession } = useAudioSession();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState('');
+  
+  // Use static image system - checks Supabase storage first, falls back to local asset
+  const headphonesImg = useStaticImage('home.headphones');
 
   const audioLinks = {
     es: '/audio-players/es.html',
@@ -91,11 +95,19 @@ const AudioPresentationSection: React.FC = () => {
             <div className="lg:col-span-4 flex items-center justify-center">
               <div className="w-full max-w-sm sm:max-w-md lg:max-w-sm flex items-center justify-center">
                 <img 
-                  src={headphonesImage}
+                  src={headphonesImg.src}
                   alt="Listen to me in multiple languages - Headphones" 
                   className="rounded-xl shadow-2xl w-auto h-[352px] sm:h-[440px] md:h-[528px] object-cover"
                   loading="lazy"
                   style={{ minHeight: '352px' }}
+                  onError={(e) => {
+                    // Fallback to static asset if storage image fails
+                    if (headphonesImg.fallback) {
+                      e.currentTarget.src = headphonesImg.fallback;
+                    } else {
+                      e.currentTarget.src = headphonesFallback;
+                    }
+                  }}
                 />
               </div>
             </div>
