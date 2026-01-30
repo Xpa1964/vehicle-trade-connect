@@ -299,8 +299,9 @@ const ImageGenerationModal: React.FC<ImageGenerationModalProps> = ({
 
           {/* Global Style Preview */}
           <div className="p-3 bg-muted/50 rounded-lg border border-border">
-            <p className="text-xs font-medium text-muted-foreground mb-1">Global Style (prepended automatically):</p>
-            <p className="text-xs text-foreground/70 line-clamp-2">{globalStylePrompt}</p>
+            <p className="text-xs font-medium text-muted-foreground">
+              Estilo global aplicado automáticamente (fijo)
+            </p>
           </div>
 
           {/* Custom Prompt */}
