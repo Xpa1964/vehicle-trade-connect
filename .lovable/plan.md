@@ -1,187 +1,149 @@
 
-# Image Control Center - Rediseño a Grid de Tarjetas
+# Plan: Corrección del Sistema de Reemplazo de Imágenes
 
-## Resumen
+## Resumen Ejecutivo
 
-Rediseñar el Image Control Center para mostrar **todas las imágenes en un grid de tarjetas** (similar al diseño de referencia), donde cada imagen tiene sus propios controles de generación, eliminación y carga manual.
+He identificado **DOS problemas críticos** que explican por qué las imágenes generadas en el Image Control Center no aparecen en la web:
+
+1. **El componente `AudioPresentationSection.tsx` NO usa el sistema de registro de imágenes**: Importa directamente el archivo estático `@/assets/headphones-listen.png` en lugar de usar el hook `useStaticImage('home.headphones')`. Esto hace que ignore completamente las imágenes guardadas en el storage.
+
+2. **El Prompt Global se guarda en dos claves diferentes de localStorage**: El Image Control Center usa `imageControlCenter_globalStyle` mientras que el hook `useStaticImageRegistry` usa `staticImageRegistry_globalStyle`. Esto causa que el prompt se "pierda" dependiendo de qué pantalla se use.
+
+Adicionalmente, el **Service Worker (PWA)** está cacheando imágenes estáticas agresivamente, lo cual dificulta ver los cambios en tablets sin hacer un "hard refresh".
 
 ---
 
-## Diseño Visual (Basado en Screenshots de Referencia)
+## Verificación del Estado Actual
 
-```text
-┌────────────────────────────────────────────────────────────────────────────┐
-│  🎨 IMAGE CONTROL CENTER                                                   │
-│  Gestiona y regenera imágenes estáticas del producto                       │
-├────────────────────────────────────────────────────────────────────────────┤
-│                                                                            │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │  ◉ Probar Nuevo Estilo (Sin guardar)                                │   │
-│  │  Prueba diferentes prompts para ver el resultado antes de aplicar   │   │
-│  │                                                                      │   │
-│  │  Prompt Global:                                                      │   │
-│  │  ┌───────────────────────────────────────────────────────────────┐  │   │
-│  │  │ Dark, cinematic automotive marketplace style, premium...       │  │   │
-│  │  └───────────────────────────────────────────────────────────────┘  │   │
-│  │                                                                      │   │
-│  │  Categoría de Prueba:  [▼ Home Page        ]                        │   │
-│  │                                                                      │   │
-│  │  [            ◉ Probar Estilo             ]                         │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                            │
-│  ─────────────────────────────────────────────────────────────────────     │
-│                                                                            │
-│  Estado de las Imágenes:  45 de 52 imágenes tienen archivo                 │
-│                                                                            │
-│  [ 🎨 Generar Todas las Faltantes ] [ 🗑️ Eliminar Todas las Imágenes ]    │
-│                                                                            │
-├────────────────────────────────────────────────────────────────────────────┤
-│  GRID DE IMÁGENES (2-4 columnas responsive)                               │
-│                                                                            │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐         │
-│  │  home.hero       │  │  services.show   │  │  dashboard.veh   │         │
-│  │  ✓ Con imagen    │  │  ✓ Con imagen    │  │  ⚠ Sin imagen    │         │
-│  │ ┌──────────────┐ │  │ ┌──────────────┐ │  │ ┌──────────────┐ │         │
-│  │ │              │ │  │ │              │ │  │ │  placeholder │ │         │
-│  │ │   [imagen]   │ │  │ │   [imagen]   │ │  │ │              │ │         │
-│  │ │              │ │  │ │              │ │  │ │              │ │         │
-│  │ └──────────────┘ │  │ └──────────────┘ │  │ └──────────────┘ │         │
-│  │                  │  │                  │  │                  │         │
-│  │ Zoom: ──●── 100% │  │ Zoom: ──●── 100% │  │ Zoom: ──●── 100% │         │
-│  │ [Guardar zoom  ] │  │ [Guardar zoom  ] │  │ [Guardar zoom  ] │         │
-│  │                  │  │                  │  │                  │         │
-│  │ [🗑️ Eliminar   ] │  │ [🗑️ Eliminar   ] │  │ [🗑️ Eliminar   ] │         │
-│  │ [📤 Subir      ] │  │ [📤 Subir      ] │  │ [📤 Subir      ] │         │
-│  │ [✨ Generar IA ] │  │ [✨ Generar IA ] │  │ [✨ Generar IA ] │         │
-│  └──────────────────┘  └──────────────────┘  └──────────────────┘         │
-│                                                                            │
-└────────────────────────────────────────────────────────────────────────────┘
+La imagen `home.headphones` **SÍ está correctamente guardada** en Supabase Storage:
+- Ruta: `home/headphones/1769764209885.png`
+- Guardada hace ~35 minutos
+- Tamaño: 1.13 MB
+
+El problema es que el código del componente nunca busca esta imagen - siempre usa el archivo del bundle.
+
+---
+
+## Cambios Necesarios
+
+### Paso 1: Migrar AudioPresentationSection al Sistema de Registro
+
+Modificar `src/components/home/AudioPresentationSection.tsx`:
+
+**Antes:**
+```typescript
+import headphonesImage from '@/assets/headphones-listen.png';
+// ...
+<img src={headphonesImage} alt="..." />
 ```
 
----
-
-## Componentes del Nuevo Diseño
-
-### 1. Sección Superior: Probar Nuevo Estilo
-
-- **Prompt Global** - Textarea con el estilo común para todas las generaciones
-- **Categoría de Prueba** - Dropdown para seleccionar qué categoría probar
-- **Botón "Probar Estilo"** - Genera una imagen de ejemplo de esa categoría
-
-### 2. Estado y Acciones Masivas
-
-- **Contador** - "X de Y imágenes tienen archivo"
-- **Generar Todas las Faltantes** - Genera con IA todas las que no tienen imagen
-- **Eliminar Todas** - Elimina todas las imágenes (con confirmación)
-
-### 3. Grid de Tarjetas de Imagen
-
-Cada tarjeta incluye:
-
-| Elemento | Descripción |
-|----------|-------------|
-| **ID** | Nombre técnico (ej: `home.hero`) |
-| **Categoría** | Badge con la categoría |
-| **Badge estado** | "✓ Con imagen" (verde) o "⚠ Sin imagen" (naranja) |
-| **Preview** | La imagen actual o placeholder |
-| **Slider de Zoom** | Control 0-200% para ajustar visualización |
-| **Botón Guardar zoom** | Persiste el nivel de zoom |
-| **Botón Eliminar** | Elimina la imagen actual (rojo) |
-| **Botón Subir** | Permite subir imagen manualmente (input file) |
-| **Botón Generar IA** | Abre modal para escribir prompt específico y generar |
-
----
-
-## Modal de Generación Individual
-
-Cuando el usuario hace clic en "Generar IA" en una tarjeta:
-
-```text
-┌─────────────────────────────────────────────────────────────┐
-│  ✨ Generar imagen: home.hero                               │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  ┌────────────────────┐     ┌────────────────────┐         │
-│  │   IMAGEN ACTUAL    │     │  IMAGEN GENERADA   │         │
-│  │                    │     │                    │         │
-│  └────────────────────┘     └────────────────────┘         │
-│                                                             │
-│  Prompt específico para esta imagen:                        │
-│  ┌───────────────────────────────────────────────────────┐ │
-│  │ Luxury sports car in dramatic spotlight...             │ │
-│  └───────────────────────────────────────────────────────┘ │
-│                                                             │
-│  ℹ️ El prompt global se añade automáticamente              │
-│                                                             │
-│  [ Cancelar ]  [ Regenerar ]  [ ✓ Aceptar y Reemplazar ]   │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
+**Después:**
+```typescript
+import { useStaticImage } from '@/hooks/useStaticImage';
+// ...
+const headphonesImg = useStaticImage('home.headphones');
+// ...
+<img 
+  src={headphonesImg.src} 
+  alt="..." 
+  onError={(e) => {
+    if (headphonesImg.fallback) {
+      e.currentTarget.src = headphonesImg.fallback;
+    }
+  }}
+/>
 ```
 
----
+Esto permitirá que el componente:
+- Primero busque la imagen en el storage de Supabase
+- Use fallback al asset estático si no hay imagen en storage
+- Se actualice automáticamente cuando se reemplace la imagen
 
-## Flujo de Trabajo
+### Paso 2: Unificar la Clave del Prompt Global
 
-1. **Ver todas las imágenes** → Grid muestra estado actual de cada una
-2. **Identificar faltantes** → Badge naranja "Sin imagen"
-3. **Generar individual** → Clic en "Generar IA" → Modal con prompt → Generar → Aceptar/Rechazar
-4. **Subir manual** → Clic en "Subir" → Selector de archivos → Upload
-5. **Eliminar** → Clic en "Eliminar" → Confirmación → Elimina de storage
-6. **Acciones masivas** → Generar todas las faltantes o eliminar todas
+Modificar `src/hooks/useStaticImageRegistry.ts`:
+
+Cambiar la clave de localStorage de `staticImageRegistry_globalStyle` a `imageControlCenter_globalStyle` para que ambos sistemas usen la misma fuente de verdad.
+
+### Paso 3: Excluir Imágenes de Supabase del Cache del Service Worker
+
+Modificar `public/sw.js`:
+
+Agregar lógica para que las URLs del bucket `static-images` de Supabase siempre usen "Network First" en lugar de "Cache First". Esto asegura que los cambios se vean inmediatamente.
+
+```text
+Antes (línea 87):
+  if (url.pathname.match(/\.(js|css|png|jpg|jpeg|...)$/)) {
+    event.respondWith(cacheFirst(request));
+
+Después:
+  // Excluir imágenes de Supabase storage del cache agresivo
+  if (url.pathname.match(/\.(png|jpg|...)$/) && !url.origin.includes('supabase.co')) {
+    event.respondWith(cacheFirst(request));
+```
+
+### Paso 4: Forzar Invalidación de Cache tras Reemplazo
+
+Modificar `src/components/admin/ImageGenerationModal.tsx`:
+
+Después de un reemplazo exitoso, disparar el evento `static-image-updated` para que todos los componentes que usen ese `imageId` se refresquen sin necesidad de recargar la página.
+
+```typescript
+// Después de reemplazo exitoso:
+window.dispatchEvent(new CustomEvent('static-image-updated', {
+  detail: { imageId: image.id }
+}));
+```
 
 ---
 
 ## Archivos a Modificar
 
-| Archivo | Cambios |
-|---------|---------|
-| `src/pages/admin/ImageControlCenter.tsx` | Rediseño completo: Grid de tarjetas + sección superior + modal de generación |
-| `src/components/admin/ImageGenerationModal.tsx` | Ya existe, se reutiliza para el modal individual |
+| Archivo | Cambio |
+|---------|--------|
+| `src/components/home/AudioPresentationSection.tsx` | Usar `useStaticImage('home.headphones')` en vez de import estático |
+| `src/hooks/useStaticImageRegistry.ts` | Cambiar clave localStorage a `imageControlCenter_globalStyle` |
+| `public/sw.js` | Excluir Supabase storage del cache agresivo |
+| `src/components/admin/ImageGenerationModal.tsx` | Disparar evento de invalidación tras reemplazo |
 
 ---
 
-## Persistencia de Datos
+## Resultado Esperado
 
-| Dato | Almacenamiento |
-|------|----------------|
-| Prompt global | localStorage (`imageControlCenter_globalStyle`) |
-| Prompts individuales | localStorage (`imageControlCenter_imagePrompts`) |
-| Niveles de zoom | localStorage (`imageControlCenter_zoomLevels`) |
-| Imágenes | Supabase Storage (`static-images` bucket) |
+Una vez implementados estos cambios:
+
+1. **Imágenes reemplazadas aparecerán inmediatamente** en la web sin necesidad de hacer hard refresh
+2. **El Prompt Global se mantendrá fijo** entre sesiones y diferentes pantallas
+3. **Las tablets y móviles** verán los cambios sin problemas de cache
+4. **El sistema será consistente**: todas las imágenes AI-editables usarán el mismo mecanismo de storage
 
 ---
 
 ## Sección Técnica
 
-### Detección de "Con imagen" vs "Sin imagen"
+### Flujo de Resolución de Imágenes (después del fix)
 
-Se validará si la imagen carga correctamente:
-
-```typescript
-const [imageStatus, setImageStatus] = useState<Record<string, boolean>>({});
-
-// Al cargar cada imagen
-<img 
-  onLoad={() => setImageStatus(prev => ({...prev, [img.id]: true}))}
-  onError={() => setImageStatus(prev => ({...prev, [img.id]: false}))}
-/>
+```text
+useStaticImage('home.headphones')
+    │
+    ▼
+┌─────────────────────────────────────┐
+│ 1. Buscar en Supabase Storage       │
+│    GET /static-images/home/headphones│
+│    - Ordenar por created_at DESC    │
+│    - Tomar el más reciente          │
+└─────────────────────────────────────┘
+    │
+    ├─── Si existe ──► Usar URL del storage con cache-buster
+    │
+    └─── Si no existe ──► Usar currentPath del registro
+                          (src/assets/headphones-listen.png)
 ```
 
-### Upload Manual de Imagen
+### Claves de localStorage Unificadas
 
-```typescript
-const handleManualUpload = async (file: File, imageId: string) => {
-  const { data, error } = await supabase.storage
-    .from('static-images')
-    .upload(`manual/${imageId}/${file.name}`, file, { upsert: true });
-  // Actualizar registry path...
-};
-```
-
-### Slider de Zoom (CSS Transform)
-
-```typescript
-<div style={{ transform: `scale(${zoomLevel / 100})` }}>
-  <img src={imagePath} />
-</div>
-```
+| Propósito | Clave Final |
+|-----------|-------------|
+| Prompt Global | `imageControlCenter_globalStyle` |
+| Zoom por imagen | `imageControlCenter_zoomLevels` |
+| Prompts individuales | `imageControlCenter_imagePrompts` |
