@@ -36,24 +36,27 @@ import {
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { STATIC_IMAGE_REGISTRY, StaticImageEntry, ImageCategory } from '@/config/staticImageRegistry';
+import { invalidateStaticImageCache } from '@/hooks/useStaticImage';
 import ImageCard from '@/components/admin/ImageCard';
 import ImageGenerationModal from '@/components/admin/ImageGenerationModal';
 
 const GLOBAL_STYLE_KEY = 'imageControlCenter_globalStyle';
 const ZOOM_LEVELS_KEY = 'imageControlCenter_zoomLevels';
 
-// Helper function to get global style from localStorage
-const getStoredGlobalStyle = (): string => {
+const DEFAULT_GLOBAL_STYLE =
+  'Dark, cinematic automotive marketplace style, premium lighting, high contrast, modern UI-friendly compositions, professional product photography aesthetic.';
+
+const readStoredGlobalStyle = (): string | null => {
   try {
     const stored = localStorage.getItem(GLOBAL_STYLE_KEY);
-    if (stored && stored.trim() !== '') {
-      return stored;
-    }
+    return stored && stored.trim() !== '' ? stored : null;
   } catch (e) {
     console.error('Error loading global style from localStorage:', e);
+    return null;
   }
-  return '';
 };
+
+const getInitialGlobalStyle = (): string => readStoredGlobalStyle() ?? DEFAULT_GLOBAL_STYLE;
 
 const CATEGORY_LABELS: Record<ImageCategory, string> = {
   home: 'Home Page',
@@ -67,10 +70,20 @@ const CATEGORY_LABELS: Record<ImageCategory, string> = {
 };
 
 const ImageControlCenter: React.FC = () => {
-  // Global style prompt - ALWAYS load from localStorage on init, NO default
-  const [globalStyle, setGlobalStyle] = useState<string>(() => getStoredGlobalStyle());
+  // Global style prompt: persistent + locked by default (only editable when explicitly unlocked)
+  const [globalStyle, setGlobalStyle] = useState<string>(() => getInitialGlobalStyle());
   const [globalStyleDirty, setGlobalStyleDirty] = useState(false);
-  const [isGlobalStyleLoaded, setIsGlobalStyleLoaded] = useState(true); // Already loaded in useState init
+  const [isGlobalStyleLocked, setIsGlobalStyleLocked] = useState(true);
+
+  const handleUnlockGlobalStyle = useCallback(() => {
+    setIsGlobalStyleLocked(false);
+  }, []);
+
+  const handleCancelGlobalStyleEdit = useCallback(() => {
+    setGlobalStyle(getInitialGlobalStyle());
+    setGlobalStyleDirty(false);
+    setIsGlobalStyleLocked(true);
+  }, []);
 
   // Zoom levels per image
   const [zoomLevels, setZoomLevels] = useState<Record<string, number>>(() => {
@@ -84,6 +97,15 @@ const ImageControlCenter: React.FC = () => {
 
   // Image status tracking (loaded vs error)
   const [imageStatuses, setImageStatuses] = useState<Record<string, boolean>>({});
+
+  // Forces cards to re-check storage after replace/upload/delete
+  const [imageRefreshToken, setImageRefreshToken] = useState<Record<string, number>>({});
+  const bumpImageRefresh = useCallback((imageId: string) => {
+    setImageRefreshToken(prev => ({
+      ...prev,
+      [imageId]: (prev[imageId] || 0) + 1
+    }));
+  }, []);
 
   // Filter state
   const [categoryFilter, setCategoryFilter] = useState<ImageCategory | 'all'>('all');
@@ -155,8 +177,16 @@ const ImageControlCenter: React.FC = () => {
   // Save global style
   const handleSaveGlobalStyle = useCallback(() => {
     try {
-      localStorage.setItem(GLOBAL_STYLE_KEY, globalStyle);
+      const trimmed = globalStyle.trim();
+      if (!trimmed) {
+        toast.error('El estilo global no puede estar vacío');
+        return;
+      }
+
+      localStorage.setItem(GLOBAL_STYLE_KEY, trimmed);
+      setGlobalStyle(trimmed);
       setGlobalStyleDirty(false);
+      setIsGlobalStyleLocked(true);
       toast.success('Estilo global guardado');
     } catch {
       toast.error('Error al guardar el estilo');
@@ -199,6 +229,8 @@ const ImageControlCenter: React.FC = () => {
       }
 
       setImageStatuses(prev => ({ ...prev, [imageId]: false }));
+      invalidateStaticImageCache(imageId);
+      bumpImageRefresh(imageId);
       toast.success('Imagen eliminada del storage');
     } catch (err: any) {
       console.error('Delete error:', err);
@@ -206,7 +238,7 @@ const ImageControlCenter: React.FC = () => {
     } finally {
       setDeletingImageId(null);
     }
-  }, []);
+  }, [bumpImageRefresh]);
 
   // Upload image manually
   const handleUploadImage = useCallback(async (imageId: string, file: File) => {
@@ -215,11 +247,14 @@ const ImageControlCenter: React.FC = () => {
       const image = allImages.find(img => img.id === imageId);
       if (!image) throw new Error('Imagen no encontrada');
 
-      const fileName = `${imageId.replace(/\./g, '-')}-${Date.now()}.${file.name.split('.').pop()}`;
+      const storagePrefix = imageId.replace(/\./g, '/');
+      const ext = file.name.split('.').pop() || 'png';
+      const fileName = `${Date.now()}.${ext}`;
+      const objectPath = `${storagePrefix}/${fileName}`;
 
       const { error } = await supabase.storage
         .from('static-images')
-        .upload(fileName, file, { 
+        .upload(objectPath, file, { 
           cacheControl: '0',
           upsert: true 
         });
@@ -227,6 +262,8 @@ const ImageControlCenter: React.FC = () => {
       if (error) throw error;
 
       setImageStatuses(prev => ({ ...prev, [imageId]: true }));
+      invalidateStaticImageCache(imageId);
+      bumpImageRefresh(imageId);
       toast.success('Imagen subida correctamente');
     } catch (err: any) {
       console.error('Upload error:', err);
@@ -234,12 +271,40 @@ const ImageControlCenter: React.FC = () => {
     } finally {
       setUploadingImageId(null);
     }
-  }, [allImages]);
+  }, [allImages, bumpImageRefresh]);
 
   // Open AI generation modal with current image URL
   const handleOpenGenerateModal = useCallback(async (image: StaticImageEntry, currentUrl?: string) => {
     setSelectedImageForGeneration(image);
-    setSelectedImageCurrentUrl(currentUrl || null);
+
+    // If the card didn't have a URL yet, fetch the latest from storage here
+    if (currentUrl) {
+      setSelectedImageCurrentUrl(currentUrl);
+    } else {
+      try {
+        const storagePrefix = image.id.replace(/\./g, '/');
+        const { data: files, error } = await supabase.storage
+          .from('static-images')
+          .list(storagePrefix, {
+            limit: 1,
+            sortBy: { column: 'created_at', order: 'desc' }
+          });
+
+        if (!error && files && files.length > 0) {
+          const latestFile = files[0];
+          const storagePath = `${storagePrefix}/${latestFile.name}`;
+          const { data: { publicUrl } } = supabase.storage
+            .from('static-images')
+            .getPublicUrl(storagePath);
+          setSelectedImageCurrentUrl(publicUrl ? `${publicUrl}?t=${Date.now()}` : null);
+        } else {
+          setSelectedImageCurrentUrl(null);
+        }
+      } catch {
+        setSelectedImageCurrentUrl(null);
+      }
+    }
+
     setIsModalOpen(true);
   }, []);
 
@@ -254,9 +319,11 @@ const ImageControlCenter: React.FC = () => {
   const handleImageReplaced = useCallback(() => {
     if (selectedImageForGeneration) {
       setImageStatuses(prev => ({ ...prev, [selectedImageForGeneration.id]: true }));
+      invalidateStaticImageCache(selectedImageForGeneration.id);
+      bumpImageRefresh(selectedImageForGeneration.id);
     }
     handleCloseModal();
-  }, [selectedImageForGeneration, handleCloseModal]);
+  }, [selectedImageForGeneration, handleCloseModal, bumpImageRefresh]);
 
   // Test style on a category
   const handleTestStyle = useCallback(async () => {
@@ -327,24 +394,47 @@ const ImageControlCenter: React.FC = () => {
             <Textarea
               value={globalStyle}
               onChange={(e) => {
+                if (isGlobalStyleLocked) return;
                 setGlobalStyle(e.target.value);
                 setGlobalStyleDirty(true);
               }}
               placeholder="Estilo visual global para todas las imágenes..."
               className="min-h-[80px] font-mono text-sm"
+              disabled={isGlobalStyleLocked}
             />
             <div className="flex justify-between items-center">
               <span className="text-xs text-muted-foreground">
                 {globalStyle.length} caracteres
               </span>
-              <Button
-                onClick={handleSaveGlobalStyle}
-                disabled={!globalStyleDirty}
-                size="sm"
-                variant={globalStyleDirty ? "default" : "outline"}
-              >
-                Guardar Estilo Global
-              </Button>
+              <div className="flex items-center gap-2">
+                {isGlobalStyleLocked ? (
+                  <Button
+                    onClick={handleUnlockGlobalStyle}
+                    size="sm"
+                    variant="outline"
+                  >
+                    Modificar
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      onClick={handleCancelGlobalStyleEdit}
+                      size="sm"
+                      variant="outline"
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      onClick={handleSaveGlobalStyle}
+                      disabled={!globalStyleDirty || !globalStyle.trim()}
+                      size="sm"
+                      variant="default"
+                    >
+                      Guardar
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
@@ -472,6 +562,7 @@ const ImageControlCenter: React.FC = () => {
           <ImageCard
             key={image.id}
             image={image}
+            refreshToken={imageRefreshToken[image.id] || 0}
             zoomLevel={zoomLevels[image.id] || 100}
             onZoomChange={handleZoomChange}
             onSaveZoom={handleSaveZoom}

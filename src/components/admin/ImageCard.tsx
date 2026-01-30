@@ -51,6 +51,8 @@ const CATEGORY_COLORS: Record<ImageCategory, string> = {
 
 interface ImageCardProps {
   image: StaticImageEntry;
+  /** Changes to force a re-check of storage after replace/upload/delete */
+  refreshToken?: number;
   zoomLevel: number;
   onZoomChange: (imageId: string, zoom: number) => void;
   onSaveZoom: (imageId: string) => void;
@@ -64,6 +66,7 @@ interface ImageCardProps {
 
 const ImageCard: React.FC<ImageCardProps> = ({
   image,
+  refreshToken = 0,
   zoomLevel,
   onZoomChange,
   onSaveZoom,
@@ -92,6 +95,9 @@ const ImageCard: React.FC<ImageCardProps> = ({
   // Only runs once on mount or when image.id changes
   useEffect(() => {
     let isMounted = true;
+
+    // New refresh cycle -> new cache buster
+    cacheBustRef.current = Date.now();
     
     const checkStorageForImage = async () => {
       if (!isMounted) return;
@@ -147,7 +153,7 @@ const ImageCard: React.FC<ImageCardProps> = ({
     checkStorageForImage();
     
     return () => { isMounted = false; };
-  }, [image.id, image.currentPath]);
+  }, [image.id, image.currentPath, refreshToken]);
 
   const handleImageLoad = () => {
     setImageLoaded(true);
