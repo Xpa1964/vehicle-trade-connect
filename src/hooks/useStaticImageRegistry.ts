@@ -38,8 +38,8 @@ const DEFAULT_GLOBAL_STYLE: GlobalStyleConfig = {
   updatedBy: 'system'
 };
 
-// Local storage keys
-const GLOBAL_STYLE_KEY = 'staticImageRegistry_globalStyle';
+// Local storage keys - UNIFIED with ImageControlCenter
+const GLOBAL_STYLE_KEY = 'imageControlCenter_globalStyle';
 const IMAGE_VERSIONS_KEY = 'staticImageRegistry_versions';
 
 export const useStaticImageRegistry = () => {
