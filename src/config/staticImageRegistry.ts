@@ -84,9 +84,9 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
   
   HOME_HERO: {
     id: "home.hero",
-    currentPath: "/src/assets/hero-background.png",
+    currentPath: "/images/home-hero.png",
     usage: "HeroSection.tsx",
-    purpose: "Main hero background - luxury vehicles with European marketplace",
+    purpose: "Main hero background - luxury vehicles",
     critical: true,
     aiEditable: true,
     category: "home",
