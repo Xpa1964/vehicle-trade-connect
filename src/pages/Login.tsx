@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LOGO_IMAGES } from '@/constants/imageAssets';
 import { useAuth } from '@/contexts/AuthContext';
@@ -15,6 +15,23 @@ import EmergencyReset from '@/components/auth/EmergencyReset';
 const Login: React.FC = () => {
   const { login, isLoading: authLoading, isAuthenticated } = useAuth();
   const { t } = useLanguage();
+
+  const redirectTarget = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get('redirect');
+    if (!raw) return '/';
+
+    try {
+      const decoded = decodeURIComponent(raw);
+      // Only allow internal paths
+      if (!decoded.startsWith('/')) return '/';
+      // Avoid loops
+      if (decoded.startsWith('/login') || decoded.startsWith('/register')) return '/';
+      return decoded;
+    } catch {
+      return '/';
+    }
+  }, []);
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,10 +41,10 @@ const Login: React.FC = () => {
   // Handle redirect if already authenticated - using window.location for stability
   useEffect(() => {
     if (isAuthenticated && !authLoading) {
-      console.log('[Login] User is authenticated, redirecting to home');
-      window.location.href = '/';
+      console.log('[Login] User is authenticated, redirecting to:', redirectTarget);
+      window.location.href = redirectTarget;
     }
-  }, [isAuthenticated, authLoading]);
+  }, [isAuthenticated, authLoading, redirectTarget]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +62,7 @@ const Login: React.FC = () => {
       const success = await login(email, password);
       if (success) {
         // Use window.location for stable redirect after login
-        window.location.href = '/';
+        window.location.href = redirectTarget;
       }
     } catch (err) {
       console.error('[Login] Error during login:', err);

@@ -13,6 +13,10 @@ const ProtectedRoute = ({ children, requiredPermission, requiredRole }: Protecte
   const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
   const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
+
+  const loginRedirectUrl = `/login?redirect=${encodeURIComponent(
+    `${location.pathname}${location.search}`
+  )}`;
   
   const isAdminRoute = location.pathname.startsWith('/admin');
   
@@ -46,7 +50,7 @@ const ProtectedRoute = ({ children, requiredPermission, requiredRole }: Protecte
   // Using window.location for stable redirect to avoid React context issues
   if (!isAuthenticated) {
     console.log('[ProtectedRoute] Not authenticated, redirecting to login');
-    window.location.href = '/login';
+    window.location.href = loginRedirectUrl;
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
