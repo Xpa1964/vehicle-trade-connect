@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { LOGO_IMAGES } from '@/constants/imageAssets';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -15,22 +15,19 @@ import EmergencyReset from '@/components/auth/EmergencyReset';
 const Login: React.FC = () => {
   const { login, isLoading: authLoading, isAuthenticated } = useAuth();
   const { t } = useLanguage();
-  const navigate = useNavigate();
-  const location = useLocation();
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Handle redirect if already authenticated
+  // Handle redirect if already authenticated - using window.location for stability
   useEffect(() => {
     if (isAuthenticated && !authLoading) {
       console.log('[Login] User is authenticated, redirecting to home');
-      const from = location.state?.from?.pathname || '/';
-      navigate(from, { replace: true });
+      window.location.href = '/';
     }
-  }, [isAuthenticated, authLoading, navigate, location]);
+  }, [isAuthenticated, authLoading]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +44,8 @@ const Login: React.FC = () => {
       console.log(`[Login] Attempting login with email: ${email}`);
       const success = await login(email, password);
       if (success) {
-        navigate('/', { replace: true });
+        // Use window.location for stable redirect after login
+        window.location.href = '/';
       }
     } catch (err) {
       console.error('[Login] Error during login:', err);
@@ -58,7 +56,7 @@ const Login: React.FC = () => {
   };
 
   const handleReturnHome = () => {
-    navigate('/');
+    window.location.href = '/';
   };
   
   // Loading state
