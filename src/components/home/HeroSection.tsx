@@ -3,20 +3,16 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import SimpleImage from '@/components/shared/SimpleImage';
 import { useImagePreload } from '@/hooks/useImagePreload';
 import { useStaticImage } from '@/hooks/useStaticImage';
-import heroBackgroundImg from '@/assets/hero-background.png';
 
 const HeroSection: React.FC = () => {
   const { t, currentLanguage } = useLanguage();
   
-  // Get images from registry (storage override) or fallback to imported asset
+  // Get images from registry (with storage override)
   const heroBackground = useStaticImage('home.hero');
   const heroLogo = useStaticImage('home.logo.hero');
-  
-  // Use storage URL if available, otherwise use the imported asset
-  const heroBackgroundSrc = heroBackground.isFromStorage ? heroBackground.src : heroBackgroundImg;
-  
+
   // Preload critical LCP image
-  useImagePreload([heroBackgroundSrc]);
+  useImagePreload([heroBackground.src]);
   
   // Check if current language is Spanish or French
   const isSpanishOrFrench = currentLanguage === 'es' || currentLanguage === 'fr';
@@ -26,10 +22,10 @@ const HeroSection: React.FC = () => {
       className="relative w-full h-screen overflow-hidden print:hidden"
       aria-label="Hero section"
     >
-      {/* Hero Image Layer - Using imported asset with storage override */}
+      {/* Hero Image Layer - Using Registry */}
       <div className="absolute inset-0 w-full h-full" aria-hidden="true">
         <SimpleImage
-          src={heroBackgroundSrc}
+          src={heroBackground.src}
           alt="Fondo de vehículos de lujo profesionales"
           className="w-full h-full object-cover object-center"
           loading="eager"
