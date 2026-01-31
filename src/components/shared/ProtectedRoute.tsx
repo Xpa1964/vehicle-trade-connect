@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface ProtectedRouteProps {
@@ -32,7 +32,7 @@ const ProtectedRoute = ({ children, requiredPermission, requiredRole }: Protecte
   if (isLoading || !hasCheckedAuth) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -43,18 +43,42 @@ const ProtectedRoute = ({ children, requiredPermission, requiredRole }: Protecte
   }
 
   // Redirect to login if not authenticated and trying to access protected route
+  // Using window.location for stable redirect to avoid React context issues
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    console.log('[ProtectedRoute] Not authenticated, redirecting to login');
+    window.location.href = '/login';
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
-  // Check admin routes
-  if (isAdminRoute && user?.role !== 'admin') {
-    return <Navigate to="/dashboard" replace />;
+  // Check admin routes - allow admin, content_manager, and analyst roles
+  if (isAdminRoute) {
+    const userRole = user?.role;
+    const allowedRoles = ['admin', 'content_manager', 'analyst'];
+    
+    if (!userRole || !allowedRoles.includes(userRole)) {
+      console.log('[ProtectedRoute] User role not allowed for admin route:', userRole);
+      window.location.href = '/dashboard';
+      return (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      );
+    }
   }
 
   // Check specific role requirements
   if (requiredRole && user?.role !== requiredRole) {
-    return <Navigate to="/dashboard" replace />;
+    console.log('[ProtectedRoute] Required role not met:', requiredRole, 'vs', user?.role);
+    window.location.href = '/dashboard';
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   // Render protected content
