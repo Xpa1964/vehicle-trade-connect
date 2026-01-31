@@ -39,6 +39,7 @@ import { STATIC_IMAGE_REGISTRY, StaticImageEntry, ImageCategory } from '@/config
 import { invalidateStaticImageCache } from '@/hooks/useStaticImage';
 import ImageCard from '@/components/admin/ImageCard';
 import ImageGenerationModal from '@/components/admin/ImageGenerationModal';
+import ImagePickerModal from '@/components/admin/ImagePickerModal';
 
 const GLOBAL_STYLE_KEY = 'imageControlCenter_globalStyle';
 const ZOOM_LEVELS_KEY = 'imageControlCenter_zoomLevels';
@@ -111,10 +112,14 @@ const ImageControlCenter: React.FC = () => {
   const [categoryFilter, setCategoryFilter] = useState<ImageCategory | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'with-image' | 'missing'>('all');
 
-  // Modal state
+  // Modal state - Generation
   const [selectedImageForGeneration, setSelectedImageForGeneration] = useState<StaticImageEntry | null>(null);
   const [selectedImageCurrentUrl, setSelectedImageCurrentUrl] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Modal state - Copy/Picker
+  const [selectedImageForCopy, setSelectedImageForCopy] = useState<StaticImageEntry | null>(null);
+  const [isPickerModalOpen, setIsPickerModalOpen] = useState(false);
 
   // Loading states
   const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
@@ -324,6 +329,28 @@ const ImageControlCenter: React.FC = () => {
     }
     handleCloseModal();
   }, [selectedImageForGeneration, handleCloseModal, bumpImageRefresh]);
+
+  // Open image picker modal to copy from existing images
+  const handleOpenCopyFromModal = useCallback((image: StaticImageEntry) => {
+    setSelectedImageForCopy(image);
+    setIsPickerModalOpen(true);
+  }, []);
+
+  // Close picker modal
+  const handleClosePickerModal = useCallback(() => {
+    setIsPickerModalOpen(false);
+    setSelectedImageForCopy(null);
+  }, []);
+
+  // Image copied callback
+  const handleImageCopied = useCallback(() => {
+    if (selectedImageForCopy) {
+      setImageStatuses(prev => ({ ...prev, [selectedImageForCopy.id]: true }));
+      invalidateStaticImageCache(selectedImageForCopy.id);
+      bumpImageRefresh(selectedImageForCopy.id);
+    }
+    handleClosePickerModal();
+  }, [selectedImageForCopy, handleClosePickerModal, bumpImageRefresh]);
 
   // Test style on a category
   const handleTestStyle = useCallback(async () => {
@@ -569,6 +596,7 @@ const ImageControlCenter: React.FC = () => {
             onDelete={handleDeleteImage}
             onUpload={handleUploadImage}
             onGenerateAI={handleOpenGenerateModal}
+            onCopyFrom={handleOpenCopyFromModal}
             isDeleting={deletingImageId === image.id}
             isUploading={uploadingImageId === image.id}
             onStatusChange={(imageId, hasImage) => {
@@ -594,6 +622,16 @@ const ImageControlCenter: React.FC = () => {
         onImageReplaced={handleImageReplaced}
         currentImageUrl={selectedImageCurrentUrl}
       />
+
+      {/* Image Picker Modal */}
+      {selectedImageForCopy && (
+        <ImagePickerModal
+          isOpen={isPickerModalOpen}
+          onClose={handleClosePickerModal}
+          targetImage={selectedImageForCopy}
+          onImageCopied={handleImageCopied}
+        />
+      )}
     </div>
   );
 };
