@@ -15,6 +15,7 @@ export const useAuthSession = () => {
   const authSubscription = useRef<{ unsubscribe: () => void } | null>(null);
   const authInitializing = useRef<boolean>(false);
   const userInitialized = useRef<boolean>(false);
+  const enhancingUser = useRef<boolean>(false);
   const enhancementTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const syncMonitor = useRef<(() => void) | null>(null);
   
@@ -76,6 +77,7 @@ export const useAuthSession = () => {
             if (session?.user && !userInitialized.current) {
               console.log("[useAuthSession] Processing auth state change with session");
               userInitialized.current = true;
+              enhancingUser.current = true;
               
               // Use setTimeout to defer enhancement to prevent any deadlocks
               if (enhancementTimeout.current) {
@@ -121,6 +123,7 @@ export const useAuthSession = () => {
                     console.log('🎯 [DEBUG NOTIFICATIONS] Enhanced user ready for notifications:', enhancedUser.id);
                     setUser(enhancedUser);
                     setIsLoading(false);
+                    enhancingUser.current = false;
                   } else if (isMounted.current) {
                     // CRITICAL: If enhanceUser fails, create a GUARANTEED working fallback
                     console.warn("[useAuthSession] 🚨 enhanceUser returned null, creating fallback");
@@ -133,6 +136,7 @@ export const useAuthSession = () => {
                     console.log('🎯 [DEBUG NOTIFICATIONS] Fallback user created for notifications:', fallbackUser.id);
                     setUser(fallbackUser);
                     setIsLoading(false);
+                    enhancingUser.current = false;
                   }
                 } catch (error) {
                   console.error("[useAuthSession] 🚨 Critical error enhancing user:", error);
@@ -147,6 +151,7 @@ export const useAuthSession = () => {
                     console.log('🎯 [DEBUG NOTIFICATIONS] Emergency user created for notifications:', emergencyUser.id);
                     setUser(emergencyUser);
                     setIsLoading(false);
+                    enhancingUser.current = false;
                     
                     toast.error("Error loading user data", {
                       description: "Using basic profile. Notifications should still work."
@@ -177,6 +182,7 @@ export const useAuthSession = () => {
         
         if (session?.user && isMounted.current && !userInitialized.current) {
           userInitialized.current = true;
+          enhancingUser.current = true;
           
           try {
             console.log("[useAuthSession] Enhancing initial user");
@@ -202,6 +208,7 @@ export const useAuthSession = () => {
                 } as UserWithMeta;
                 setUser(fallbackUser);
                 if (isMounted.current) setIsLoading(false);
+                enhancingUser.current = false;
                 return;
               }
             }
@@ -242,13 +249,17 @@ export const useAuthSession = () => {
                 description: "Using basic profile. Notifications should still work."
               });
             }
+          } finally {
+            // Don't let routes decide auth before enhancement completes
+            enhancingUser.current = false;
           }
         } else if (isMounted.current && !userInitialized.current) {
           console.log("[useAuthSession] No initial user session found");
           setUser(null);
         }
-        
-        if (isMounted.current) setIsLoading(false);
+
+        // IMPORTANT: avoid flipping isLoading=false while user enhancement is still pending.
+        if (isMounted.current && !enhancingUser.current) setIsLoading(false);
         authInitializing.current = false;
       } catch (error) {
         console.error("[useAuthSession] Error initializing auth:", error);
@@ -256,6 +267,7 @@ export const useAuthSession = () => {
           setIsLoading(false);
           setUser(null);
           userInitialized.current = false;
+          enhancingUser.current = false;
           
           toast.error("Error al inicializar la autenticación", {
             description: "Intente recargar la página."
