@@ -17,12 +17,12 @@ import {
   Upload, 
   Wand2, 
   Check, 
-  X, 
   ZoomIn,
   Save,
   ImageIcon,
   AlertTriangle,
-  Loader2
+  Loader2,
+  Copy
 } from 'lucide-react';
 import { StaticImageEntry, ImageCategory } from '@/config/staticImageRegistry';
 import { supabase } from '@/integrations/supabase/client';
@@ -59,6 +59,7 @@ interface ImageCardProps {
   onDelete: (imageId: string) => void;
   onUpload: (imageId: string, file: File) => void;
   onGenerateAI: (image: StaticImageEntry, currentUrl?: string) => void;
+  onCopyFrom: (image: StaticImageEntry) => void;
   isDeleting?: boolean;
   isUploading?: boolean;
   onStatusChange?: (imageId: string, hasImage: boolean) => void;
@@ -73,6 +74,7 @@ const ImageCard: React.FC<ImageCardProps> = ({
   onDelete,
   onUpload,
   onGenerateAI,
+  onCopyFrom,
   isDeleting = false,
   isUploading = false,
   onStatusChange
@@ -290,8 +292,8 @@ const ImageCard: React.FC<ImageCardProps> = ({
           </Button>
         </div>
 
-        {/* Action Buttons */}
-        <div className="grid grid-cols-3 gap-2">
+        {/* Action Buttons - Row 1 */}
+        <div className="grid grid-cols-2 gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -312,6 +314,19 @@ const ImageCard: React.FC<ImageCardProps> = ({
           >
             <Upload className="h-3 w-3 mr-1" />
             Subir
+          </Button>
+        </div>
+
+        {/* Action Buttons - Row 2 */}
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 text-xs px-2"
+            onClick={() => onCopyFrom(image)}
+          >
+            <Copy className="h-3 w-3 mr-1" />
+            Copiar de...
           </Button>
           
           <Button
