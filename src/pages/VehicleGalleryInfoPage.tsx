@@ -3,11 +3,14 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import BackButton from '@/components/shared/BackButton';
 import { ArrowRight, Search, FileText, PlusCircle } from 'lucide-react';
+import { useStaticImage } from '@/hooks/useStaticImage';
 import galleryViewImg from '/images/gallery-view.png';
 import vehicleDetailImg from '/images/vehicle-detail.png';
 import vehicleFormImg from '/images/vehicle-form.png';
 
 const VehicleGalleryInfoPage = () => {
+  // Use registry-based image that updates from Storage
+  const { src: showroomHeroSrc } = useStaticImage('services.showroom');
   const navigate = useNavigate();
   const { t } = useLanguage();
   
@@ -17,7 +20,7 @@ const VehicleGalleryInfoPage = () => {
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-6 mt-4">
         <div className="absolute inset-0">
           <img 
-            src="/images/showroom-gallery.png"
+            src={showroomHeroSrc}
             alt="Vehicle Gallery Background"
             className="w-full h-full object-cover"
             style={{ objectPosition: 'center' }}
@@ -60,22 +63,26 @@ const VehicleGalleryInfoPage = () => {
             </p>
           </div>
           <div className="order-1 md:order-2">
-            <img 
-              src={galleryViewImg} 
-              alt="Vehicle Gallery View" 
-              className="rounded-lg overflow-hidden shadow-xl border border-border w-full object-cover aspect-video"
-            />
+            <div className="bg-white/95 dark:bg-white/90 rounded-lg overflow-hidden shadow-xl border border-border">
+              <img 
+                src={galleryViewImg} 
+                alt="Vehicle Gallery View" 
+                className="w-full object-cover aspect-video"
+              />
+            </div>
           </div>
         </div>
 
         {/* Section 2: Detail View */}
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="order-1">
-            <img 
-              src={vehicleDetailImg} 
-              alt="Vehicle Detail View" 
-              className="rounded-lg overflow-hidden shadow-xl border border-border w-full object-cover aspect-video"
-            />
+            <div className="bg-white/95 dark:bg-white/90 rounded-lg overflow-hidden shadow-xl border border-border">
+              <img 
+                src={vehicleDetailImg} 
+                alt="Vehicle Detail View" 
+                className="w-full object-cover aspect-video"
+              />
+            </div>
           </div>
           <div className="order-2">
             <div className="flex items-center gap-3 mb-4">
@@ -108,11 +115,13 @@ const VehicleGalleryInfoPage = () => {
             </p>
           </div>
           <div className="order-1 md:order-2">
-            <img 
-              src={vehicleFormImg} 
-              alt="Vehicle Publishing Form" 
-              className="rounded-lg overflow-hidden shadow-xl border border-border w-full object-cover aspect-video"
-            />
+            <div className="bg-white/95 dark:bg-white/90 rounded-lg overflow-hidden shadow-xl border border-border">
+              <img 
+                src={vehicleFormImg} 
+                alt="Vehicle Publishing Form" 
+                className="w-full object-cover aspect-video"
+              />
+            </div>
           </div>
         </div>
 

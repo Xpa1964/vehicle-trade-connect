@@ -54,8 +54,9 @@ const CATEGORY_COLORS: Record<ImageCategory, string> = {
 interface StorageImage {
   id: string;
   entry: StaticImageEntry;
-  url: string;
-  storagePath: string;
+  url: string | null;
+  storagePath: string | null;
+  hasStorageImage: boolean;
 }
 
 interface ImagePickerModalProps {
@@ -77,11 +78,11 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
   const [selectedImage, setSelectedImage] = useState<StorageImage | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Load all images from storage
+  // Load all images from registry (and check storage for existing)
   useEffect(() => {
     if (!isOpen) return;
     
-    const loadStorageImages = async () => {
+    const loadAllRegistryImages = async () => {
       setIsLoading(true);
       setSelectedImage(null);
       
@@ -102,7 +103,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
               sortBy: { column: 'created_at', order: 'desc' }
             });
 
-          if (!error && files && files.length > 0) {
+          if (!error && files && files.length > 0 && files[0].metadata) {
             const latestFile = files[0];
             const storagePath = `${storagePrefix}/${latestFile.name}`;
             
@@ -114,21 +115,40 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
               id: entry.id,
               entry,
               url: `${publicUrl}?t=${Date.now()}`,
-              storagePath
+              storagePath,
+              hasStorageImage: true
+            });
+          } else {
+            // Add registry entry with fallback image
+            images.push({
+              id: entry.id,
+              entry,
+              url: entry.currentPath.startsWith('src/') 
+                ? `/${entry.currentPath}` 
+                : entry.currentPath,
+              storagePath: null,
+              hasStorageImage: false
             });
           }
         }
 
+        // Sort: entries WITH storage images first, then by ID
+        images.sort((a, b) => {
+          if (a.hasStorageImage && !b.hasStorageImage) return -1;
+          if (!a.hasStorageImage && b.hasStorageImage) return 1;
+          return a.id.localeCompare(b.id);
+        });
+
         setAvailableImages(images);
       } catch (err) {
-        console.error('Error loading storage images:', err);
+        console.error('Error loading registry images:', err);
         toast.error('Error al cargar imágenes disponibles');
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadStorageImages();
+    loadAllRegistryImages();
   }, [isOpen, targetImage.id]);
 
   // Filter images by search query
@@ -254,23 +274,40 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
                       ? 'border-primary ring-2 ring-primary/30' 
                       : 'border-border hover:border-primary/50'
                     }
+                    ${!img.hasStorageImage ? 'opacity-60' : ''}
                   `}
-                  onClick={() => setSelectedImage(img)}
+                  onClick={() => img.hasStorageImage && setSelectedImage(img)}
+                  title={!img.hasStorageImage ? 'Sin imagen en Storage - genera una primero' : img.entry.purpose}
                 >
                   {/* Image */}
                   <div className="aspect-video bg-muted">
-                    <img
-                      src={img.url}
-                      alt={img.entry.purpose}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
+                    {img.url ? (
+                      <img
+                        src={img.url}
+                        alt={img.entry.purpose}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon className="h-8 w-8 text-muted-foreground/50" />
+                      </div>
+                    )}
                   </div>
 
                   {/* Selection indicator */}
                   {selectedImage?.id === img.id && (
                     <div className="absolute top-2 right-2 bg-primary text-primary-foreground rounded-full p-1">
                       <Check className="h-4 w-4" />
+                    </div>
+                  )}
+
+                  {/* No storage badge */}
+                  {!img.hasStorageImage && (
+                    <div className="absolute top-2 left-2">
+                      <Badge variant="secondary" className="text-[9px] bg-muted/90">
+                        Sin generar
+                      </Badge>
                     </div>
                   )}
 
@@ -295,7 +332,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
         {/* Footer actions */}
         <div className="flex items-center justify-between pt-4 border-t">
           <div className="text-sm text-muted-foreground">
-            {availableImages.length} imágenes disponibles
+            {availableImages.filter(i => i.hasStorageImage).length} con imagen / {availableImages.length} total
             {selectedImage && (
               <span className="text-primary ml-2">
                 • Seleccionada: {selectedImage.id}
