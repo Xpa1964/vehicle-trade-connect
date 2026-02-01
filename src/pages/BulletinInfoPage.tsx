@@ -5,8 +5,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Briefcase, Search, Car, Wrench, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { useStaticImage } from '@/hooks/useStaticImage';
 
 const BulletinInfoPage: React.FC = () => {
+  // Use registry-based image that updates from Storage
+  const { src: bulletinHeroSrc } = useStaticImage('services.bulletin');
   const { t } = useLanguage();
   const navigate = useNavigate();
   
@@ -15,7 +18,7 @@ const BulletinInfoPage: React.FC = () => {
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
         <div className="absolute inset-0">
           <img 
-            src="/images/bulletin-hero.png"
+            src={bulletinHeroSrc}
             alt="Bulletin Board Background"
             className="w-full h-full object-cover"
             style={{ objectPosition: 'center 35%' }}

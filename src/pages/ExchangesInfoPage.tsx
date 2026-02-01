@@ -6,8 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowRightLeft, Search, Car, HandshakeIcon, Truck, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { useStaticImage } from '@/hooks/useStaticImage';
 
 const ExchangesInfoPage: React.FC = () => {
+  // Use registry-based image that updates from Storage
+  const { src: exchangesHeroSrc } = useStaticImage('services.exchanges');
   const { currentLanguage, t } = useLanguage();
   const navigate = useNavigate();
   
@@ -273,7 +276,7 @@ const ExchangesInfoPage: React.FC = () => {
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
         <div className="absolute inset-0">
           <img 
-            src="/images/exchanges-hero.png"
+            src={exchangesHeroSrc}
             alt="Exchanges Background"
             className="w-full h-full object-cover"
             style={{ objectPosition: 'center 35%' }}
