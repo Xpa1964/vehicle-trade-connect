@@ -42,10 +42,10 @@ const HeroSection: React.FC = () => {
 
       {/* Content Layer - Responsive spacing */}
       <div className="relative w-full h-full flex items-center justify-center z-10 pt-20 sm:pt-24 md:pt-28 lg:pt-32">
-        <div className="w-full max-w-8xl mx-auto h-full flex items-center justify-center lg:justify-center xl:justify-end px-4 sm:px-6 md:px-8 lg:pl-12 lg:pr-6 xl:pl-16 xl:pr-10 2xl:pr-16">
+        <div className="w-full max-w-8xl mx-auto h-full flex items-center justify-center px-4 sm:px-6 md:px-8">
           
           {/* Responsive content container */}
-          <div className="w-full lg:w-auto flex flex-col items-center lg:items-end justify-start lg:justify-center text-center lg:text-right space-y-4 sm:space-y-6">
+          <div className="w-full lg:w-auto flex flex-col items-center justify-start lg:justify-center text-center space-y-4 sm:space-y-6">
             
             {/* Logo and text container - responsive layout */}
             <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 lg:flex-row lg:gap-8 lg:items-center">
@@ -67,7 +67,7 @@ const HeroSection: React.FC = () => {
               </div>
               
               {/* Responsive text container */}
-              <div className="flex flex-col items-center lg:items-end text-center lg:text-right">
+              <div className="flex flex-col items-center text-center">
                 {/* Responsive main title */}
                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white drop-shadow-2xl mb-2 sm:mb-3 leading-tight">
                   KONTACT
@@ -75,7 +75,7 @@ const HeroSection: React.FC = () => {
                 
                 {/* Responsive subtitle */}
                 {isSpanishOrFrench ? (
-                  <div className="text-center lg:text-right">
+                  <div className="text-center">
                     <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white/95 uppercase tracking-wider drop-shadow-xl font-semibold">
                       {t('home.subtitle')}
                     </p>
@@ -84,7 +84,7 @@ const HeroSection: React.FC = () => {
                     </p>
                   </div>
                 ) : (
-                  <div className="text-center lg:text-right">
+                  <div className="text-center">
                     <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white/95 uppercase tracking-wider drop-shadow-xl font-semibold">
                       {t('home.subtitle')}
                     </p>
