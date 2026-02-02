@@ -59,6 +59,29 @@ interface StorageImage {
   hasStorageImage: boolean;
 }
 
+const getExtFromContentType = (contentType: string | null | undefined): string => {
+  const ct = (contentType || '').toLowerCase();
+  if (ct.includes('image/png')) return 'png';
+  if (ct.includes('image/jpeg') || ct.includes('image/jpg')) return 'jpg';
+  if (ct.includes('image/webp')) return 'webp';
+  if (ct.includes('image/gif')) return 'gif';
+  return 'png';
+};
+
+const getExtFromUrl = (url: string): string => {
+  try {
+    const u = new URL(url, window.location.origin);
+    const last = u.pathname.split('/').pop() || '';
+    const ext = last.includes('.') ? last.split('.').pop() : '';
+    return (ext || 'png').toLowerCase();
+  } catch {
+    const cleaned = url.split('?')[0];
+    const last = cleaned.split('/').pop() || '';
+    const ext = last.includes('.') ? last.split('.').pop() : '';
+    return (ext || 'png').toLowerCase();
+  }
+};
+
 interface ImagePickerModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -169,16 +192,41 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
     
     setIsCopying(true);
     try {
-      // Download the source image
-      const { data: sourceData, error: downloadError } = await supabase.storage
-        .from('static-images')
-        .download(selectedImage.storagePath);
+      // 1) Obtain source data
+      let sourceData: Blob;
+      let sourceContentType: string | null = null;
 
-      if (downloadError) throw downloadError;
+      if (selectedImage.hasStorageImage && selectedImage.storagePath) {
+        // Download from storage
+        const { data, error: downloadError } = await supabase.storage
+          .from('static-images')
+          .download(selectedImage.storagePath);
+
+        if (downloadError) throw downloadError;
+        if (!data) throw new Error('No se pudo descargar la imagen de origen');
+
+        sourceData = data;
+        sourceContentType = (data as any)?.type || null;
+      } else {
+        // Fetch from original registry URL (e.g. /images/* or /lovable-uploads/*)
+        if (!selectedImage.url) {
+          throw new Error('La imagen seleccionada no tiene una URL válida');
+        }
+
+        const res = await fetch(selectedImage.url, { cache: 'no-store' });
+        if (!res.ok) {
+          throw new Error(`No se pudo obtener la imagen original (${res.status})`);
+        }
+
+        sourceContentType = res.headers.get('content-type');
+        sourceData = await res.blob();
+      }
 
       // Upload to target location
       const targetPrefix = targetImage.id.replace(/\./g, '/');
-      const ext = selectedImage.storagePath.split('.').pop() || 'png';
+      const ext = selectedImage.hasStorageImage && selectedImage.storagePath
+        ? (selectedImage.storagePath.split('.').pop() || 'png')
+        : getExtFromContentType(sourceContentType) || getExtFromUrl(selectedImage.url || '');
       const fileName = `${Date.now()}.${ext}`;
       const targetPath = `${targetPrefix}/${fileName}`;
 
@@ -186,7 +234,8 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
         .from('static-images')
         .upload(targetPath, sourceData, {
           cacheControl: '0',
-          upsert: true
+          upsert: true,
+          contentType: sourceContentType || undefined,
         });
 
       if (uploadError) throw uploadError;
@@ -274,10 +323,10 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
                       ? 'border-primary ring-2 ring-primary/30' 
                       : 'border-border hover:border-primary/50'
                     }
-                    ${!img.hasStorageImage ? 'opacity-60' : ''}
+                    ${!img.hasStorageImage ? 'opacity-80' : ''}
                   `}
-                  onClick={() => img.hasStorageImage && setSelectedImage(img)}
-                  title={!img.hasStorageImage ? 'Sin imagen en Storage - genera una primero' : img.entry.purpose}
+                  onClick={() => img.url && setSelectedImage(img)}
+                  title={!img.hasStorageImage ? 'Sin imagen en storage - se copiará desde el original' : img.entry.purpose}
                 >
                   {/* Image */}
                   <div className="aspect-video bg-muted">
@@ -306,7 +355,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
                   {!img.hasStorageImage && (
                     <div className="absolute top-2 left-2">
                       <Badge variant="secondary" className="text-[9px] bg-muted/90">
-                        Sin generar
+                        Original
                       </Badge>
                     </div>
                   )}
