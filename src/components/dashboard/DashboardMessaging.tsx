@@ -1,46 +1,52 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
-import messagesImage from '@/assets/messages-image.png';
+import { Mail, ArrowRight } from 'lucide-react';
+import { useStatistics } from '@/hooks/useStatistics';
 
 const DashboardMessaging: React.FC = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { messages } = useStatistics();
+  
+  const unreadCount = messages?.count || 0;
   
   return (
-    <Card className="border-2 border-primary/30 shadow-lg bg-gradient-to-br from-card to-secondary h-full relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary/80"></div>
-      <CardHeader className="pb-4 pt-6">
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-primary/10 rounded-lg">
-            <img 
-              src={messagesImage} 
-              alt="Messages" 
-              className="w-20 h-20 rounded-full object-cover"
-            />
+    <Card className="bg-card border-border/50 h-full">
+      <CardContent className="p-4 flex items-center justify-between h-full">
+        <div className="flex items-center gap-4">
+          {/* Icono prominente */}
+          <div className="relative">
+            <div className="p-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl">
+              <Mail className="h-12 w-12 text-primary" />
+            </div>
+            {/* Badge contador */}
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
           </div>
-          <CardTitle className="text-lg font-semibold text-foreground uppercase tracking-wide">
-            {t('messages.title')}
-          </CardTitle>
+          
+          <div>
+            <h3 className="font-semibold text-lg text-foreground">
+              {t('messages.title', { fallback: 'Mensajería' })}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {unreadCount} {t('messages.unread', { fallback: 'mensajes sin leer' })}
+            </p>
+          </div>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm text-muted-foreground font-light leading-relaxed">
-          {t('dashboard.messagesDescription')}
-        </p>
         
-        <div className="pt-2">
-          <Button 
-            onClick={() => navigate('/messages')}
-            className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
-          >
-            {t('messages.title')}
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
+        <Button 
+          onClick={() => navigate('/messages')}
+          className="gap-2"
+        >
+          {t('messages.goTo', { fallback: 'Ir a Mensajes' })}
+          <ArrowRight size={16} />
+        </Button>
       </CardContent>
     </Card>
   );

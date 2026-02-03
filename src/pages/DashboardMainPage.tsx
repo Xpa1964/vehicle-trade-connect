@@ -1,14 +1,11 @@
-
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import StatsBar from '@/components/dashboard/StatsBar';
 import DashboardProfile from '@/components/dashboard/DashboardProfile';
 import DashboardMessaging from '@/components/dashboard/DashboardMessaging';
-import QuickActionsCarousel from '@/components/dashboard/QuickActionsCarousel';
-import StatsSection from '@/components/dashboard/StatsSection';
 import ControlPanel from '@/components/dashboard/ControlPanel';
 
 const DashboardMainPage: React.FC = () => {
@@ -33,11 +30,11 @@ const DashboardMainPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background w-full">
-      <div className="w-full px-3 sm:px-4 md:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
-        {/* Header Section - Full Width with responsive spacing */}
-        <DashboardHeader user={user} />
+      <div className="w-full px-3 sm:px-4 md:px-6 py-4 sm:py-6 space-y-6">
+        {/* Stats Bar - 5 estadísticas horizontal */}
+        <StatsBar />
         
-        {/* Profile and Messaging Section - 2/3 + 1/3 layout */}
+        {/* Profile + Messaging Row - 2/3 + 1/3 layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className="lg:col-span-2">
             <DashboardProfile user={user} />
@@ -47,10 +44,7 @@ const DashboardMainPage: React.FC = () => {
           </div>
         </div>
         
-        {/* Statistics Section - Full Width with responsive spacing */}
-        <StatsSection />
-        
-        {/* Panel de Control Unificado - Full Width */}
+        {/* Service Cards Grid - 3 columnas */}
         <ControlPanel />
       </div>
     </div>
