@@ -1,5 +1,5 @@
-
 import { z } from "zod";
+import { ResultType, VehicleType } from '@/lib/transportPriceCalculator';
 
 export const formSchema = z.object({
   // Vehicle information
@@ -33,6 +33,22 @@ export const formSchema = z.object({
   destinationPhone: z.string().min(1, { message: "Destination phone is required" }),
   
   date: z.date({ required_error: "Please select a date" }),
+
+  // Calculator fields
+  vehicleType: z.enum(['standard', 'premium', 'industrial']).optional(),
+  cleaning: z.boolean().default(false),
+  personalizedDelivery: z.boolean().default(false),
+  urgent: z.boolean().default(false),
+  night: z.boolean().default(false),
+  holiday: z.boolean().default(false),
+  
+  // Calculation results (not editable by user)
+  calculatedPrice: z.number().optional(),
+  calculationResultType: z.enum(['FINAL', 'ORIENTATIVE', 'NOT_AVAILABLE']).optional(),
+  calculatedDistanceKm: z.number().optional(),
 });
 
 export type FormValues = z.infer<typeof formSchema>;
+
+// Re-export types for convenience
+export type { ResultType, VehicleType };
