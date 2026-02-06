@@ -40,9 +40,9 @@ const HeroSection: React.FC = () => {
         />
       </div>
 
-      {/* Logo independiente - posicionado encima del camión */}
-      <div className="absolute top-24 right-8 sm:right-12 md:right-16 lg:right-20 xl:right-24 z-20">
-        <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64">
+      {/* Logo independiente - posicionado a la izquierda, debajo del menú Vehículos, encima del camión */}
+      <div className="absolute top-28 sm:top-32 md:top-36 left-[420px] sm:left-[450px] md:left-[480px] lg:left-[520px] xl:left-[560px] z-20">
+        <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 xl:w-56 xl:h-56">
           <SimpleImage
             src={kontactLogoHero}
             alt="Logo de KONTACT VO - Marketplace Automotriz Profesional"
