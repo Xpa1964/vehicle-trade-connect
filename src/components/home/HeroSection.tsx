@@ -7,8 +7,8 @@ import kontactLogoHero from '@/assets/kontact-vo-logo-hero.png';
 import { useAuth } from '@/contexts/AuthContext';
 
 // Ajuste fino: constantes para micro-correcciones
-const GAP_PX = 4; // Espacio vertical bajo el header (reducido para subir)
-const X_NUDGE_PX = -30; // Micro ajuste horizontal (negativo = hacia la izquierda)
+const GAP_PX = -4; // Espacio vertical bajo el header (negativo = más arriba)
+const X_NUDGE_PX = 20; // Micro ajuste horizontal (positivo = hacia la derecha)
 
 const HeroSection: React.FC = () => {
   const { t, currentLanguage } = useLanguage();
