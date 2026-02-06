@@ -61,7 +61,7 @@ export default defineConfig(({ mode }) => ({
     // Optimize assets
     assetsInlineLimit: 4096,
   },
-  // Optimize dependencies
+  // Optimize dependencies - force single React instance
   optimizeDeps: {
     include: [
       'react',
@@ -72,5 +72,7 @@ export default defineConfig(({ mode }) => ({
       '@tanstack/react-query',
       '@supabase/supabase-js'
     ],
+    // Force rebuild to clear any cached duplicate React instances
+    force: true,
   },
 }));
