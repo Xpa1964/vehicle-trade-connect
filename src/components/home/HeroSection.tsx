@@ -40,55 +40,54 @@ const HeroSection: React.FC = () => {
         />
       </div>
 
-      {/* Content Layer - Responsive spacing - shifted more to center */}
+      {/* Logo independiente - posicionado encima del camión */}
+      <div className="absolute top-24 right-8 sm:right-12 md:right-16 lg:right-20 xl:right-24 z-20">
+        <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64">
+          <SimpleImage
+            src={kontactLogoHero}
+            alt="Logo de KONTACT VO - Marketplace Automotriz Profesional"
+            className="w-full h-full object-contain"
+            loading="eager"
+            width={288}
+            height={288}
+          />
+        </div>
+      </div>
+
+      {/* Content Layer - Responsive spacing */}
       <div className="relative w-full h-full flex items-center justify-start z-10 pt-20 sm:pt-24 md:pt-28 lg:pt-32 pl-8 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-40">
         <div className="w-full max-w-8xl h-full flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24">
           
           {/* Responsive content container - aligned left */}
           <div className="w-full lg:w-auto flex flex-col items-center lg:items-start justify-start lg:justify-center text-center lg:text-left space-y-4 sm:space-y-6">
             
-            {/* Logo and text container - responsive layout */}
-            <div className="flex flex-col items-center lg:items-start justify-center gap-4 sm:gap-6 lg:flex-row lg:gap-8 lg:items-center">
-              {/* Responsive logo - Using new uploaded logo */}
-              <div className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 flex-shrink-0">
-                <SimpleImage
-                  src={kontactLogoHero}
-                  alt="Logo de KONTACT VO - Marketplace Automotriz Profesional"
-                  className="w-full h-full object-contain"
-                  loading="eager"
-                  width={288}
-                  height={288}
-                />
-              </div>
+            {/* Responsive text container - SIN el logo */}
+            <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
+              {/* Responsive main title */}
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white drop-shadow-2xl mb-2 sm:mb-3 leading-tight">
+                KONTACT
+              </h1>
               
-              {/* Responsive text container */}
-              <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-                {/* Responsive main title */}
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white drop-shadow-2xl mb-2 sm:mb-3 leading-tight">
-                  KONTACT
-                </h1>
-                
-                {/* Responsive subtitle */}
-                {isSpanishOrFrench ? (
-                  <div className="text-center lg:text-left">
-                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white/95 uppercase tracking-wider drop-shadow-xl font-semibold">
-                      {t('home.subtitle')}
-                    </p>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white/90 uppercase tracking-wide drop-shadow-xl font-medium mt-1 sm:mt-2">
-                      {t('home.marketplace')}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="text-center lg:text-left">
-                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white/95 uppercase tracking-wider drop-shadow-xl font-semibold">
-                      {t('home.subtitle')}
-                    </p>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white/90 uppercase tracking-wide drop-shadow-xl font-medium mt-1 sm:mt-2">
-                      {t('home.marketplace')}
-                    </p>
-                  </div>
-                )}
-              </div>
+              {/* Responsive subtitle */}
+              {isSpanishOrFrench ? (
+                <div className="text-center lg:text-left">
+                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white/95 uppercase tracking-wider drop-shadow-xl font-semibold">
+                    {t('home.subtitle')}
+                  </p>
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white/90 uppercase tracking-wide drop-shadow-xl font-medium mt-1 sm:mt-2">
+                    {t('home.marketplace')}
+                  </p>
+                </div>
+              ) : (
+                <div className="text-center lg:text-left">
+                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white/95 uppercase tracking-wider drop-shadow-xl font-semibold">
+                    {t('home.subtitle')}
+                  </p>
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white/90 uppercase tracking-wide drop-shadow-xl font-medium mt-1 sm:mt-2">
+                    {t('home.marketplace')}
+                  </p>
+                </div>
+              )}
             </div>
             
             {/* Responsive spacer */}
