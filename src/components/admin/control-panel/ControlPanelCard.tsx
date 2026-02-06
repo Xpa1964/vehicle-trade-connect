@@ -20,10 +20,10 @@ const ControlPanelCard: React.FC<ControlPanelCardProps> = ({
 }) => {
   return (
     <Link to={href}>
-      <Card className="h-full hover:shadow-md transition-all duration-200 hover:scale-105 cursor-pointer border-border bg-card">
+      <Card className="h-full hover:shadow-lg transition-all duration-200 hover:scale-105 cursor-pointer border-border bg-[hsl(222,33%,13%)] text-card-foreground">
         <CardContent className="p-4">
           <div className="flex flex-col items-center text-center space-y-3">
-            <div className={imageUrl ? "w-16 h-16 rounded-full overflow-hidden" : "p-3 rounded-full"}>
+            <div className={imageUrl ? "w-16 h-16 rounded-full overflow-hidden bg-secondary" : "p-3 rounded-full bg-primary/10"}>
               {imageUrl ? (
                 <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
               ) : Icon ? (
@@ -31,7 +31,7 @@ const ControlPanelCard: React.FC<ControlPanelCardProps> = ({
               ) : null}
             </div>
             <div>
-              <h3 className="font-semibold text-card-foreground mb-1">
+              <h3 className="font-semibold text-foreground mb-1">
                 {title}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">

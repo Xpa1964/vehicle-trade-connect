@@ -19,7 +19,7 @@ interface ControlPanelSectionProps {
 const ControlPanelSection: React.FC<ControlPanelSectionProps> = ({
   title,
   items,
-  colorClass = "border-gray-200 bg-gray-50/50"
+  colorClass = "border-border bg-secondary/30"
 }) => {
   return (
     <div className={`rounded-lg border p-6 ${colorClass}`}>

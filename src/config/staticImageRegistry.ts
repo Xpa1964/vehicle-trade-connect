@@ -654,6 +654,95 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     aiEditable: false,
     category: "auth",
     source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // AUTH PAGES
+  // ═══════════════════════════════════════════════════════════════
+
+  AUTH_LOGO: {
+    id: "auth.logo",
+    currentPath: "/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png",
+    usage: "Login.tsx, Register.tsx",
+    purpose: "Logo displayed in authentication pages",
+    critical: true,
+    aiEditable: false,
+    category: "auth",
+    source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // ERROR PAGES
+  // ═══════════════════════════════════════════════════════════════
+
+  ERROR_404: {
+    id: "error.404",
+    currentPath: "/images/error-404.png",
+    usage: "NotFound.tsx",
+    purpose: "404 error page illustration",
+    critical: false,
+    aiEditable: true,
+    category: "layout",
+    source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // INFO / HERO PAGES
+  // ═══════════════════════════════════════════════════════════════
+
+  HERO_EXCHANGES: {
+    id: "hero.exchanges",
+    currentPath: "/images/vehicle-exchanges.png",
+    usage: "Exchanges.tsx",
+    purpose: "Hero background for exchanges page",
+    critical: true,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  HERO_REPORTS: {
+    id: "hero.reports",
+    currentPath: "/images/vehicle-inspection.png",
+    usage: "VehicleReportsInfoPage.tsx",
+    purpose: "Hero background for vehicle reports page",
+    critical: true,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  INFO_GALLERY_VIEW: {
+    id: "info.gallery.view",
+    currentPath: "/images/showroom-gallery.png",
+    usage: "VehicleGalleryInfoPage.tsx",
+    purpose: "Gallery view illustration",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  INFO_GALLERY_DETAIL: {
+    id: "info.gallery.detail",
+    currentPath: "/images/vehicle-inspection.png",
+    usage: "VehicleGalleryInfoPage.tsx",
+    purpose: "Vehicle detail illustration",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  INFO_GALLERY_FORM: {
+    id: "info.gallery.form",
+    currentPath: "/images/bulletin-board.png",
+    usage: "VehicleGalleryInfoPage.tsx",
+    purpose: "Vehicle form illustration",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
   }
 };
 
