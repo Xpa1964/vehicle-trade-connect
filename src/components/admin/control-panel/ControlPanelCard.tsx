@@ -23,9 +23,9 @@ const ControlPanelCard: React.FC<ControlPanelCardProps> = ({
       <Card className="h-full hover:shadow-md transition-all duration-200 hover:scale-105 cursor-pointer border-border bg-card">
         <CardContent className="p-4">
           <div className="flex flex-col items-center text-center space-y-3">
-            <div className="p-3 rounded-full bg-primary/10">
+            <div className={imageUrl ? "w-16 h-16 rounded-full overflow-hidden" : "p-3 rounded-full bg-primary/10"}>
               {imageUrl ? (
-                <img src={imageUrl} alt={title} className="h-12 w-12 object-contain" />
+                <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
               ) : Icon ? (
                 <Icon className="h-6 w-6 text-primary" />
               ) : null}

@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 // Ajuste fino: constantes para micro-correcciones
 const GAP_PX = -4; // Espacio vertical bajo el header (negativo = más arriba)
-const X_NUDGE_PX = 0; // Micro ajuste horizontal (centrado exacto bajo Vehículos)
+const X_NUDGE_PX = -40; // Micro ajuste horizontal (40px hacia la izquierda)
 
 const HeroSection: React.FC = () => {
   const { t, currentLanguage } = useLanguage();
