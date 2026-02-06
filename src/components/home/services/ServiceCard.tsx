@@ -47,14 +47,19 @@ const ServiceCard: React.FC<ServiceCardProps> = memo(({
       </div>
     )}
     
-    {/* Image section - 80% height */}
+    {/* Image section - fixed aspect ratio to prevent cropping */}
     {backgroundImage ? (
-      <div 
-        className="w-full h-[80%] bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${backgroundImage})`, backgroundPosition: imagePosition }}
-      />
+      <div className="w-full aspect-[16/10] relative overflow-hidden">
+        <img 
+          src={backgroundImage} 
+          alt={title}
+          className="w-full h-full object-cover object-center"
+          style={{ objectPosition: imagePosition }}
+          loading="lazy"
+        />
+      </div>
     ) : (
-      <div className="w-full h-[80%] flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10">
+      <div className="w-full aspect-[16/10] flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10">
         <div className="transform transition-transform group-hover:scale-110 duration-300 text-primary">
           <Icon size={48} className="w-12 h-12 sm:w-16 sm:h-16" />
         </div>
