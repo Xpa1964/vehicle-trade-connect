@@ -3,13 +3,13 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import SimpleImage from '@/components/shared/SimpleImage';
 import { useImagePreload } from '@/hooks/useImagePreload';
 import { useStaticImage } from '@/hooks/useStaticImage';
+import kontactLogoHero from '@/assets/kontact-vo-logo-hero.png';
 
 const HeroSection: React.FC = () => {
   const { t, currentLanguage } = useLanguage();
   
-  // Get images from registry (with storage override)
+  // Get background image from registry (with storage override)
   const heroBackground = useStaticImage('home.hero');
-  const heroLogo = useStaticImage('home.logo.hero');
 
   // Preload critical LCP image
   useImagePreload([heroBackground.src]);
@@ -40,8 +40,8 @@ const HeroSection: React.FC = () => {
         />
       </div>
 
-      {/* Content Layer - Responsive spacing */}
-      <div className="relative w-full h-full flex items-center justify-start z-10 pt-20 sm:pt-24 md:pt-28 lg:pt-32">
+      {/* Content Layer - Responsive spacing - shifted more to center */}
+      <div className="relative w-full h-full flex items-center justify-start z-10 pt-20 sm:pt-24 md:pt-28 lg:pt-32 pl-8 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-40">
         <div className="w-full max-w-8xl h-full flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24">
           
           {/* Responsive content container - aligned left */}
@@ -49,20 +49,15 @@ const HeroSection: React.FC = () => {
             
             {/* Logo and text container - responsive layout */}
             <div className="flex flex-col items-center lg:items-start justify-center gap-4 sm:gap-6 lg:flex-row lg:gap-8 lg:items-center">
-              {/* Responsive logo - Using Registry */}
-              <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 flex-shrink-0">
+              {/* Responsive logo - Using new uploaded logo */}
+              <div className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 flex-shrink-0">
                 <SimpleImage
-                  src={heroLogo.src}
+                  src={kontactLogoHero}
                   alt="Logo de KONTACT VO - Marketplace Automotriz Profesional"
                   className="w-full h-full object-contain"
                   loading="eager"
-                  width={192}
-                  height={192}
-                  onError={(e) => {
-                    if (heroLogo.fallback) {
-                      e.currentTarget.src = heroLogo.fallback;
-                    }
-                  }}
+                  width={288}
+                  height={288}
                 />
               </div>
               
