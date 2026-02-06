@@ -37,11 +37,14 @@ const NavbarContainer: React.FC = () => {
   }
 
   return (
-    <div className={`w-full transition-all duration-300 sticky top-0 z-50 ${
-      isHomePage && !isScrolled 
-        ? 'bg-transparent' 
-        : 'bg-card/95 backdrop-blur-md border-b border-border shadow-sm'
-    }`}>
+    <div 
+      data-site-header="main"
+      className={`w-full transition-all duration-300 sticky top-0 z-50 ${
+        isHomePage && !isScrolled 
+          ? 'bg-transparent' 
+          : 'bg-card/95 backdrop-blur-md border-b border-border shadow-sm'
+      }`}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo - Responsive sizing MEJORADO PARA MÓVIL */}
