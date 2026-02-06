@@ -49,11 +49,12 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ isHomePage, isScrolled, isAdmin
     <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
       {/* Navigation Links - Responsive spacing */}
       <nav className="flex items-center space-x-1 lg:space-x-2">
-        {navItems.map((item) => (
+      {navItems.map((item) => (
           <Link 
             key={item.to} 
             to={item.to} 
             className={getNavItemClass(item.to)}
+            {...(item.to === '/vehicles' ? { 'data-nav-item': 'vehicles' } : {})}
           >
             {item.label}
           </Link>

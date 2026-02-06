@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useRef, useLayoutEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import SimpleImage from '@/components/shared/SimpleImage';
 import { useImagePreload } from '@/hooks/useImagePreload';
 import { useStaticImage } from '@/hooks/useStaticImage';
 import kontactLogoHero from '@/assets/kontact-vo-logo-hero.png';
+import { useAuth } from '@/contexts/AuthContext';
+
+// Ajuste fino: constantes para micro-correcciones
+const GAP_PX = 12; // Espacio vertical bajo el header
+const X_NUDGE_PX = 0; // Micro ajuste horizontal (0 = centrado exacto)
 
 const HeroSection: React.FC = () => {
   const { t, currentLanguage } = useLanguage();
+  const { user } = useAuth();
+  const heroRef = useRef<HTMLElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const [logoStyle, setLogoStyle] = useState<React.CSSProperties>({});
+  const [isDesktop, setIsDesktop] = useState(false);
   
   // Get background image from registry (with storage override)
   const heroBackground = useStaticImage('home.hero');
@@ -17,8 +27,55 @@ const HeroSection: React.FC = () => {
   // Check if current language is Spanish or French
   const isSpanishOrFrench = currentLanguage === 'es' || currentLanguage === 'fr';
 
+  // Dynamic positioning for logo under "Vehículos" menu
+  useLayoutEffect(() => {
+    const updateLogoPosition = () => {
+      const vehiclesEl = document.querySelector('[data-nav-item="vehicles"]');
+      const headerEl = document.querySelector('[data-site-header="main"]');
+      const heroEl = heroRef.current;
+
+      // Check if we're on desktop (md breakpoint = 768px)
+      const isDesktopView = window.innerWidth >= 768;
+      setIsDesktop(isDesktopView);
+
+      if (!isDesktopView || !vehiclesEl || !headerEl || !heroEl) {
+        // Mobile: reset to use CSS classes for centering
+        setLogoStyle({});
+        return;
+      }
+
+      const heroRect = heroEl.getBoundingClientRect();
+      const vehiclesRect = vehiclesEl.getBoundingClientRect();
+      const headerRect = headerEl.getBoundingClientRect();
+
+      // Calculate position: centered under "Vehículos" link
+      const leftPx = (vehiclesRect.left + vehiclesRect.width / 2) - heroRect.left + X_NUDGE_PX;
+      const topPx = (headerRect.bottom - heroRect.top) + GAP_PX;
+
+      setLogoStyle({
+        left: `${leftPx}px`,
+        top: `${topPx}px`,
+      });
+    };
+
+    // Initial calculation
+    updateLogoPosition();
+
+    // Small delay to account for font loading
+    const timeout = setTimeout(updateLogoPosition, 100);
+
+    // Recalculate on resize
+    window.addEventListener('resize', updateLogoPosition);
+
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('resize', updateLogoPosition);
+    };
+  }, [currentLanguage, user]); // Recalculate on language or auth change
+
   return (
     <section 
+      ref={heroRef}
       className="relative w-full h-screen overflow-hidden print:hidden"
       aria-label="Hero section"
     >
@@ -40,8 +97,16 @@ const HeroSection: React.FC = () => {
         />
       </div>
 
-      {/* Logo independiente - posicionado a la izquierda, debajo del menú Vehículos, encima del camión */}
-      <div className="absolute top-28 sm:top-32 md:top-36 left-[420px] sm:left-[450px] md:left-[480px] lg:left-[520px] xl:left-[560px] z-20">
+      {/* Logo independiente - posicionado dinámicamente bajo "Vehículos" en desktop, centrado en móvil */}
+      <div 
+        ref={logoRef}
+        className={`absolute z-20 pointer-events-none ${
+          isDesktop 
+            ? '-translate-x-1/2' 
+            : 'left-1/2 -translate-x-1/2 top-28 sm:top-32'
+        }`}
+        style={isDesktop ? logoStyle : undefined}
+      >
         <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 xl:w-56 xl:h-56">
           <SimpleImage
             src={kontactLogoHero}
@@ -54,15 +119,15 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Content Layer - Responsive spacing */}
-      <div className="relative w-full h-full flex items-center justify-start z-10 pt-20 sm:pt-24 md:pt-28 lg:pt-32 pl-8 sm:pl-16 md:pl-24 lg:pl-32 xl:pl-40">
-        <div className="w-full max-w-8xl h-full flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24">
+      {/* Content Layer - CENTRADO (sin padding-left ni alineación izquierda) */}
+      <div className="relative w-full h-full flex items-center justify-center z-10 pt-20 sm:pt-24 md:pt-28 lg:pt-32">
+        <div className="w-full max-w-8xl h-full flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24">
           
-          {/* Responsive content container - aligned left */}
-          <div className="w-full lg:w-auto flex flex-col items-center lg:items-start justify-start lg:justify-center text-center lg:text-left space-y-4 sm:space-y-6">
+          {/* Responsive content container - CENTRADO en todas las pantallas */}
+          <div className="w-full lg:w-auto flex flex-col items-center justify-center text-center space-y-4 sm:space-y-6">
             
-            {/* Responsive text container - SIN el logo */}
-            <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
+            {/* Responsive text container */}
+            <div className="flex flex-col items-center text-center">
               {/* Responsive main title */}
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white drop-shadow-2xl mb-2 sm:mb-3 leading-tight">
                 KONTACT
@@ -70,7 +135,7 @@ const HeroSection: React.FC = () => {
               
               {/* Responsive subtitle */}
               {isSpanishOrFrench ? (
-                <div className="text-center lg:text-left">
+                <div className="text-center">
                   <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white/95 uppercase tracking-wider drop-shadow-xl font-semibold">
                     {t('home.subtitle')}
                   </p>
@@ -79,7 +144,7 @@ const HeroSection: React.FC = () => {
                   </p>
                 </div>
               ) : (
-                <div className="text-center lg:text-left">
+                <div className="text-center">
                   <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white/95 uppercase tracking-wider drop-shadow-xl font-semibold">
                     {t('home.subtitle')}
                   </p>
