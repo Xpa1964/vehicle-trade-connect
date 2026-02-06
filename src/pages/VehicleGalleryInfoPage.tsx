@@ -4,13 +4,13 @@ import { Button } from '@/components/ui/button';
 import BackButton from '@/components/shared/BackButton';
 import { ArrowRight, Search, FileText, PlusCircle } from 'lucide-react';
 import { useStaticImage } from '@/hooks/useStaticImage';
-import galleryViewImg from '/images/gallery-view.png';
-import vehicleDetailImg from '/images/vehicle-detail.png';
-import vehicleFormImg from '/images/vehicle-form.png';
 
 const VehicleGalleryInfoPage = () => {
-  // Use registry-based image that updates from Storage
+  // Use registry-based images that update from Storage
   const { src: showroomHeroSrc } = useStaticImage('services.showroom');
+  const { src: galleryViewSrc } = useStaticImage('info.gallery.view');
+  const { src: vehicleDetailSrc } = useStaticImage('info.gallery.detail');
+  const { src: vehicleFormSrc } = useStaticImage('info.gallery.form');
   const navigate = useNavigate();
   const { t } = useLanguage();
   
@@ -65,7 +65,7 @@ const VehicleGalleryInfoPage = () => {
           <div className="order-1 md:order-2">
             <div className="bg-white/95 dark:bg-white/90 rounded-lg overflow-hidden shadow-xl border border-border">
               <img 
-                src={galleryViewImg} 
+                src={galleryViewSrc} 
                 alt="Vehicle Gallery View" 
                 className="w-full object-cover aspect-video"
               />
@@ -78,7 +78,7 @@ const VehicleGalleryInfoPage = () => {
           <div className="order-1">
             <div className="bg-white/95 dark:bg-white/90 rounded-lg overflow-hidden shadow-xl border border-border">
               <img 
-                src={vehicleDetailImg} 
+                src={vehicleDetailSrc} 
                 alt="Vehicle Detail View" 
                 className="w-full object-cover aspect-video"
               />
@@ -117,7 +117,7 @@ const VehicleGalleryInfoPage = () => {
           <div className="order-1 md:order-2">
             <div className="bg-white/95 dark:bg-white/90 rounded-lg overflow-hidden shadow-xl border border-border">
               <img 
-                src={vehicleFormImg} 
+                src={vehicleFormSrc} 
                 alt="Vehicle Publishing Form" 
                 className="w-full object-cover aspect-video"
               />

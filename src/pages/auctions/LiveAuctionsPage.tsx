@@ -9,10 +9,12 @@ import { Button } from '@/components/ui/button';
 import { AuctionStatus } from '@/types/auction';
 import { Search, Filter, Gavel, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useStaticImage } from '@/hooks/useStaticImage';
 
 const LiveAuctionsPage: React.FC = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { src: heroSrc } = useStaticImage('hero.auctions');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<AuctionStatus | 'all'>('active');
   const [priceMin, setPriceMin] = useState<number | undefined>();
@@ -33,7 +35,7 @@ const LiveAuctionsPage: React.FC = () => {
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
         <div className="absolute inset-0">
       <img 
-        src="/images/auctions-hero.png"
+        src={heroSrc}
         alt={t('auctions.title')}
             className="w-full h-full object-cover object-center"
             style={{ minHeight: '320px' }}

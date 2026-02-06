@@ -701,6 +701,28 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     source: "product"
   },
 
+  HERO_AUCTIONS: {
+    id: "hero.auctions",
+    currentPath: "/images/auctions-hero.png",
+    usage: "LiveAuctionsPage.tsx, AuctionsInfoPage.tsx",
+    purpose: "Hero background for auctions pages",
+    critical: true,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  HERO_VEHICLES: {
+    id: "hero.vehicles",
+    currentPath: "/images/showroom-gallery.png",
+    usage: "VehicleGalleryInfoPage.tsx",
+    purpose: "Hero background for vehicle gallery page",
+    critical: true,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
   HERO_REPORTS: {
     id: "hero.reports",
     currentPath: "/images/vehicle-inspection.png",
