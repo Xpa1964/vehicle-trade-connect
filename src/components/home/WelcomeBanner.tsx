@@ -24,7 +24,7 @@ const WelcomeBanner: React.FC = () => {
   };
 
   return (
-    <div className="fixed top-14 sm:top-16 left-0 right-0 z-40 bg-primary/95 backdrop-blur-sm text-primary-foreground py-2 px-4 shadow-md">
+    <div className="fixed top-14 sm:top-16 left-0 right-0 z-40 bg-primary/40 backdrop-blur-md text-white py-2 px-4 shadow-sm">
       <div className="container mx-auto flex items-center justify-between gap-2">
         <span className="text-sm font-medium truncate">
           {t('dashboard.welcome', { fallback: '¡Bienvenido' })}, {displayName}!
@@ -44,7 +44,7 @@ const WelcomeBanner: React.FC = () => {
               variant="outline" 
               size="sm"
               onClick={() => handleNavigate('/admin/dashboard')}
-              className="h-8 text-xs sm:text-sm border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 touch-manipulation"
+              className="h-8 text-xs sm:text-sm border-white/40 text-white hover:bg-white/20 touch-manipulation"
             >
               Admin
             </Button>
