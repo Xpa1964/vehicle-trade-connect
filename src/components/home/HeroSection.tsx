@@ -7,8 +7,8 @@ import kontactLogoCircle from '@/assets/kontact-vo-logo-circle.png';
 import { useAuth } from '@/contexts/AuthContext';
 
 // Ajuste fino: constantes para micro-correcciones
-const GAP_PX = -4; // Espacio vertical bajo el header (negativo = más arriba)
-const X_NUDGE_PX = -40; // Micro ajuste horizontal (40px hacia la izquierda)
+const GAP_PX = 16; // Espacio vertical bajo el header (+20px hacia abajo)
+const X_NUDGE_PX = -60; // Micro ajuste horizontal (60px hacia la izquierda)
 
 const HeroSection: React.FC = () => {
   const { t, currentLanguage } = useLanguage();
@@ -108,9 +108,9 @@ const HeroSection: React.FC = () => {
         style={isDesktop ? logoStyle : undefined}
       >
         <div className="w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 xl:w-60 xl:h-60 relative">
-          {/* Máscara sutil de respaldo - círculo blanco difuso */}
+          {/* Máscara sutil de respaldo - círculo blanco difuso más visible */}
           <div 
-            className="absolute inset-0 rounded-full bg-white/30 blur-xl scale-90"
+            className="absolute inset-0 rounded-full bg-white/40 blur-2xl scale-110"
             aria-hidden="true"
           />
           {/* Logo con sombra sutil */}
