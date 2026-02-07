@@ -3,7 +3,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import SimpleImage from '@/components/shared/SimpleImage';
 import { useImagePreload } from '@/hooks/useImagePreload';
 import { useStaticImage } from '@/hooks/useStaticImage';
-import kontactLogoHero from '@/assets/kontact-vo-logo-hero.png';
+import kontactLogoCircle from '@/assets/kontact-vo-logo-circle.png';
 import { useAuth } from '@/contexts/AuthContext';
 
 // Ajuste fino: constantes para micro-correcciones
@@ -107,14 +107,21 @@ const HeroSection: React.FC = () => {
         }`}
         style={isDesktop ? logoStyle : undefined}
       >
-        <div className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 xl:w-56 xl:h-56">
+        <div className="w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 xl:w-60 xl:h-60 relative">
+          {/* Máscara sutil de respaldo - círculo blanco difuso */}
+          <div 
+            className="absolute inset-0 rounded-full bg-white/30 blur-xl scale-90"
+            aria-hidden="true"
+          />
+          {/* Logo con sombra sutil */}
           <SimpleImage
-            src={kontactLogoHero}
+            src={kontactLogoCircle}
             alt="Logo de KONTACT VO - Marketplace Automotriz Profesional"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain relative z-10"
+            style={{ filter: 'drop-shadow(0 4px 15px rgba(0,0,0,0.3))' }}
             loading="eager"
-            width={288}
-            height={288}
+            width={320}
+            height={320}
           />
         </div>
       </div>
