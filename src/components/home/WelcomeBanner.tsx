@@ -24,19 +24,19 @@ const WelcomeBanner: React.FC = () => {
   };
 
   return (
-    <div className="fixed top-14 sm:top-16 left-0 right-0 z-40 bg-primary/40 backdrop-blur-md text-white py-2 px-4 shadow-sm">
-      <div className="container mx-auto flex items-center justify-between gap-2">
-        <span className="text-sm font-medium truncate">
+    <div className="fixed top-20 sm:top-24 right-4 sm:right-6 z-40 bg-black/50 backdrop-blur-md rounded-lg px-4 py-3 shadow-lg max-w-xs">
+      <div className="flex flex-col gap-2">
+        <span className="text-sm font-medium text-white/90">
           {t('dashboard.welcome', { fallback: '¡Bienvenido' })}, {displayName}!
         </span>
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex flex-col gap-1.5">
           <Button 
             variant="secondary" 
             size="sm"
             onClick={() => handleNavigate('/dashboard')}
-            className="flex items-center gap-1.5 h-8 text-xs sm:text-sm touch-manipulation"
+            className="flex items-center justify-center gap-1.5 h-8 text-xs sm:text-sm w-full touch-manipulation"
           >
-            {t('nav.dashboard', { fallback: 'Panel' })}
+            {t('nav.dashboard', { fallback: 'Panel de Control' })}
             <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
           </Button>
           {user?.role === 'admin' && (
@@ -44,7 +44,7 @@ const WelcomeBanner: React.FC = () => {
               variant="outline" 
               size="sm"
               onClick={() => handleNavigate('/admin/dashboard')}
-              className="h-8 text-xs sm:text-sm border-white/40 text-white hover:bg-white/20 touch-manipulation"
+              className="h-8 text-xs sm:text-sm border-white/40 text-white hover:bg-white/20 w-full touch-manipulation"
             >
               Admin
             </Button>
