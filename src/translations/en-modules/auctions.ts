@@ -56,6 +56,8 @@ export default {
   'auctions.result.rejectNotify': '• All participants will be notified about the cancellation',
   'auctions.result.rejectAvailable': '• The vehicle will be immediately available again',
   'auctions.result.rejectFinal': '• This action cannot be undone',
+  'auctions.result.acceptedSuccess': 'Result accepted! Contact details will be shared.',
+  'auctions.result.rejectedSuccess': 'Result rejected. The vehicle is available again.',
 
   // Time states
   'auctions.time.calculating': 'Calculating...',

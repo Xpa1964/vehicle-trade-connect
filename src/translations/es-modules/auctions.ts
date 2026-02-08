@@ -107,6 +107,8 @@ export default {
   'auctions.result.rejectNotify': '• Todos los participantes serán notificados sobre la cancelación',
   'auctions.result.rejectAvailable': '• El vehículo estará disponible inmediatamente otra vez',
   'auctions.result.rejectFinal': '• Esta acción no se puede deshacer',
+  'auctions.result.acceptedSuccess': '¡Resultado aceptado! Los datos de contacto serán compartidos.',
+  'auctions.result.rejectedSuccess': 'Resultado rechazado. El vehículo está disponible nuevamente.',
 
   // Nuevas traducciones faltantes
   'auctions.ended.withWinner': 'Subasta finalizada con ganador',

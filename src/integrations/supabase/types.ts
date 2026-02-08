@@ -2679,6 +2679,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_auction_result: {
+        Args: { p_auction_id: string; p_seller_id: string }
+        Returns: Json
+      }
       admin_update_user_profile: {
         Args: { p_profile_data: Json; p_user_id: string }
         Returns: boolean
@@ -2745,6 +2749,10 @@ export type Database = {
       reject_api_key_request: {
         Args: { p_request_id: string }
         Returns: boolean
+      }
+      reject_auction_result: {
+        Args: { p_auction_id: string; p_reason?: string; p_seller_id: string }
+        Returns: Json
       }
       soft_delete_conversation: {
         Args: { p_conversation_id: string }

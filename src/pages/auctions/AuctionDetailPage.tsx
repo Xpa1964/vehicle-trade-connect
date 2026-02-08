@@ -7,6 +7,7 @@ import { useAuctionRealtime } from '@/hooks/auctions/useAuctionRealtime';
 import { AuctionTimer } from '@/components/auctions/AuctionTimer';
 import { BidForm } from '@/components/auctions/BidForm';
 import { BidHistory } from '@/components/auctions/BidHistory';
+import { SellerDecisionPanel } from '@/components/auctions/SellerDecisionPanel';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -228,7 +229,10 @@ const AuctionDetailPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Bid Form */}
+          {/* Seller Decision Panel - Solo visible para vendedor en ENDED_PENDING_ACCEPTANCE */}
+          <SellerDecisionPanel auction={auction} />
+
+          {/* Bid Form - Solo visible cuando la subasta está activa */}
           <BidForm auction={auction} />
         </div>
       </div>
