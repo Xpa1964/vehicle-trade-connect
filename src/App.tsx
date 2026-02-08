@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -20,9 +19,9 @@ import { ScrollToTop } from '@/components/shared/ScrollToTop';
 import { queryClient } from '@/lib/react-query';
 
 function App() {
-  const [languageReady, setLanguageReady] = useState(false);
+  const [languageReady, setLanguageReady] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Initialize Phase 0 security systems
     initializePhase0().then(status => {
       console.log('[App] Fase 0 inicializada:', status);
