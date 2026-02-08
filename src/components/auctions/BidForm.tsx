@@ -1,4 +1,17 @@
-import React, { useState } from 'react';
+/**
+ * FORMULARIO DE PUJAS - KONTACT VO
+ * Documento Capa 2: Gestión de Pujas
+ * 
+ * Este componente es SOLO para UX.
+ * TODA la validación crítica ocurre en backend (función place_bid).
+ * 
+ * El frontend solo:
+ * - Muestra información al usuario
+ * - Previene envíos obvios (campo vacío)
+ * - NO valida reglas de negocio
+ */
+
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,8 +20,8 @@ import { Auction } from '@/types/auction';
 import { formatPrice } from '@/utils/formatters';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { Gavel } from 'lucide-react';
-import { toast } from 'sonner';
+import { Gavel, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface BidFormProps {
   auction: Auction;
@@ -19,25 +32,24 @@ export const BidForm: React.FC<BidFormProps> = ({ auction }) => {
   const { user } = useAuth();
   const placeBid = usePlaceBid();
   
-  const minimumBid = auction.current_price + auction.increment_minimum;
-  const [bidAmount, setBidAmount] = useState(minimumBid.toString());
+  // Sugerencia de puja mínima (solo UX, no validación)
+  const suggestedMinimum = auction.current_price + auction.increment_minimum;
+  const [bidAmount, setBidAmount] = useState(suggestedMinimum.toString());
+
+  // Actualizar sugerencia cuando cambie el precio actual
+  useEffect(() => {
+    const newMinimum = auction.current_price + auction.increment_minimum;
+    setBidAmount(newMinimum.toString());
+  }, [auction.current_price, auction.increment_minimum]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!user) {
-      toast.error(t('auctions.loginRequired', { fallback: 'Debes iniciar sesión para pujar' }));
-      return;
-    }
-
     const amount = parseFloat(bidAmount);
 
-    if (isNaN(amount) || amount < minimumBid) {
-      toast.error(
-        t('auctions.minimumBidError', { 
-          fallback: `La puja mínima es ${formatPrice(minimumBid)}` 
-        })
-      );
+    // Validación mínima de UX (campo no vacío, número válido)
+    // La validación REAL ocurre en backend
+    if (isNaN(amount) || amount <= 0) {
       return;
     }
 
@@ -47,7 +59,54 @@ export const BidForm: React.FC<BidFormProps> = ({ auction }) => {
     });
   };
 
-  const canBid = auction.status === 'active' && user?.id !== auction.created_by;
+  // Verificaciones de UI (no son validaciones de negocio)
+  const isLoggedIn = !!user;
+  const isOwnAuction = user?.id === auction.created_by;
+  const isActive = auction.status === 'active';
+
+  // Mostrar mensajes informativos según el estado
+  const renderStatusMessage = () => {
+    if (!isLoggedIn) {
+      return (
+        <Alert>
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            {t('auctions.loginToBid', { fallback: 'Inicia sesión para pujar' })}
+          </AlertDescription>
+        </Alert>
+      );
+    }
+
+    if (isOwnAuction) {
+      return (
+        <Alert>
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            {t('auctions.cannotBidOwnAuction', { 
+              fallback: 'No puedes pujar en tu propia subasta' 
+            })}
+          </AlertDescription>
+        </Alert>
+      );
+    }
+
+    if (!isActive) {
+      return (
+        <Alert>
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            {t('auctions.auctionNotActive', { 
+              fallback: 'Esta subasta no está activa' 
+            })}
+          </AlertDescription>
+        </Alert>
+      );
+    }
+
+    return null;
+  };
+
+  const canShowForm = isLoggedIn && !isOwnAuction && isActive;
 
   return (
     <Card>
@@ -58,54 +117,35 @@ export const BidForm: React.FC<BidFormProps> = ({ auction }) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {!canBid ? (
-          <div className="text-center py-4">
-            {user?.id === auction.created_by ? (
-              <p className="text-gray-600">
-                {t('auctions.cannotBidOwnAuction', { 
-                  fallback: 'No puedes pujar en tu propia subasta' 
-                })}
-              </p>
-            ) : auction.status !== 'active' ? (
-              <p className="text-gray-600">
-                {t('auctions.auctionNotActive', { 
-                  fallback: 'Esta subasta no está activa' 
-                })}
-              </p>
-            ) : (
-              <p className="text-gray-600">
-                {t('auctions.loginToBid', { 
-                  fallback: 'Inicia sesión para pujar' 
-                })}
-              </p>
-            )}
-          </div>
-        ) : (
+        {renderStatusMessage()}
+        
+        {canShowForm && (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-muted-foreground">
                 {t('auctions.currentBid', { fallback: 'Puja Actual' })}
               </label>
-              <p className="text-2xl font-bold text-blue-600">
+              <p className="text-2xl font-bold text-primary">
                 {formatPrice(auction.current_price)}
               </p>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-muted-foreground">
                 {t('auctions.yourBid', { fallback: 'Tu Puja' })}
               </label>
               <Input
                 type="number"
                 step="0.01"
-                min={minimumBid}
+                min="0"
                 value={bidAmount}
                 onChange={(e) => setBidAmount(e.target.value)}
                 className="mt-1"
-                placeholder={formatPrice(minimumBid)}
+                placeholder={formatPrice(suggestedMinimum)}
+                disabled={placeBid.isPending}
               />
-              <p className="text-xs text-gray-500 mt-1">
-                {t('auctions.minimumBid', { fallback: 'Puja mínima' })}: {formatPrice(minimumBid)}
+              <p className="text-xs text-muted-foreground mt-1">
+                {t('auctions.suggestedMinimum', { fallback: 'Puja sugerida mínima' })}: {formatPrice(suggestedMinimum)}
               </p>
             </div>
 
@@ -119,6 +159,12 @@ export const BidForm: React.FC<BidFormProps> = ({ auction }) => {
                 : t('auctions.placeBid', { fallback: 'Realizar Puja' })
               }
             </Button>
+
+            <p className="text-xs text-muted-foreground text-center">
+              {t('auctions.bidDisclaimer', { 
+                fallback: 'Al pujar, aceptas las condiciones de la subasta. La validación final se realiza en el servidor.' 
+              })}
+            </p>
           </form>
         )}
       </CardContent>

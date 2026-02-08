@@ -320,6 +320,33 @@ export type Database = {
           },
         ]
       }
+      auction_config: {
+        Row: {
+          config_key: string
+          config_value: number
+          created_at: string
+          description: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          config_key: string
+          config_value: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          config_key?: string
+          config_value?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       auction_state_transitions: {
         Row: {
           auction_id: string
@@ -461,6 +488,9 @@ export type Database = {
           created_at: string | null
           id: string
           is_winning: boolean | null
+          new_end_date: string | null
+          previous_end_date: string | null
+          triggered_extension: boolean | null
         }
         Insert: {
           amount: number
@@ -469,6 +499,9 @@ export type Database = {
           created_at?: string | null
           id?: string
           is_winning?: boolean | null
+          new_end_date?: string | null
+          previous_end_date?: string | null
+          triggered_extension?: boolean | null
         }
         Update: {
           amount?: number
@@ -477,6 +510,9 @@ export type Database = {
           created_at?: string | null
           id?: string
           is_winning?: boolean | null
+          new_end_date?: string | null
+          previous_end_date?: string | null
+          triggered_extension?: boolean | null
         }
         Relationships: [
           {
@@ -2704,7 +2740,7 @@ export type Database = {
       }
       place_bid: {
         Args: { p_amount: number; p_auction_id: string; p_bidder_id: string }
-        Returns: string
+        Returns: Json
       }
       reject_api_key_request: {
         Args: { p_request_id: string }

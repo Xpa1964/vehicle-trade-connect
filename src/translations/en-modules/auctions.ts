@@ -114,4 +114,21 @@ export default {
   'auctions.incrementRequired': 'Minimum increment must be positive',
   'auctions.startDateRequired': 'Start date must be in the future',
   'auctions.endDateRequired': 'End date must be after start date',
+  
+  // Mensajes de puja - Capa 2
+  'auctions.bidPlacedSuccess': 'Bid placed successfully!',
+  'auctions.bidPlacedExtended': 'Bid accepted! Auction extended by anti-sniping.',
+  'auctions.newEndTime': 'New closing time',
+  'auctions.suggestedMinimum': 'Suggested minimum bid',
+  'auctions.bidDisclaimer': 'By bidding, you accept the auction conditions. Final validation is performed on the server.',
+  
+  // Errores de puja - Capa 2
+  'auctions.errors.notAuthenticated': 'You must log in to bid',
+  'auctions.errors.notFound': 'Auction not found',
+  'auctions.errors.notActive': 'Auction is not active',
+  'auctions.errors.expired': 'Auction has ended',
+  'auctions.errors.sellerCannotBid': 'You cannot bid on your own auction',
+  'auctions.errors.invalidAmount': 'Amount must be greater than 0',
+  'auctions.errors.belowMinimum': 'Bid is below minimum increment',
+  'auctions.errors.internal': 'Internal server error',
 };
