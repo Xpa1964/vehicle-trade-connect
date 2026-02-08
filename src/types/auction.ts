@@ -1,6 +1,16 @@
 import { Vehicle } from './vehicle';
 
-export type AuctionStatus = 'scheduled' | 'active' | 'ended' | 'completed' | 'cancelled';
+// Estados oficiales del sistema de subastas Kontact VO - Documento Capa 1
+// FUENTE DE VERDAD: Base de datos (ENUM auction_status)
+export type AuctionStatus = 
+  | 'draft'                      // Borrador, editable
+  | 'scheduled'                  // Programada, pendiente de inicio
+  | 'active'                     // Activa, acepta pujas
+  | 'ended_pending_acceptance'   // Finalizada, vendedor debe decidir
+  | 'accepted'                   // Resultado aceptado por vendedor
+  | 'rejected'                   // Resultado rechazado por vendedor
+  | 'contact_shared'             // Datos de contacto compartidos
+  | 'closed';                    // Cerrada definitivamente
 
 export interface Auction {
   id: string;
@@ -16,9 +26,11 @@ export interface Auction {
   winner_id?: string;
   terms_accepted: boolean;
   description?: string;
-  seller_accepted_bid_id?: string;
-  seller_accepted_at?: string;
-  hidden_at?: string;
+  // Campos de trazabilidad - Capa 1
+  seller_decision_at?: string;
+  seller_decision_reason?: string;
+  contact_shared_at?: string;
+  closed_at?: string;
   created_at: string;
   updated_at: string;
   

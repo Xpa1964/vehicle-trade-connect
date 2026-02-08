@@ -65,7 +65,9 @@ export const AuctionTimer: React.FC<AuctionTimerProps> = ({
   }, [startDate, endDate, status, t]);
 
   const getTimerColor = () => {
-    if (status === 'ended' || status === 'completed' || status === 'cancelled') {
+    // Estados finalizados según Documento Capa 1
+    if (status === 'ended_pending_acceptance' || status === 'accepted' || 
+        status === 'rejected' || status === 'contact_shared' || status === 'closed') {
       return 'text-gray-500';
     }
     if (isAntiSnipe) {

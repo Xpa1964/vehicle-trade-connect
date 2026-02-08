@@ -320,10 +320,53 @@ export type Database = {
           },
         ]
       }
+      auction_state_transitions: {
+        Row: {
+          auction_id: string
+          created_at: string
+          from_status: Database["public"]["Enums"]["auction_status"] | null
+          id: string
+          metadata: Json | null
+          to_status: Database["public"]["Enums"]["auction_status"]
+          trigger_type: string
+          triggered_by: string | null
+        }
+        Insert: {
+          auction_id: string
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["auction_status"] | null
+          id?: string
+          metadata?: Json | null
+          to_status: Database["public"]["Enums"]["auction_status"]
+          trigger_type: string
+          triggered_by?: string | null
+        }
+        Update: {
+          auction_id?: string
+          created_at?: string
+          from_status?: Database["public"]["Enums"]["auction_status"] | null
+          id?: string
+          metadata?: Json | null
+          to_status?: Database["public"]["Enums"]["auction_status"]
+          trigger_type?: string
+          triggered_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auction_state_transitions_auction_id_fkey"
+            columns: ["auction_id"]
+            isOneToOne: false
+            referencedRelation: "auctions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       auctions: {
         Row: {
           bid_increment: number | null
           buy_now_price: number | null
+          closed_at: string | null
+          contact_shared_at: string | null
           created_at: string | null
           created_by: string | null
           current_price: number | null
@@ -333,11 +376,13 @@ export type Database = {
           id: string
           increment_minimum: number | null
           reserve_price: number | null
+          seller_decision_at: string | null
+          seller_decision_reason: string | null
           seller_id: string
           start_date: string | null
           start_time: string | null
           starting_price: number | null
-          status: string | null
+          status: Database["public"]["Enums"]["auction_status"]
           terms_accepted: boolean | null
           title: string | null
           updated_at: string | null
@@ -347,6 +392,8 @@ export type Database = {
         Insert: {
           bid_increment?: number | null
           buy_now_price?: number | null
+          closed_at?: string | null
+          contact_shared_at?: string | null
           created_at?: string | null
           created_by?: string | null
           current_price?: number | null
@@ -356,11 +403,13 @@ export type Database = {
           id?: string
           increment_minimum?: number | null
           reserve_price?: number | null
+          seller_decision_at?: string | null
+          seller_decision_reason?: string | null
           seller_id: string
           start_date?: string | null
           start_time?: string | null
           starting_price?: number | null
-          status?: string | null
+          status?: Database["public"]["Enums"]["auction_status"]
           terms_accepted?: boolean | null
           title?: string | null
           updated_at?: string | null
@@ -370,6 +419,8 @@ export type Database = {
         Update: {
           bid_increment?: number | null
           buy_now_price?: number | null
+          closed_at?: string | null
+          contact_shared_at?: string | null
           created_at?: string | null
           created_by?: string | null
           current_price?: number | null
@@ -379,11 +430,13 @@ export type Database = {
           id?: string
           increment_minimum?: number | null
           reserve_price?: number | null
+          seller_decision_at?: string | null
+          seller_decision_reason?: string | null
           seller_id?: string
           start_date?: string | null
           start_time?: string | null
           starting_price?: number | null
-          status?: string | null
+          status?: Database["public"]["Enums"]["auction_status"]
           terms_accepted?: boolean | null
           title?: string | null
           updated_at?: string | null
@@ -2678,6 +2731,15 @@ export type Database = {
         | "workshop"
         | "analyst"
         | "content_manager"
+      auction_status:
+        | "draft"
+        | "scheduled"
+        | "active"
+        | "ended_pending_acceptance"
+        | "accepted"
+        | "rejected"
+        | "contact_shared"
+        | "closed"
       dispute_priority: "low" | "medium" | "high" | "urgent"
       dispute_status: "open" | "in_progress" | "resolved" | "closed"
       dispute_type:
@@ -2824,6 +2886,16 @@ export const Constants = {
         "workshop",
         "analyst",
         "content_manager",
+      ],
+      auction_status: [
+        "draft",
+        "scheduled",
+        "active",
+        "ended_pending_acceptance",
+        "accepted",
+        "rejected",
+        "contact_shared",
+        "closed",
       ],
       dispute_priority: ["low", "medium", "high", "urgent"],
       dispute_status: ["open", "in_progress", "resolved", "closed"],

@@ -1,3 +1,15 @@
+/**
+ * AUCTION SCHEDULER - KONTACT VO
+ * Documento Capa 1: Estados y Transiciones
+ * 
+ * Transiciones automáticas implementadas:
+ * - SCHEDULED → ACTIVE (cuando start_date <= NOW)
+ * - ACTIVE → ENDED_PENDING_ACCEPTANCE (cuando end_date <= NOW)
+ * - ACCEPTED → CONTACT_SHARED (automático tras aceptación)
+ * - CONTACT_SHARED → CLOSED (automático tras compartir contacto)
+ * 
+ * PROHIBIDO: Saltar estados, revertir estados, modificar estados pasados
+ */
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
@@ -12,246 +24,370 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
 );
 
+// Tipos según Documento Capa 1
+type AuctionStatus = 
+  | 'draft'
+  | 'scheduled'
+  | 'active'
+  | 'ended_pending_acceptance'
+  | 'accepted'
+  | 'rejected'
+  | 'contact_shared'
+  | 'closed';
+
 interface SchedulerResponse {
   activated: number;
+  ended: number;
+  contact_shared: number;
   closed: number;
   timestamp: string;
+  errors: string[];
+}
+
+/**
+ * Registra una transición de estado en la tabla de auditoría inmutable
+ */
+async function logStateTransition(
+  auctionId: string,
+  fromStatus: AuctionStatus | null,
+  toStatus: AuctionStatus,
+  triggeredBy: string | null,
+  triggerType: 'automatic' | 'manual' | 'admin',
+  metadata: Record<string, unknown> = {}
+): Promise<void> {
+  const { error } = await supabase
+    .from('auction_state_transitions')
+    .insert({
+      auction_id: auctionId,
+      from_status: fromStatus,
+      to_status: toStatus,
+      triggered_by: triggeredBy,
+      trigger_type: triggerType,
+      metadata: {
+        ...metadata,
+        processed_at: new Date().toISOString(),
+        scheduler_version: '1.0.0'
+      }
+    });
+
+  if (error) {
+    console.error(`❌ Error logging transition for auction ${auctionId}:`, error);
+  }
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    console.log('🕐 Auction scheduler starting at:', new Date().toISOString());
-    
-    let activatedCount = 0;
-    let closedCount = 0;
+  const response: SchedulerResponse = {
+    activated: 0,
+    ended: 0,
+    contact_shared: 0,
+    closed: 0,
+    timestamp: new Date().toISOString(),
+    errors: []
+  };
 
-    // 1. Activate scheduled auctions whose start_date has passed
+  try {
+    console.log('🕐 Auction scheduler starting at:', response.timestamp);
+    const now = new Date().toISOString();
+
+    // ============================================
+    // TRANSICIÓN 1: SCHEDULED → ACTIVE
+    // Condición: start_date <= NOW()
+    // ============================================
     const { data: scheduledAuctions, error: scheduledError } = await supabase
       .from('auctions')
-      .select('id, vehicle_id, created_by, start_date')
+      .select('id, vehicle_id, seller_id, start_date')
       .eq('status', 'scheduled')
-      .lte('start_date', new Date().toISOString())
+      .lte('start_date', now)
       .order('start_date', { ascending: true });
 
     if (scheduledError) {
       console.error('❌ Error fetching scheduled auctions:', scheduledError);
+      response.errors.push(`scheduled_fetch: ${scheduledError.message}`);
     } else if (scheduledAuctions && scheduledAuctions.length > 0) {
       console.log(`📅 Found ${scheduledAuctions.length} auctions to activate`);
       
       for (const auction of scheduledAuctions) {
-        console.log(`🚀 Processing auction ${auction.id} scheduled for ${auction.start_date}`);
-        
-        // Update auction status to active
         const { error: updateError } = await supabase
           .from('auctions')
           .update({ 
             status: 'active',
-            updated_at: new Date().toISOString()
+            updated_at: now
           })
-          .eq('id', auction.id);
+          .eq('id', auction.id)
+          .eq('status', 'scheduled'); // Doble verificación para evitar race conditions
 
         if (updateError) {
           console.error(`❌ Error activating auction ${auction.id}:`, updateError);
+          response.errors.push(`activate_${auction.id}: ${updateError.message}`);
           continue;
         }
 
-        // Update vehicle status to in_auction
-        const { error: vehicleError } = await supabase
-          .from('vehicles')
-          .update({ status: 'in_auction' })
-          .eq('id', auction.vehicle_id);
-
-        if (vehicleError) {
-          console.error(`❌ Error updating vehicle ${auction.vehicle_id}:`, vehicleError);
+        // Actualizar estado del vehículo
+        if (auction.vehicle_id) {
+          await supabase
+            .from('vehicles')
+            .update({ status: 'in_auction' })
+            .eq('id', auction.vehicle_id);
         }
 
-        // Create notification for auction owner
-        const { error: notifError } = await supabase
-          .from('auction_notifications')
-          .insert({
-            user_id: auction.created_by,
-            auction_id: auction.id,
-            type: 'auction_started',
-            content: 'Tu subasta ha comenzado automáticamente y está ahora activa para recibir pujas.',
-            is_read: false
-          });
+        // Registrar transición inmutable
+        await logStateTransition(
+          auction.id,
+          'scheduled',
+          'active',
+          null,
+          'automatic',
+          { start_date: auction.start_date }
+        );
 
-        if (notifError) {
-          console.error(`❌ Error creating notification for auction ${auction.id}:`, notifError);
-        }
-
-        // Log the action
-        const { error: logError } = await supabase
-          .from('auction_audit_log')
-          .insert({
-            auction_id: auction.id,
-            user_id: null,
-            action: 'auto_start_auction',
-            details: {
-              previous_status: 'scheduled',
-              start_date: auction.start_date,
-              activated_at: new Date().toISOString(),
-              triggered_by: 'scheduler'
-            }
-          });
-
-        if (logError) {
-          console.error(`❌ Error logging auction activation ${auction.id}:`, logError);
-        }
-
-        activatedCount++;
+        response.activated++;
         console.log(`✅ Activated auction ${auction.id}`);
       }
-    } else {
-      console.log('📅 No scheduled auctions found to activate');
     }
 
-    // 2. Close active auctions whose end_date has passed
+    // ============================================
+    // TRANSICIÓN 2: ACTIVE → ENDED_PENDING_ACCEPTANCE
+    // Condición: end_date <= NOW()
+    // ============================================
     const { data: expiredAuctions, error: expiredError } = await supabase
       .from('auctions')
-      .select('id, vehicle_id, created_by, current_price, reserve_price, end_date')
+      .select('id, vehicle_id, seller_id, current_price, reserve_price, end_date')
       .eq('status', 'active')
-      .lte('end_date', new Date().toISOString())
+      .lte('end_date', now)
       .order('end_date', { ascending: true });
 
     if (expiredError) {
       console.error('❌ Error fetching expired auctions:', expiredError);
+      response.errors.push(`expired_fetch: ${expiredError.message}`);
     } else if (expiredAuctions && expiredAuctions.length > 0) {
-      console.log(`⏰ Found ${expiredAuctions.length} auctions to close`);
+      console.log(`⏰ Found ${expiredAuctions.length} auctions to end`);
       
       for (const auction of expiredAuctions) {
-        console.log(`🔚 Processing expired auction ${auction.id} ended at ${auction.end_date}`);
-        
-        // Check if reserve price has been met
-        const hasMetReserve = auction.reserve_price === null || auction.current_price >= auction.reserve_price;
-        
-        // Get highest bidder if exists
+        // Obtener la puja más alta
         const { data: highestBid } = await supabase
           .from('bids')
           .select('bidder_id, amount')
           .eq('auction_id', auction.id)
-          .eq('amount', auction.current_price)
-          .order('created_at', { ascending: true })
+          .order('amount', { ascending: false })
           .limit(1)
           .single();
 
-        const winnerId = hasMetReserve ? highestBid?.bidder_id : null;
+        const hasMetReserve = auction.reserve_price === null || 
+          (highestBid && highestBid.amount >= auction.reserve_price);
 
-        // Update auction status
         const { error: updateError } = await supabase
           .from('auctions')
           .update({
-            status: 'ended',
-            updated_at: new Date().toISOString(),
-            winner_id: winnerId
+            status: 'ended_pending_acceptance',
+            updated_at: now,
+            winner_id: hasMetReserve ? highestBid?.bidder_id : null
           })
-          .eq('id', auction.id);
+          .eq('id', auction.id)
+          .eq('status', 'active');
 
         if (updateError) {
-          console.error(`❌ Error closing auction ${auction.id}:`, updateError);
+          console.error(`❌ Error ending auction ${auction.id}:`, updateError);
+          response.errors.push(`end_${auction.id}: ${updateError.message}`);
           continue;
         }
 
-        // Update vehicle status
-        const vehicleStatus = hasMetReserve && winnerId ? 'reserved' : 'available';
-        const { error: vehicleError } = await supabase
-          .from('vehicles')
-          .update({ status: vehicleStatus })
-          .eq('id', auction.vehicle_id);
+        // Registrar transición inmutable
+        await logStateTransition(
+          auction.id,
+          'active',
+          'ended_pending_acceptance',
+          null,
+          'automatic',
+          {
+            end_date: auction.end_date,
+            final_price: highestBid?.amount || auction.current_price,
+            has_met_reserve: hasMetReserve,
+            winner_id: hasMetReserve ? highestBid?.bidder_id : null
+          }
+        );
 
-        if (vehicleError) {
-          console.error(`❌ Error updating vehicle ${auction.vehicle_id}:`, vehicleError);
-        }
-
-        // Create notifications
-        if (hasMetReserve && winnerId) {
-          // Notify winner
-          await supabase
-            .from('auction_notifications')
-            .insert({
-              user_id: winnerId,
-              auction_id: auction.id,
-              type: 'auction_won',
-              content: `¡Felicitaciones! Has ganado una subasta con una puja de €${auction.current_price.toLocaleString()}`,
-              is_read: false
-            });
-
-          // Notify seller
-          await supabase
-            .from('auction_notifications')
-            .insert({
-              user_id: auction.created_by,
-              auction_id: auction.id,
-              type: 'auction_sold',
-              content: `Tu subasta ha finalizado con una puja ganadora de €${auction.current_price.toLocaleString()}`,
-              is_read: false
-            });
-        } else {
-          // Notify seller that reserve was not met
-          await supabase
-            .from('auction_notifications')
-            .insert({
-              user_id: auction.created_by,
-              auction_id: auction.id,
-              type: 'reserve_not_met',
-              content: `Tu subasta ha finalizado sin alcanzar el precio de reserva. Puja más alta: €${auction.current_price.toLocaleString()}`,
-              is_read: false
-            });
-        }
-
-        // Log the action
-        await supabase
-          .from('auction_audit_log')
-          .insert({
-            auction_id: auction.id,
-            user_id: null,
-            action: 'auto_close_auction',
-            details: {
-              has_met_reserve: hasMetReserve,
-              winner_id: winnerId,
-              final_price: auction.current_price,
-              end_date: auction.end_date,
-              closed_at: new Date().toISOString(),
-              triggered_by: 'scheduler'
-            }
-          });
-
-        closedCount++;
-        console.log(`✅ Closed auction ${auction.id} - Winner: ${winnerId || 'None'}`);
+        response.ended++;
+        console.log(`✅ Ended auction ${auction.id} - Winner: ${hasMetReserve ? highestBid?.bidder_id : 'None'}`);
       }
-    } else {
-      console.log('⏰ No expired auctions found to close');
     }
 
-    const response: SchedulerResponse = {
-      activated: activatedCount,
-      closed: closedCount,
-      timestamp: new Date().toISOString()
-    };
+    // ============================================
+    // TRANSICIÓN 3: ACCEPTED → CONTACT_SHARED
+    // Esta transición ocurre automáticamente después de la aceptación
+    // El sistema comparte los datos de contacto entre las partes
+    // ============================================
+    const { data: acceptedAuctions, error: acceptedError } = await supabase
+      .from('auctions')
+      .select('id, seller_id, winner_id, seller_decision_at')
+      .eq('status', 'accepted')
+      .is('contact_shared_at', null)
+      .not('winner_id', 'is', null);
 
-    console.log(`🎯 Scheduler completed: ${activatedCount} activated, ${closedCount} closed`);
+    if (acceptedError) {
+      console.error('❌ Error fetching accepted auctions:', acceptedError);
+      response.errors.push(`accepted_fetch: ${acceptedError.message}`);
+    } else if (acceptedAuctions && acceptedAuctions.length > 0) {
+      console.log(`📧 Found ${acceptedAuctions.length} auctions to share contacts`);
+      
+      for (const auction of acceptedAuctions) {
+        // Marcar que el contacto ha sido compartido
+        const { error: updateError } = await supabase
+          .from('auctions')
+          .update({
+            status: 'contact_shared',
+            contact_shared_at: now,
+            updated_at: now
+          })
+          .eq('id', auction.id)
+          .eq('status', 'accepted');
+
+        if (updateError) {
+          console.error(`❌ Error sharing contact for auction ${auction.id}:`, updateError);
+          response.errors.push(`contact_${auction.id}: ${updateError.message}`);
+          continue;
+        }
+
+        // Registrar transición inmutable
+        await logStateTransition(
+          auction.id,
+          'accepted',
+          'contact_shared',
+          null,
+          'automatic',
+          {
+            seller_id: auction.seller_id,
+            winner_id: auction.winner_id,
+            contact_shared_at: now
+          }
+        );
+
+        response.contact_shared++;
+        console.log(`✅ Contact shared for auction ${auction.id}`);
+      }
+    }
+
+    // ============================================
+    // TRANSICIÓN 4: CONTACT_SHARED → CLOSED
+    // Cierre automático después de compartir contacto
+    // Fin del proceso para Kontact
+    // ============================================
+    const { data: sharedAuctions, error: sharedError } = await supabase
+      .from('auctions')
+      .select('id, contact_shared_at')
+      .eq('status', 'contact_shared')
+      .is('closed_at', null);
+
+    if (sharedError) {
+      console.error('❌ Error fetching contact_shared auctions:', sharedError);
+      response.errors.push(`shared_fetch: ${sharedError.message}`);
+    } else if (sharedAuctions && sharedAuctions.length > 0) {
+      console.log(`🔒 Found ${sharedAuctions.length} auctions to close`);
+      
+      for (const auction of sharedAuctions) {
+        const { error: updateError } = await supabase
+          .from('auctions')
+          .update({
+            status: 'closed',
+            closed_at: now,
+            updated_at: now
+          })
+          .eq('id', auction.id)
+          .eq('status', 'contact_shared');
+
+        if (updateError) {
+          console.error(`❌ Error closing auction ${auction.id}:`, updateError);
+          response.errors.push(`close_${auction.id}: ${updateError.message}`);
+          continue;
+        }
+
+        // Registrar transición inmutable
+        await logStateTransition(
+          auction.id,
+          'contact_shared',
+          'closed',
+          null,
+          'automatic',
+          {
+            closed_at: now,
+            final_status: 'completed_with_contact'
+          }
+        );
+
+        response.closed++;
+        console.log(`✅ Closed auction ${auction.id}`);
+      }
+    }
+
+    // ============================================
+    // TRANSICIÓN: REJECTED → CLOSED
+    // Subastas rechazadas también se cierran
+    // ============================================
+    const { data: rejectedAuctions, error: rejectedError } = await supabase
+      .from('auctions')
+      .select('id, vehicle_id')
+      .eq('status', 'rejected')
+      .is('closed_at', null);
+
+    if (!rejectedError && rejectedAuctions && rejectedAuctions.length > 0) {
+      console.log(`❌ Found ${rejectedAuctions.length} rejected auctions to close`);
+      
+      for (const auction of rejectedAuctions) {
+        const { error: updateError } = await supabase
+          .from('auctions')
+          .update({
+            status: 'closed',
+            closed_at: now,
+            updated_at: now
+          })
+          .eq('id', auction.id)
+          .eq('status', 'rejected');
+
+        if (updateError) {
+          response.errors.push(`close_rejected_${auction.id}: ${updateError.message}`);
+          continue;
+        }
+
+        // Liberar vehículo
+        if (auction.vehicle_id) {
+          await supabase
+            .from('vehicles')
+            .update({ status: 'available' })
+            .eq('id', auction.vehicle_id);
+        }
+
+        await logStateTransition(
+          auction.id,
+          'rejected',
+          'closed',
+          null,
+          'automatic',
+          { closed_at: now, final_status: 'rejected_closed' }
+        );
+
+        response.closed++;
+        console.log(`✅ Closed rejected auction ${auction.id}`);
+      }
+    }
+
+    console.log(`🎯 Scheduler completed: ${response.activated} activated, ${response.ended} ended, ${response.contact_shared} contact shared, ${response.closed} closed`);
 
     return new Response(JSON.stringify(response), {
       status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        ...corsHeaders,
-      },
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
     });
 
-  } catch (error: any) {
-    console.error('❌ Error in auction scheduler:', error);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('❌ Error in auction scheduler:', errorMessage);
+    
     return new Response(
       JSON.stringify({ 
-        error: error.message,
-        activated: 0,
-        closed: 0,
-        timestamp: new Date().toISOString()
+        ...response,
+        errors: [...response.errors, `fatal: ${errorMessage}`]
       }),
       {
         status: 500,
