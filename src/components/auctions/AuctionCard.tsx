@@ -19,15 +19,19 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
   if (!vehicle) return null;
 
   const getStatusBadge = () => {
-    const badges = {
+    // Estados oficiales según Documento Capa 1
+    const badges: Record<string, { text: string; class: string }> = {
+      draft: { text: t('auctions.statusDraft', { fallback: 'Borrador' }), class: 'bg-slate-400' },
       scheduled: { text: t('auctions.statusScheduled', { fallback: 'Próximamente' }), class: 'bg-blue-500' },
       active: { text: t('auctions.statusActive', { fallback: 'Activa' }), class: 'bg-green-500' },
-      ended: { text: t('auctions.statusEnded', { fallback: 'Finalizada' }), class: 'bg-gray-500' },
-      completed: { text: t('auctions.statusCompleted', { fallback: 'Completada' }), class: 'bg-purple-500' },
-      cancelled: { text: t('auctions.statusCancelled', { fallback: 'Cancelada' }), class: 'bg-red-500' },
+      ended_pending_acceptance: { text: t('auctions.statusPendingAcceptance', { fallback: 'Pendiente Decisión' }), class: 'bg-amber-500' },
+      accepted: { text: t('auctions.statusAccepted', { fallback: 'Aceptada' }), class: 'bg-emerald-600' },
+      rejected: { text: t('auctions.statusRejected', { fallback: 'Rechazada' }), class: 'bg-red-500' },
+      contact_shared: { text: t('auctions.statusContactShared', { fallback: 'Contacto Compartido' }), class: 'bg-purple-500' },
+      closed: { text: t('auctions.statusClosed', { fallback: 'Cerrada' }), class: 'bg-gray-500' },
     };
 
-    const badge = badges[auction.status] || badges.scheduled;
+    const badge = badges[auction.status] || badges.draft;
 
     return (
       <Badge className={`${badge.class} text-white`}>

@@ -102,7 +102,7 @@ export const detectCriticalAlerts = async () => {
     const { data: failedAuctions } = await supabase
       .from('auctions')
       .select('id')
-      .eq('status', 'ended')
+      .eq('status', 'ended_pending_acceptance')
       .is('winner_id', null)
       .gte('end_date', oneWeekAgo.toISOString());
     

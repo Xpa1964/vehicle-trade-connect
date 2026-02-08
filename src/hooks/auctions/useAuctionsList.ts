@@ -51,17 +51,9 @@ export const useAuctionsList = (params: UseAuctionsListParams = {}) => {
         `)
         .order('created_at', { ascending: false });
 
-      // Filtrar por estado
+      // Filtrar por estado - Estados oficiales según Documento Capa 1
       if (params.status && params.status.length > 0) {
         query = query.in('status', params.status);
-        
-        // Si NO está filtrando por 'ended', ocultar subastas que pasaron 48h
-        if (!params.status.includes('ended')) {
-          query = query.or('hidden_at.is.null,hidden_at.gt.' + new Date().toISOString());
-        }
-      } else {
-        // Si no hay filtro de status, ocultar subastas que pasaron 48h
-        query = query.or('hidden_at.is.null,hidden_at.gt.' + new Date().toISOString());
       }
 
       // Filtrar por rango de precio
