@@ -1,1 +1,4 @@
 project_id = "vbqvzumjmnblcdkkxuqq"
+
+[functions.send-auction-contact-details]
+verify_jwt = false
