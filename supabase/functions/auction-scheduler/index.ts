@@ -265,6 +265,34 @@ const handler = async (req: Request): Promise<Response> => {
           }
         );
 
+        // ============================================
+        // ENVIAR EMAILS DE CONTACTO (Capa 3)
+        // ============================================
+        try {
+          const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
+          const emailResponse = await fetch(
+            `${supabaseUrl}/functions/v1/send-auction-contact-details`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`
+              },
+              body: JSON.stringify({ auctionId: auction.id })
+            }
+          );
+          
+          if (!emailResponse.ok) {
+            const errorData = await emailResponse.json();
+            console.error(`❌ Error sending contact emails for auction ${auction.id}:`, errorData);
+          } else {
+            console.log(`📧 Contact emails sent for auction ${auction.id}`);
+          }
+        } catch (emailError) {
+          console.error(`❌ Failed to call contact email function for auction ${auction.id}:`, emailError);
+          // No bloqueamos la transición por error de email
+        }
+
         response.contact_shared++;
         console.log(`✅ Contact shared for auction ${auction.id}`);
       }

@@ -41,6 +41,7 @@ export interface Auction {
     company_name?: string;
     full_name?: string;
     email: string;
+    contact_phone?: string;
   };
   winner?: {
     id: string;
