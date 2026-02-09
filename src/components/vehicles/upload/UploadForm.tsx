@@ -91,7 +91,7 @@ export const UploadForm = ({
             </AlertTitle>
             <AlertDescription className="text-amber-800 dark:text-amber-200 space-y-3 mt-2">
               <p className="text-sm">{t('vehicles.imageNamingInfo')}</p>
-              <div className="space-y-2 text-sm bg-white dark:bg-amber-900/20 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
+              <div className="space-y-2 text-sm bg-card p-3 rounded-lg border border-amber-200 dark:border-amber-800">
                 <div className="flex items-start gap-2">
                   <span className="font-semibold whitespace-nowrap">1️⃣ {t('vehicles.imageNamingByVin', { fallback: 'Por VIN:' })}</span>
                   <code className="text-xs bg-amber-100 dark:bg-amber-900 px-2 py-1 rounded">
