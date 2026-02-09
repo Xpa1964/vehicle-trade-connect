@@ -692,7 +692,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
 
   HERO_EXCHANGES: {
     id: "hero.exchanges",
-    currentPath: "/images/vehicle-exchanges.png",
+    currentPath: "/images/exchanges-hero.png",
     usage: "Exchanges.tsx",
     purpose: "Hero background for exchanges page",
     critical: true,

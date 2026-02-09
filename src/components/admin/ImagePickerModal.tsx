@@ -100,6 +100,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
   const [availableImages, setAvailableImages] = useState<StorageImage[]>([]);
   const [selectedImage, setSelectedImage] = useState<StorageImage | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [reloadToken, setReloadToken] = useState(0);
 
   // Load all images from registry (and check storage for existing)
   useEffect(() => {
@@ -137,7 +138,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
             images.push({
               id: entry.id,
               entry,
-              url: `${publicUrl}?t=${Date.now()}`,
+              url: `${publicUrl}?v=${encodeURIComponent(latestFile.name)}`,
               storagePath,
               hasStorageImage: true
             });
@@ -172,7 +173,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
     };
 
     loadAllRegistryImages();
-  }, [isOpen, targetImage.id]);
+  }, [isOpen, targetImage.id, reloadToken]);
 
   // Filter images by search query
   const filteredImages = useMemo(() => {
@@ -252,13 +253,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
   };
 
   const handleRefresh = () => {
-    setIsLoading(true);
-    setAvailableImages([]);
-    // Trigger reload by resetting state - useEffect will handle reload
-    setTimeout(() => {
-      const event = new Event('reload');
-      window.dispatchEvent(event);
-    }, 100);
+    setReloadToken((x) => x + 1);
   };
 
   return (

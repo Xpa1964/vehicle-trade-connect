@@ -5,6 +5,7 @@ import { LucideIcon } from 'lucide-react';
 interface ControlPanelItem {
   icon?: LucideIcon;
   imageUrl?: string;
+  imageId?: string;
   title: string;
   description: string;
   href: string;
@@ -32,6 +33,7 @@ const ControlPanelSection: React.FC<ControlPanelSectionProps> = ({
             key={index}
             icon={item.icon}
             imageUrl={item.imageUrl}
+            imageId={item.imageId}
             title={item.title}
             description={item.description}
             href={item.href}

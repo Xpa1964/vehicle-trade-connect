@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { ArrowLeftRight, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import SafeImage from '@/components/shared/SafeImage';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,8 +50,8 @@ const Exchanges: React.FC = () => {
       {/* Header con imagen de fondo */}
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-6 mx-4 mt-8">
         <div className="absolute inset-0">
-          <img 
-            src="/images/exchanges-hero.png?v=2"
+          <SafeImage
+            imageId="hero.exchanges"
             alt="Exchanges Background"
             className="w-full h-full object-cover object-[center_30%]"
             style={{ minHeight: '320px' }}
@@ -177,11 +178,11 @@ const Exchanges: React.FC = () => {
                             {/* Vehicle information */}
                             <div className="flex-1">
                               <h3 className="font-semibold text-lg">{vehicle.brand} {vehicle.model}</h3>
-                              <p className="text-gray-600">{vehicle.year} - {vehicle.mileage?.toLocaleString()} km</p>
-                              <p className="text-sm text-gray-500">{vehicle.location}</p>
+                              <p className="text-muted-foreground">{vehicle.year} - {vehicle.mileage?.toLocaleString()} km</p>
+                              <p className="text-sm text-muted-foreground">{vehicle.location}</p>
                               <div className="flex items-center mt-1">
-                                <ArrowLeftRight className="h-3 w-3 mr-1 text-gray-600" />
-                                <span className="text-xs text-gray-600 font-medium">Acepta intercambio</span>
+                                <ArrowLeftRight className="h-3 w-3 mr-1 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground font-medium">Acepta intercambio</span>
                               </div>
                             </div>
                           </div>
@@ -198,7 +199,7 @@ const Exchanges: React.FC = () => {
                       </Card>
                     ))
                   ) : (
-                    <div className="text-center text-gray-500 py-8">
+                    <div className="text-center text-muted-foreground py-8">
                       <p className="mb-2">
                         {searchQuery.trim() 
                           ? t('exchanges.noVehiclesFound', { fallback: 'No se encontraron vehículos que coincidan con tu búsqueda' })
@@ -206,7 +207,7 @@ const Exchanges: React.FC = () => {
                         }
                       </p>
                       {!searchQuery.trim() && user && (
-                        <p className="text-sm text-gray-400">
+                        <p className="text-sm text-muted-foreground">
                           {t('exchanges.ownVehiclesExcluded', { fallback: 'Nota: Tus propios vehículos no se muestran en esta lista' })}
                         </p>
                       )}

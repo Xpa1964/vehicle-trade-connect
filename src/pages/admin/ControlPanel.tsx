@@ -6,7 +6,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ControlPanelSection from '@/components/admin/control-panel/ControlPanelSection';
-import { apiKeysImage } from '@/constants/imageAssets';
 import { 
   LayoutDashboard, 
   Users, 
@@ -199,7 +198,7 @@ const ControlPanelPage: React.FC = () => {
       href: '/admin/report-payments'
     },
     {
-      imageUrl: apiKeysImage,
+      imageId: 'admin.apikeys',
       title: 'Gestión de APIs',
       description: 'Gestiona API keys de partners para sincronización automática de stock',
       href: '/admin/api-management'
@@ -221,31 +220,31 @@ const ControlPanelPage: React.FC = () => {
         <ControlPanelSection
           title={t('control.primaryFunctions')}
           items={primaryFunctions}
-          colorClass="border-blue-200 bg-blue-50/50"
+          colorClass="border-border bg-card/30"
         />
         
         <ControlPanelSection
           title={t('control.communication')}
           items={communication}
-          colorClass="border-green-200 bg-green-50/50"
+          colorClass="border-border bg-card/30"
         />
         
         <ControlPanelSection
           title="Gestión de Contenido"
           items={contentManagement}
-          colorClass="border-purple-200 bg-purple-50/50"
+          colorClass="border-border bg-card/30"
         />
         
         <ControlPanelSection
           title={t('control.professionalTools')}
           items={professionalTools}
-          colorClass="border-orange-200 bg-orange-50/50"
+          colorClass="border-border bg-card/30"
         />
         
         <ControlPanelSection
           title="Administración"
           items={administration}
-          colorClass="border-red-200 bg-red-50/50"
+          colorClass="border-border bg-card/30"
         />
       </div>
     </div>
