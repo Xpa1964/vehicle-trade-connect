@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import TransportQuotesList from '@/components/transport/TransportQuotesList';
-import transportQuotesImage from '@/assets/transport-quotes-image.png';
+import SafeImage from '@/components/shared/SafeImage';
 
 const TransportQuoteManagement: React.FC = () => {
   const navigate = useNavigate();
@@ -17,8 +17,8 @@ const TransportQuoteManagement: React.FC = () => {
         {/* Header con imagen de fondo */}
         <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
           <div className="absolute inset-0">
-            <img 
-              src={transportQuotesImage}
+            <SafeImage 
+              imageId="hero.transport.quotes"
               alt="Transport Quote Background"
               className="w-full h-full object-cover object-center"
               style={{ minHeight: '320px' }}
@@ -54,9 +54,9 @@ const TransportQuoteManagement: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-2xl font-bold mb-4">{t('transportQuotes.title')}</h2>
-          <p className="text-gray-600 mb-6">
+        <div className="bg-card rounded-lg shadow border border-border p-6">
+          <h2 className="text-2xl font-bold text-foreground mb-4">{t('transportQuotes.title')}</h2>
+          <p className="text-muted-foreground mb-6">
             {t('transportQuotes.description')}
           </p>
           

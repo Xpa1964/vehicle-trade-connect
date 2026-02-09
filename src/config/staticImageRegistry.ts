@@ -765,6 +765,185 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     aiEditable: true,
     category: "services",
     source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // TRANSPORT PAGES
+  // ═══════════════════════════════════════════════════════════════
+
+  HERO_TRANSPORT: {
+    id: "hero.transport",
+    currentPath: "/lovable-uploads/04839c38-9d09-4f2f-9ec2-8af7c35dbceb.png",
+    usage: "Transport.tsx",
+    purpose: "Hero background for transport request page",
+    critical: true,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  HERO_TRANSPORT_EXPRESS: {
+    id: "hero.transport.express",
+    currentPath: "/assets/transport-image.png",
+    usage: "TransportExpressPage.tsx",
+    purpose: "Hero background for transport express info page",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  HERO_TRANSPORT_QUOTES: {
+    id: "hero.transport.quotes",
+    currentPath: "/assets/transport-quotes-image.png",
+    usage: "TransportQuoteManagement.tsx",
+    purpose: "Hero background for transport quote management",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // BULLETIN / ANNOUNCEMENTS PAGES
+  // ═══════════════════════════════════════════════════════════════
+
+  HERO_BULLETIN: {
+    id: "hero.bulletin",
+    currentPath: "/images/bulletin-board.png",
+    usage: "BulletinHero.tsx",
+    purpose: "Hero background for bulletin board page",
+    critical: true,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  HERO_BULLETIN_PUBLISH: {
+    id: "hero.bulletin.publish",
+    currentPath: "/assets/announcement-image.png",
+    usage: "PublishAnnouncementPage.tsx",
+    purpose: "Header image for publish announcement page",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // REPORTS PAGES
+  // ═══════════════════════════════════════════════════════════════
+
+  HERO_REPORTS_DELIVERY: {
+    id: "hero.reports.delivery",
+    currentPath: "/assets/report-delivery-image.png",
+    usage: "VehicleReports.tsx, RequestReport.tsx",
+    purpose: "Hero background for vehicle reports delivery pages",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // CALCULATOR PAGES
+  // ═══════════════════════════════════════════════════════════════
+
+  HERO_IMPORT_CALCULATOR: {
+    id: "hero.import.calculator",
+    currentPath: "/lovable-uploads/ba9a7ade-a335-4687-9895-ed163a824df5.png",
+    usage: "ImportCalculator.tsx",
+    purpose: "Hero background for import calculator page",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  HERO_COMMISSION_CALCULATOR: {
+    id: "hero.commission.calculator",
+    currentPath: "/lovable-uploads/379e75ed-00ea-49f5-a545-0365e0d9dc22.png",
+    usage: "CommissionCalculatorPage.tsx",
+    purpose: "Hero background for commission calculator page",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // BLOG PAGE
+  // ═══════════════════════════════════════════════════════════════
+
+  HERO_BLOG: {
+    id: "hero.blog",
+    currentPath: "/lovable-uploads/eec67196-c0f3-47cb-9620-773175533a94.png",
+    usage: "BlogMainPage.tsx",
+    purpose: "Hero background for blog main page",
+    critical: false,
+    aiEditable: true,
+    category: "marketing",
+    source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MESSAGING PAGE
+  // ═══════════════════════════════════════════════════════════════
+
+  HERO_MESSAGING: {
+    id: "hero.messaging",
+    currentPath: "/images/messaging-chat.png",
+    usage: "MessagingInfoPage.tsx",
+    purpose: "Hero background for messaging info page",
+    critical: false,
+    aiEditable: true,
+    category: "messaging",
+    source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // EXCHANGE PAGES
+  // ═══════════════════════════════════════════════════════════════
+
+  HERO_EXCHANGE_FORM: {
+    id: "hero.exchange.form",
+    currentPath: "/lovable-uploads/exchange-header.png",
+    usage: "ExchangeForm.tsx",
+    purpose: "Hero background for exchange request form",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // DASHBOARD HEADER
+  // ═══════════════════════════════════════════════════════════════
+
+  HERO_DASHBOARD_HEADER: {
+    id: "hero.dashboard.header",
+    currentPath: "/lovable-uploads/e8bcfe5d-970e-46e2-a7e3-97c470666f95.png",
+    usage: "DashboardHeader.tsx",
+    purpose: "Hero background for dashboard control panel header",
+    critical: true,
+    aiEditable: true,
+    category: "dashboard",
+    source: "product"
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // ADMIN API MANAGEMENT
+  // ═══════════════════════════════════════════════════════════════
+
+  HERO_API_MANAGEMENT: {
+    id: "hero.api.management",
+    currentPath: "/assets/api-keys-image.png",
+    usage: "APIManagement.tsx",
+    purpose: "Header image for API management admin page",
+    critical: false,
+    aiEditable: true,
+    category: "dashboard",
+    source: "product"
   }
 };
 

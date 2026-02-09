@@ -67,10 +67,10 @@ export const DamagesSection: React.FC<DamagesSectionProps> = ({ form }) => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'minor': return 'bg-yellow-100 text-yellow-800';
-      case 'moderate': return 'bg-orange-100 text-orange-800';
-      case 'severe': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'minor': return 'bg-warning/10 text-warning';
+      case 'moderate': return 'bg-orange-500/10 text-orange-500';
+      case 'severe': return 'bg-destructive/10 text-destructive';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 

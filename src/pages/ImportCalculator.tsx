@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ImportCalculatorComponent from '@/components/import-calculator/ImportCalculator';
 import BackButton from '@/components/shared/BackButton';
+import SafeImage from '@/components/shared/SafeImage';
 
 const ImportCalculator: React.FC = () => {
   const { t } = useLanguage();
@@ -20,22 +21,11 @@ const ImportCalculator: React.FC = () => {
         {/* Header con imagen de fondo SIN máscara */}
         <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
           <div className="absolute inset-0">
-            <img 
-              src="/lovable-uploads/ba9a7ade-a335-4687-9895-ed163a824df5.png"
+            <SafeImage 
+              imageId="hero.import.calculator"
               alt="Import Calculator Background"
               className="w-full h-full object-cover object-center"
               style={{ minHeight: '320px' }}
-              onError={(e) => {
-                console.log('Error loading import calculator background image, using gradient fallback');
-                e.currentTarget.style.display = 'none';
-                const parent = e.currentTarget.parentElement;
-                if (parent) {
-                  parent.style.background = 'linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%)';
-                }
-              }}
-              onLoad={() => {
-                console.log('Import calculator background image loaded successfully');
-              }}
             />
           </div>
           

@@ -2,7 +2,7 @@
 import React from 'react';
 import { CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { LOGO_IMAGES } from '@/constants/imageAssets';
+import SafeImage from '@/components/shared/SafeImage';
 
 interface VehicleFormHeaderProps {
   isEditing: boolean;
@@ -15,8 +15,8 @@ export const VehicleFormHeader: React.FC<VehicleFormHeaderProps> = ({ isEditing 
     <CardHeader className="border-b">
       <div className="flex items-center gap-4 md:gap-6">
         {/* Logo KONTACT */}
-        <img 
-          src={LOGO_IMAGES.primary}
+        <SafeImage 
+          imageId="layout.navbar.logo"
           alt="KONTACT VO Logo" 
           className="h-12 md:h-16 lg:h-20 w-auto object-contain flex-shrink-0"
           style={{ mixBlendMode: 'multiply' }}

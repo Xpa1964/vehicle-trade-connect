@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
-import bulletinImage from '@/assets/bulletin-image.png';
+import SafeImage from '@/components/shared/SafeImage';
 
 const BulletinHero: React.FC = () => {
   const { t } = useLanguage();
@@ -13,8 +13,8 @@ const BulletinHero: React.FC = () => {
   return (
     <div className="relative overflow-hidden rounded-xl shadow-lg mb-4 sm:mb-6">
       <div className="absolute inset-0">
-        <img 
-          src="/images/bulletin-board.png"
+        <SafeImage 
+          imageId="hero.bulletin"
           alt="Bulletin Background"
           className="w-full h-full object-cover object-center"
           style={{ minHeight: '220px' }}

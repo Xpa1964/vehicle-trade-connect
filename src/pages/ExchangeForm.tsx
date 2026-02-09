@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { ExchangeRequestForm } from '@/components/exchanges/ExchangeRequestForm';
+import SafeImage from '@/components/shared/SafeImage';
 
 const ExchangeForm = () => {
   const navigate = useNavigate();
@@ -22,9 +23,9 @@ const ExchangeForm = () => {
       {/* Hero Section */}
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-6 mx-4 mt-4">
         <div className="absolute inset-0">
-      <img 
-        src="/lovable-uploads/exchange-header.png"
-        alt="Intercambio de Vehículos"
+          <SafeImage 
+            imageId="hero.exchange.form"
+            alt="Intercambio de Vehículos"
             className="w-full h-full object-cover object-center"
             style={{ minHeight: '320px' }}
           />

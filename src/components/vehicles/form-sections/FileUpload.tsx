@@ -143,9 +143,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
               {Array.from(form.watch('additionalFiles')).map((file, i) => (
-                <div key={i} className="flex items-center gap-2 p-2 rounded-md bg-gray-50 border">
-                  <FileText className="h-4 w-4 text-auto-blue" />
-                  <span className="text-sm truncate flex-1">{file.name}</span>
+                <div key={i} className="flex items-center gap-2 p-2 rounded-md bg-muted border border-border">
+                  <FileText className="h-4 w-4 text-primary" />
+                  <span className="text-sm truncate flex-1 text-foreground">{file.name}</span>
                   <Button 
                     variant="ghost" 
                     size="icon" 

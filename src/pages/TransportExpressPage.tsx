@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { TransportHighlights } from '@/components/transport';
-import transportImage from '@/assets/transport-image.png';
+import SafeImage from '@/components/shared/SafeImage';
 
 const TransportExpressPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,8 +17,8 @@ const TransportExpressPage: React.FC = () => {
         {/* Header con imagen de fondo */}
         <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
           <div className="absolute inset-0">
-            <img 
-              src={transportImage}
+            <SafeImage 
+              imageId="hero.transport.express"
               alt="Transport Express Background"
               className="w-full h-full object-cover object-center"
               style={{ minHeight: '320px' }}

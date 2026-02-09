@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import AnnouncementForm from '@/components/bulletin/AnnouncementForm';
 import { Announcement } from '@/types/announcement';
 import { Button } from '@/components/ui/button';
-import announcementImage from '@/assets/announcement-image.png';
+import SafeImage from '@/components/shared/SafeImage';
 
 const PublishAnnouncementPage: React.FC = () => {
   const { t } = useLanguage();
@@ -52,8 +52,8 @@ const PublishAnnouncementPage: React.FC = () => {
         <div className="bg-card rounded-xl shadow-sm border border-border p-8 mb-6">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="flex-shrink-0">
-              <img 
-                src={announcementImage}
+              <SafeImage 
+                imageId="hero.bulletin.publish"
                 alt="Publish Announcement"
                 className="w-32 h-32 md:w-40 md:h-40 object-cover rounded-lg"
               />
