@@ -86,16 +86,16 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
     <div className="space-y-4">
       {/* Drag and Drop Area */}
       <div
-        className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-auto-blue transition-colors cursor-pointer"
+        className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer bg-muted/50"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onClick={() => fileInputRef.current?.click()}
       >
-        <Images className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <p className="text-lg font-medium text-gray-700 mb-2">
+        <Images className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+        <p className="text-lg font-medium text-foreground mb-2">
           {t('vehicles.dragDropImages', { fallback: 'Arrastra y suelta imágenes aquí' })}
         </p>
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           {t('vehicles.orClickToSelect', { fallback: 'o haz clic para seleccionar archivos' })}
         </p>
         <Button type="button" variant="outline">
@@ -104,7 +104,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
         </Button>
         
         {remainingSlots < maxImages && (
-          <p className="text-xs text-gray-400 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             {t('vehicles.remainingSlots', { 
               count: remainingSlots, 
               fallback: `${remainingSlots} imágenes restantes` 
@@ -124,7 +124,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
       />
 
       {/* Upload tips */}
-      <div className="text-xs text-gray-500 space-y-1">
+      <div className="text-xs text-muted-foreground space-y-1">
         <p>• {t('vehicles.uploadTip1', { fallback: 'Formatos permitidos: JPG, PNG, WebP' })}</p>
         <p>• {t('vehicles.uploadTip2', { fallback: 'Tamaño máximo por imagen: 10MB' })}</p>
         <p>• {t('vehicles.uploadTip3', { fallback: 'Máximo 25 imágenes por vehículo' })}</p>

@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { TransportFormHeader } from '@/components/transport';
 import TransportRequestForm from '@/components/transport/TransportRequestForm';
+import SafeImage from '@/components/shared/SafeImage';
 
 const Transport: React.FC = () => {
   const { t } = useLanguage();
@@ -17,13 +18,11 @@ const Transport: React.FC = () => {
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-8" style={{ minHeight: '320px' }}>
         {/* Background image */}
         <div className="absolute inset-0">
-          <div 
-            className="w-full h-full bg-cover bg-no-repeat"
-            style={{ 
-              backgroundImage: 'url(/lovable-uploads/04839c38-9d09-4f2f-9ec2-8af7c35dbceb.png)',
-              backgroundPosition: 'center 30%',
-              minHeight: '320px'
-            }}
+          <SafeImage 
+            imageId="hero.transport"
+            alt="Transport Background"
+            className="w-full h-full object-cover"
+            style={{ objectPosition: 'center 30%' }}
           />
         </div>
         

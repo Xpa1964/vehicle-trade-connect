@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import CommissionCalculator from '@/components/commission/CommissionCalculator';
 import { useLanguage } from '@/contexts/LanguageContext';
+import SafeImage from '@/components/shared/SafeImage';
 
 const CommissionCalculatorPage: React.FC = () => {
   const navigate = useNavigate();
@@ -16,22 +17,11 @@ const CommissionCalculatorPage: React.FC = () => {
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
         {/* Background usando la imagen de calculadora y dinero - SIN FILTROS */}
         <div className="absolute inset-0">
-          <img 
-            src="/lovable-uploads/379e75ed-00ea-49f5-a545-0365e0d9dc22.png"
+          <SafeImage 
+            imageId="hero.commission.calculator"
             alt="Commission Calculator Background"
             className="w-full h-full object-cover object-center"
             style={{ minHeight: '320px' }}
-            onError={(e) => {
-              console.log('Error loading commission calculator background image, using gradient fallback');
-              e.currentTarget.style.display = 'none';
-              const parent = e.currentTarget.parentElement;
-              if (parent) {
-                parent.style.background = 'linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%)';
-              }
-            }}
-            onLoad={() => {
-              console.log('Commission calculator background image loaded successfully');
-            }}
           />
         </div>
         

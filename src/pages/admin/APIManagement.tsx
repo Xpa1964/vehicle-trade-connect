@@ -10,7 +10,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import APIKeysList from '@/components/admin/api-management/APIKeysList';
 import APIStats from '@/components/admin/api-management/APIStats';
 import APIKeyRequestsList from '@/components/admin/api-management/APIKeyRequestsList';
-import apiKeysImage from '@/assets/api-keys-image.png';
+import SafeImage from '@/components/shared/SafeImage';
 
 const APIManagement: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
@@ -55,8 +55,8 @@ const APIManagement: React.FC = () => {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-            <img 
-              src={apiKeysImage} 
+            <SafeImage 
+              imageId="hero.api.management"
               alt="API Keys" 
               className="w-full h-full object-cover"
             />

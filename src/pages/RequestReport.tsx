@@ -3,7 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ReportRequestForm } from '@/components/vehicle-reports/ReportRequestForm';
 import { useLanguage } from '@/contexts/LanguageContext';
-import reportDeliveryImage from '@/assets/report-delivery-image.png';
+import SafeImage from '@/components/shared/SafeImage';
 
 const RequestReport = () => {
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ const RequestReport = () => {
       {/* Hero Section */}
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-6 mx-4 mt-4" style={{ minHeight: '320px' }}>
         <div className="absolute inset-0 z-0">
-          <img 
-            src={reportDeliveryImage}
+          <SafeImage 
+            imageId="hero.reports.delivery"
             alt="Solicitar Informe"
             className="w-full h-full object-cover object-center"
           />

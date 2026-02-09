@@ -117,10 +117,10 @@ export const DamageEditor: React.FC<DamageEditorProps> = ({ damage, onSave, onCa
       <div>
         <Label>Imágenes del Daño</Label>
         <div className="mt-2">
-          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-muted/50 bg-muted/30">
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-              <Upload className="w-8 h-8 mb-2 text-gray-400" />
-              <p className="text-sm text-gray-500">Subir imágenes del daño</p>
+              <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">Subir imágenes del daño</p>
             </div>
             <input
               type="file"

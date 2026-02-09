@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import BlogList from '@/components/blog/BlogList';
+import SafeImage from '@/components/shared/SafeImage';
 
 const BlogMainPage: React.FC = () => {
   const { t } = useLanguage();
@@ -17,21 +18,10 @@ const BlogMainPage: React.FC = () => {
         <div className="relative overflow-hidden rounded-xl shadow-lg mb-6 min-h-[320px]">
           {/* Background Image */}
           <div className="absolute inset-0">
-            <img 
-              src="/lovable-uploads/eec67196-c0f3-47cb-9620-773175533a94.png"
+            <SafeImage 
+              imageId="hero.blog"
               alt="Blog Background"
               className="w-full h-full object-cover object-center"
-              onError={(e) => {
-                console.log('Error loading blog background image, using gradient fallback');
-                e.currentTarget.style.display = 'none';
-                const parent = e.currentTarget.parentElement;
-                if (parent) {
-                  parent.style.background = 'linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%)';
-                }
-              }}
-              onLoad={() => {
-                console.log('Blog background image loaded successfully');
-              }}
             />
           </div>
           

@@ -38,8 +38,8 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
                 className={cn(
                   "flex-1 text-xs lg:text-sm relative flex items-center gap-1 px-1 lg:px-3 py-3 min-h-[3.5rem] whitespace-normal border-0",
                   isActive && "bg-primary text-primary-foreground",
-                  (isCompleted || showAsCompleted) && "bg-green-100 text-green-800",
-                  showAsCompleted && "bg-green-500 text-white"
+                  (isCompleted || showAsCompleted) && "bg-success/10 text-success",
+                  showAsCompleted && "bg-success text-success-foreground"
                 )}
               >
                 {(isCompleted || showAsCompleted) && !isPublishedTab && <Check className="h-3 w-3 flex-shrink-0" />}
@@ -49,7 +49,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
               {index < tabs.length - 1 && (
                 <ChevronRight className={cn(
                   "h-3 w-3 lg:h-4 lg:w-4 mx-1 transition-colors flex-shrink-0",
-                  isActive ? "text-primary" : "text-gray-400"
+                  isActive ? "text-primary" : "text-muted-foreground"
                 )} />
               )}
             </div>

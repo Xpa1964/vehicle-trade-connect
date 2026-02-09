@@ -4,6 +4,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BackButton from '@/components/shared/BackButton';
+import SafeImage from '@/components/shared/SafeImage';
 
 // Imágenes de capturas reales para cada idioma
 import chatES from "@/assets/messaging/chat-es.jpg";
@@ -94,8 +95,8 @@ const MessagingInfoPage = () => {
         {/* Hero Section con imagen de fondo */}
         <div className="relative overflow-hidden rounded-xl shadow-lg mb-12">
           <div className="absolute inset-0">
-            <img 
-              src="/images/messaging-chat.png"
+            <SafeImage 
+              imageId="hero.messaging"
               alt="Messaging System Background"
               className="w-full h-full object-cover"
               style={{ objectPosition: 'center' }}
@@ -188,31 +189,31 @@ const MessagingInfoPage = () => {
         {/* Features Grid - Estandarizado */}
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
           <div className="bg-card border hover:shadow-lg transition-shadow rounded-xl p-6 flex flex-col items-center text-center">
-            <Zap className="h-12 w-12 text-blue-600 mb-4" />
-            <h3 className="text-lg font-semibold mb-2">
+            <Zap className="h-12 w-12 text-primary mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               {t('messaging.features.instant.title')}
             </h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               {t('messaging.features.instant.desc')}
             </p>
           </div>
 
           <div className="bg-card border hover:shadow-lg transition-shadow rounded-xl p-6 flex flex-col items-center text-center">
-            <Globe className="h-12 w-12 text-green-600 mb-4" />
-            <h3 className="text-lg font-semibold mb-2">
+            <Globe className="h-12 w-12 text-success mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               {t('messaging.features.languages.title')}
             </h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               {t('messaging.features.languages.desc')}
             </p>
           </div>
 
           <div className="bg-card border hover:shadow-lg transition-shadow rounded-xl p-6 flex flex-col items-center text-center">
-            <Languages className="h-12 w-12 text-purple-600 mb-4" />
-            <h3 className="text-lg font-semibold mb-2">
+            <Languages className="h-12 w-12 text-accent-foreground mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               {t('messaging.features.context.title')}
             </h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               {t('messaging.features.context.desc')}
             </p>
           </div>

@@ -4,6 +4,7 @@ import { Bell, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UserWithMeta } from '@/types/auth';
+import SafeImage from '@/components/shared/SafeImage';
 
 interface DashboardHeaderProps {
   user: UserWithMeta;
@@ -19,22 +20,11 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ user }) => {
     <div className="relative overflow-hidden rounded-xl shadow-lg">
       {/* Background using the uploaded car interior image - SIN FILTROS NI DEGRADADOS */}
       <div className="absolute inset-0">
-        <img 
-          src="/lovable-uploads/e8bcfe5d-970e-46e2-a7e3-97c470666f95.png"
+        <SafeImage 
+          imageId="hero.dashboard.header"
           alt="Dashboard Background"
           className="w-full h-full object-cover object-[center_30%]"
           style={{ minHeight: '320px' }}
-          onError={(e) => {
-            console.log('Error loading primary background image, using gradient fallback');
-            e.currentTarget.style.display = 'none';
-            const parent = e.currentTarget.parentElement;
-            if (parent) {
-              parent.style.background = 'linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #581c87 100%)';
-            }
-          }}
-          onLoad={() => {
-            console.log('Car interior background image loaded successfully');
-          }}
         />
       </div>
       

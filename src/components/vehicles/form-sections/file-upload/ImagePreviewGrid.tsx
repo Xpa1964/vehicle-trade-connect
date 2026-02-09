@@ -47,7 +47,7 @@ export const ImagePreviewGrid: React.FC<ImagePreviewGridProps> = ({
                     {...provided.dragHandleProps}
                     className={`
                       relative group aspect-square rounded-lg overflow-hidden border-2 
-                      ${image.isPrimary ? 'border-auto-blue ring-2 ring-auto-blue/20' : 'border-gray-200'} 
+                      ${image.isPrimary ? 'border-primary ring-2 ring-primary/20' : 'border-border'} 
                       ${snapshot.isDragging ? 'shadow-lg scale-105' : 'hover:shadow-md'}
                       transition-all duration-200 cursor-grab active:cursor-grabbing
                     `}

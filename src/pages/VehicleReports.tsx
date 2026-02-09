@@ -8,7 +8,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import BudgetReviewDialog from '@/components/vehicle-reports/BudgetReviewDialog';
-import reportDeliveryImage from '@/assets/report-delivery-image.png';
+import SafeImage from '@/components/shared/SafeImage';
 
 interface ReportRequest {
   id: string;
@@ -100,11 +100,11 @@ const VehicleReports: React.FC = () => {
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { label: string; variant: any; className?: string }> = {
       pending: { label: 'Pendiente de Procesamiento', variant: 'secondary' },
-      budgeted: { label: 'Presupuesto Disponible', variant: 'outline', className: 'border-amber-500 text-amber-600' },
-      budget_accepted: { label: 'Presupuesto Aceptado', variant: 'outline', className: 'border-green-500 text-green-600' },
-      budget_rejected: { label: 'Presupuesto Rechazado', variant: 'outline', className: 'border-red-500 text-red-600' },
-      in_process: { label: 'En Proceso', variant: 'default', className: 'bg-orange-100 text-orange-800' },
-      delivered: { label: 'Entregado', variant: 'default', className: 'bg-green-100 text-green-800' },
+      budgeted: { label: 'Presupuesto Disponible', variant: 'outline', className: 'border-warning text-warning' },
+      budget_accepted: { label: 'Presupuesto Aceptado', variant: 'outline', className: 'border-success text-success' },
+      budget_rejected: { label: 'Presupuesto Rechazado', variant: 'outline', className: 'border-destructive text-destructive' },
+      in_process: { label: 'En Proceso', variant: 'default', className: 'bg-warning/10 text-warning' },
+      delivered: { label: 'Entregado', variant: 'default', className: 'bg-success/10 text-success' },
       rejected: { label: 'Rechazado', variant: 'destructive' }
     };
 
@@ -150,8 +150,8 @@ const VehicleReports: React.FC = () => {
         {/* Header con imagen de fondo */}
         <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
           <div className="absolute inset-0">
-            <img 
-              src={reportDeliveryImage}
+            <SafeImage 
+              imageId="hero.reports.delivery"
               alt="Vehicle Reports Background"
               className="w-full h-full object-cover object-center"
               style={{ minHeight: '320px' }}
@@ -197,30 +197,30 @@ const VehicleReports: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-600" />
+              <CheckCircle className="h-5 w-5 text-success" />
               Informes Entregados
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-green-600">
+            <div className="text-3xl font-bold text-success">
               {reports.filter(r => r.status === 'delivered').length}
             </div>
-            <p className="text-gray-600">Listos para descarga</p>
+            <p className="text-muted-foreground">Listos para descarga</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-orange-600" />
+              <Clock className="h-5 w-5 text-warning" />
               En Proceso
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-orange-600">
+            <div className="text-3xl font-bold text-warning">
               {reports.filter(r => r.status === 'in_process').length}
             </div>
-            <p className="text-gray-600">Siendo procesados</p>
+            <p className="text-muted-foreground">Siendo procesados</p>
           </CardContent>
         </Card>
 
@@ -317,8 +317,8 @@ const VehicleReports: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <FileText className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+            <div className="text-center py-8 text-muted-foreground">
+              <FileText className="h-16 w-16 mx-auto mb-4 text-muted" />
               <p>No tienes informes solicitados aún</p>
               <Button asChild className="mt-4">
                 <Link to="/request-report">

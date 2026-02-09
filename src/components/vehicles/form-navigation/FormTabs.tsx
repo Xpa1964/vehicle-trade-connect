@@ -75,36 +75,36 @@ export const FormTabs: React.FC<FormTabsProps> = ({
       <TabsContent value="published" className="space-y-6">
         <Card className="w-full">
           <CardContent className="pt-6">
-            {isVehiclePublished ? (
+        {isVehiclePublished ? (
               <div className="text-center space-y-6">
                 <div className="flex justify-center">
-                  <CheckCircle className="h-20 w-20 text-green-500" />
+                  <CheckCircle className="h-20 w-20 text-success" />
                 </div>
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold text-green-600">¡Vehículo Publicado Exitosamente!</h2>
-                  <p className="text-gray-600">Tu vehículo ya está disponible en la plataforma</p>
+                  <h2 className="text-2xl font-bold text-success">¡Vehículo Publicado Exitosamente!</h2>
+                  <p className="text-muted-foreground">Tu vehículo ya está disponible en la plataforma</p>
                 </div>
                 
-                <div className="bg-green-50 p-6 rounded-lg space-y-4">
+                <div className="bg-success/10 p-6 rounded-lg space-y-4">
                   <div className="flex items-center gap-3">
-                    <Car className="h-5 w-5 text-green-600" />
-                    <span className="font-medium">{formData.brand} {formData.model} ({formData.year})</span>
+                    <Car className="h-5 w-5 text-success" />
+                    <span className="font-medium text-foreground">{formData.brand} {formData.model} ({formData.year})</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <MapPin className="h-5 w-5 text-green-600" />
-                    <span>{formData.location}, {formData.country}</span>
+                    <MapPin className="h-5 w-5 text-success" />
+                    <span className="text-foreground">{formData.location}, {formData.country}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Calendar className="h-5 w-5 text-green-600" />
-                    <span>Publicado: {new Date().toLocaleDateString('es-ES')}</span>
+                    <Calendar className="h-5 w-5 text-success" />
+                    <span className="text-foreground">Publicado: {new Date().toLocaleDateString('es-ES')}</span>
                   </div>
                 </div>
                 
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Tu vehículo aparecerá en los resultados de búsqueda y será visible para compradores potenciales.
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Recibirás notificaciones cuando haya consultas o ofertas.
                   </p>
                 </div>
@@ -112,8 +112,8 @@ export const FormTabs: React.FC<FormTabsProps> = ({
             ) : (
               <div className="text-center space-y-6">
                 <div className="space-y-2">
-                  <h2 className="text-xl font-bold text-gray-600">Completar Publicación</h2>
-                  <p className="text-gray-500">Completa todas las secciones anteriores para publicar tu vehículo</p>
+                  <h2 className="text-xl font-bold text-muted-foreground">Completar Publicación</h2>
+                  <p className="text-muted-foreground">Completa todas las secciones anteriores para publicar tu vehículo</p>
                 </div>
               </div>
             )}

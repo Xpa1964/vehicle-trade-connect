@@ -35,11 +35,11 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
   const isLastTab = currentTabIndex === tabs.length - 1;
 
   return (
-    <div className="border-t border-gray-200 bg-white p-4 mt-8">
+    <div className="border-t border-border bg-card p-4 mt-8">
       <div className="max-w-4xl mx-auto">
         {/* Progress indicator */}
         <div className="flex justify-center mb-4">
-          <div className="text-sm text-gray-500 bg-gray-50 px-3 py-1 rounded-full">
+          <div className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full">
             Paso {currentTabIndex + 1} de {tabs.length}: {tabs[currentTabIndex]?.label}
           </div>
         </div>
@@ -69,10 +69,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                 key={index}
                 className={`w-2 h-2 rounded-full transition-colors ${
                   index === currentTabIndex
-                    ? 'bg-blue-500'
+                    ? 'bg-primary'
                     : index < currentTabIndex
-                    ? 'bg-green-500'
-                    : 'bg-gray-300'
+                    ? 'bg-success'
+                    : 'bg-muted'
                 }`}
               />
             ))}
@@ -85,7 +85,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                 type="button"
                 onClick={onNext}
                 disabled={isLoading}
-                className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600"
+                className="flex items-center gap-2"
               >
                 <span>Siguiente Página</span>
                 <ChevronRight className="h-4 w-4" />
@@ -95,11 +95,11 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                 type="button"
                 onClick={onSubmit}
                 disabled={isLoading}
-                className="flex items-center gap-2 bg-green-500 hover:bg-green-600"
+                className="flex items-center gap-2 bg-success hover:bg-success/90"
               >
                 {isLoading ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
                     <span>Publicando...</span>
                   </>
                 ) : (
