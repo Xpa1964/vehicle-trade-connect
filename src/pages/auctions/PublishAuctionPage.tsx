@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import SafeImage from '@/components/shared/SafeImage';
 import { Gavel, Calendar, DollarSign, TrendingUp, FileText, ArrowRight, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -84,9 +85,9 @@ const PublishAuctionPage: React.FC = () => {
       {/* Hero Section */}
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
         <div className="absolute inset-0">
-      <img 
-        src="/images/auctions-hero.png"
-        alt={t('auctions.publishAuction')}
+          <SafeImage
+            imageId="hero.auctions"
+            alt={t('auctions.publishAuction')}
             className="w-full h-full object-cover object-center"
             style={{ minHeight: '320px' }}
           />
@@ -127,8 +128,8 @@ const PublishAuctionPage: React.FC = () => {
         <div className="flex justify-between items-center">
           {[1, 2, 3].map((s) => (
             <div key={s} className="flex-1">
-              <div className={`h-2 rounded ${step >= s ? 'bg-blue-600' : 'bg-gray-200'}`} />
-              <p className={`text-center mt-2 text-sm ${step >= s ? 'text-blue-600 font-semibold' : 'text-gray-500'}`}>
+              <div className={`h-2 rounded ${step >= s ? 'bg-primary' : 'bg-muted'}`} />
+              <p className={`text-center mt-2 text-sm ${step >= s ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>
                 {s === 1 && t('auctions.step1', { fallback: 'Vehículo' })}
                 {s === 2 && t('auctions.step2', { fallback: 'Configuración' })}
                 {s === 3 && t('auctions.step3', { fallback: 'Confirmar' })}
@@ -140,15 +141,15 @@ const PublishAuctionPage: React.FC = () => {
 
       {/* Step 1: Select Vehicle */}
       {step === 1 && (
-        <Card>
+        <Card className="bg-card text-card-foreground">
           <CardHeader>
             <CardTitle>{t('auctions.selectVehicle', { fallback: 'Selecciona el Vehículo' })}</CardTitle>
           </CardHeader>
           <CardContent>
             {loadingVehicles ? (
               <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">{t('auctions.loading', { fallback: 'Cargando vehículos...' })}</p>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-muted-foreground">{t('auctions.loading', { fallback: 'Cargando vehículos...' })}</p>
               </div>
             ) : vehicles && vehicles.length > 0 ? (
               <div className="space-y-4">
@@ -179,9 +180,9 @@ const PublishAuctionPage: React.FC = () => {
                       <h3 className="font-semibold text-lg">
                         {selectedVehicle.brand} {selectedVehicle.model}
                       </h3>
-                      <p className="text-gray-600">{selectedVehicle.year}</p>
-                      <p className="text-gray-600">{selectedVehicle.mileage?.toLocaleString()} km</p>
-                      <p className="text-gray-600">{selectedVehicle.location}, {selectedVehicle.country}</p>
+                      <p className="text-muted-foreground">{selectedVehicle.year}</p>
+                      <p className="text-muted-foreground">{selectedVehicle.mileage?.toLocaleString()} km</p>
+                      <p className="text-muted-foreground">{selectedVehicle.location}, {selectedVehicle.country}</p>
                     </div>
                   </div>
                 )}
@@ -197,7 +198,7 @@ const PublishAuctionPage: React.FC = () => {
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   {t('auctions.noAvailableVehicles', { fallback: 'No tienes vehículos disponibles para subasta' })}
                 </p>
                 <Button onClick={() => navigate('/vehicle-management')}>
@@ -211,7 +212,7 @@ const PublishAuctionPage: React.FC = () => {
 
       {/* Step 2: Configuration */}
       {step === 2 && (
-        <Card>
+        <Card className="bg-card text-card-foreground">
           <CardHeader>
             <CardTitle>{t('auctions.auctionConfiguration', { fallback: 'Configuración de Subasta' })}</CardTitle>
           </CardHeader>
@@ -327,7 +328,7 @@ const PublishAuctionPage: React.FC = () => {
 
       {/* Step 3: Confirm */}
       {step === 3 && (
-        <Card>
+        <Card className="bg-card text-card-foreground">
           <CardHeader>
             <CardTitle>{t('auctions.confirmAuction', { fallback: 'Confirmar Subasta' })}</CardTitle>
           </CardHeader>

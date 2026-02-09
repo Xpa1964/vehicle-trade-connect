@@ -285,30 +285,30 @@ const ImageControlCenter: React.FC = () => {
     // If the card didn't have a URL yet, fetch the latest from storage here
     if (currentUrl) {
       setSelectedImageCurrentUrl(currentUrl);
-    } else {
-      try {
-        const storagePrefix = image.id.replace(/\./g, '/');
-        const { data: files, error } = await supabase.storage
-          .from('static-images')
-          .list(storagePrefix, {
-            limit: 1,
-            sortBy: { column: 'created_at', order: 'desc' }
-          });
-
-        if (!error && files && files.length > 0) {
-          const latestFile = files[0];
-          const storagePath = `${storagePrefix}/${latestFile.name}`;
-          const { data: { publicUrl } } = supabase.storage
+      } else {
+        try {
+          const storagePrefix = image.id.replace(/\./g, '/');
+          const { data: files, error } = await supabase.storage
             .from('static-images')
-            .getPublicUrl(storagePath);
-          setSelectedImageCurrentUrl(publicUrl ? `${publicUrl}?t=${Date.now()}` : null);
-        } else {
+            .list(storagePrefix, {
+              limit: 1,
+              sortBy: { column: 'created_at', order: 'desc' }
+            });
+
+          if (!error && files && files.length > 0) {
+            const latestFile = files[0];
+            const storagePath = `${storagePrefix}/${latestFile.name}`;
+            const { data: { publicUrl } } = supabase.storage
+              .from('static-images')
+              .getPublicUrl(storagePath);
+            setSelectedImageCurrentUrl(publicUrl ? `${publicUrl}?v=${encodeURIComponent(latestFile.name)}` : null);
+          } else {
+            setSelectedImageCurrentUrl(null);
+          }
+        } catch {
           setSelectedImageCurrentUrl(null);
         }
-      } catch {
-        setSelectedImageCurrentUrl(null);
       }
-    }
 
     setIsModalOpen(true);
   }, []);

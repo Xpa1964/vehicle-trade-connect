@@ -7,6 +7,7 @@ import BulkVehicleUpload from '@/components/vehicles/BulkVehicleUpload';
 import { ImageUploadTester } from '@/components/debug/ImageUploadTester';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useStaticImage } from '@/hooks/useStaticImage';
 import { ArrowLeft, Upload, Car, TestTube } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +16,7 @@ const VehicleManagement: React.FC = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("individual");
+  const { src: heroSrc } = useStaticImage('hero.vehicles');
 
   if (!user) {
     return <div className="text-foreground">{t('auth.loginRequired')}</div>;
@@ -30,7 +32,7 @@ const VehicleManagement: React.FC = () => {
             className="w-full h-full bg-cover bg-no-repeat"
             style={{ 
               minHeight: '280px',
-              backgroundImage: `url('/lovable-uploads/b04a7a23-c825-4659-a1f2-a510fc3b863b.png')`,
+              backgroundImage: `url('${heroSrc}')`,
               backgroundPosition: '20% center',
               backgroundSize: 'cover'
             }}

@@ -119,24 +119,28 @@ const ImageCard: React.FC<ImageCardProps> = ({
 
         if (!isMounted) return;
 
-        if (!error && files && files.length > 0) {
+        const isFile = (f: any) => Boolean(f?.metadata) && Boolean(f?.name);
+        const imageFiles = (files || []).filter(isFile);
+
+        if (!error && imageFiles.length > 0) {
           // Found files in storage - use the most recent one
-          const latestFile = files[0];
+          const latestFile = imageFiles[0];
           const storagePath = `${storagePrefix}/${latestFile.name}`;
           
           const { data: { publicUrl } } = supabase.storage
             .from('static-images')
             .getPublicUrl(storagePath);
           
-          // Add stable cache buster
-          const urlWithCacheBuster = `${publicUrl}?t=${cacheBustRef.current}`;
-          setDisplayUrl(urlWithCacheBuster);
+          // Cache-bust by FILE NAME (mobile-safe)
+          const urlWithVersion = `${publicUrl}?v=${encodeURIComponent(latestFile.name)}`;
+          setDisplayUrl(urlWithVersion);
           setImageSource('storage');
           setImageLoaded(true);
           onStatusChangeRef.current?.(image.id, true);
         } else {
           // No files in storage - try original path
-          setDisplayUrl(image.currentPath);
+          const original = image.currentPath.startsWith('src/') ? `/${image.currentPath}` : image.currentPath;
+          setDisplayUrl(original);
           setImageSource('original');
         }
       } catch (err) {
@@ -256,7 +260,7 @@ const ImageCard: React.FC<ImageCardProps> = ({
                 <img
                   src={displayUrl}
                   alt={image.purpose}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                   onLoad={handleImageLoad}
                   onError={handleImageError}
                 />
