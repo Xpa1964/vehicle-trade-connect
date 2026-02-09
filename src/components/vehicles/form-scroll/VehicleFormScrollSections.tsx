@@ -135,33 +135,33 @@ export const VehicleFormScrollSections: React.FC<VehicleFormScrollSectionsProps>
               {isVehiclePublished ? (
                 <div className="text-center space-y-6">
                   <div className="flex justify-center">
-                    <CheckCircle className="h-20 w-20 text-green-500" />
+                    <CheckCircle className="h-20 w-20 text-success" />
                   </div>
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-bold text-green-600">¡Vehículo Publicado Exitosamente!</h2>
-                    <p className="text-gray-600">Tu vehículo ya está disponible en la plataforma</p>
+                    <h2 className="text-2xl font-bold text-success">¡Vehículo Publicado Exitosamente!</h2>
+                    <p className="text-muted-foreground">Tu vehículo ya está disponible en la plataforma</p>
                   </div>
                   
-                  <div className="bg-green-50 p-6 rounded-lg space-y-4">
+                  <div className="bg-success/10 p-6 rounded-lg space-y-4">
                     <div className="flex items-center gap-3">
-                      <Car className="h-5 w-5 text-green-600" />
-                      <span className="font-medium">{formData.brand} {formData.model} ({formData.year})</span>
+                      <Car className="h-5 w-5 text-success" />
+                      <span className="font-medium text-foreground">{formData.brand} {formData.model} ({formData.year})</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <MapPin className="h-5 w-5 text-green-600" />
-                      <span>{formData.location}, {formData.country}</span>
+                      <MapPin className="h-5 w-5 text-success" />
+                      <span className="text-foreground">{formData.location}, {formData.country}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Calendar className="h-5 w-5 text-green-600" />
-                      <span>Publicado: {new Date().toLocaleDateString('es-ES')}</span>
+                      <Calendar className="h-5 w-5 text-success" />
+                      <span className="text-foreground">Publicado: {new Date().toLocaleDateString('es-ES')}</span>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="text-center space-y-6">
                   <div className="space-y-2">
-                    <h2 className="text-xl font-bold text-gray-600">Completar Publicación</h2>
-                    <p className="text-gray-500">Completa todas las secciones anteriores para publicar tu vehículo</p>
+                    <h2 className="text-xl font-bold text-muted-foreground">Completar Publicación</h2>
+                    <p className="text-muted-foreground">Completa todas las secciones anteriores para publicar tu vehículo</p>
                   </div>
                 </div>
               )}
@@ -182,20 +182,20 @@ export const VehicleFormScrollSections: React.FC<VehicleFormScrollSectionsProps>
           className="scroll-mt-24"
         >
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-foreground mb-2">
               {section.title}
             </h2>
-            <div className="w-full h-1 bg-gray-200 rounded-full">
+            <div className="w-full h-1 bg-muted rounded-full">
               <div 
                 className={`h-1 rounded-full transition-all duration-300 ${
-                  activeSection === section.id ? 'bg-blue-500' : 'bg-gray-300'
+                  activeSection === section.id ? 'bg-primary' : 'bg-border'
                 }`}
                 style={{ width: activeSection === section.id ? '100%' : '20%' }}
               />
             </div>
           </div>
           
-          <div className="bg-white rounded-lg shadow-sm border p-6">
+          <div className="bg-card rounded-lg shadow-sm border border-border p-6">
             {renderSection(section)}
           </div>
         </section>
