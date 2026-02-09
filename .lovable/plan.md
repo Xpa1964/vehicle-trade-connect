@@ -1,126 +1,173 @@
 
-# Plan: Auditoría del Image Control Center + Corrección de Estilo Dark
 
-## Problema 1: Cards del Panel de Control con Estilo Claro
+# Plan: Migración Completa de Imágenes al Image Control Center + Dark Theme en Formulario de Vehículos
 
-### Diagnóstico
-El componente `DashboardServiceCard.tsx` usa `bg-card`, que según el CSS debería ser dark (#161B2A). Si aparece claro, necesitamos verificar que no haya conflictos de estilos.
+## Resumen Ejecutivo
 
-### Solución
-Forzar explícitamente el estilo dark en el componente para garantizar consistencia:
-```tsx
-// Antes
-<div className="group overflow-hidden rounded-xl border border-border bg-card">
+Se realizará una auditoría y corrección total en **2 frentes** según lo solicitado:
 
-// Después - forzar dark theme tokens
-<div className="group overflow-hidden rounded-xl border border-border bg-[hsl(222,33%,13%)]">
-```
+1. **Tema Dark en Publicar Vehículo**: Reemplazar todas las clases `bg-white`, `bg-gray-*`, `text-gray-*`, `bg-blue-*`, `bg-green-*` por tokens semánticos del design system (bg-card, bg-muted, text-muted-foreground, bg-primary, bg-success, etc.)
 
-O mejor, añadir clases redundantes para garantizar el tema:
-```tsx
-<div className="group overflow-hidden rounded-xl border border-border bg-card text-card-foreground">
-```
+2. **Integrar TODAS las imágenes de producto al Image Control Center**: Cada página interior del panel (ver/publicar vehículo, subastas, intercambios, tablón, transporte, informes, calculadoras, blog) pasará de rutas hardcodeadas (`/lovable-uploads/...`, `/images/...`, `@/assets/...`) a usar `SafeImage` o `useStaticImage` con IDs del registro.
 
 ---
 
-## Problema 2: Qué son `messaging.placeholder.es/en/de`
+## Parte 1: Formulario de Vehículo — Dark Theme
 
-### Explicación
-Son imágenes **registradas pero NO usadas**:
-- Definidas en `staticImageRegistry.ts` líneas 465-562
-- Documentadas para `ChatPlaceholder.tsx`
-- El componente real (`EmptyChatPlaceholder.tsx`) usa un icono, NO estas imágenes
-- Son ilustraciones localizadas por idioma que **nunca se implementaron**
+### Archivos a modificar (13 archivos)
 
-### Decisión Requerida
-Opciones:
-1. **Eliminarlas del registry** (si no se van a usar)
-2. **Implementar su uso** en EmptyChatPlaceholder (mostrar imagen localizada)
+| Archivo | Cambios principales |
+|---------|---------------------|
+| `VehicleFormScrollSections.tsx` | Reemplazar `bg-white`, `text-gray-*`, `bg-blue-*`, `bg-green-*` por tokens |
+| `BottomNavigation.tsx` | `bg-white` → `bg-card`, `border-gray-*` → `border-border`, `bg-blue-500` → `bg-primary` |
+| `FormTabs.tsx` | `text-green-*` → `text-success`, `bg-green-50` → `bg-success/10`, `text-gray-*` → `text-muted-foreground` |
+| `MultipleImageUpload.tsx` | `border-gray-300` → `border-border`, `text-gray-*` → `text-muted-foreground` |
+| `FileUpload.tsx` | `bg-gray-50` → `bg-muted` |
+| `DamagesSection.tsx` | `bg-gray-100 text-gray-800` → `bg-muted text-muted-foreground` |
+| `TabNavigation.tsx` | `bg-green-100` → `bg-success/10`, `text-gray-400` → `text-muted-foreground` |
+| `ImagePreviewGrid.tsx` | `border-gray-200` → `border-border` |
+| `EquipmentCategoryList.tsx` | `text-gray-500` → `text-muted-foreground` |
+| `UploadForm.tsx` | `bg-white` → `bg-card` |
 
----
-
-## Problema 3: Páginas que Faltan en el Image Control Center
-
-### Imágenes a Añadir al Registry
+### Mapeo de tokens
 
 ```text
-1. exchanges.hero → /images/exchanges-hero.png
-   - Usado en: src/pages/Exchanges.tsx
-   - Propósito: Hero de la página de Intercambios
-
-2. auctions.hero → /images/auctions-hero.png (ya existe services.auctions)
-   - Usado en: AuctionsInfoPage.tsx, PublishAuctionPage.tsx, LiveAuctionsPage.tsx
-   - Propósito: Hero de páginas de subastas
-
-3. reports.hero → /images/vehicle-reports-hero.png
-   - Usado en: VehicleReportsInfoPage.tsx
-   - Propósito: Hero de informes de vehículos
-
-4. info.gallery.view → /images/gallery-view.png
-   - Usado en: VehicleGalleryInfoPage.tsx
-   - Propósito: Ilustración de vista de galería
-
-5. info.gallery.detail → /images/vehicle-detail.png
-   - Usado en: VehicleGalleryInfoPage.tsx
-   - Propósito: Ilustración de detalle de vehículo
-
-6. info.gallery.form → /images/vehicle-form.png
-   - Usado en: VehicleGalleryInfoPage.tsx
-   - Propósito: Ilustración de formulario de vehículo
-
-7. auth.logo → /lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png
-   - Usado en: Login.tsx, Register.tsx
-   - Propósito: Logo en páginas de autenticación
-
-8. error.404 → (nueva imagen a generar)
-   - Usado en: NotFound.tsx
-   - Propósito: Ilustración de página no encontrada
+bg-white              → bg-card
+bg-gray-50            → bg-muted
+border-gray-200/300   → border-border
+text-gray-400/500/600 → text-muted-foreground
+text-gray-900         → text-foreground
+bg-blue-500           → bg-primary
+bg-green-500          → bg-success
+text-green-600        → text-success
+bg-green-50           → bg-success/10
 ```
 
 ---
 
-## Archivos a Modificar
+## Parte 2: Integración de Imágenes al Registry (26 páginas)
 
-### 1. `src/config/staticImageRegistry.ts`
-- Añadir las 8 nuevas entradas al registry
-- (Opcional) Eliminar o marcar como deprecated las imágenes de messaging.placeholder si no se usarán
+### Nuevas entradas del registro (a añadir)
 
-### 2. `src/components/dashboard/DashboardServiceCard.tsx`
-- Garantizar estilo dark explícito
-- Añadir `text-card-foreground` para consistencia
+Se añadirán las siguientes entradas en `staticImageRegistry.ts`:
 
-### 3. Páginas que usan imágenes hardcodeadas (opcional, fase 2)
-- `src/pages/Exchanges.tsx` → usar `useStaticImage('exchanges.hero')`
-- `src/pages/auctions/*.tsx` → usar `useStaticImage('auctions.hero')`
-- `src/pages/VehicleReportsInfoPage.tsx` → usar `useStaticImage('reports.hero')`
-- `src/pages/NotFound.tsx` → rediseñar con estilo dark + imagen del registry
+```text
+ID                         | Página(s)                    | Ruta actual
+---------------------------|------------------------------|-----------------------------
+hero.transport             | Transport.tsx                | /lovable-uploads/04839c38...
+hero.transport.express     | TransportExpressPage.tsx     | @/assets/transport-image.png
+hero.transport.quotes      | TransportQuoteManagement.tsx | @/assets/transport-quotes-image.png
+hero.bulletin              | BulletinHero.tsx             | /images/bulletin-board.png
+hero.bulletin.publish      | PublishAnnouncementPage.tsx  | @/assets/announcement-image.png
+hero.reports               | VehicleReportsInfoPage.tsx   | /images/vehicle-reports-hero.png
+hero.reports.delivery      | VehicleReports.tsx           | @/assets/report-delivery-image.png
+hero.reports.request       | RequestReport.tsx            | (misma imagen)
+hero.exchange.form         | ExchangeForm.tsx             | /lovable-uploads/exchange-header.png
+hero.import.calculator     | ImportCalculator.tsx         | /lovable-uploads/ba9a7ade...
+hero.commission.calculator | CommissionCalculatorPage.tsx | /lovable-uploads/379e75ed...
+hero.blog                  | BlogMainPage.tsx             | /lovable-uploads/eec67196...
+hero.messaging             | MessagingInfoPage.tsx        | /images/messaging-chat.png
+hero.api.management        | APIManagement.tsx (admin)    | @/assets/api-keys-image.png
+logo.form                  | VehicleFormHeader.tsx        | LOGO_IMAGES.primary
+hero.dashboard.header      | DashboardHeader.tsx          | /lovable-uploads/e8bcfe5d...
+info.gallery.view          | VehicleGalleryInfoPage.tsx   | (ya existe)
+info.gallery.detail        | VehicleGalleryInfoPage.tsx   | (ya existe)
+info.gallery.form          | VehicleGalleryInfoPage.tsx   | (ya existe)
+```
+
+### Páginas a migrar (resumen por sección del panel)
+
+**Vehículos**
+- `VehicleManagement.tsx` ✅ ya usa `useStaticImage('hero.vehicles')`
+- `VehicleGalleryInfoPage.tsx` ✅ ya usa registry (showroom, gallery.view, gallery.detail, gallery.form)
+
+**Subastas**
+- `LiveAuctionsPage.tsx` ✅ ya usa `useStaticImage('hero.auctions')`
+- `PublishAuctionPage.tsx` ✅ ya usa `SafeImage imageId="hero.auctions"`
+- `AuctionsInfoPage.tsx` ⚠️ usa `/images/auctions-hero.png` hardcodeado → migrar
+
+**Intercambios**
+- `Exchanges.tsx` ✅ ya usa `SafeImage imageId="hero.exchanges"`
+- `ExchangeForm.tsx` ⚠️ usa `/lovable-uploads/exchange-header.png` → migrar
+- `ExchangesInfoPage.tsx` ✅ ya usa `useStaticImage('services.exchanges')`
+
+**Tablón de Anuncios**
+- `BulletinBoard.tsx` ✅ delega al componente `BulletinHero` (necesita verificar)
+- `PublishAnnouncementPage.tsx` ⚠️ usa `@/assets/announcement-image.png` → migrar
+- `BulletinInfoPage.tsx` ✅ ya usa `useStaticImage('services.bulletin')`
+
+**Transporte**
+- `Transport.tsx` ⚠️ usa `/lovable-uploads/04839c38...` hardcodeado → migrar
+- `TransportExpressPage.tsx` ⚠️ usa `@/assets/transport-image.png` → migrar
+- `TransportQuoteManagement.tsx` ⚠️ usa `@/assets/transport-quotes-image.png` → migrar
+
+**Informes**
+- `VehicleReports.tsx` ⚠️ usa `@/assets/report-delivery-image.png` → migrar
+- `RequestReport.tsx` ⚠️ misma imagen → migrar
+- `VehicleReportsInfoPage.tsx` ⚠️ usa `/images/vehicle-reports-hero.png` → migrar
+
+**Calculadoras**
+- `ImportCalculator.tsx` ⚠️ usa `/lovable-uploads/ba9a7ade...` → migrar
+- `CommissionCalculatorPage.tsx` ⚠️ usa `/lovable-uploads/379e75ed...` → migrar
+
+**Blog**
+- `BlogMainPage.tsx` ⚠️ usa `/lovable-uploads/eec67196...` → migrar
+
+**Mensajería**
+- `MessagingInfoPage.tsx` ⚠️ usa `/images/messaging-chat.png` → migrar
+
+**Admin**
+- `APIManagement.tsx` ⚠️ usa `@/assets/api-keys-image.png` → migrar
+- `DashboardHeader.tsx` ⚠️ usa `/lovable-uploads/e8bcfe5d...` → migrar
 
 ---
 
-## Resumen de Cambios
+## Parte 3: Copiar assets de src/assets a public/assets
 
-| Archivo | Cambio |
-|---------|--------|
-| `staticImageRegistry.ts` | +8 nuevas entradas de imágenes |
-| `DashboardServiceCard.tsx` | Forzar estilo dark theme |
-| (Fase 2) Páginas con imágenes hardcoded | Migrar a useStaticImage |
+Para que los paths del registry funcionen con imágenes bundleadas, se copiarán estos archivos a `public/assets`:
+
+- `transport-image.png`
+- `transport-quotes-image.png`
+- `report-delivery-image.png`
+- `announcement-image.png`
+- `api-keys-image.png`
+
+Y se actualizará el registry con paths `"/assets/..."`.
+
+---
+
+## Secuencia de Implementación
+
+### Batch 1: Dark Theme (Formulario de Vehículos)
+1. Modificar `VehicleFormScrollSections.tsx`
+2. Modificar `BottomNavigation.tsx`
+3. Modificar `FormTabs.tsx`
+4. Modificar `MultipleImageUpload.tsx`
+5. Modificar `FileUpload.tsx`, `DamagesSection.tsx`, etc.
+
+### Batch 2: Registry + Páginas (Imágenes)
+1. Añadir 18 nuevas entradas al registry
+2. Copiar assets a `public/assets`
+3. Migrar cada página (usar `SafeImage imageId` o `useStaticImage`)
+4. Eliminar imports de `@/assets/...` y `@/constants/imageAssets`
+
+### Batch 3: Validación
+1. Verificar que Image Control Center muestra todas las nuevas imágenes
+2. Verificar que el formulario de vehículos es Dark Pro
+3. Probar navegación en móvil
 
 ---
 
 ## Notas Técnicas
 
-### Sobre las imágenes `messaging.placeholder.*`
-Estas 9 imágenes (es, en, fr, it, pt, de, nl, pl, dk) fueron registradas para un sistema de placeholders localizados que **nunca se implementó**. El componente `EmptyChatPlaceholder.tsx` usa un simple icono en su lugar.
+### Sobre rutas `src/assets/`
+El bundler de Vite no expone `src/assets` como rutas en runtime. Por eso:
+- Si el registry usa `currentPath: "/assets/foo.png"`, ese archivo debe existir en `public/assets/foo.png`
+- O se puede usar imports ES6 y asignar al registry como string
 
-Ubicación de las imágenes:
-- `/lovable-uploads/8d67f46e-d1c0-4b17-89f7-aebb88ccb8d3.png` (ES)
-- `/lovable-uploads/8bed91df-a428-49d0-b2cb-d08fc5c92b9e.png` (EN)
-- `/lovable-uploads/3ad30d4e-64f5-418a-a430-c3e8f53d72e5.png` (DE)
-- etc.
+### Sobre cache-busting
+El sistema ya usa `?v=fileName` para cache-busting. Se mantendrá ese patrón.
 
-Si se decide implementar, `EmptyChatPlaceholder.tsx` necesitaría:
-```tsx
-const { currentLanguage } = useLanguage();
-const { src } = useStaticImage(`messaging.placeholder.${currentLanguage}`);
-// ... mostrar <img src={src} /> en lugar del icono
-```
+### Sobre el preloader
+El `criticalImagePreloader.ts` ya omite paths `src/assets/`. No se requieren cambios allí.
+
