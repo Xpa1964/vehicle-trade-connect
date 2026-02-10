@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { Vehicle } from '@/types/vehicle';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -101,62 +100,104 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
             />
           )}
 
-          {/* 2) INFORMACIÓN DETALLADA EN TABS */}
+          {/* 2) DESCRIPCIÓN */}
           <Card className="bg-card border-border rounded-2xl overflow-hidden">
-            <Tabs defaultValue="description" className="w-full">
-              <TabsList className="w-full justify-start bg-secondary/50 rounded-none border-b border-border p-0 h-auto">
-                <TabsTrigger
-                  value="description"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6 py-3 text-sm"
-                >
-                  {t('vehicles.description')}
-                </TabsTrigger>
-                <TabsTrigger
-                  value="technical"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6 py-3 text-sm"
-                >
-                  {t('vehicles.technicalDetails')}
-                </TabsTrigger>
-                <TabsTrigger
-                  value="status"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6 py-3 text-sm"
-                >
-                  Estado
-                </TabsTrigger>
-                <TabsTrigger
-                  value="docs"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-6 py-3 text-sm"
-                >
-                  Documentación
-                </TabsTrigger>
-              </TabsList>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <FileText className="h-5 w-5 text-muted-foreground" />
+                {t('vehicles.description')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {vehicle.description ? (
+                <VehicleDescription description={vehicle.description} />
+              ) : (
+                <p className="text-muted-foreground italic">{t('vehicles.noDescription')}</p>
+              )}
+            </CardContent>
+          </Card>
 
-              {/* TAB: Descripción */}
-              <TabsContent value="description" className="p-6 mt-0">
-                {vehicle.description ? (
-                  <VehicleDescription description={vehicle.description} />
-                ) : (
-                  <p className="text-muted-foreground italic">{t('vehicles.noDescription')}</p>
-                )}
-              </TabsContent>
+          {/* 3) CARD DE VENDEDOR */}
+          <Card className="bg-card border-border rounded-2xl overflow-hidden">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Building2 className="h-5 w-5 text-muted-foreground" />
+                Vendedor
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                {/* Avatar / Logo */}
+                <div className="flex-shrink-0">
+                  {sellerProfile?.company_logo ? (
+                    <img
+                      src={sellerProfile.company_logo}
+                      alt={sellerDisplayName}
+                      className="h-16 w-16 object-contain rounded-xl border border-border"
+                    />
+                  ) : (
+                    <div className="h-16 w-16 rounded-xl bg-secondary flex items-center justify-center border border-border">
+                      <User className="h-8 w-8 text-muted-foreground" />
+                    </div>
+                  )}
+                </div>
 
-              {/* TAB: Información Técnica */}
-              <TabsContent value="technical" className="p-6 mt-0">
-                <VehicleInformationCard vehicleId={vehicle.id} />
-              </TabsContent>
+                {/* Info */}
+                <div className="flex-1 min-w-0 space-y-1">
+                  <div className="flex items-center gap-3">
+                    <h3 className="text-lg font-semibold text-foreground truncate">
+                      {sellerDisplayName}
+                    </h3>
+                    {sellerProfile?.trader_type && (
+                      <Badge variant="outline" className="text-xs border-border text-muted-foreground flex-shrink-0">
+                        {sellerProfile.trader_type === 'professional' ? 'Profesional' : 'Particular'}
+                      </Badge>
+                    )}
+                    {isOwner && (
+                      <Badge variant="primary" className="text-xs flex-shrink-0">
+                        {t('common.owner')}
+                      </Badge>
+                    )}
+                  </div>
 
-              {/* TAB: Estado / Historial */}
-              <TabsContent value="status" className="p-6 mt-0 space-y-4">
-                <DamageAccessCard vehicleId={vehicle.id} />
-                <VehicleEquipmentCard vehicleId={vehicle.id} />
-              </TabsContent>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <MapPin className="h-3.5 w-3.5" />
+                      {vehicle.location || vehicle.country || t('vehicles.locationNotSpecified')}
+                    </span>
+                    {sellerProfile?.contact_phone && (
+                      <span className="flex items-center gap-1">
+                        <Phone className="h-3.5 w-3.5" />
+                        {sellerProfile.contact_phone}
+                      </span>
+                    )}
+                  </div>
 
-              {/* TAB: Documentación */}
-              <TabsContent value="docs" className="p-6 mt-0 space-y-4">
-                <DocumentAccessCard vehicleId={vehicle.id} />
-                <VehicleDataSheet vehicle={vehicle} />
-              </TabsContent>
-            </Tabs>
+                  {ratingSummary && ratingSummary.total_ratings > 0 && (
+                    <div className="flex items-center gap-2 pt-1">
+                      <Star className="h-4 w-4 text-yellow-500" />
+                      <UserRatingBadge
+                        averageRating={Number(ratingSummary.average_rating)}
+                        totalRatings={Number(ratingSummary.total_ratings)}
+                        verifiedRatings={Number(ratingSummary.verified_ratings)}
+                        compact={true}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Action */}
+                <div className="flex-shrink-0">
+                  <Link to={isOwner ? '/profile' : `/user/${vehicle.user_id}`}>
+                    <Button variant="outline" className="rounded-xl">
+                      <Building2 className="h-4 w-4 mr-2" />
+                      {isOwner ? t('profile.editProfile') : t('profile.viewFullProfile')}
+                      <ChevronRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
           </Card>
         </div>
 
@@ -269,12 +310,57 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
 
             {/* Commission Calculator */}
             <Card className="bg-card border-border rounded-2xl overflow-hidden">
-              <CardContent className="p-4">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Calculator className="h-5 w-5 text-muted-foreground" />
+                  Calculadora de Comisiones
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
                 <CommissionCalculator
                   initialPrice={vehicle.price}
                   compact={true}
-                  showTitle={true}
+                  showTitle={false}
                 />
+              </CardContent>
+            </Card>
+
+            {/* Ficha Técnica */}
+            <Card className="bg-card border-border rounded-2xl overflow-hidden">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Download className="h-5 w-5 text-muted-foreground" />
+                  Ficha Técnica
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <VehicleDataSheet vehicle={vehicle} />
+              </CardContent>
+            </Card>
+
+            {/* Estado */}
+            <Card className="bg-card border-border rounded-2xl overflow-hidden">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <ShieldCheck className="h-5 w-5 text-muted-foreground" />
+                  Estado
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <DamageAccessCard vehicleId={vehicle.id} />
+              </CardContent>
+            </Card>
+
+            {/* Archivos / Documentación */}
+            <Card className="bg-card border-border rounded-2xl overflow-hidden">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <FileText className="h-5 w-5 text-muted-foreground" />
+                  Archivos
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <DocumentAccessCard vehicleId={vehicle.id} />
               </CardContent>
             </Card>
           </div>
@@ -282,83 +368,35 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
       </div>
 
       {/* ═══════════════════════════════════════════ */}
-      {/* BLOQUE INFERIOR: VENDEDOR (FULL WIDTH)      */}
+      {/* SECCIÓN INFERIOR: EQUIPAMIENTO + INFO       */}
       {/* ═══════════════════════════════════════════ */}
-      <Card className="bg-card border-border rounded-2xl overflow-hidden">
-        <CardContent className="p-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-            {/* Avatar / Logo */}
-            <div className="flex-shrink-0">
-              {sellerProfile?.company_logo ? (
-                <img
-                  src={sellerProfile.company_logo}
-                  alt={sellerDisplayName}
-                  className="h-16 w-16 object-contain rounded-xl border border-border"
-                />
-              ) : (
-                <div className="h-16 w-16 rounded-xl bg-secondary flex items-center justify-center border border-border">
-                  <User className="h-8 w-8 text-muted-foreground" />
-                </div>
-              )}
-            </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Equipamiento */}
+        <Card className="bg-card border-border rounded-2xl overflow-hidden">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Wrench className="h-5 w-5 text-muted-foreground" />
+              Equipamiento
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <VehicleEquipmentCard vehicleId={vehicle.id} />
+          </CardContent>
+        </Card>
 
-            {/* Info */}
-            <div className="flex-1 min-w-0 space-y-1">
-              <div className="flex items-center gap-3">
-                <h3 className="text-lg font-semibold text-foreground truncate">
-                  {sellerDisplayName}
-                </h3>
-                {sellerProfile?.trader_type && (
-                  <Badge variant="outline" className="text-xs border-border text-muted-foreground flex-shrink-0">
-                    {sellerProfile.trader_type === 'professional' ? 'Profesional' : 'Particular'}
-                  </Badge>
-                )}
-                {isOwner && (
-                  <Badge variant="primary" className="text-xs flex-shrink-0">
-                    {t('common.owner')}
-                  </Badge>
-                )}
-              </div>
-
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5" />
-                  {vehicle.location || vehicle.country || t('vehicles.locationNotSpecified')}
-                </span>
-                {sellerProfile?.contact_phone && (
-                  <span className="flex items-center gap-1">
-                    <Phone className="h-3.5 w-3.5" />
-                    {sellerProfile.contact_phone}
-                  </span>
-                )}
-              </div>
-
-              {ratingSummary && ratingSummary.total_ratings > 0 && (
-                <div className="flex items-center gap-2 pt-1">
-                  <Star className="h-4 w-4 text-yellow-500" />
-                  <UserRatingBadge
-                    averageRating={Number(ratingSummary.average_rating)}
-                    totalRatings={Number(ratingSummary.total_ratings)}
-                    verifiedRatings={Number(ratingSummary.verified_ratings)}
-                    compact={true}
-                  />
-                </div>
-              )}
-            </div>
-
-            {/* Action */}
-            <div className="flex-shrink-0">
-              <Link to={isOwner ? '/profile' : `/user/${vehicle.user_id}`}>
-                <Button variant="outline" className="rounded-xl">
-                  <Building2 className="h-4 w-4 mr-2" />
-                  {isOwner ? t('profile.editProfile') : t('profile.viewFullProfile')}
-                  <ChevronRight className="h-4 w-4 ml-1" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+        {/* Información completa */}
+        <Card className="bg-card border-border rounded-2xl overflow-hidden">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Info className="h-5 w-5 text-muted-foreground" />
+              Información
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <VehicleInformationCard vehicleId={vehicle.id} />
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Contact Dialog */}
       {sellerProfile && (
