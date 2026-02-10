@@ -1,6 +1,5 @@
 
-import * as React from 'react';
-const { useState } = React;
+import React, { useState } from 'react';
 import { Vehicle } from '@/types/vehicle';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

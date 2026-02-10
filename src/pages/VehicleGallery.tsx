@@ -1,5 +1,4 @@
-import * as React from 'react';
-const { memo } = React;
+import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Car, Database } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
