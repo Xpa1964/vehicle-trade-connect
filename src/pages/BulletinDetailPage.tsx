@@ -54,13 +54,13 @@ const BulletinDetailPage: React.FC = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button 
+                <Button 
                 variant="ghost" 
-                onClick={() => navigate('/dashboard')}
+                onClick={() => navigate('/bulletin')}
                 className="flex items-center gap-2 hover:bg-accent/50"
               >
                 <ArrowLeft className="h-4 w-4" />
-                {t('common.backToDashboard', { fallback: 'Volver al Panel' })}
+                {t('bulletin.backToBulletin', { fallback: 'Volver al Tablón' })}
               </Button>
               <div className="h-6 w-px bg-border hidden sm:block" />
               <div className="flex items-center gap-3 hidden sm:flex">

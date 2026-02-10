@@ -1,9 +1,13 @@
 export default {
-  // Footer
-  'footer.privacy': 'Privacybeleid',
-  'footer.terms': 'Algemene Voorwaarden',
+  'footer.description': 'Het toonaangevende platform voor professionals in de internationale auto-industrie.',
+  'footer.legal': 'Juridisch',
+  'footer.privacyPolicy': 'Privacybeleid',
+  'footer.termsConditions': 'Algemene Voorwaarden',
   'footer.cookies': 'Cookiebeleid',
-  'footer.community': 'Gemeenschapsrichtlijnen',
+  'footer.auctionPolicies': 'Veilingbeleid',
+  'footer.contactSupport': 'Contact en Ondersteuning',
   'footer.contact': 'Contact',
-  'footer.copyright': '© 2025 Auto Mundo Connect. Alle rechten voorbehouden.',
+  'footer.communityGuidelines': 'Gemeenschapsrichtlijnen',
+  'footer.allRightsReserved': 'Alle rechten voorbehouden.',
+  'footer.followUs': 'Volg ons op sociale media'
 };
