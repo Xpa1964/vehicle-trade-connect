@@ -74,10 +74,10 @@ export const useVehicleDataFetcher = (
         console.log('✅ [useVehicleDataFetcher] Vehicle information fetched:', vehicleInfo);
       }
       
-      // Fetch equipment
+      // Fetch equipment - now loads keys stored in `name` field
       const { data: equipmentData, error: equipmentError } = await supabase
         .from('vehicle_equipment')
-        .select('equipment_id')
+        .select('name')
         .eq('vehicle_id', vehicleId);
       
       if (equipmentError) {
@@ -120,9 +120,9 @@ export const useVehicleDataFetcher = (
         }
       }
       
-      // Add equipment if available
+      // Add equipment if available - stored as option keys in `name` field
       if (equipmentData && equipmentData.length > 0) {
-        mappedData.equipment = equipmentData.map(item => item.equipment_id);
+        mappedData.equipment = equipmentData.map(item => item.name).filter(Boolean);
       }
       
       // Add damages if available

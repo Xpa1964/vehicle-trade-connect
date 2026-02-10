@@ -82,9 +82,9 @@ export const useVehicleUpdater = () => {
         }
       }
       
-      // Update equipment if provided
-      if (formData.equipment && formData.equipment.length > 0) {
-        console.log('🔧 [useVehicleUpdater] Updating equipment:', formData.equipment);
+      // Update equipment if provided - stores option keys
+      if (formData.equipment) {
+        console.log('🔧 [useVehicleUpdater] Updating equipment with keys:', formData.equipment);
         
         // Remove existing equipment
         await supabase
@@ -92,21 +92,22 @@ export const useVehicleUpdater = () => {
           .delete()
           .eq('vehicle_id', id);
         
-        // Add new equipment
-        const equipmentItems = formData.equipment.map(equipmentId => ({
-          vehicle_id: id,
-          equipment_id: equipmentId,
-          name: equipmentId // Required field
-        }));
-        
-        const { error: equipmentError } = await supabase
-          .from('vehicle_equipment')
-          .insert(equipmentItems);
-        
-        if (equipmentError) {
-          console.error('⚠️ [useVehicleUpdater] Error updating equipment (non-critical):', equipmentError);
-        } else {
-          console.log('✅ [useVehicleUpdater] Equipment updated successfully');
+        if (formData.equipment.length > 0) {
+          // Store equipment using keys - the key is stored in the name field
+          const equipmentItems = formData.equipment.map(optionKey => ({
+            vehicle_id: id,
+            name: optionKey, // Store the option key
+          }));
+          
+          const { error: equipmentError } = await supabase
+            .from('vehicle_equipment')
+            .insert(equipmentItems);
+          
+          if (equipmentError) {
+            console.error('⚠️ [useVehicleUpdater] Error updating equipment (non-critical):', equipmentError);
+          } else {
+            console.log('✅ [useVehicleUpdater] Equipment updated successfully with keys');
+          }
         }
       }
       
