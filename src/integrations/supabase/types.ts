@@ -101,12 +101,17 @@ export type Database = {
           content: string | null
           created_at: string | null
           expires_at: string | null
+          featured_until: string | null
           id: string
           images: Json | null
+          is_featured: boolean | null
+          priority: number | null
           status: string | null
           title: string
+          type: string | null
           updated_at: string | null
           user_id: string
+          view_count: number | null
           views_count: number | null
         }
         Insert: {
@@ -115,12 +120,17 @@ export type Database = {
           content?: string | null
           created_at?: string | null
           expires_at?: string | null
+          featured_until?: string | null
           id?: string
           images?: Json | null
+          is_featured?: boolean | null
+          priority?: number | null
           status?: string | null
           title: string
+          type?: string | null
           updated_at?: string | null
           user_id: string
+          view_count?: number | null
           views_count?: number | null
         }
         Update: {
@@ -129,12 +139,17 @@ export type Database = {
           content?: string | null
           created_at?: string | null
           expires_at?: string | null
+          featured_until?: string | null
           id?: string
           images?: Json | null
+          is_featured?: boolean | null
+          priority?: number | null
           status?: string | null
           title?: string
+          type?: string | null
           updated_at?: string | null
           user_id?: string
+          view_count?: number | null
           views_count?: number | null
         }
         Relationships: []
