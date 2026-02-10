@@ -799,24 +799,30 @@ export type Database = {
       }
       equipment_items: {
         Row: {
+          active: boolean
           category_id: string | null
           created_at: string | null
           description: string | null
           id: string
+          key: string | null
           name: string
         }
         Insert: {
+          active?: boolean
           category_id?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
+          key?: string | null
           name: string
         }
         Update: {
+          active?: boolean
           category_id?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
+          key?: string | null
           name?: string
         }
         Relationships: [
@@ -1921,6 +1927,35 @@ export type Database = {
           },
         ]
       }
+      vehicle_custom_options: {
+        Row: {
+          created_at: string | null
+          id: string
+          label: string
+          vehicle_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          label: string
+          vehicle_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          label?: string
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_custom_options_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vehicle_damage_images: {
         Row: {
           created_at: string | null
@@ -2223,6 +2258,35 @@ export type Database = {
             columns: ["vehicle_id"]
             isOneToOne: true
             referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_option_translations: {
+        Row: {
+          id: string
+          label: string
+          language_code: string
+          option_id: string
+        }
+        Insert: {
+          id?: string
+          label: string
+          language_code: string
+          option_id: string
+        }
+        Update: {
+          id?: string
+          label?: string
+          language_code?: string
+          option_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_option_translations_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "equipment_items"
             referencedColumns: ["id"]
           },
         ]
