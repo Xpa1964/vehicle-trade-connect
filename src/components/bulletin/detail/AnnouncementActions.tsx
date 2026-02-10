@@ -91,7 +91,7 @@ const AnnouncementActions: React.FC<AnnouncementActionsProps> = ({
           className="flex items-center gap-2 border-primary/20 hover:bg-primary/5 font-medium px-6"
         >
           <Share2 className="h-4 w-4" />
-          Compartir
+          {t('bulletin.share', { fallback: 'Compartir' })}
         </Button>
         
         {/* Contact publisher button */}
@@ -112,7 +112,7 @@ const AnnouncementActions: React.FC<AnnouncementActionsProps> = ({
       <div className="flex items-center justify-center w-full mt-4">
         <div className="flex items-center gap-2 text-muted-foreground text-sm">
           <BookOpen className="h-4 w-4" />
-          <span>Artículo publicado en Kontact Automotive</span>
+          <span>{t('bulletin.publishedIn', { fallback: 'Artículo publicado en Kontact Automotive' })}</span>
         </div>
       </div>
     </CardFooter>
