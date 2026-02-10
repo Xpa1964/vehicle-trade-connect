@@ -155,11 +155,6 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
               <TabsContent value="docs" className="p-6 mt-0 space-y-4">
                 <DocumentAccessCard vehicleId={vehicle.id} />
                 <VehicleDataSheet vehicle={vehicle} />
-                <CommissionCalculator
-                  initialPrice={vehicle.price}
-                  compact={true}
-                  showTitle={true}
-                />
               </TabsContent>
             </Tabs>
           </Card>
@@ -271,6 +266,17 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
                 </CardContent>
               </Card>
             )}
+
+            {/* Commission Calculator */}
+            <Card className="bg-card border-border rounded-2xl overflow-hidden">
+              <CardContent className="p-4">
+                <CommissionCalculator
+                  initialPrice={vehicle.price}
+                  compact={true}
+                  showTitle={true}
+                />
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
