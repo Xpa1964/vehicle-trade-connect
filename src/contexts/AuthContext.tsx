@@ -1,5 +1,6 @@
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import * as React from 'react';
+const { createContext, useContext, useEffect, useState } = React;
 import { AuthContextType, AppRole, Permission } from '@/types/auth';
 import { useAuthSession } from '@/hooks/useAuthSession';
 import { useAuthOperations } from '@/hooks/useAuthOperations';

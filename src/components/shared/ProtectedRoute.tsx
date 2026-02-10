@@ -1,5 +1,6 @@
 
-import { useEffect, useState } from 'react';
+import * as React from 'react';
+const { useEffect, useState } = React;
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
