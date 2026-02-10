@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Settings } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useEquipmentTranslation } from '@/utils/equipmentTranslation';
+import { useVehicleOptions } from '@/hooks/useVehicleOptions';
 
 interface VehicleEquipmentCardProps {
   vehicleId: string;
@@ -15,37 +14,23 @@ const VehicleEquipmentCard: React.FC<VehicleEquipmentCardProps> = ({
   vehicleId
 }) => {
   const { t } = useLanguage();
-  const getEquipmentName = useEquipmentTranslation();
+  const { getLabelForKey } = useVehicleOptions();
 
-  console.log('🔧 VehicleEquipmentCard - Component rendered for vehicle:', vehicleId);
-
-  const { data: equipment = [], isLoading, error } = useQuery({
-    queryKey: ['vehicle-equipment', vehicleId],
+  const { data: equipmentKeys = [], isLoading } = useQuery({
+    queryKey: ['vehicle-equipment-keys', vehicleId],
     queryFn: async () => {
-      console.log('🔧 VehicleEquipmentCard - Fetching equipment for vehicle:', vehicleId);
-      
       const { data, error } = await supabase
         .from('vehicle_equipment')
-        .select(`
-          equipment_items(name, standard_name)
-        `)
+        .select('name')
         .eq('vehicle_id', vehicleId);
       
       if (error) {
-        console.error('🔧 VehicleEquipmentCard - Error fetching equipment:', error);
+        console.error('Error fetching vehicle equipment:', error);
         return [];
       }
       
-      console.log('🔧 VehicleEquipmentCard - Raw equipment data from DB:', data);
-      return data || [];
+      return (data || []).map(item => item.name).filter(Boolean);
     }
-  });
-
-  console.log('🔧 VehicleEquipmentCard - Query state:', { 
-    isLoading, 
-    error, 
-    equipmentCount: equipment.length,
-    equipment 
   });
 
   return (
@@ -57,24 +42,16 @@ const VehicleEquipmentCard: React.FC<VehicleEquipmentCardProps> = ({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {equipment.length > 0 ? (
+        {equipmentKeys.length > 0 ? (
           <div className="grid grid-cols-1 gap-2">
-            {equipment.map((item: any, index: number) => {
-              console.log('🔧 VehicleEquipmentCard - Rendering equipment item:', {
-                index,
-                standardName: item.equipment_items?.standard_name,
-                name: item.equipment_items?.name
-              });
-              
-              return (
-                <div key={index} className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-[#22C55E] rounded-full"></div>
-                  <span className="text-sm text-foreground">
-                    {getEquipmentName(item.equipment_items?.standard_name, item.equipment_items?.name)}
-                  </span>
-                </div>
-              );
-            })}
+            {equipmentKeys.map((key, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-[#22C55E] rounded-full"></div>
+                <span className="text-sm text-foreground">
+                  {getLabelForKey(key)}
+                </span>
+              </div>
+            ))}
           </div>
         ) : (
           <p className="text-muted-foreground italic">

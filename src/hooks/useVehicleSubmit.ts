@@ -96,13 +96,12 @@ export const useVehicleSubmit = () => {
         console.log('✅ [useVehicleSubmit] Metadata inserted successfully');
       }
       
-      // Handle equipment if provided
+      // Handle equipment if provided - store option keys
       if (data.equipment && data.equipment.length > 0) {
-        console.log('🔧 [useVehicleSubmit] Processing equipment:', data.equipment);
-        const equipmentItems = data.equipment.map(equipmentId => ({
+        console.log('🔧 [useVehicleSubmit] Processing equipment keys:', data.equipment);
+        const equipmentItems = data.equipment.map(optionKey => ({
           vehicle_id: vehicleId,
-          equipment_id: equipmentId,
-          name: equipmentId // Use equipment_id as name for now
+          name: optionKey, // Store the option key
         }));
         
         const { error: equipmentError } = await supabase
