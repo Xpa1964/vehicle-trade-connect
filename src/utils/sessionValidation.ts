@@ -82,7 +82,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
       const result = await supabase
         .from('profiles')
         .select('id')
-        .eq('id', session.user.id)
+        .eq('user_id', session.user.id)
         .limit(1);
       
       authTest = result.data;
@@ -113,7 +113,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
           const { data: retryTest, error: retryError } = await supabase
             .from('profiles')
             .select('id')
-            .eq('id', session.user.id)
+            .eq('user_id', session.user.id)
             .limit(1);
           
           if (retryError) {
