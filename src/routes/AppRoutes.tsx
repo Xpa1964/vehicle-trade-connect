@@ -1,6 +1,5 @@
 
-import * as React from "react";
-const { Suspense, lazy } = React;
+import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";

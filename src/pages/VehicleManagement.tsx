@@ -1,6 +1,5 @@
 
-import * as React from 'react';
-const { useState } = React;
+import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from '@/components/ui/button';
 import VehicleUploadForm from '@/components/vehicles/VehicleUploadForm';
