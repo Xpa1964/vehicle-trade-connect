@@ -72,18 +72,22 @@ export const useImageUpload = (
   const addImageToCollection = (files: File[], forceFirstAsPrimary: boolean = false) => {
     try {
       const newImages = files.map((file, index) => {
-        const previewUrl = URL.createObjectURL(file);
-        // La primera imagen es principal si no hay imágenes existentes O si se fuerza
+        let previewUrl: string;
+        try {
+          previewUrl = URL.createObjectURL(file);
+        } catch {
+          // Fallback for environments where createObjectURL fails
+          previewUrl = '';
+        }
         const isPrimary = (selectedImages.length === 0 && index === 0) || 
                          (forceFirstAsPrimary && index === 0);
         return { file, preview: previewUrl, isPrimary };
       });
       
-      // Use functional update to avoid stale closure issues
       setSelectedImages(prev => {
         const combined = [...prev, ...newImages];
-        // Update form value with the latest combined list
-        updateFormValue(combined);
+        // Defer form update to avoid synchronous state conflicts
+        setTimeout(() => updateFormValue(combined), 0);
         return combined;
       });
     } catch (error) {
@@ -142,21 +146,31 @@ export const useImageUpload = (
         return;
       }
 
-      const dataTransfer = new DataTransfer();
+      // Use a simple array approach instead of DataTransfer (not supported on all devices)
+      const files = [] as File[];
       
       // Add primary image first, then others
       const primaryImage = images.find(img => img.isPrimary);
       const otherImages = images.filter(img => !img.isPrimary);
       
       if (primaryImage) {
-        dataTransfer.items.add(primaryImage.file);
+        files.push(primaryImage.file);
       }
       
       otherImages.forEach(img => {
-        dataTransfer.items.add(img.file);
+        files.push(img.file);
       });
-      
-      form.setValue('images', dataTransfer.files);
+
+      // Try DataTransfer first, fallback to direct assignment
+      try {
+        const dataTransfer = new DataTransfer();
+        files.forEach(f => dataTransfer.items.add(f));
+        form.setValue('images', dataTransfer.files);
+      } catch {
+        // DataTransfer not supported (some mobile browsers)
+        // Store files directly - the submit handler should handle File[] too
+        form.setValue('images', files as any);
+      }
     } catch (error) {
       console.error('❌ [useImageUpload] Error updating form value:', error);
     }

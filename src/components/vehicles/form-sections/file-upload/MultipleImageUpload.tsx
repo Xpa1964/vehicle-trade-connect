@@ -63,15 +63,16 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
     e.preventDefault();
     e.stopPropagation();
     
-    const files = Array.from(e.dataTransfer.files).filter(file => 
-      file.type.startsWith('image/')
-    );
-    
-    if (files.length > 0) {
-      const event = {
-        target: { files }
-      } as unknown as React.ChangeEvent<HTMLInputElement>;
-      handleFileSelect(event);
+    try {
+      const files = Array.from(e.dataTransfer.files).filter(file => 
+        file.type.startsWith('image/')
+      );
+      
+      if (files.length > 0) {
+        onImagesUpload(files);
+      }
+    } catch (error) {
+      console.error('❌ [MultipleImageUpload] Drop error:', error);
     }
   };
 
