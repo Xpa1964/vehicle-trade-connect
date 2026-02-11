@@ -27,6 +27,7 @@ export const SingleImageUpload = ({ onImageUpload }: SingleImageUploadProps) => 
       <input
         id="singleImageInput"
         type="file"
+        accept="image/*"
         className="hidden"
         onChange={onImageUpload}
       />

@@ -20,11 +20,15 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
   const formHook = vehicleId ? editForm : createForm;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
+    try {
+      const files = e.target.files;
+      if (files && files.length > 0) {
+        const file = files[0];
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+      }
+    } catch (error) {
+      console.error('❌ [VehicleUploadForm] Error handling image change:', error);
     }
   };
 

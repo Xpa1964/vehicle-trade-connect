@@ -70,16 +70,25 @@ export const useImageUpload = (
 
   // Add images to collection
   const addImageToCollection = (files: File[], forceFirstAsPrimary: boolean = false) => {
-    const newImages = files.map((file, index) => {
-      const previewUrl = URL.createObjectURL(file);
-      // La primera imagen es principal si no hay imágenes existentes O si se fuerza
-      const isPrimary = (selectedImages.length === 0 && index === 0) || 
-                       (forceFirstAsPrimary && index === 0);
-      return { file, preview: previewUrl, isPrimary };
-    });
-    
-    setSelectedImages(prev => [...prev, ...newImages]);
-    updateFormValue([...selectedImages, ...newImages]);
+    try {
+      const newImages = files.map((file, index) => {
+        const previewUrl = URL.createObjectURL(file);
+        // La primera imagen es principal si no hay imágenes existentes O si se fuerza
+        const isPrimary = (selectedImages.length === 0 && index === 0) || 
+                         (forceFirstAsPrimary && index === 0);
+        return { file, preview: previewUrl, isPrimary };
+      });
+      
+      // Use functional update to avoid stale closure issues
+      setSelectedImages(prev => {
+        const combined = [...prev, ...newImages];
+        // Update form value with the latest combined list
+        updateFormValue(combined);
+        return combined;
+      });
+    } catch (error) {
+      console.error('❌ [useImageUpload] Error adding images:', error);
+    }
   };
 
   // Handler to remove an image
@@ -127,26 +136,30 @@ export const useImageUpload = (
 
   // Update form value with current images
   const updateFormValue = (images: ImagePreview[]) => {
-    if (images.length === 0) {
-      form.setValue('images', undefined);
-      return;
-    }
+    try {
+      if (images.length === 0) {
+        form.setValue('images', undefined);
+        return;
+      }
 
-    const dataTransfer = new DataTransfer();
-    
-    // Add primary image first, then others
-    const primaryImage = images.find(img => img.isPrimary);
-    const otherImages = images.filter(img => !img.isPrimary);
-    
-    if (primaryImage) {
-      dataTransfer.items.add(primaryImage.file);
+      const dataTransfer = new DataTransfer();
+      
+      // Add primary image first, then others
+      const primaryImage = images.find(img => img.isPrimary);
+      const otherImages = images.filter(img => !img.isPrimary);
+      
+      if (primaryImage) {
+        dataTransfer.items.add(primaryImage.file);
+      }
+      
+      otherImages.forEach(img => {
+        dataTransfer.items.add(img.file);
+      });
+      
+      form.setValue('images', dataTransfer.files);
+    } catch (error) {
+      console.error('❌ [useImageUpload] Error updating form value:', error);
     }
-    
-    otherImages.forEach(img => {
-      dataTransfer.items.add(img.file);
-    });
-    
-    form.setValue('images', dataTransfer.files);
   };
 
   // Function to set images from existing URLs (for editing)
