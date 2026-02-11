@@ -28,7 +28,6 @@ export const BulkImageUpload = ({ onImagesUpload }: BulkImageUploadProps) => {
         id="multipleImagesInput"
         type="file"
         multiple
-        accept=".jpg,.jpeg,.png,.webp,.gif,.bmp,.tiff,.tif"
         className="hidden"
         onChange={onImagesUpload}
       />

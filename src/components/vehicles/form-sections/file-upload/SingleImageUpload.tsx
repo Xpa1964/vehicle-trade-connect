@@ -27,7 +27,6 @@ export const SingleImageUpload = ({ onImageUpload }: SingleImageUploadProps) => 
       <input
         id="singleImageInput"
         type="file"
-        accept=".jpg,.jpeg,.png,.webp,.gif,.bmp,.tiff,.tif"
         className="hidden"
         onChange={onImageUpload}
       />
