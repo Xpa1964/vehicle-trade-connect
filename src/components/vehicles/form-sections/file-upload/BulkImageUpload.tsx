@@ -28,9 +28,16 @@ export const BulkImageUpload = ({ onImagesUpload }: BulkImageUploadProps) => {
         id="multipleImagesInput"
         type="file"
         multiple
-        accept="image/*"
         className="hidden"
-        onChange={onImagesUpload}
+        onChange={(e) => {
+          const files = Array.from(e.target.files || []);
+          const nonImages = files.some(f => !f.type.startsWith('image/'));
+          if (nonImages) {
+            e.target.value = '';
+            return;
+          }
+          onImagesUpload(e);
+        }}
       />
     </>
   );

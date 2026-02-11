@@ -27,9 +27,15 @@ export const SingleImageUpload = ({ onImageUpload }: SingleImageUploadProps) => 
       <input
         id="singleImageInput"
         type="file"
-        accept="image/*"
         className="hidden"
-        onChange={onImageUpload}
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file && !file.type.startsWith('image/')) {
+            e.target.value = '';
+            return;
+          }
+          onImageUpload(e);
+        }}
       />
     </>
   );
