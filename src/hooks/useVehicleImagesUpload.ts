@@ -6,7 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 export const useVehicleImagesUpload = () => {
   const { t } = useLanguage();
 
-  const handleImageUploads = async (images: FileList, vehicleId: string) => {
+  const handleImageUploads = async (images: FileList | File[], vehicleId: string) => {
     console.log(`Processing ${images.length} images for upload with validation`);
     
     const result = await vehicleImageServiceCore.uploadMultipleImages(images, vehicleId, 0);

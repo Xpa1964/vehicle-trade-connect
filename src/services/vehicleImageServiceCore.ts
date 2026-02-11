@@ -190,7 +190,7 @@ export class VehicleImageServiceCore {
    * Sube múltiples imágenes con validación, optimización y manejo de errores mejorado
    */
   async uploadMultipleImages(
-    images: FileList,
+    images: FileList | File[],
     vehicleId: string,
     startIndex: number = 0
   ): Promise<{
