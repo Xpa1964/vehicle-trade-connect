@@ -49,10 +49,24 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
     goToSection('published');
   };
 
+  const onValidationError = (errors: any) => {
+    console.error('❌ [VehicleForm] Validation errors preventing submit:', JSON.stringify(errors, null, 2));
+    const fieldNames = Object.keys(errors);
+    if (fieldNames.length > 0) {
+      const firstError = errors[fieldNames[0]];
+      const msg = firstError?.message || `Campo inválido: ${fieldNames[0]}`;
+      import('sonner').then(({ toast }) => {
+        toast.error(`Error de validación: ${msg}`, {
+          description: `Campos con error: ${fieldNames.join(', ')}`,
+        });
+      });
+    }
+  };
+
   return (
     <div className="relative bg-background">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
+        <form onSubmit={form.handleSubmit(onSubmit, onValidationError)} className="relative">
           {/* Layout: Sidebar siempre visible en desktop */}
           <div className="flex flex-col lg:flex-row gap-6 xl:gap-8">
             

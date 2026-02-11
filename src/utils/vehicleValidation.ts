@@ -25,7 +25,7 @@ export const vehicleValidationSchema = {
   location: z.string().min(1, REQUIRED_MESSAGE),
   country: z.string().min(1, REQUIRED_MESSAGE),
   countryCode: z.string().min(1, REQUIRED_MESSAGE),
-  ivaStatus: z.enum(['included', 'notIncluded', 'deductible']),
+  ivaStatus: z.enum(['included', 'notIncluded', 'deductible', 'rebu']),
   cocStatus: z.boolean(),
   status: z.enum(['available', 'reserved', 'sold']).default('available'),
   images: z.instanceof(FileList).optional(),
