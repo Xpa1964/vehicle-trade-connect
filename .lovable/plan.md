@@ -1,173 +1,53 @@
 
 
-# Plan: Migración Completa de Imágenes al Image Control Center + Dark Theme en Formulario de Vehículos
+## Plan: Eliminar mascaras, agregar card API Key y resolver carrusel de vehiculos
 
-## Resumen Ejecutivo
+### Problema 1: Mascaras en titulos y textos de las paginas interiores
 
-Se realizará una auditoría y corrección total en **2 frentes** según lo solicitado:
+Actualmente, 17 paginas dentro del panel de control usan contenedores con `bg-black/20 backdrop-blur-sm` (mascaras semitransparentes) sobre los titulos y subtitulos en las secciones hero. Se eliminaran estas mascaras de todas las paginas afectadas, dejando el texto directamente sobre la imagen con `text-shadow` o `drop-shadow` para mantener la legibilidad.
 
-1. **Tema Dark en Publicar Vehículo**: Reemplazar todas las clases `bg-white`, `bg-gray-*`, `text-gray-*`, `bg-blue-*`, `bg-green-*` por tokens semánticos del design system (bg-card, bg-muted, text-muted-foreground, bg-primary, bg-success, etc.)
+**Paginas afectadas:**
+- `src/pages/APIManagement.tsx`
+- `src/pages/BlogMainPage.tsx`
+- `src/pages/VehicleReports.tsx`
+- `src/pages/VehicleReportsInfoPage.tsx`
+- `src/pages/Transport.tsx`
+- `src/pages/TransportQuoteManagement.tsx`
+- `src/pages/ExchangeForm.tsx`
+- `src/pages/ExchangesInfoPage.tsx`
+- `src/pages/RequestReport.tsx`
+- `src/pages/CommissionCalculatorPage.tsx`
+- `src/pages/MessagingInfoPage.tsx`
+- `src/pages/auctions/PublishAuctionPage.tsx`
+- Y otras paginas con el mismo patron
 
-2. **Integrar TODAS las imágenes de producto al Image Control Center**: Cada página interior del panel (ver/publicar vehículo, subastas, intercambios, tablón, transporte, informes, calculadoras, blog) pasará de rutas hardcodeadas (`/lovable-uploads/...`, `/images/...`, `@/assets/...`) a usar `SafeImage` o `useStaticImage` con IDs del registro.
-
----
-
-## Parte 1: Formulario de Vehículo — Dark Theme
-
-### Archivos a modificar (13 archivos)
-
-| Archivo | Cambios principales |
-|---------|---------------------|
-| `VehicleFormScrollSections.tsx` | Reemplazar `bg-white`, `text-gray-*`, `bg-blue-*`, `bg-green-*` por tokens |
-| `BottomNavigation.tsx` | `bg-white` → `bg-card`, `border-gray-*` → `border-border`, `bg-blue-500` → `bg-primary` |
-| `FormTabs.tsx` | `text-green-*` → `text-success`, `bg-green-50` → `bg-success/10`, `text-gray-*` → `text-muted-foreground` |
-| `MultipleImageUpload.tsx` | `border-gray-300` → `border-border`, `text-gray-*` → `text-muted-foreground` |
-| `FileUpload.tsx` | `bg-gray-50` → `bg-muted` |
-| `DamagesSection.tsx` | `bg-gray-100 text-gray-800` → `bg-muted text-muted-foreground` |
-| `TabNavigation.tsx` | `bg-green-100` → `bg-success/10`, `text-gray-400` → `text-muted-foreground` |
-| `ImagePreviewGrid.tsx` | `border-gray-200` → `border-border` |
-| `EquipmentCategoryList.tsx` | `text-gray-500` → `text-muted-foreground` |
-| `UploadForm.tsx` | `bg-white` → `bg-card` |
-
-### Mapeo de tokens
-
-```text
-bg-white              → bg-card
-bg-gray-50            → bg-muted
-border-gray-200/300   → border-border
-text-gray-400/500/600 → text-muted-foreground
-text-gray-900         → text-foreground
-bg-blue-500           → bg-primary
-bg-green-500          → bg-success
-text-green-600        → text-success
-bg-green-50           → bg-success/10
-```
+**Cambio:** Reemplazar los `div` con `bg-black/XX backdrop-blur-sm rounded-lg p-4 border border-white/10` por contenedores sin fondo, aplicando `drop-shadow-lg` al texto para legibilidad.
 
 ---
 
-## Parte 2: Integración de Imágenes al Registry (26 páginas)
+### Problema 2: Card de API Key en el Panel de Control
 
-### Nuevas entradas del registro (a añadir)
+El panel de control (`src/pages/admin/ControlPanel.tsx`) ya tiene una entrada para "Gestion de APIs" en la seccion "Administracion" (linea 201), pero usa `imageId: 'admin.apikeys'` en lugar de un icono. Se cambiara para usar el icono `Key` que ya esta importado pero no se usa.
 
-Se añadirán las siguientes entradas en `staticImageRegistry.ts`:
-
-```text
-ID                         | Página(s)                    | Ruta actual
----------------------------|------------------------------|-----------------------------
-hero.transport             | Transport.tsx                | /lovable-uploads/04839c38...
-hero.transport.express     | TransportExpressPage.tsx     | @/assets/transport-image.png
-hero.transport.quotes      | TransportQuoteManagement.tsx | @/assets/transport-quotes-image.png
-hero.bulletin              | BulletinHero.tsx             | /images/bulletin-board.png
-hero.bulletin.publish      | PublishAnnouncementPage.tsx  | @/assets/announcement-image.png
-hero.reports               | VehicleReportsInfoPage.tsx   | /images/vehicle-reports-hero.png
-hero.reports.delivery      | VehicleReports.tsx           | @/assets/report-delivery-image.png
-hero.reports.request       | RequestReport.tsx            | (misma imagen)
-hero.exchange.form         | ExchangeForm.tsx             | /lovable-uploads/exchange-header.png
-hero.import.calculator     | ImportCalculator.tsx         | /lovable-uploads/ba9a7ade...
-hero.commission.calculator | CommissionCalculatorPage.tsx | /lovable-uploads/379e75ed...
-hero.blog                  | BlogMainPage.tsx             | /lovable-uploads/eec67196...
-hero.messaging             | MessagingInfoPage.tsx        | /images/messaging-chat.png
-hero.api.management        | APIManagement.tsx (admin)    | @/assets/api-keys-image.png
-logo.form                  | VehicleFormHeader.tsx        | LOGO_IMAGES.primary
-hero.dashboard.header      | DashboardHeader.tsx          | /lovable-uploads/e8bcfe5d...
-info.gallery.view          | VehicleGalleryInfoPage.tsx   | (ya existe)
-info.gallery.detail        | VehicleGalleryInfoPage.tsx   | (ya existe)
-info.gallery.form          | VehicleGalleryInfoPage.tsx   | (ya existe)
-```
-
-### Páginas a migrar (resumen por sección del panel)
-
-**Vehículos**
-- `VehicleManagement.tsx` ✅ ya usa `useStaticImage('hero.vehicles')`
-- `VehicleGalleryInfoPage.tsx` ✅ ya usa registry (showroom, gallery.view, gallery.detail, gallery.form)
-
-**Subastas**
-- `LiveAuctionsPage.tsx` ✅ ya usa `useStaticImage('hero.auctions')`
-- `PublishAuctionPage.tsx` ✅ ya usa `SafeImage imageId="hero.auctions"`
-- `AuctionsInfoPage.tsx` ⚠️ usa `/images/auctions-hero.png` hardcodeado → migrar
-
-**Intercambios**
-- `Exchanges.tsx` ✅ ya usa `SafeImage imageId="hero.exchanges"`
-- `ExchangeForm.tsx` ⚠️ usa `/lovable-uploads/exchange-header.png` → migrar
-- `ExchangesInfoPage.tsx` ✅ ya usa `useStaticImage('services.exchanges')`
-
-**Tablón de Anuncios**
-- `BulletinBoard.tsx` ✅ delega al componente `BulletinHero` (necesita verificar)
-- `PublishAnnouncementPage.tsx` ⚠️ usa `@/assets/announcement-image.png` → migrar
-- `BulletinInfoPage.tsx` ✅ ya usa `useStaticImage('services.bulletin')`
-
-**Transporte**
-- `Transport.tsx` ⚠️ usa `/lovable-uploads/04839c38...` hardcodeado → migrar
-- `TransportExpressPage.tsx` ⚠️ usa `@/assets/transport-image.png` → migrar
-- `TransportQuoteManagement.tsx` ⚠️ usa `@/assets/transport-quotes-image.png` → migrar
-
-**Informes**
-- `VehicleReports.tsx` ⚠️ usa `@/assets/report-delivery-image.png` → migrar
-- `RequestReport.tsx` ⚠️ misma imagen → migrar
-- `VehicleReportsInfoPage.tsx` ⚠️ usa `/images/vehicle-reports-hero.png` → migrar
-
-**Calculadoras**
-- `ImportCalculator.tsx` ⚠️ usa `/lovable-uploads/ba9a7ade...` → migrar
-- `CommissionCalculatorPage.tsx` ⚠️ usa `/lovable-uploads/379e75ed...` → migrar
-
-**Blog**
-- `BlogMainPage.tsx` ⚠️ usa `/lovable-uploads/eec67196...` → migrar
-
-**Mensajería**
-- `MessagingInfoPage.tsx` ⚠️ usa `/images/messaging-chat.png` → migrar
-
-**Admin**
-- `APIManagement.tsx` ⚠️ usa `@/assets/api-keys-image.png` → migrar
-- `DashboardHeader.tsx` ⚠️ usa `/lovable-uploads/e8bcfe5d...` → migrar
+**Cambio:** Reemplazar `imageId: 'admin.apikeys'` por `icon: Key` en el item de API Management.
 
 ---
 
-## Parte 3: Copiar assets de src/assets a public/assets
+### Problema 3: Carrusel de vehiculos no funciona
 
-Para que los paths del registry funcionen con imágenes bundleadas, se copiarán estos archivos a `public/assets`:
+La tabla `vehicle_images` esta **completamente vacia**. Los 5 vehiculos migrados solo tienen la imagen principal (`thumbnailurl`) pero no se importaron las imagenes adicionales a la tabla `vehicle_images`. Por eso el carrusel no aparece (solo se muestra cuando hay mas de 1 imagen).
 
-- `transport-image.png`
-- `transport-quotes-image.png`
-- `report-delivery-image.png`
-- `announcement-image.png`
-- `api-keys-image.png`
+**Solucion:** Crear registros en `vehicle_images` a partir de las URLs de `thumbnailurl` existentes para que al menos la imagen principal aparezca en la galeria. Ademas, las imagenes apuntan al storage de otro proyecto Supabase (`inqqnsvlimtpjxjxuzaf`), por lo que seguiran funcionando como enlaces externos pero no podran gestionarse localmente.
 
-Y se actualizará el registry con paths `"/assets/..."`.
+Se insertaran los 5 registros correspondientes con `is_primary = true` para cada vehiculo existente.
 
 ---
 
-## Secuencia de Implementación
+### Detalles tecnicos
 
-### Batch 1: Dark Theme (Formulario de Vehículos)
-1. Modificar `VehicleFormScrollSections.tsx`
-2. Modificar `BottomNavigation.tsx`
-3. Modificar `FormTabs.tsx`
-4. Modificar `MultipleImageUpload.tsx`
-5. Modificar `FileUpload.tsx`, `DamagesSection.tsx`, etc.
+1. **Mascaras** - Editar ~15 archivos `.tsx` eliminando los contenedores `bg-black/XX backdrop-blur-sm` y aplicando clases de sombra al texto (`drop-shadow-lg`, `[text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]`).
 
-### Batch 2: Registry + Páginas (Imágenes)
-1. Añadir 18 nuevas entradas al registry
-2. Copiar assets a `public/assets`
-3. Migrar cada página (usar `SafeImage imageId` o `useStaticImage`)
-4. Eliminar imports de `@/assets/...` y `@/constants/imageAssets`
+2. **Card API Key** - Edicion minima en `ControlPanel.tsx`, linea 201: cambiar `imageId` por `icon: Key`.
 
-### Batch 3: Validación
-1. Verificar que Image Control Center muestra todas las nuevas imágenes
-2. Verificar que el formulario de vehículos es Dark Pro
-3. Probar navegación en móvil
-
----
-
-## Notas Técnicas
-
-### Sobre rutas `src/assets/`
-El bundler de Vite no expone `src/assets` como rutas en runtime. Por eso:
-- Si el registry usa `currentPath: "/assets/foo.png"`, ese archivo debe existir en `public/assets/foo.png`
-- O se puede usar imports ES6 y asignar al registry como string
-
-### Sobre cache-busting
-El sistema ya usa `?v=fileName` para cache-busting. Se mantendrá ese patrón.
-
-### Sobre el preloader
-El `criticalImagePreloader.ts` ya omite paths `src/assets/`. No se requieren cambios allí.
+3. **Vehicle images** - Migracion SQL para insertar 5 registros en `vehicle_images` usando los `thumbnailurl` de los vehiculos existentes, con `is_primary = true` y `display_order = 0`.
 
