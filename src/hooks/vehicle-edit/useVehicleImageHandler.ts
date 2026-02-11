@@ -9,7 +9,7 @@ export const useVehicleImageHandler = () => {
   /**
    * Upload multiple images for a vehicle
    */
-  const handleImageUploads = async (images: FileList, vehicleId: string, startIndex: number = 0) => {
+  const handleImageUploads = async (images: FileList | File[], vehicleId: string, startIndex: number = 0) => {
     const result = await vehicleImageServiceCore.uploadMultipleImages(images, vehicleId, startIndex);
     
     console.log(`Upload completed: ${result.successful.length}/${result.total} successful`);

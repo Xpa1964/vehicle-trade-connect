@@ -144,14 +144,15 @@ export const useVehicleUpdater = () => {
       }
       
       // Handle image uploads if available
-      if (formData.images && formData.images.length > 0) {
-        console.log('🖼️ [useVehicleUpdater] Processing image uploads...');
+      const imagesArray = formData.images instanceof FileList ? Array.from(formData.images) : Array.isArray(formData.images) ? formData.images : [];
+      if (imagesArray.length > 0) {
+        console.log('🖼️ [useVehicleUpdater] Processing image uploads:', imagesArray.length, 'images');
         const { data: existingImages } = await supabase
           .from('vehicle_images')
           .select('*')
           .eq('vehicle_id', id);
         
-        await handleImageUploads(formData.images, id, existingImages?.length || 0);
+        await handleImageUploads(imagesArray, id, existingImages?.length || 0);
         console.log('✅ [useVehicleUpdater] Images processed successfully');
       }
       

@@ -65,7 +65,7 @@ export class ImageValidator {
   /**
    * Valida múltiples archivos
    */
-  validateFiles(files: FileList, currentImageCount: number = 0): ValidationResult {
+  validateFiles(files: FileList | File[], currentImageCount: number = 0): ValidationResult {
     const result: ValidationResult = {
       isValid: true,
       errors: [],
@@ -107,7 +107,7 @@ export class ImageValidator {
   /**
    * Valida antes de subir (incluyendo verificaciones de red)
    */
-  async validateForUpload(files: FileList, vehicleId: string, currentImageCount: number): Promise<ValidationResult> {
+  async validateForUpload(files: FileList | File[], vehicleId: string, currentImageCount: number): Promise<ValidationResult> {
     const result = this.validateFiles(files, currentImageCount);
 
     // Validar vehicleId

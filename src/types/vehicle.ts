@@ -88,8 +88,8 @@ export interface VehicleFormData {
   ivaStatus: 'included' | 'notIncluded' | 'deductible' | 'rebu';
   cocStatus: boolean;
   status: 'available' | 'reserved' | 'sold';
-  images?: FileList;
-  additionalFiles?: FileList;
+  images?: FileList | File[];
+  additionalFiles?: FileList | File[];
   equipment?: string[];
   description?: string;
   
