@@ -40,24 +40,13 @@ const BlogMainPage: React.FC = () => {
           
           {/* Content - Bottom Area */}
           <div className="absolute bottom-6 left-6 right-6 z-20">
-            <div className="space-y-3">
-              {/* Title */}
-              <div>
-                <div className="bg-black/40 backdrop-blur-sm rounded-lg px-6 py-3 inline-block">
-                  <h1 className="text-3xl md:text-4xl font-bold text-white">
-                    Blog Profesional
-                  </h1>
-                </div>
-              </div>
-              
-              {/* Description */}
-              <div>
-                <div className="bg-black/40 backdrop-blur-sm rounded-lg px-6 py-3 inline-block max-w-2xl">
-                  <p className="text-lg text-white">
-                    Conocimiento y tendencias del sector automotriz
-                  </p>
-                </div>
-              </div>
+           <div className="space-y-3">
+              <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                Blog Profesional
+              </h1>
+              <p className="text-lg text-white drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                Conocimiento y tendencias del sector automotriz
+              </p>
             </div>
           </div>
         </div>

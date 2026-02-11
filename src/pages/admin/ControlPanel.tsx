@@ -198,7 +198,7 @@ const ControlPanelPage: React.FC = () => {
       href: '/admin/report-payments'
     },
     {
-      imageId: 'admin.apikeys',
+      icon: Key,
       title: 'Gestión de APIs',
       description: 'Gestiona API keys de partners para sincronización automática de stock',
       href: '/admin/api-management'

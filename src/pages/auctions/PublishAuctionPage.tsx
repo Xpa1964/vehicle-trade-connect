@@ -108,16 +108,12 @@ const PublishAuctionPage: React.FC = () => {
             </div>
             
             <div className="flex-1 flex flex-col justify-end">
-              <div className="bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 w-fit">
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  {t('auctions.publishAuction', { fallback: 'Publicar Subasta' })}
-                </h1>
-              </div>
-              <div className="bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 w-fit mt-3">
-                <p className="text-lg text-white font-bold">
-                  {t('auctions.publishDescription', { fallback: 'Crea una subasta para vender tu vehículo al mejor postor' })}
-                </p>
-              </div>
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                {t('auctions.publishAuction', { fallback: 'Publicar Subasta' })}
+              </h1>
+              <p className="text-lg text-white font-bold drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                {t('auctions.publishDescription', { fallback: 'Crea una subasta para vender tu vehículo al mejor postor' })}
+              </p>
             </div>
           </div>
         </div>

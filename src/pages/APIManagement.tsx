@@ -53,20 +53,16 @@ const APIManagement: React.FC = () => {
             {/* Logo + Title */}
             <div className="flex-1 flex flex-col justify-end space-y-3">
               <div className="w-full">
-                <div className="bg-black/20 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-white/10 inline-block max-w-full">
-                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight break-words">
-                    {t('api.management.title')}
-                  </h1>
-                </div>
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight break-words drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                  {t('api.management.title')}
+                </h1>
               </div>
               
               {/* Description */}
-              <div className="w-full">
-                <div className="bg-black/20 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-white/10 inline-block max-w-full">
-                  <p className="text-sm sm:text-base md:text-lg text-white font-medium leading-relaxed break-words">
-                    {t('api.management.subtitle')}
-                  </p>
-                </div>
+              <div className="w-full mt-3">
+                <p className="text-sm sm:text-base md:text-lg text-white font-medium leading-relaxed break-words drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                  {t('api.management.subtitle')}
+                </p>
               </div>
             </div>
           </div>

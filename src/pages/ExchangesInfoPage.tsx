@@ -300,14 +300,12 @@ const ExchangesInfoPage: React.FC = () => {
                 </Button>
               </div>
               
-              <div className="inline-block bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 w-fit">
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  {translations.title[lang] || translations.title.es}
-                </h1>
-                <p className="text-lg text-white font-bold">
-                  {translations.subtitle[lang] || translations.subtitle.es}
-                </p>
-              </div>
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                {translations.title[lang] || translations.title.es}
+              </h1>
+              <p className="text-lg text-white font-bold drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                {translations.subtitle[lang] || translations.subtitle.es}
+              </p>
             </div>
           </div>
         </div>
