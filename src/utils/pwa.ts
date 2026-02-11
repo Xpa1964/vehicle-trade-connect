@@ -14,6 +14,31 @@ let deferredPrompt: BeforeInstallPromptEvent | null = null;
  * Initialize PWA features
  */
 export function initializePWA(): void {
+  // IMPORTANT: In development/preview, service workers can cause asset cache mismatches
+  // (old JS chunks served with new HTML), which looks like "continuous reload" and wipes form state.
+  // So we proactively disable SW + clear caches in DEV.
+  if (import.meta.env.DEV) {
+    void (async () => {
+      try {
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map((r) => r.unregister()));
+        }
+
+        if ('caches' in window) {
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map((name) => caches.delete(name)));
+        }
+
+        console.log('[PWA] DEV: service worker disabled and caches cleared');
+      } catch (error) {
+        console.warn('[PWA] DEV: failed to disable service worker', error);
+      }
+    })();
+
+    return;
+  }
+
   // Register service worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
