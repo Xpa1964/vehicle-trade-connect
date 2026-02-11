@@ -127,9 +127,12 @@ export const useVehicleSubmit = () => {
       }
       
       // Handle image uploads if available
-      if (data.images && data.images.length > 0) {
-        console.log('🖼️ [useVehicleSubmit] Processing images:', data.images.length, 'images');
-        await handleImageUploads(data.images, vehicleId);
+      if (data.images) {
+        const imagesArray = data.images instanceof FileList ? Array.from(data.images) : Array.isArray(data.images) ? data.images : [];
+        if (imagesArray.length > 0) {
+          console.log('🖼️ [useVehicleSubmit] Processing images:', imagesArray.length, 'images');
+          await handleImageUploads(imagesArray, vehicleId);
+        }
       }
       
       // Handle additional files if available
@@ -274,12 +277,13 @@ export const useVehicleSubmit = () => {
     }
   };
 
-  const handleImageUploads = async (images: FileList, vehicleId: string) => {
+  const handleImageUploads = async (images: FileList | File[], vehicleId: string) => {
     try {
       console.log('🖼️ [handleImageUploads] Starting image uploads for vehicle:', vehicleId);
       let thumbnailUrl: string | null = null;
       
-      const imagePromises = Array.from(images).map(async (file, index) => {
+      const filesArray = Array.from(images);
+      const imagePromises = filesArray.map(async (file, index) => {
         try {
           console.log(`🖼️ [handleImageUploads] Processing image ${index + 1}/${images.length}:`, file.name);
           const fileExt = file.name.split('.').pop();
