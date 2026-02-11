@@ -63,8 +63,18 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
     }
   };
 
+  // Prevent browser from navigating to dropped files (causes full page reload + data loss)
+  const preventDragNavigation = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   return (
-    <div className="relative bg-background">
+    <div 
+      className="relative bg-background"
+      onDragOver={preventDragNavigation}
+      onDrop={preventDragNavigation}
+    >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onValidationError)} className="relative">
           {/* Layout: Sidebar siempre visible en desktop */}
