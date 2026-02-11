@@ -21,13 +21,13 @@ export const useVehicleForm = () => {
     try {
       setIsLoading(true);
       const result = await handleVehicleSubmit(data);
-      
+
       if (result?.id) {
         // Navigate to the preview page if we have a vehicle ID
         navigate(`/vehicle-preview/${result.id}`);
+        // Only reset on success (avoid losing user input on failure)
+        form.reset();
       }
-      
-      form.reset();
     } catch (error) {
       console.error('Form submission error:', error);
     } finally {
