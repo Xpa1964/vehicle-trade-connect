@@ -76,7 +76,7 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
       onDrop={preventDragNavigation}
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onValidationError)} className="relative">
+        <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit(onSubmit, onValidationError)(e); }} className="relative">
           {/* Layout: Sidebar siempre visible en desktop */}
           <div className="flex flex-col lg:flex-row gap-6 xl:gap-8">
             
