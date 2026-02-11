@@ -118,7 +118,6 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
         ref={fileInputRef}
         type="file"
         multiple
-        accept=".jpg,.jpeg,.png,.webp,.gif,.bmp,.tiff,.tif"
         className="hidden"
         onChange={handleFileSelect}
       />
