@@ -30,6 +30,9 @@ export const useVehicleSubmit = () => {
       // Prepare vehicle data with proper date formatting
       const vehicleData = {
         id: vehicleId,
+        // CRITICAL: vehicles.seller_id is NOT NULL + enforced by RLS
+        seller_id: user.id,
+
         brand: data.brand,
         model: data.model,
         year: data.year,
@@ -42,8 +45,10 @@ export const useVehicleSubmit = () => {
         type: data.fuel,
         condition: 'used', // Default value
         description: data.description || '',
+
+        // Keep user_id for analytics/ownership fields used elsewhere
         user_id: user.id,
-        
+
         // Campos adicionales
         fuel: data.fuel,
         transmission: data.transmission,
@@ -149,9 +154,19 @@ export const useVehicleSubmit = () => {
       toast.success(t('vehicles.createSuccess', { fallback: 'Vehicle created successfully' }));
       console.log('🎉 [useVehicleSubmit] Vehicle submission completed successfully');
       return { id: vehicleId };
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ [useVehicleSubmit] Error submitting vehicle:', error);
-      toast.error(t('vehicles.createError', { fallback: 'Error creating vehicle' }));
+
+      const details =
+        error?.message ||
+        error?.details ||
+        error?.hint ||
+        (typeof error === 'string' ? error : undefined);
+
+      toast.error(t('vehicles.createError', { fallback: 'Error creating vehicle' }), {
+        description: details,
+      });
+
       return null;
     } finally {
       setLoading(false);
