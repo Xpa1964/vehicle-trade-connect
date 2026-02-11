@@ -39,17 +39,13 @@ const RequestReport = () => {
             </Button>
           </div>
           
-          <div className="flex-1 flex flex-col justify-end gap-3">
-            <div className="bg-black/30 backdrop-blur-md rounded-lg p-4 border border-white/20">
-              <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">
-                {t('reports.form.title')}
-              </h1>
-            </div>
-            <div className="bg-black/30 backdrop-blur-md rounded-lg p-4 border border-white/20">
-              <p className="text-lg text-white font-medium drop-shadow-md">
-                {t('reports.form.description')}
-              </p>
-            </div>
+           <div className="flex-1 flex flex-col justify-end gap-3">
+            <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+              {t('reports.form.title')}
+            </h1>
+            <p className="text-lg text-white font-medium drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+              {t('reports.form.description')}
+            </p>
           </div>
         </div>
       </div>

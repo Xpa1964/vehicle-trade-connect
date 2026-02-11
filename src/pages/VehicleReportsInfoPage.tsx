@@ -540,23 +540,12 @@ const VehicleReportsInfoPage: React.FC = () => {
                 </div>
                 
                 <div className="space-y-3">
-                  {/* Máscara independiente para el título */}
-                  <div className="inline-block">
-                    <div className="bg-black/30 backdrop-blur-sm rounded-lg px-4 py-3 border border-white/20">
-                      <h1 className="text-3xl md:text-4xl font-bold text-white">
-                        {t('reports.title', { fallback: 'Informes de Vehículos' })}
-                      </h1>
-                    </div>
-                  </div>
-                  
-                  {/* Máscara independiente para el subtítulo */}
-                  <div className="inline-block">
-                    <div className="bg-black/30 backdrop-blur-sm rounded-lg px-4 py-3 border border-white/20">
-                      <p className="text-lg text-white font-medium">
-                        {translations.subtitle[lang]}
-                      </p>
-                    </div>
-                  </div>
+                  <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                    {t('reports.title', { fallback: 'Informes de Vehículos' })}
+                  </h1>
+                  <p className="text-lg text-white font-medium drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                    {translations.subtitle[lang]}
+                  </p>
                 </div>
               </div>
             </div>

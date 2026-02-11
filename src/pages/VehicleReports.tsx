@@ -174,19 +174,12 @@ const VehicleReports: React.FC = () => {
               </div>
               
               <div className="flex flex-col justify-end flex-1">
-                {/* Title with independent mask */}
-                <div className="mb-4 bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 w-fit">
-                  <h1 className="text-3xl md:text-4xl font-bold text-white">
-                    {t('reports.title', { fallback: 'Entrega de Informes' })}
-                  </h1>
-                </div>
-                
-                {/* Description with independent mask */}
-                <div className="bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 w-fit">
-                  <p className="text-lg text-white font-bold">
-                    {t('reports.subtitle', { fallback: 'Descarga tus informes técnicos solicitados' })}
-                  </p>
-                </div>
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                  {t('reports.title', { fallback: 'Entrega de Informes' })}
+                </h1>
+                <p className="text-lg text-white font-bold drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
+                  {t('reports.subtitle', { fallback: 'Descarga tus informes técnicos solicitados' })}
+                </p>
               </div>
             </div>
           </div>

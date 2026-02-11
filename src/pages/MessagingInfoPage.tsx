@@ -116,13 +116,13 @@ const MessagingInfoPage = () => {
               </div>
               
               {/* Title & description */}
-              <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
                   {t('messaging.hero.title')}{' '}
                   <span className="text-white">{t('messaging.hero.titleHighlight')}</span>
                 </h1>
                 
-                <p className="text-lg text-white font-bold">
+                <p className="text-lg text-white font-bold drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
                   {t('messaging.hero.description')}
                 </p>
               </div>
