@@ -40,6 +40,12 @@ export function useStatistics() {
         .select('*', { count: 'exact', head: true })
         .or(`initiator_id.eq.${user.id},receiver_id.eq.${user.id}`);
 
+      // Query auctions count
+      const { count: auctionsCount } = await supabase
+        .from('auctions')
+        .select('*', { count: 'exact', head: true })
+        .eq('seller_id', user.id);
+
       const duration = Date.now() - startTime;
       console.log(`✅ [useStatistics] Stats loaded in ${duration}ms`);
 
@@ -48,6 +54,7 @@ export function useStatistics() {
         announcements: { count: announcementsCount || 0 },
         messages: { count: messagesCount || 0 },
         exchanges: { count: exchangesCount || 0 },
+        auctions: { count: auctionsCount || 0 },
       };
     },
     enabled: !!user?.id,
@@ -60,6 +67,7 @@ export function useStatistics() {
     announcements: data?.announcements || { count: 0 },
     messages: data?.messages || { count: 0 },
     exchanges: data?.exchanges || { count: 0 },
+    auctions: data?.auctions || { count: 0 },
     isLoading,
     error,
     ...rest

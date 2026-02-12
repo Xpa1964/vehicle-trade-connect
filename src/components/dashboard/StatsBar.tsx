@@ -30,7 +30,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, isLoading
 
 const StatsBar: React.FC = React.memo(() => {
   const { t } = useLanguage();
-  const { vehicles, announcements, messages, exchanges, isLoading } = useStatistics();
+  const { vehicles, announcements, messages, exchanges, auctions, isLoading } = useStatistics();
 
   const stats = [
     {
@@ -40,7 +40,7 @@ const StatsBar: React.FC = React.memo(() => {
     },
     {
       title: t('nav.auctionRoom', { fallback: 'Subastas' }),
-      value: 0, // TODO: Add auctions count when available
+      value: auctions?.count || 0,
       icon: Gavel
     },
     {
