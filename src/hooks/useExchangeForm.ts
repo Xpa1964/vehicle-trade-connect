@@ -49,17 +49,19 @@ export const useExchangeForm = () => {
     try {
       const exchangeData = {
         initiator_id: user.id,
-        status: 'pending',
-        initiator_vehicle: {
-          brand: data.offerBrand,
-          model: data.offerModel,
-          year: data.offerYear,
-          kilometers: data.offerKilometers
-        },
-        target_preferences: {
-          brands: data.acceptBrands,
-          countries: data.acceptCountries
-        }
+        status: 'pending' as const,
+        message: JSON.stringify({
+          initiator_vehicle: {
+            brand: data.offerBrand,
+            model: data.offerModel,
+            year: data.offerYear,
+            kilometers: data.offerKilometers
+          },
+          target_preferences: {
+            brands: data.acceptBrands,
+            countries: data.acceptCountries
+          }
+        })
       };
       
       const { error } = await supabase
