@@ -104,8 +104,8 @@ const MultiSelectField = ({
                 autoFocus
               />
             </div>
-            <ScrollArea className="max-h-48">
-              <div className="p-2 space-y-1">
+            <div className="max-h-48 overflow-y-auto p-2 space-y-1">
+              <div>
                 {filtered.map(option => (
                   <label
                     key={option}
@@ -122,7 +122,7 @@ const MultiSelectField = ({
                   <p className="text-sm text-muted-foreground text-center py-2">Sin resultados</p>
                 )}
               </div>
-            </ScrollArea>
+             </div>
           </div>
         )}
       </div>
