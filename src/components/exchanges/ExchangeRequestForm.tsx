@@ -8,7 +8,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useExchangeVehicles } from '@/hooks/useExchangeVehicles';
-import { Vehicle } from '@/types/vehicle';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,7 +15,123 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDes
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Car, Plus, ArrowRight } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Car, Plus, X } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+
+const VEHICLE_BRANDS = [
+  'AUDI', 'BMW', 'MERCEDES-BENZ', 'VOLKSWAGEN', 'FORD', 'RENAULT', 'PEUGEOT', 'CITROEN',
+  'OPEL', 'SEAT', 'TOYOTA', 'NISSAN', 'HONDA', 'HYUNDAI', 'KIA', 'MAZDA', 'MITSUBISHI',
+  'SUBARU', 'VOLVO', 'JAGUAR', 'LAND ROVER', 'PORSCHE', 'FERRARI', 'LAMBORGHINI', 'MASERATI',
+  'ALFA ROMEO', 'FIAT', 'LANCIA', 'SKODA', 'DACIA', 'SUZUKI', 'ISUZU', 'JEEP', 'CHEVROLET',
+  'CADILLAC', 'BUICK', 'GMC', 'CHRYSLER', 'DODGE', 'LINCOLN', 'ACURA', 'INFINITI', 'LEXUS',
+  'TESLA', 'CUPRA'
+].sort();
+
+const EU_COUNTRIES = [
+  'Alemania', 'Austria', 'Bélgica', 'Bulgaria', 'Chipre', 'Croacia',
+  'Dinamarca', 'Eslovaquia', 'Eslovenia', 'España', 'Estonia', 'Finlandia',
+  'Francia', 'Grecia', 'Hungría', 'Irlanda', 'Italia', 'Letonia',
+  'Lituania', 'Luxemburgo', 'Malta', 'Países Bajos', 'Polonia', 'Portugal',
+  'República Checa', 'Rumanía', 'Suecia'
+].sort();
+
+// Multi-select component for brands/countries
+const MultiSelectField = ({
+  label,
+  description,
+  options,
+  selectedValues,
+  onChange,
+  placeholder,
+}: {
+  label: string;
+  description?: string;
+  options: string[];
+  selectedValues: string[];
+  onChange: (values: string[]) => void;
+  placeholder: string;
+}) => {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+
+  const filtered = options.filter(o =>
+    o.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const toggle = (value: string) => {
+    if (selectedValues.includes(value)) {
+      onChange(selectedValues.filter(v => v !== value));
+    } else {
+      onChange([...selectedValues, value]);
+    }
+  };
+
+  const remove = (value: string) => {
+    onChange(selectedValues.filter(v => v !== value));
+  };
+
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap gap-1.5 min-h-[32px]">
+        {selectedValues.map(val => (
+          <Badge key={val} variant="secondary" className="flex items-center gap-1 text-xs">
+            {val}
+            <X className="h-3 w-3 cursor-pointer" onClick={() => remove(val)} />
+          </Badge>
+        ))}
+      </div>
+      <div className="relative">
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full justify-start text-muted-foreground font-normal"
+          onClick={() => setOpen(!open)}
+        >
+          {selectedValues.length > 0
+            ? `${selectedValues.length} seleccionados`
+            : placeholder}
+        </Button>
+        {open && (
+          <div className="absolute z-50 mt-1 w-full rounded-md border bg-popover shadow-lg">
+            <div className="p-2">
+              <Input
+                placeholder="Buscar..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                className="h-8"
+                autoFocus
+              />
+            </div>
+            <ScrollArea className="max-h-48">
+              <div className="p-2 space-y-1">
+                {filtered.map(option => (
+                  <label
+                    key={option}
+                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-accent cursor-pointer text-sm"
+                  >
+                    <Checkbox
+                      checked={selectedValues.includes(option)}
+                      onCheckedChange={() => toggle(option)}
+                    />
+                    {option}
+                  </label>
+                ))}
+                {filtered.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-2">Sin resultados</p>
+                )}
+              </div>
+            </ScrollArea>
+          </div>
+        )}
+      </div>
+      {description && (
+        <p className="text-sm text-muted-foreground">{description}</p>
+      )}
+    </div>
+  );
+};
 
 // Schema for selecting an existing vehicle
 const existingVehicleSchema = z.object({
@@ -43,7 +158,14 @@ export const ExchangeRequestForm = () => {
   const [activeTab, setActiveTab] = useState<"existing" | "new">("existing");
   const { userVehicles, fetchUserVehicles, isLoading } = useExchangeVehicles();
 
-  // Create two separate forms for each tab
+  // State for multi-select values (existing vehicle tab)
+  const [existingBrands, setExistingBrands] = useState<string[]>([]);
+  const [existingCountries, setExistingCountries] = useState<string[]>([]);
+
+  // State for multi-select values (new vehicle tab)
+  const [newBrands, setNewBrands] = useState<string[]>([]);
+  const [newCountries, setNewCountries] = useState<string[]>([]);
+
   const existingVehicleForm = useForm<z.infer<typeof existingVehicleSchema>>({
     resolver: zodResolver(existingVehicleSchema),
     defaultValues: {
@@ -65,7 +187,23 @@ export const ExchangeRequestForm = () => {
     }
   });
 
-  // Fetch user's vehicles on component mount
+  // Sync multi-select state to form values
+  useEffect(() => {
+    existingVehicleForm.setValue('acceptBrands', existingBrands.join(', '), { shouldValidate: existingBrands.length > 0 });
+  }, [existingBrands]);
+
+  useEffect(() => {
+    existingVehicleForm.setValue('acceptCountries', existingCountries.join(', '), { shouldValidate: existingCountries.length > 0 });
+  }, [existingCountries]);
+
+  useEffect(() => {
+    newVehicleForm.setValue('acceptBrands', newBrands.join(', '), { shouldValidate: newBrands.length > 0 });
+  }, [newBrands]);
+
+  useEffect(() => {
+    newVehicleForm.setValue('acceptCountries', newCountries.join(', '), { shouldValidate: newCountries.length > 0 });
+  }, [newCountries]);
+
   useEffect(() => {
     if (user) {
       fetchUserVehicles(user.id);
@@ -257,18 +395,17 @@ export const ExchangeRequestForm = () => {
                     <FormField
                       control={existingVehicleForm.control}
                       name="acceptBrands"
-                      render={({ field }) => (
+                      render={() => (
                         <FormItem>
                           <FormLabel>{t('exchanges.brandsInterest')}</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder={t('exchanges.brandsPlaceholder')} 
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormDescription>
-                            {t('exchanges.acceptingDescription')}
-                          </FormDescription>
+                          <MultiSelectField
+                            label={t('exchanges.brandsInterest')}
+                            options={VEHICLE_BRANDS}
+                            selectedValues={existingBrands}
+                            onChange={setExistingBrands}
+                            placeholder={t('exchanges.brandsPlaceholder')}
+                            description={t('exchanges.acceptingDescription')}
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
@@ -276,15 +413,16 @@ export const ExchangeRequestForm = () => {
                     <FormField
                       control={existingVehicleForm.control}
                       name="acceptCountries"
-                      render={({ field }) => (
+                      render={() => (
                         <FormItem>
                           <FormLabel>{t('exchanges.countriesOrigin')}</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder={t('exchanges.countriesPlaceholder')} 
-                              {...field}
-                            />
-                          </FormControl>
+                          <MultiSelectField
+                            label={t('exchanges.countriesOrigin')}
+                            options={EU_COUNTRIES}
+                            selectedValues={existingCountries}
+                            onChange={setExistingCountries}
+                            placeholder={t('exchanges.countriesPlaceholder')}
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
@@ -318,12 +456,18 @@ export const ExchangeRequestForm = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>{t('exchanges.brand')}</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder={t('exchanges.brandPlaceholder')} 
-                              {...field}
-                            />
-                          </FormControl>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder={t('exchanges.brandPlaceholder')} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {VEHICLE_BRANDS.map(brand => (
+                                <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -385,18 +529,17 @@ export const ExchangeRequestForm = () => {
                     <FormField
                       control={newVehicleForm.control}
                       name="acceptBrands"
-                      render={({ field }) => (
+                      render={() => (
                         <FormItem>
                           <FormLabel>{t('exchanges.brandsInterest')}</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder={t('exchanges.brandsPlaceholder')} 
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormDescription>
-                            {t('exchanges.acceptingDescription')}
-                          </FormDescription>
+                          <MultiSelectField
+                            label={t('exchanges.brandsInterest')}
+                            options={VEHICLE_BRANDS}
+                            selectedValues={newBrands}
+                            onChange={setNewBrands}
+                            placeholder={t('exchanges.brandsPlaceholder')}
+                            description={t('exchanges.acceptingDescription')}
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
@@ -404,15 +547,16 @@ export const ExchangeRequestForm = () => {
                     <FormField
                       control={newVehicleForm.control}
                       name="acceptCountries"
-                      render={({ field }) => (
+                      render={() => (
                         <FormItem>
                           <FormLabel>{t('exchanges.countriesOrigin')}</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder={t('exchanges.countriesPlaceholder')} 
-                              {...field}
-                            />
-                          </FormControl>
+                          <MultiSelectField
+                            label={t('exchanges.countriesOrigin')}
+                            options={EU_COUNTRIES}
+                            selectedValues={newCountries}
+                            onChange={setNewCountries}
+                            placeholder={t('exchanges.countriesPlaceholder')}
+                          />
                           <FormMessage />
                         </FormItem>
                       )}
