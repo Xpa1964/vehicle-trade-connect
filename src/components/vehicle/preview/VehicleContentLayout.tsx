@@ -84,7 +84,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Imagen principal */}
         <div className="lg:col-span-8 rounded-2xl overflow-hidden border border-border bg-card">
-          <VehicleImageGallery vehicle={vehicle} />
+          <VehicleImageGallery vehicle={vehicle} canManage={isOwner} />
         </div>
 
         {/* Card Información del Vehículo */}
