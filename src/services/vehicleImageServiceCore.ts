@@ -245,20 +245,22 @@ export class VehicleImageServiceCore {
     
     if (needsOptimization) {
       console.log('Optimizing images for better performance...');
-      const optimizationResult = await imageOptimizer.optimizeMultipleImages(new FileList() as any);
       
-      // Aplicar optimización a archivos que la necesiten
       const optimizedFiles = await Promise.all(
         filesToUpload.map(async (file) => {
           if (imageOptimizer.shouldOptimize(file)) {
-            const optimization = await imageOptimizer.optimizeImage(file);
-            if (optimization) {
-              optimizationSummary.totalSavings += (file.size - optimization.optimizedSize);
-              optimizationSummary.optimizedCount++;
-              results.warnings.push(
-                `${file.name}: Optimizada (${(optimization.compressionRatio).toFixed(1)}% reducción)`
-              );
-              return optimization.optimizedFile;
+            try {
+              const optimization = await imageOptimizer.optimizeImage(file);
+              if (optimization) {
+                optimizationSummary.totalSavings += (file.size - optimization.optimizedSize);
+                optimizationSummary.optimizedCount++;
+                results.warnings.push(
+                  `${file.name}: Optimizada (${(optimization.compressionRatio).toFixed(1)}% reducción)`
+                );
+                return optimization.optimizedFile;
+              }
+            } catch (optError) {
+              console.warn(`Optimization failed for ${file.name}, using original:`, optError);
             }
           }
           return file;

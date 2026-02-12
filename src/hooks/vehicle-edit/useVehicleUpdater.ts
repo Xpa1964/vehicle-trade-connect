@@ -152,8 +152,19 @@ export const useVehicleUpdater = () => {
           .select('*')
           .eq('vehicle_id', id);
         
-        await handleImageUploads(imagesArray, id, existingImages?.length || 0);
-        console.log('✅ [useVehicleUpdater] Images processed successfully');
+        const uploadResult = await handleImageUploads(imagesArray, id, existingImages?.length || 0);
+        console.log('🖼️ [useVehicleUpdater] Upload result:', JSON.stringify(uploadResult, null, 2));
+        
+        if (uploadResult.failed > 0) {
+          console.error('❌ [useVehicleUpdater] Image upload failures:', uploadResult.errors);
+          uploadResult.errors.forEach(err => toast.error(err));
+        }
+        
+        if (uploadResult.successful.length > 0) {
+          console.log('✅ [useVehicleUpdater] Images uploaded successfully:', uploadResult.successful.length);
+        } else if (imagesArray.length > 0) {
+          toast.error(t('vehicles.imageUploadError', { fallback: 'No se pudieron subir las imágenes' }));
+        }
       }
       
       // Handle additional files if available
