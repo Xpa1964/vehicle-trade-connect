@@ -132,11 +132,11 @@ export const useVehicleGallery = () => {
         return [];
       }
     },
-    // CONFIGURACIÓN OPTIMIZADA PARA TIEMPO REAL:
-    staleTime: 0, // Datos siempre considerados obsoletos - fuerza validación
+    // CONFIGURACIÓN OPTIMIZADA: Reduce conexiones innecesarias
+    staleTime: 30 * 1000, // 30 segundos - realtime se encarga de actualizaciones
     gcTime: 5 * 60 * 1000, // 5 minutos en cache
-    refetchOnWindowFocus: false, // Controlamos manualmente
-    refetchOnMount: 'always', // Siempre refetch al montar
+    refetchOnWindowFocus: false, // Controlamos manualmente via realtime
+    refetchOnMount: true, // Solo refetch si está stale (no 'always')
     refetchOnReconnect: true, // Refetch cuando se reconecta
   });
 
