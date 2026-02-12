@@ -64,18 +64,23 @@ const PublishAuctionPage: React.FC = () => {
       return;
     }
 
-    await createAuction.mutateAsync({
-      vehicle_id: selectedVehicleId,
-      starting_price: parseFloat(formData.starting_price),
-      reserve_price: formData.reserve_price ? parseFloat(formData.reserve_price) : undefined,
-      increment_minimum: parseFloat(formData.increment_minimum),
-      start_date: new Date(formData.start_date).toISOString(),
-      end_date: new Date(formData.end_date).toISOString(),
-      description: formData.description || undefined,
-      terms_accepted: formData.terms_accepted,
-    });
+    try {
+      await createAuction.mutateAsync({
+        vehicle_id: selectedVehicleId,
+        starting_price: parseFloat(formData.starting_price),
+        reserve_price: formData.reserve_price ? parseFloat(formData.reserve_price) : undefined,
+        increment_minimum: parseFloat(formData.increment_minimum),
+        start_date: new Date(formData.start_date).toISOString(),
+        end_date: new Date(formData.end_date).toISOString(),
+        description: formData.description || undefined,
+        terms_accepted: formData.terms_accepted,
+      });
 
-    navigate('/auctions');
+      navigate('/auctions');
+    } catch (error) {
+      // Error already handled by mutation's onError callback
+      console.error('Auction creation failed:', error);
+    }
   };
 
   const selectedVehicle = vehicles?.find(v => v.id === selectedVehicleId);
