@@ -16,7 +16,7 @@ const LiveAuctionsPage: React.FC = () => {
   const navigate = useNavigate();
   const { src: heroSrc } = useStaticImage('hero.auctions');
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<AuctionStatus | 'all'>('active');
+  const [statusFilter, setStatusFilter] = useState<AuctionStatus | 'all'>('all');
   const [priceMin, setPriceMin] = useState<number | undefined>();
   const [priceMax, setPriceMax] = useState<number | undefined>();
 
