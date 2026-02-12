@@ -3,7 +3,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { VehicleFormData } from '@/types/vehicle';
 import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useVehicleImageHandler } from './useVehicleImageHandler';
 import { 
   mapFormDataToVehicle, 
   mapMetadataToDatabase,
@@ -12,16 +11,94 @@ import {
 } from '@/services/vehicleDataMapper';
 
 /**
- * Hook for updating vehicle data with improved mapping
+ * Hook for updating vehicle data - simplified image upload
  */
 export const useVehicleUpdater = () => {
   const { t } = useLanguage();
-  const { handleImageUploads } = useVehicleImageHandler();
+
+  /**
+   * Direct image upload - bypasses complex service layers that fail silently
+   */
+  const uploadImagesDirect = async (images: File[], vehicleId: string) => {
+    const results = { successful: [] as string[], failed: 0, errors: [] as string[] };
+    let thumbnailUrl: string | null = null;
+
+    for (let index = 0; index < images.length; index++) {
+      const file = images[index];
+      try {
+        const fileExt = file.name.split('.').pop() || 'jpg';
+        const fileName = `${Date.now()}-${index}.${fileExt}`;
+        const filePath = `${vehicleId}/${fileName}`;
+
+        console.log(`🖼️ [uploadImagesDirect] Uploading ${index + 1}/${images.length}: ${file.name} (${(file.size/1024).toFixed(1)}KB)`);
+
+        const { error: uploadError } = await supabase.storage
+          .from('vehicles')
+          .upload(filePath, file);
+
+        if (uploadError) {
+          console.error(`❌ [uploadImagesDirect] Storage upload failed:`, uploadError);
+          results.failed++;
+          results.errors.push(`${file.name}: ${uploadError.message}`);
+          continue;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('vehicles')
+          .getPublicUrl(filePath);
+
+        console.log(`✅ [uploadImagesDirect] Storage OK: ${publicUrl}`);
+
+        if (index === 0) thumbnailUrl = publicUrl;
+
+        const { error: dbError } = await supabase
+          .from('vehicle_images')
+          .insert({
+            vehicle_id: vehicleId,
+            image_url: publicUrl,
+            is_primary: index === 0,
+            display_order: index
+          });
+
+        if (dbError) {
+          console.error(`❌ [uploadImagesDirect] DB insert failed:`, dbError);
+          results.failed++;
+          results.errors.push(`${file.name}: Error registro DB - ${dbError.message}`);
+          continue;
+        }
+
+        results.successful.push(publicUrl);
+        console.log(`✅ [uploadImagesDirect] Image ${index + 1} complete`);
+      } catch (err) {
+        console.error(`❌ [uploadImagesDirect] Exception:`, err);
+        results.failed++;
+        results.errors.push(`${file.name}: ${err instanceof Error ? err.message : 'Error desconocido'}`);
+      }
+    }
+
+    // Update thumbnail
+    if (thumbnailUrl) {
+      await supabase.from('vehicles').update({ thumbnailurl: thumbnailUrl }).eq('id', vehicleId);
+    }
+
+    return results;
+  };
 
   const updateVehicle = async (id: string, formData: VehicleFormData) => {
     try {
       console.log('🚀 [useVehicleUpdater] Starting vehicle update for ID:', id);
-      console.log('📋 [useVehicleUpdater] COMPLETE form data received:', formData);
+      
+      // Extract images FIRST before any processing
+      let imagesToUpload: File[] = [];
+      if (formData.images) {
+        if (formData.images instanceof FileList) {
+          imagesToUpload = Array.from(formData.images);
+        } else if (Array.isArray(formData.images)) {
+          imagesToUpload = formData.images.filter(f => f instanceof File);
+        }
+      }
+      console.log(`📸 [useVehicleUpdater] Images to upload: ${imagesToUpload.length}`, 
+        imagesToUpload.map(f => `${f.name} (${(f.size/1024).toFixed(1)}KB)`));
       
       // Validate form data
       if (!validateFormData(formData)) {
@@ -30,10 +107,8 @@ export const useVehicleUpdater = () => {
       
       // Map form data to vehicles table format
       const vehicleData = mapFormDataToVehicle(formData);
-      console.log('🎯 [useVehicleUpdater] Vehicle table update payload:', vehicleData);
       
       // Update main vehicle record
-      console.log('💾 [useVehicleUpdater] Updating main vehicle record...');
       const { error: vehicleError, data: updatedVehicle } = await (supabase as any)
         .from('vehicles')
         .update(vehicleData)
@@ -46,26 +121,17 @@ export const useVehicleUpdater = () => {
         throw vehicleError;
       }
       
-      console.log('✅ [useVehicleUpdater] Vehicle record updated successfully:', updatedVehicle);
+      console.log('✅ [useVehicleUpdater] Vehicle record updated');
       
-      // Update or insert metadata
+      // Update metadata
       const metadataPayload = mapMetadataToDatabase(formData, id);
-      console.log('💾 [useVehicleUpdater] Updating metadata with payload:', metadataPayload);
-      
       const { error: metadataError } = await supabase
         .from('vehicle_metadata')
         .upsert(metadataPayload);
-        
-      if (metadataError) {
-        console.error('⚠️ [useVehicleUpdater] Error updating metadata (non-critical):', metadataError);
-      } else {
-        console.log('✅ [useVehicleUpdater] Metadata updated successfully');
-      }
+      if (metadataError) console.warn('⚠️ Metadata update error:', metadataError);
       
-      // Update vehicle information (technical specs)
+      // Update technical specs
       const technicalSpecs = mapTechnicalSpecsToDatabase(formData);
-      console.log('📋 [useVehicleUpdater] Technical specs to update:', technicalSpecs);
-      
       if (Object.keys(technicalSpecs).length > 0 || formData.description) {
         const { error: infoError } = await supabase
           .from('vehicle_information')
@@ -74,54 +140,27 @@ export const useVehicleUpdater = () => {
             technical_specs: technicalSpecs,
             additional_notes: formData.description || null
           });
-        
-        if (infoError) {
-          console.error('⚠️ [useVehicleUpdater] Error updating vehicle information (non-critical):', infoError);
-        } else {
-          console.log('✅ [useVehicleUpdater] Vehicle information updated successfully');
-        }
+        if (infoError) console.warn('⚠️ Vehicle info update error:', infoError);
       }
       
-      // Update equipment if provided - stores option keys
+      // Update equipment
       if (formData.equipment) {
-        console.log('🔧 [useVehicleUpdater] Updating equipment with keys:', formData.equipment);
-        
-        // Remove existing equipment
-        await supabase
-          .from('vehicle_equipment')
-          .delete()
-          .eq('vehicle_id', id);
-        
+        await supabase.from('vehicle_equipment').delete().eq('vehicle_id', id);
         if (formData.equipment.length > 0) {
-          // Store equipment using keys - the key is stored in the name field
           const equipmentItems = formData.equipment.map(optionKey => ({
             vehicle_id: id,
-            name: optionKey, // Store the option key
+            name: optionKey,
           }));
-          
           const { error: equipmentError } = await supabase
             .from('vehicle_equipment')
             .insert(equipmentItems);
-          
-          if (equipmentError) {
-            console.error('⚠️ [useVehicleUpdater] Error updating equipment (non-critical):', equipmentError);
-          } else {
-            console.log('✅ [useVehicleUpdater] Equipment updated successfully with keys');
-          }
+          if (equipmentError) console.warn('⚠️ Equipment update error:', equipmentError);
         }
       }
       
-      // Handle damages if provided
+      // Handle damages
       if (formData.damages && formData.damages.length > 0) {
-        console.log('🔧 [useVehicleUpdater] Updating vehicle damages...');
-        
-        // Remove existing damages
-        await supabase
-          .from('vehicle_damages')
-          .delete()
-          .eq('vehicle_id', id);
-        
-        // Add new damages
+        await supabase.from('vehicle_damages').delete().eq('vehicle_id', id);
         const damageItems = formData.damages.map(damage => ({
           vehicle_id: id,
           damage_type: damage.damage_type,
@@ -131,67 +170,37 @@ export const useVehicleUpdater = () => {
           location: damage.location || null,
           estimated_cost: damage.estimated_cost || null
         }));
-        
         const { error: damageError } = await supabase
           .from('vehicle_damages')
           .insert(damageItems);
-        
-        if (damageError) {
-          console.error('⚠️ [useVehicleUpdater] Error updating damages (non-critical):', damageError);
-        } else {
-          console.log('✅ [useVehicleUpdater] Vehicle damages updated successfully');
-        }
+        if (damageError) console.warn('⚠️ Damages update error:', damageError);
       }
       
-      // Handle image uploads if available
-      const imagesArray = formData.images instanceof FileList ? Array.from(formData.images) : Array.isArray(formData.images) ? formData.images : [];
-      if (imagesArray.length > 0) {
-        console.log('🖼️ [useVehicleUpdater] Processing image uploads:', imagesArray.length, 'images');
-        const { data: existingImages } = await supabase
-          .from('vehicle_images')
-          .select('*')
-          .eq('vehicle_id', id);
+      // DIRECT IMAGE UPLOAD - simple path, no complex service layers
+      if (imagesToUpload.length > 0) {
+        console.log('🖼️ [useVehicleUpdater] Starting DIRECT image upload...');
+        const uploadResult = await uploadImagesDirect(imagesToUpload, id);
         
-        const uploadResult = await handleImageUploads(imagesArray, id, existingImages?.length || 0);
-        console.log('🖼️ [useVehicleUpdater] Upload result:', JSON.stringify(uploadResult, null, 2));
+        console.log(`🖼️ [useVehicleUpdater] Upload result: ${uploadResult.successful.length} OK, ${uploadResult.failed} failed`);
         
         if (uploadResult.failed > 0) {
-          console.error('❌ [useVehicleUpdater] Image upload failures:', uploadResult.errors);
           uploadResult.errors.forEach(err => toast.error(err));
         }
         
         if (uploadResult.successful.length > 0) {
-          console.log('✅ [useVehicleUpdater] Images uploaded successfully:', uploadResult.successful.length);
-        } else if (imagesArray.length > 0) {
-          toast.error(t('vehicles.imageUploadError', { fallback: 'No se pudieron subir las imágenes' }));
+          toast.success(`${uploadResult.successful.length} imagen(es) subida(s) correctamente`);
+        } else {
+          toast.error('No se pudo subir ninguna imagen');
         }
-      }
-      
-      // Handle additional files if available
-      if (formData.additionalFiles && formData.additionalFiles.length > 0) {
-        console.log('📎 [useVehicleUpdater] Additional files detected (implementation needed)');
-      }
-      
-      console.log('🎉 [useVehicleUpdater] Vehicle update completed successfully');
-      
-      // Verificar que los datos se guardaron correctamente
-      console.log('🔍 [useVehicleUpdater] Verifying saved data...');
-      const { data: verifyData, error: verifyError } = await supabase
-        .from('vehicles')
-        .select('*')
-        .eq('id', id)
-        .single();
-      
-      if (verifyError) {
-        console.error('❌ [useVehicleUpdater] Error verifying saved data:', verifyError);
       } else {
-        console.log('✅ [useVehicleUpdater] Verified saved data:', verifyData);
+        console.log('ℹ️ [useVehicleUpdater] No images to upload');
       }
       
+      console.log('🎉 [useVehicleUpdater] Vehicle update completed');
       return updatedVehicle;
       
     } catch (error) {
-      console.error('❌ [useVehicleUpdater] Critical error in updateVehicle:', error);
+      console.error('❌ [useVehicleUpdater] Critical error:', error);
       toast.error(t('vehicles.updateError', { fallback: 'Error updating vehicle' }));
       throw error;
     }
