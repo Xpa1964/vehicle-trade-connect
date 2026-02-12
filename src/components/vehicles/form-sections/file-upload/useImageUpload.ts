@@ -86,8 +86,9 @@ export const useImageUpload = (
       
       setSelectedImages(prev => {
         const combined = [...prev, ...newImages];
-        // Defer form update to avoid synchronous state conflicts
-        setTimeout(() => updateFormValue(combined), 0);
+        console.log(`📸 [useImageUpload] addImageToCollection: ${combined.length} images total, updating form...`);
+        // Update form synchronously to ensure images are available on submit
+        updateFormValue(combined);
         return combined;
       });
     } catch (error) {
@@ -143,6 +144,7 @@ export const useImageUpload = (
     try {
       if (images.length === 0) {
         form.setValue('images', undefined);
+        console.log('📸 [useImageUpload] updateFormValue: cleared images');
         return;
       }
 
@@ -161,16 +163,17 @@ export const useImageUpload = (
         files.push(img.file);
       });
 
-      // Try DataTransfer first, fallback to direct assignment
-      try {
-        const dataTransfer = new DataTransfer();
-        files.forEach(f => dataTransfer.items.add(f));
-        form.setValue('images', dataTransfer.files);
-      } catch {
-        // DataTransfer not supported (some mobile browsers)
-        // Store files directly - the submit handler should handle File[] too
-        form.setValue('images', files as any);
-      }
+      console.log(`📸 [useImageUpload] updateFormValue: ${files.length} files to set`, 
+        files.map(f => `${f.name} (${(f.size/1024).toFixed(1)}KB)`));
+
+      // Always store as File[] directly - most compatible across all devices
+      // DataTransfer can fail on mobile and FileList is read-only
+      form.setValue('images', files as any, { shouldDirty: true });
+      
+      // Verify the value was set
+      const currentValue = form.getValues('images');
+      console.log(`📸 [useImageUpload] updateFormValue: verification - form.getValues('images') =`, 
+        currentValue ? `${Array.isArray(currentValue) ? currentValue.length : (currentValue as FileList)?.length || 'unknown'} items` : 'null/undefined');
     } catch (error) {
       console.error('❌ [useImageUpload] Error updating form value:', error);
     }

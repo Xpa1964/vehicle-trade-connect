@@ -49,10 +49,14 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
   };
   
   const handleFormSubmit = async (data: VehicleFormData) => {
-    console.log('🚀 [VehicleUploadForm] Form submitted with data:', data);
+    console.log('🚀 [VehicleUploadForm] Form submitted');
+    console.log('🚀 [VehicleUploadForm] data.images:', data.images ? 
+      `${Array.isArray(data.images) ? data.images.length : (data.images as FileList)?.length || 'unknown'} items` : 'null/undefined');
     
     try {
       const allFormValues = formHook.form.getValues();
+      console.log('🚀 [VehicleUploadForm] allFormValues.images:', allFormValues.images ?
+        `${Array.isArray(allFormValues.images) ? allFormValues.images.length : (allFormValues.images as FileList)?.length || 'unknown'} items` : 'null/undefined');
       
       const completeFormData: VehicleFormData = {
         brand: allFormValues.brand || data.brand || '',
