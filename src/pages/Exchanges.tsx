@@ -94,14 +94,14 @@ const Exchanges: React.FC = () => {
           <SafeImage
             imageId="hero.exchanges"
             alt="Exchanges Background"
-            className="w-full h-full object-cover object-center"
-            style={{ minHeight: '280px' }}
+            className="w-full h-full object-contain object-center"
+            style={{ minHeight: '320px' }}
             loading="lazy"
             decoding="async"
           />
         </div>
         
-        <div className="relative z-10 p-8" style={{ minHeight: '280px' }}>
+        <div className="relative z-10 p-8" style={{ minHeight: '320px' }}>
           <div className="flex flex-col justify-between h-full">
             {/* Back button */}
             <div className="mb-4">
