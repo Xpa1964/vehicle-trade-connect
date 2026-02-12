@@ -28,8 +28,8 @@ export const vehicleValidationSchema = {
   ivaStatus: z.enum(['included', 'notIncluded', 'deductible', 'rebu']),
   cocStatus: z.boolean(),
   status: z.enum(['available', 'reserved', 'sold']).default('available'),
-  images: z.instanceof(FileList).optional(),
-  additionalFiles: z.instanceof(FileList).optional(),
+  images: z.any().optional(),
+  additionalFiles: z.any().optional(),
   equipment: z.array(z.string()).default([]),
   description: z.string().max(2000, 'Description must be less than 2000 characters').optional(),
 };
