@@ -14,30 +14,13 @@ export class VehicleImageServiceCore {
   private bucketName = 'vehicles';
 
   /**
-   * Verifica y crea el bucket si no existe
+   * Bucket already exists in Supabase storage - no need to check/create
    */
   private async ensureBucketExists(): Promise<void> {
-    try {
-      // Verificar si el bucket existe
-      const { data: bucketData, error: bucketError } = await supabase.storage.getBucket(this.bucketName);
-      
-      if (bucketError && bucketError.message.includes('not found')) {
-        console.log(`${this.bucketName} bucket not found, attempting to create it`);
-        const { error: createBucketError } = await supabase.storage.createBucket(this.bucketName, {
-          public: true,
-          fileSizeLimit: 10485760, // 10MB in bytes
-        });
-        
-        if (createBucketError) {
-          console.error('Error creating bucket:', createBucketError);
-          throw new Error(`Couldn't create storage bucket: ${createBucketError.message}`);
-        }
-        console.log(`Successfully created ${this.bucketName} bucket`);
-      }
-    } catch (error) {
-      console.error('Error ensuring bucket exists:', error);
-      throw error;
-    }
+    // The 'vehicles' bucket is pre-configured in Supabase storage.
+    // Attempting getBucket/createBucket with anon key causes RLS errors.
+    // Simply proceed - upload will fail with a clear error if bucket is missing.
+    return;
   }
 
   /**
