@@ -190,10 +190,12 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
         const prefix = getStoragePrefix(imageId);
         
         // List files in the storage path
+        // Use limit > 1 to account for subfolders (e.g. hero/reports/delivery/)
+        // which are returned alongside actual files but have no metadata
         const { data: files, error } = await supabase.storage
           .from(STORAGE_BUCKET)
           .list(prefix.slice(0, -1), {
-            limit: 1,
+            limit: 10,
             sortBy: { column: 'created_at', order: 'desc' }
           });
 
