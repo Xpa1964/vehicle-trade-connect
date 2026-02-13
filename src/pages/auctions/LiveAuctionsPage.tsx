@@ -56,17 +56,13 @@ const LiveAuctionsPage: React.FC = () => {
               </Button>
             </div>
             
-            <div className="flex-1 flex flex-col justify-end">
-              <div className="bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 w-fit">
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  {t('auctions.title', { fallback: 'Subastas en Vivo' })}
-                </h1>
-              </div>
-              <div className="bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 w-fit mt-3">
-                <p className="text-lg text-white font-bold">
-                  {t('auctions.description', { fallback: 'Participa en subastas exclusivas de vehículos profesionales' })}
-                </p>
-              </div>
+            <div className="flex-1 flex flex-col justify-end space-y-3">
+              <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                {t('auctions.title', { fallback: 'Subastas en Vivo' })}
+              </h1>
+              <p className="text-lg text-white font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                {t('auctions.description', { fallback: 'Participa en subastas exclusivas de vehículos profesionales' })}
+              </p>
             </div>
           </div>
         </div>

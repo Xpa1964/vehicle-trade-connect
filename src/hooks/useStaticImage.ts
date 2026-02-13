@@ -272,8 +272,13 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
   }, [imageId, registryData.isAIEditable, registryData.entry, registryData.isCritical, refreshTick]);
 
   // Return final result - prioritize storage URL if available
+  // While loading an AI-editable image, return empty src to prevent flash of local fallback
+  const effectiveSrc = isLoading && registryData.isAIEditable
+    ? ''
+    : (storageUrl || registryData.resolvedSrc);
+
   return useMemo(() => ({
-    src: storageUrl || registryData.resolvedSrc,
+    src: effectiveSrc,
     isValid: registryData.isValid,
     isProductPath: registryData.isProductPath,
     entry: registryData.entry,
@@ -282,7 +287,7 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
     isAIEditable: registryData.isAIEditable,
     isFromStorage,
     isLoading
-  }), [storageUrl, registryData, isFromStorage, isLoading]);
+  }), [effectiveSrc, registryData, isFromStorage, isLoading]);
 };
 
 /**

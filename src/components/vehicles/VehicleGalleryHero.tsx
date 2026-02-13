@@ -39,20 +39,13 @@ const VehicleGalleryHero: React.FC = () => {
             </Button>
           </div>
           
-          <div className="flex flex-col justify-end flex-1">
-            {/* Title with independent mask */}
-            <div className="mb-4 bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 w-fit">
-              <h1 className="text-3xl md:text-4xl font-bold text-white">
-                {t('vehicles.galleryTitle')}
-              </h1>
-            </div>
-            
-            {/* Description with independent mask */}
-            <div className="bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 w-fit">
-              <p className="text-lg text-white font-bold">
-                {t('vehicles.galleryDescription')}
-              </p>
-            </div>
+          <div className="flex flex-col justify-end flex-1 space-y-3">
+            <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              {t('vehicles.galleryTitle')}
+            </h1>
+            <p className="text-lg text-white font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              {t('vehicles.galleryDescription')}
+            </p>
           </div>
         </div>
       </div>
