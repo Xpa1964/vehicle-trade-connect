@@ -7,7 +7,7 @@ import { useStaticImage } from '@/hooks/useStaticImage';
 
 const VehicleGalleryInfoPage = () => {
   // Use registry-based images that update from Storage
-  const { src: showroomHeroSrc } = useStaticImage('services.showroom');
+  const { src: showroomHeroSrc } = useStaticImage('hero.vehicles');
   const { src: galleryViewSrc } = useStaticImage('info.gallery.view');
   const { src: vehicleDetailSrc } = useStaticImage('info.gallery.detail');
   const { src: vehicleFormSrc } = useStaticImage('info.gallery.form');

@@ -10,7 +10,7 @@ import { useStaticImage } from '@/hooks/useStaticImage';
 
 const ExchangesInfoPage: React.FC = () => {
   // Use registry-based image that updates from Storage
-  const { src: exchangesHeroSrc } = useStaticImage('services.exchanges');
+  const { src: exchangesHeroSrc } = useStaticImage('hero.exchanges');
   const { currentLanguage, t } = useLanguage();
   const navigate = useNavigate();
   

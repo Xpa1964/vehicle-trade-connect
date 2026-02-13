@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import ReportPackages from '@/components/info-pages/vehicle-reports/ReportPackages';
 import ReportFeatures from '@/components/info-pages/vehicle-reports/ReportFeatures';
+import SafeImage from '@/components/shared/SafeImage';
 
 const VehicleReportsInfoPage: React.FC = () => {
   const { currentLanguage, t } = useLanguage();
@@ -514,12 +515,10 @@ const VehicleReportsInfoPage: React.FC = () => {
         {/* Header con imagen de fondo */}
         <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
           <div className="absolute inset-0">
-            <img 
-              src="/images/vehicle-reports-hero.png"
+            <SafeImage 
+              imageId="hero.reports"
               alt="Vehicle Reports Background"
               className="w-full h-full object-contain object-center"
-              loading="lazy"
-              decoding="async"
             />
           </div>
           

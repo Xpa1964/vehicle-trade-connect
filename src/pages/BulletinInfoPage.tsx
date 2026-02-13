@@ -9,7 +9,7 @@ import { useStaticImage } from '@/hooks/useStaticImage';
 
 const BulletinInfoPage: React.FC = () => {
   // Use registry-based image that updates from Storage
-  const { src: bulletinHeroSrc } = useStaticImage('services.bulletin');
+  const { src: bulletinHeroSrc } = useStaticImage('hero.bulletin');
   const { t } = useLanguage();
   const navigate = useNavigate();
   

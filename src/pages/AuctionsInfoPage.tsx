@@ -3,6 +3,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Gavel, TrendingUp, Shield, Zap, Users, Calendar, Award, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import SafeImage from '@/components/shared/SafeImage';
 
 const AuctionsInfoPage: React.FC = () => {
   const { currentLanguage, t } = useLanguage();
@@ -228,12 +229,10 @@ const AuctionsInfoPage: React.FC = () => {
       {/* Hero Section con imagen de fondo */}
       <div className="relative overflow-hidden rounded-xl shadow-lg mb-8">
         <div className="absolute inset-0">
-          <img 
-            src="/images/auctions-hero.png"
+          <SafeImage 
+            imageId="hero.auctions"
             alt="Auctions Background"
             className="w-full h-full object-contain object-center"
-            loading="lazy"
-            decoding="async"
           />
         </div>
         <div className="relative z-10 p-8 bg-gradient-to-r from-black/20 to-black/10" style={{ minHeight: '320px' }}>
