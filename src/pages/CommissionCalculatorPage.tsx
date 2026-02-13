@@ -20,7 +20,7 @@ const CommissionCalculatorPage: React.FC = () => {
           <SafeImage 
             imageId="hero.commission.calculator"
             alt="Commission Calculator Background"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-contain object-center"
             style={{ minHeight: '320px' }}
           />
         </div>

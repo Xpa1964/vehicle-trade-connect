@@ -21,7 +21,7 @@ const BlogMainPage: React.FC = () => {
             <SafeImage 
               imageId="hero.blog"
               alt="Blog Background"
-              className="w-full h-full object-cover object-center"
+              className="w-full h-full object-contain object-center"
             />
           </div>
           
