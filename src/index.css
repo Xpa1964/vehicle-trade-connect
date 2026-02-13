@@ -69,6 +69,16 @@
     --shadow-warning: 0 4px 14px -2px hsl(var(--brand-orange) / 0.25);
     --shadow-accent: 0 4px 14px -2px hsl(var(--brand-purple) / 0.25);
     --shadow-elegant: 0 8px 25px -5px hsl(222 47% 5% / 0.5);
+
+    /* Premium 3D Depth Shadow System */
+    --shadow-card: 
+      0 1px 2px 0 hsl(222 47% 3% / 0.3),
+      0 4px 8px -1px hsl(222 47% 3% / 0.2),
+      0 8px 20px -4px hsl(222 47% 3% / 0.15);
+    --shadow-card-hover: 
+      0 2px 4px 0 hsl(222 47% 3% / 0.35),
+      0 8px 16px -2px hsl(222 47% 3% / 0.25),
+      0 16px 32px -6px hsl(222 47% 3% / 0.2);
     
     /* Surface Colors - Dark Theme */
     --surface: 222 33% 13%; /* #161B2A */
