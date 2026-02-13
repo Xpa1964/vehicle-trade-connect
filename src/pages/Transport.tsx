@@ -21,7 +21,7 @@ const Transport: React.FC = () => {
           <SafeImage 
             imageId="hero.transport"
             alt="Transport Background"
-            className="w-full h-full object-contain object-center"
+            className="w-full h-full object-cover object-center"
           />
         </div>
         

@@ -232,7 +232,7 @@ const AuctionsInfoPage: React.FC = () => {
           <SafeImage 
             imageId="hero.auctions"
             alt="Auctions Background"
-            className="w-full h-full object-contain object-center"
+            className="w-full h-full object-cover object-center"
           />
         </div>
         <div className="relative z-10 p-8 bg-gradient-to-r from-black/20 to-black/10" style={{ minHeight: '320px' }}>
