@@ -270,6 +270,9 @@ const config = {
         'medium': '0 4px 16px 0 rgba(0, 0, 0, 0.12)',
         'strong': '0 8px 32px 0 rgba(0, 0, 0, 0.16)',
         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+        // Premium 3D depth system for dark theme
+        'card-depth': '0 1px 2px 0 rgba(0,0,0,0.4), 0 4px 12px -2px rgba(0,0,0,0.35), 0 12px 24px -6px rgba(0,0,0,0.25)',
+        'card-depth-hover': '0 2px 4px 0 rgba(0,0,0,0.5), 0 8px 20px -4px rgba(0,0,0,0.4), 0 20px 40px -8px rgba(0,0,0,0.3)',
       },
       keyframes: {
         "accordion-down": {
