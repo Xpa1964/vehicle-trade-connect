@@ -41,19 +41,12 @@ const TransportExpressPage: React.FC = () => {
                 </div>
                 
                 <div className="flex-1 flex flex-col justify-end space-y-3">
-                  {/* Primera máscara: Título */}
-                  <div className="bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 inline-block w-fit">
-                    <h1 className="text-3xl md:text-4xl font-bold text-white">
-                      {t('transport.express.title')}
-                    </h1>
-                  </div>
-                  
-                  {/* Segunda máscara: Subtítulo */}
-                  <div className="bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10 inline-block w-fit">
-                    <p className="text-lg text-white font-bold">
-                      {t('transport.express.subtitle')}
-                    </p>
-                  </div>
+                  <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                    {t('transport.express.title')}
+                  </h1>
+                  <p className="text-lg text-white font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                    {t('transport.express.subtitle')}
+                  </p>
                 </div>
               </div>
             </div>

@@ -42,23 +42,12 @@ const BulletinInfoPage: React.FC = () => {
               </div>
               
               <div className="space-y-3">
-                {/* Máscara solo para el título */}
-                <div className="inline-block">
-                  <div className="bg-black/30 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20">
-                    <h1 className="text-3xl md:text-4xl font-bold text-white">
-                      {t('bulletinInfo.title')}
-                    </h1>
-                  </div>
-                </div>
-                
-                {/* Máscara independiente solo para el subtítulo */}
-                <div className="inline-block">
-                  <div className="bg-black/30 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20">
-                    <p className="text-lg text-white font-bold">
-                      {t('bulletinInfo.subtitle')}
-                    </p>
-                  </div>
-                </div>
+                <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                  {t('bulletinInfo.title')}
+                </h1>
+                <p className="text-lg text-white font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                  {t('bulletinInfo.subtitle')}
+                </p>
               </div>
             </div>
           </div>

@@ -57,23 +57,12 @@ const VehicleManagement: React.FC = () => {
             
             {/* Title and description - Responsive and properly spaced */}
             <div className="flex-1 flex flex-col justify-end space-y-3">
-              {/* Logo + Title with proper mobile handling */}
-              <div className="w-full">
-                <div className="bg-black/20 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-white/10 inline-block max-w-full">
-                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight break-words">
-                    {t('vehicles.management')}
-                  </h1>
-                </div>
-              </div>
-              
-              {/* Description with mobile optimization */}
-              <div className="w-full">
-                <div className="bg-black/20 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-white/10 inline-block max-w-full">
-                  <p className="text-sm sm:text-base md:text-lg text-white font-medium leading-relaxed break-words">
-                    {t('vehicles.managementDescription')}
-                  </p>
-                </div>
-              </div>
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight break-words drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                {t('vehicles.management')}
+              </h1>
+              <p className="text-sm sm:text-base md:text-lg text-white font-medium leading-relaxed break-words drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                {t('vehicles.managementDescription')}
+              </p>
             </div>
           </div>
         </div>

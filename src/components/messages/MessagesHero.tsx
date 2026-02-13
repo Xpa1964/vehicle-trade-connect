@@ -45,14 +45,13 @@ const MessagesHero: React.FC = () => {
             </Button>
           </div>
           
-          <div className="inline-block bg-black/20 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-white/10 w-fit">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2">
+          <div className="space-y-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               {t('messages.title', { fallback: 'Mensajería' })}
             </h1>
-            <p className="text-base sm:text-lg text-white font-bold">
+            <p className="text-base sm:text-lg text-white font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               {t('messages.description', { fallback: 'Gestiona todas tus conversaciones en un solo lugar' })}
             </p>
-            
           </div>
         </div>
       </div>

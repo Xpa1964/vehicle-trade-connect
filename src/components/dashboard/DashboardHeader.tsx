@@ -41,12 +41,9 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ user }) => {
               </h1>
             </div>
             
-            {/* Description text - SOLO LIGERO FONDO PARA ESTE TEXTO */}
-            <div className="bg-black/20 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-              <p className="text-lg text-white font-bold">
-                {t('dashboard.welcomeMessage', { fallback: 'Gestiona toda la aplicación desde un solo lugar y conecta con la mayor comunidad de profesionales de VO.' })}
-              </p>
-            </div>
+            <p className="text-lg text-white font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              {t('dashboard.welcomeMessage', { fallback: 'Gestiona toda la aplicación desde un solo lugar y conecta con la mayor comunidad de profesionales de VO.' })}
+            </p>
           </div>
           
           <div className="flex items-center space-x-3">
