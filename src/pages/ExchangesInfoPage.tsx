@@ -278,7 +278,7 @@ const ExchangesInfoPage: React.FC = () => {
           <img 
             src={exchangesHeroSrc}
             alt="Exchanges Background"
-            className="w-full h-full object-contain object-center"
+            className="w-full h-full object-cover object-center"
             loading="lazy"
             decoding="async"
           />

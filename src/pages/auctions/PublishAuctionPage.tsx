@@ -93,7 +93,7 @@ const PublishAuctionPage: React.FC = () => {
           <SafeImage
             imageId="hero.auctions"
             alt={t('auctions.publishAuction')}
-            className="w-full h-full object-contain object-center"
+            className="w-full h-full object-cover object-center"
             style={{ minHeight: '320px' }}
           />
         </div>

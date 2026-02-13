@@ -94,7 +94,7 @@ const Exchanges: React.FC = () => {
           <SafeImage
             imageId="hero.exchanges"
             alt="Exchanges Background"
-            className="w-full h-full object-contain object-center"
+            className="w-full h-full object-cover object-center"
             style={{ minHeight: '320px' }}
             loading="lazy"
             decoding="async"

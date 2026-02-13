@@ -20,7 +20,7 @@ const BulletinInfoPage: React.FC = () => {
           <img 
             src={bulletinHeroSrc}
             alt="Bulletin Board Background"
-            className="w-full h-full object-contain object-center"
+            className="w-full h-full object-cover object-center"
             loading="lazy"
             decoding="async"
           />
