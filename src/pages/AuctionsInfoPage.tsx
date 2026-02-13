@@ -231,8 +231,7 @@ const AuctionsInfoPage: React.FC = () => {
           <img 
             src="/images/auctions-hero.png"
             alt="Auctions Background"
-            className="w-full h-full object-cover"
-            style={{ objectPosition: 'center' }}
+            className="w-full h-full object-contain object-center"
             loading="lazy"
             decoding="async"
           />
