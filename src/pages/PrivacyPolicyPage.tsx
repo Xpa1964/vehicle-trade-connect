@@ -33,8 +33,8 @@ const PrivacyPolicyPage: React.FC = () => {
       <div className="text-center mb-8">
         <div className="flex justify-center mb-6">
           <img 
-            src="/lovable-uploads/c68019ea-0437-4bf7-b1b0-2270c4eca601.png" 
-            alt="KONTACT VO Logo" 
+            src="/lovable-uploads/kontact-driver-logo.png" 
+            alt="KONTACT DRIVER Logo" 
             className="h-24 w-auto"
           />
         </div>
