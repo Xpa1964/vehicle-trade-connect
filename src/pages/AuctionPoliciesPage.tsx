@@ -41,7 +41,7 @@ const AuctionPoliciesPage: React.FC = () => {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="text-center mb-8">
         <div className="flex justify-center mb-6">
-          <img src="/lovable-uploads/c68019ea-0437-4bf7-b1b0-2270c4eca601.png" alt="KONTACT VO Logo" className="h-24 w-auto" />
+          <img src="/lovable-uploads/kontact-driver-logo.png" alt="KONTACT DRIVER Logo" className="h-24 w-auto" />
         </div>
         <h1 className="text-3xl font-bold mb-2 text-foreground">{t('auctions.policies.title')}</h1>
         <p className="text-muted-foreground">{t('auctions.policies.subtitle')}</p>

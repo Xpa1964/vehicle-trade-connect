@@ -72,7 +72,7 @@ const CommissionCalculator: React.FC<CommissionCalculatorProps> = ({
                   {t('commission.filteredByProfile')}
                 </p>
               )}
-              <RadioGroup value={type} onValueChange={handleTypeChange} className="flex gap-3">
+              <RadioGroup value={type} onValueChange={handleTypeChange} className="flex flex-wrap gap-x-4 gap-y-2">
                 {allowedTypes.includes('comprador') && (
                   <div className="flex items-center space-x-1">
                     <RadioGroupItem value="comprador" id="comprador-compact" className="h-3 w-3" />
@@ -153,7 +153,7 @@ const CommissionCalculator: React.FC<CommissionCalculatorProps> = ({
                 {t('commission.filteredByProfile')}
               </p>
             )}
-            <RadioGroup value={type} onValueChange={handleTypeChange} className="grid grid-cols-3 gap-4">
+            <RadioGroup value={type} onValueChange={handleTypeChange} className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
               {allowedTypes.includes('comprador') && (
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="comprador" id="comprador" />

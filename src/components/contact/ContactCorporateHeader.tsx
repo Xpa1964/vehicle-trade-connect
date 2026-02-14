@@ -7,8 +7,8 @@ const ContactCorporateHeader: React.FC = () => (
     <div className="w-24 h-24 md:w-32 md:h-32 mb-3">
       <ContactPageLogo />
     </div>
-    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-center drop-shadow-sm mb-1">KONTACT VO</h1>
-    <p className="text-base md:text-lg text-blue-700 font-semibold text-center">Marketplace Automotive</p>
+    <h1 className="text-3xl md:text-4xl font-bold text-foreground text-center drop-shadow-sm mb-1">KONTACT DRIVER</h1>
+    <p className="text-base md:text-lg text-primary font-semibold text-center">Marketplace Automotive</p>
   </header>
 );
 

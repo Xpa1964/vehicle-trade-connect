@@ -27,9 +27,9 @@ export const HERO_IMAGES = {
 };
 
 export const LOGO_IMAGES = {
-  primary: "/lovable-uploads/865135a7-9f1d-44e9-9386-623ae7f90529.png",
-  primaryPNG: "/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png",
-  fallbacks: ["/placeholder.svg"]
+  primary: "/lovable-uploads/kontact-driver-logo.png",
+  primaryPNG: "/lovable-uploads/kontact-driver-logo.png",
+  fallbacks: ["/lovable-uploads/865135a7-9f1d-44e9-9386-623ae7f90529.png", "/placeholder.svg"]
 };
 
 export const MESSAGES_IMAGES = {
