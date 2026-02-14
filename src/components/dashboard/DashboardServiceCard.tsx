@@ -9,6 +9,8 @@ interface DashboardServiceCardProps {
   primaryAction: { label: string; href: string };
   secondaryAction?: { label: string; href: string };
   onClick?: () => void;
+  /** Custom object-position for the image (e.g. 'top' to avoid cropping) */
+  imagePosition?: string;
 }
 
 const DashboardServiceCard: React.FC<DashboardServiceCardProps> = ({
@@ -16,7 +18,8 @@ const DashboardServiceCard: React.FC<DashboardServiceCardProps> = ({
   title,
   primaryAction,
   secondaryAction,
-  onClick
+  onClick,
+  imagePosition
 }) => {
   const { src } = useStaticImage(imageId);
 
@@ -27,7 +30,8 @@ const DashboardServiceCard: React.FC<DashboardServiceCardProps> = ({
         <img
           src={src}
           alt={title}
-          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          style={imagePosition ? { objectPosition: imagePosition } : undefined}
         />
       </div>
 
