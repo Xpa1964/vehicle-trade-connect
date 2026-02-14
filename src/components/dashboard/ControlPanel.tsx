@@ -75,8 +75,7 @@ const ControlPanel: React.FC = () => {
       secondaryAction: { 
         label: t('common.request', { fallback: 'Solicitar' }), 
         href: '/transport' 
-      },
-      imagePosition: 'top'
+      }
     },
     {
       imageId: 'services.inspection',
@@ -134,7 +133,7 @@ const ControlPanel: React.FC = () => {
             primaryAction={card.primaryAction}
             secondaryAction={card.secondaryAction}
             onClick={card.isReportRequest ? () => setIsReportDialogOpen(true) : undefined}
-            imagePosition={card.imagePosition}
+            imagePosition={(card as any).imagePosition}
           />
         ))}
       </div>
