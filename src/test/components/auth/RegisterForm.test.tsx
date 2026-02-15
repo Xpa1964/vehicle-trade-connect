@@ -21,7 +21,8 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => {
       country: '',
       city: '',
       postalCode: '',
-      managerName: '',
+      managerFirstName: '',
+      managerLastName: '',
       termsAccepted: false,
     },
   });

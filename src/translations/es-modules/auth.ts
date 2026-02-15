@@ -93,6 +93,10 @@ export default {
   'auth.register.postalCode': 'Código Postal',
   'auth.register.postalCodePlaceholder': '28001',
   'auth.register.managerName': 'Nombre del Responsable',
+  'auth.register.managerFirstName': 'Nombre del Responsable',
+  'auth.register.managerFirstNamePlaceholder': 'Juan',
+  'auth.register.managerLastName': 'Apellido del Responsable',
+  'auth.register.managerLastNamePlaceholder': 'García',
   'auth.register.managerNamePlaceholder': 'Juan García',
   'auth.register.location': 'Ubicación',
   

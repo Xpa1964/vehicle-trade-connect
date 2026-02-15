@@ -21,7 +21,18 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
   const { currentRole } = useUserRole();
   const { ratingSummary, ratingsLoading } = useRatings(user?.id);
 
-  const getCompanyName = () => {
+  const getDisplayUsername = () => {
+    const companyName = user?.profile?.company_name || '';
+    const fullName = user?.profile?.full_name || user?.name || '';
+    
+    if (companyName && fullName) {
+      const companyPart = companyName.trim().split(/\s+/)[0]?.substring(0, 6)?.toLowerCase().replace(/[^a-z0-9]/g, '') || '';
+      const lastNamePart = fullName.trim().split(/\s+/).pop()?.substring(0, 6)?.toLowerCase().replace(/[^a-z0-9]/g, '') || '';
+      if (companyPart && lastNamePart) {
+        return `${companyPart}_${lastNamePart}`;
+      }
+    }
+    
     return user?.profile?.company_name || t('profile.companyNotSpecified', { fallback: 'Empresa no especificada' });
   };
 
@@ -91,7 +102,7 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
           {user?.profile?.company_logo ? (
             <img
               src={user.profile.company_logo}
-              alt={`Logo de la empresa ${getCompanyName()}`}
+              alt={`Logo de la empresa ${getDisplayUsername()}`}
               className="w-16 h-16 rounded-full object-cover border-2 border-border"
             />
           ) : (
@@ -105,7 +116,7 @@ const DashboardProfile: React.FC<DashboardProfileProps> = React.memo(({ user }) 
         {/* Columna: Info */}
         <div className="flex-1 space-y-1">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-foreground">{getCompanyName()}</h3>
+            <h3 className="font-semibold text-foreground">{getDisplayUsername()}</h3>
             <Badge variant="outline" className="text-xs">{getRoleDisplayName()}</Badge>
           </div>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">

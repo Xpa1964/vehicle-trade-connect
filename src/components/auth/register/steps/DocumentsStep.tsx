@@ -12,8 +12,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { UseFormReturn } from 'react-hook-form';
 import { RegisterFormData } from '@/schemas/registerSchema';
-import { File, X, HelpCircle, Upload } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { File, X, HelpCircle, Upload, Building2, UserCheck } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -52,7 +52,6 @@ const DocumentsStep: React.FC<DocumentsStepProps> = ({
     if (e.target.files && e.target.files.length > 0) {
       const filesArray = Array.from(e.target.files);
       
-      // Validate each file type
       const invalidFiles = filesArray.filter(file => !validateFileType(file));
       
       if (invalidFiles.length > 0) {
@@ -72,7 +71,6 @@ const DocumentsStep: React.FC<DocumentsStepProps> = ({
     updatedFiles.splice(index, 1);
     setSelectedFiles(updatedFiles);
     
-    // Create a new DataTransfer object to update the FileList
     const dataTransfer = new DataTransfer();
     updatedFiles.forEach(file => dataTransfer.items.add(file));
     form.setValue('documents', dataTransfer.files);
@@ -84,31 +82,42 @@ const DocumentsStep: React.FC<DocumentsStepProps> = ({
         {t('auth.register.documents')}
       </h3>
       
-      <Card className="bg-gray-50">
-        <CardContent className="pt-4">
-          <div className="space-y-3">
-            <div className="flex items-center gap-1">
-              <h4 className="text-sm font-medium">{t('auth.register.requiredDocuments')}</h4>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <HelpCircle className="h-4 w-4 text-gray-400" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="w-80">{t('auth.register.documentsListHelp')}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
-              <li>{t('auth.register.documentBusiness')}</li>
-              <li>{t('auth.register.documentId')}</li>
-              <li>{t('auth.register.documentProof')}</li>
-              <li>{t('auth.register.documentOthers')}</li>
+      {/* Two document category blocks */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Sociedades */}
+        <Card className="border-primary/30 bg-primary/5">
+          <CardHeader className="pb-2 pt-4 px-4">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-primary">
+              <Building2 className="h-4 w-4" />
+              {t('auth.register.docCategorySociedades', { fallback: 'Sociedades' })}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 pb-4">
+            <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1.5">
+              <li>{t('auth.register.docMercantil', { fallback: 'Certificado de Registro Mercantil (Company Register Extract)' })}</li>
+              <li>{t('auth.register.docVAT', { fallback: 'Número de IVA Intracomunitario (VAT Number)' })}</li>
+              <li>{t('auth.register.docDeclaracion', { fallback: 'Declaración oficial del administrador' })}</li>
+              <li>{t('auth.register.docIdRepresentante', { fallback: 'Documento de Identidad del Representante Legal' })}</li>
             </ul>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+        
+        {/* Profesionales Autónomos */}
+        <Card className="border-accent/30 bg-accent/5">
+          <CardHeader className="pb-2 pt-4 px-4">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-accent-foreground">
+              <UserCheck className="h-4 w-4" />
+              {t('auth.register.docCategoryAutonomos', { fallback: 'Profesionales Autónomos' })}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 pb-4">
+            <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1.5">
+              <li>{t('auth.register.docIdentidad', { fallback: 'Documento de Identidad (ID Card / Passport)' })}</li>
+              <li>{t('auth.register.docActividad', { fallback: 'Registro de Actividad Económica y Estatus Fiscal' })}</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
       
       <FormField
         control={form.control}
@@ -129,7 +138,7 @@ const DocumentsStep: React.FC<DocumentsStepProps> = ({
               </TooltipProvider>
             </div>
             <FormControl>
-              <div className="border-2 border-dashed rounded-md p-6 text-center hover:bg-gray-50 cursor-pointer transition-colors">
+              <div className="border-2 border-dashed rounded-md p-6 text-center hover:bg-secondary/50 cursor-pointer transition-colors">
                 <input
                   type="file"
                   id="documents"
@@ -141,9 +150,9 @@ const DocumentsStep: React.FC<DocumentsStepProps> = ({
                 />
                 <label htmlFor="documents" className="cursor-pointer">
                   <div className="flex flex-col items-center gap-2">
-                    <Upload className="h-8 w-8 text-gray-400" />
+                    <Upload className="h-8 w-8 text-muted-foreground" />
                     <p className="text-sm font-medium">{t('auth.register.dragDocuments')}</p>
-                    <p className="text-xs text-gray-500">PDF, Word (.doc, .docx), Imágenes (.jpg, .jpeg, .png)</p>
+                    <p className="text-xs text-muted-foreground">PDF, Word (.doc, .docx), Imágenes (.jpg, .jpeg, .png)</p>
                     <Button type="button" variant="outline" size="sm">
                       {t('auth.register.browseFiles')}
                     </Button>
@@ -164,11 +173,11 @@ const DocumentsStep: React.FC<DocumentsStepProps> = ({
           <h4 className="text-sm font-medium">{t('auth.register.selectedFiles')} ({selectedFiles.length})</h4>
           <div className="space-y-2">
             {selectedFiles.map((file, index) => (
-              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded border">
+              <div key={index} className="flex items-center justify-between p-2 bg-secondary rounded border">
                 <div className="flex items-center gap-2">
-                  <File className="h-4 w-4 text-blue-500" />
+                  <File className="h-4 w-4 text-primary" />
                   <span className="text-sm truncate max-w-[200px]">{file.name}</span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-muted-foreground">
                     ({(file.size / 1024).toFixed(0)} KB) - {file.type}
                   </span>
                 </div>

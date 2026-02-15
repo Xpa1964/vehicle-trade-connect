@@ -66,6 +66,10 @@ export default {
   'auth.register.postalCode': 'Postal Code',
   'auth.register.postalCodePlaceholder': 'SW1A 1AA',
   'auth.register.managerName': 'Manager Name',
+  'auth.register.managerFirstName': 'Manager First Name',
+  'auth.register.managerFirstNamePlaceholder': 'John',
+  'auth.register.managerLastName': 'Manager Last Name',
+  'auth.register.managerLastNamePlaceholder': 'Smith',
   'auth.register.managerNamePlaceholder': 'John Smith',
   'auth.register.location': 'Location',
   
