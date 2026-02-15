@@ -39,7 +39,8 @@ const Register: React.FC = () => {
       country: '',
       city: '',
       postalCode: '',
-      managerName: '',
+      managerFirstName: '',
+      managerLastName: '',
       termsAccepted: false
     }
   });

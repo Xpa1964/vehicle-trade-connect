@@ -123,7 +123,7 @@ export const useRegisterForm = () => {
         city: data.city,
         country: data.country,
         postal_code: data.postalCode,
-        manager_name: data.managerName,
+        manager_name: `${data.managerFirstName} ${data.managerLastName}`,
         contact_person: data.contactPerson,
         phone: data.phone,
         business_type: data.businessType,

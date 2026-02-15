@@ -152,23 +152,44 @@ const CompanyInfoStep: React.FC<CompanyInfoStepProps> = ({
         />
       </div>
       
-      <FormField
-        control={form.control}
-        name="managerName"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t('auth.register.managerName')}</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                disabled={isSubmitting}
-                placeholder={t('auth.register.managerNamePlaceholder')}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      {/* Manager name split into first name and last name */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <FormField
+          control={form.control}
+          name="managerFirstName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('auth.register.managerFirstName', { fallback: 'Nombre del Responsable' })}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  disabled={isSubmitting}
+                  placeholder={t('auth.register.managerFirstNamePlaceholder', { fallback: 'Juan' })}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="managerLastName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('auth.register.managerLastName', { fallback: 'Apellido del Responsable' })}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  disabled={isSubmitting}
+                  placeholder={t('auth.register.managerLastNamePlaceholder', { fallback: 'García' })}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
     </div>
   );
 };

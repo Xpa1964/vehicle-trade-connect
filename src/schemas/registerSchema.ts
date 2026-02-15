@@ -8,7 +8,8 @@ export const registerSchema = z.object({
   city: z.string().min(2, { message: 'City name is required' }),
   country: z.string().min(2, { message: 'Country name is required' }),
   postalCode: z.string().min(1, { message: 'Postal code is required' }),
-  managerName: z.string().min(3, { message: 'Manager name is required' }),
+  managerFirstName: z.string().min(2, { message: 'First name is required' }),
+  managerLastName: z.string().min(2, { message: 'Last name is required' }),
   
   // Contact information
   contactPerson: z.string().min(3, { message: 'Contact person name is required' }),
@@ -35,3 +36,22 @@ export const registerSchema = z.object({
 });
 
 export type RegisterFormData = z.infer<typeof registerSchema>;
+
+// Generate username from company name + manager last name
+export const generateUsername = (companyName: string, lastName: string): string => {
+  const companyPart = companyName
+    .trim()
+    .split(/\s+/)[0]
+    .substring(0, 6)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
+  
+  const lastNamePart = lastName
+    .trim()
+    .split(/\s+/)[0]
+    .substring(0, 6)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
+  
+  return `${companyPart}_${lastNamePart}`;
+};

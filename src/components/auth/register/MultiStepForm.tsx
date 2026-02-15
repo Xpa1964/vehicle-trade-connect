@@ -10,6 +10,7 @@ export type FormStep = {
   label: string;
   component: React.ReactNode;
   optional?: boolean;
+  fieldsToValidate?: string[];
 }
 
 interface MultiStepFormProps {
@@ -36,16 +37,27 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   const isLastStep = currentStepIndex === steps.length - 1;
   const progressPercentage = ((currentStepIndex + 1) / steps.length) * 100;
   
-  // Icons for each phase
   const phaseIcons = [Building2, Phone, Briefcase, FileText, CheckCircle2];
+  
+  const validateCurrentStep = async (): Promise<boolean> => {
+    if (!formInstance || !currentStep.fieldsToValidate || currentStep.fieldsToValidate.length === 0) {
+      return true;
+    }
+    
+    const result = await formInstance.trigger(currentStep.fieldsToValidate);
+    return result;
+  };
   
   const handleNext = async () => {
     if (isLastStep) {
       console.log('Submitting registration form...');
       onComplete();
     } else {
-      setCompletedSteps({...completedSteps, [currentStep.id]: true});
-      setCurrentStepIndex(currentStepIndex + 1);
+      const isValid = await validateCurrentStep();
+      if (isValid) {
+        setCompletedSteps({...completedSteps, [currentStep.id]: true});
+        setCurrentStepIndex(currentStepIndex + 1);
+      }
     }
   };
   
@@ -56,10 +68,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   };
   
   const handleStepClick = (index: number) => {
-    // Allow clicking on:
-    // 1. Any previous step (index < currentStepIndex)
-    // 2. Completed steps
-    // 3. The immediate next step
     if (
       index < currentStepIndex || 
       completedSteps[steps[index].id] || 
@@ -71,14 +79,11 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   
   return (
     <div className="space-y-6">
-      {/* Multi-phase registration indicator */}
       <div className="mb-8">
-        {/* Title */}
         <h3 className="text-center text-lg font-bold text-primary mb-6">
           {t('auth.register.multiStepTitle')}
         </h3>
         
-        {/* Visual phase cards */}
         <div className="flex justify-between items-center gap-2 mb-4">
           {steps.map((step, index) => {
             const PhaseIcon = phaseIcons[index] || Building2;
@@ -100,7 +105,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
                     flex-1 min-w-0
                   `}
                 >
-                  {/* Phase number and icon */}
                   <div className={`
                     w-10 h-10 rounded-full flex items-center justify-center mb-2 font-bold text-lg
                     ${isCurrent ? 'bg-primary text-primary-foreground' : ''}
@@ -110,7 +114,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
                     {isCompleted ? '✓' : index + 1}
                   </div>
                   
-                  {/* Phase icon */}
                   <PhaseIcon className={`
                     h-5 w-5 mb-1
                     ${isCurrent ? 'text-primary' : ''}
@@ -118,7 +121,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
                     ${isPending ? 'text-muted-foreground' : ''}
                   `} />
                   
-                  {/* Phase name */}
                   <span className={`
                     text-xs font-medium text-center line-clamp-2
                     ${isCurrent ? 'text-primary' : ''}
@@ -128,14 +130,12 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
                     {step.label}
                   </span>
                   
-                  {/* Current indicator */}
                   {isCurrent && (
                     <span className="text-[10px] font-bold text-primary mt-1 uppercase">
                       {t('auth.register.current')}
                     </span>
                   )}
                   
-                  {/* Completed indicator */}
                   {isCompleted && !isCurrent && (
                     <span className="text-[10px] font-medium text-[#22C55E] mt-1 uppercase">
                       {t('auth.register.completed')}
@@ -143,7 +143,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   )}
                 </button>
                 
-                {/* Arrow between phases */}
                 {index < steps.length - 1 && (
                   <ArrowRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 )}
@@ -152,10 +151,8 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
           })}
         </div>
         
-        {/* Progress bar */}
         <Progress value={progressPercentage} className="h-3 mb-2" />
         
-        {/* Progress text */}
         <div className="flex justify-between text-sm text-muted-foreground">
           <span className="font-medium">
             {t('auth.register.phase')} {currentStepIndex + 1} {t('auth.register.of')} {steps.length}
@@ -164,12 +161,10 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
         </div>
       </div>
       
-      {/* Current step content */}
       <div className="py-4">
         {currentStep.component}
       </div>
       
-      {/* Navigation buttons */}
       <div className="flex justify-between pt-4 border-t border-border">
         <Button
           type="button"

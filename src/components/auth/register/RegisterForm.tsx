@@ -77,7 +77,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       country: '',
       city: '',
       postalCode: '',
-      managerName: '',
+      managerFirstName: '',
+      managerLastName: '',
       termsAccepted: false
     });
     
@@ -128,6 +129,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     {
       id: 'company-info',
       label: t('auth.register.companyInfo'),
+      fieldsToValidate: ['companyName', 'city', 'country', 'postalCode', 'managerFirstName', 'managerLastName'],
       component: (
         <CompanyInfoStep
           form={form}
@@ -140,6 +142,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     {
       id: 'contact-details',
       label: t('auth.register.contactDetails'),
+      fieldsToValidate: ['contactPerson', 'phone', 'email', 'password', 'confirmPassword'],
       component: (
         <ContactDetailsStep
           form={form}
@@ -150,6 +153,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     {
       id: 'business-details',
       label: t('auth.register.businessDetails'),
+      fieldsToValidate: ['businessType', 'traderType', 'description'],
       component: (
         <BusinessDetailsStep
           form={form}
@@ -160,6 +164,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     {
       id: 'documents',
       label: t('auth.register.documents'),
+      fieldsToValidate: [],
       component: (
         <DocumentsStep
           form={form}
@@ -170,6 +175,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     {
       id: 'review',
       label: t('auth.register.review'),
+      fieldsToValidate: ['termsAccepted'],
       component: (
         <FinalStep
           form={form}
