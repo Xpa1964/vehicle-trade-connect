@@ -12,8 +12,8 @@ const VehicleGalleryInfoPage = () => {
   // Use registry-based images that update from Storage
   const { src: showroomHeroSrc } = useStaticImage('hero.vehicles');
   const galleryViewSrc = galleryScreenshot;
-  const { src: vehicleDetailSrc } = useStaticImage('info.gallery.detail');
-  const { src: vehicleFormSrc } = useStaticImage('info.gallery.form');
+  const vehicleDetailSrc = vehicleDetailScreenshot;
+  const vehicleFormSrc = vehicleFormScreenshot;
   const navigate = useNavigate();
   const { t } = useLanguage();
   
