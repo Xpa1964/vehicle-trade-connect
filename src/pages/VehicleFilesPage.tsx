@@ -6,7 +6,7 @@ import { ArrowLeft, FileText, Download } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { mockGetVehicleById } from '@/data/mockVehicles';
+import { supabase } from '@/integrations/supabase/client';
 import { useVehicleDocuments } from '@/hooks/useVehicleDocuments';
 import { formatFileSize } from '@/utils/fileUtils';
 
@@ -16,7 +16,16 @@ const VehicleFilesPage: React.FC = () => {
   
   const { data: vehicle, isLoading: isLoadingVehicle } = useQuery({
     queryKey: ['vehicle', id],
-    queryFn: () => mockGetVehicleById(id || '')
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('vehicles')
+        .select('*')
+        .eq('id', id!)
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!id
   });
 
   const { documents } = useVehicleDocuments(id || '');
@@ -32,7 +41,7 @@ const VehicleFilesPage: React.FC = () => {
   if (!vehicle) {
     return (
       <div className="container mx-auto px-4 py-12">
-        <div className="text-center text-red-500">
+        <div className="text-center text-destructive">
           <h2 className="text-2xl font-bold mb-4">{t('common.error')}</h2>
           <p>{t('vehicles.notFound')}</p>
         </div>
@@ -57,31 +66,26 @@ const VehicleFilesPage: React.FC = () => {
       </div>
 
       <div className="mb-8">
-        <img 
-          src="/lovable-uploads/865135a7-9f1d-44e9-9386-623ae7f90529.png" 
-          alt="Kontact Logo" 
-          className="w-32 mb-4"
-        />
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-2xl font-bold text-foreground">
           {vehicle.brand} {vehicle.model} - {t('vehicles.files')}
         </h1>
-        <p className="text-lg text-gray-700 mb-6">{t('vehicles.filesFullDescription')}</p>
+        <p className="text-lg text-muted-foreground mb-6">{t('vehicles.filesFullDescription')}</p>
       </div>
 
-      <Card>
+      <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle>{t('vehicles.availableFiles')}</CardTitle>
+          <CardTitle className="text-foreground">{t('vehicles.availableFiles')}</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           {documents && documents.length > 0 ? (
             <div className="grid grid-cols-1 gap-4">
               {documents.map((doc) => (
-                <div key={doc.id} className="flex items-center justify-between border p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                <div key={doc.id} className="flex items-center justify-between border border-border p-4 rounded-lg hover:bg-muted/50 transition-colors">
                   <div className="flex items-center">
-                    <FileText className="w-8 h-8 mr-4 text-auto-blue" />
+                    <FileText className="w-8 h-8 mr-4 text-primary" />
                     <div>
-                      <h4 className="font-medium">{doc.file_name}</h4>
-                      <p className="text-sm text-gray-500">{formatFileSize(doc.file_size || 0)}</p>
+                      <h4 className="font-medium text-foreground">{doc.file_name}</h4>
+                      <p className="text-sm text-muted-foreground">{formatFileSize(doc.file_size || 0)}</p>
                     </div>
                   </div>
                   <Button variant="outline" size="sm" className="ml-4" asChild>
@@ -93,7 +97,7 @@ const VehicleFilesPage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-muted-foreground">
               {t('vehicles.noFilesAvailable')}
             </div>
           )}

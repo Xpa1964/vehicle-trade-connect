@@ -82,19 +82,19 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
       <CardContent className="space-y-3">
         {/* Vehicle Details */}
         <div className="grid grid-cols-2 gap-1.5">
-          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5">
+          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5 shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
             <Gauge className="w-3.5 h-3.5 text-primary/70 flex-shrink-0" />
             <span className="text-xs font-semibold text-foreground">{vehicle.mileage?.toLocaleString()} km</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5">
+          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5 shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
             <Fuel className="w-3.5 h-3.5 text-primary/70 flex-shrink-0" />
             <span className="text-xs font-semibold text-foreground capitalize">{vehicle.fuel}</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5">
+          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5 shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
             <Settings className="w-3.5 h-3.5 text-primary/70 flex-shrink-0" />
             <span className="text-xs font-semibold text-foreground capitalize">{vehicle.transmission}</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5">
+          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5 shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
             <Users className="w-3.5 h-3.5 text-primary/70 flex-shrink-0" />
             <span className="text-xs font-semibold text-foreground">{vehicle.doors} {t('vehicles.doors').toLowerCase()}</span>
           </div>
