@@ -141,39 +141,22 @@ const VehicleDetailsCard: React.FC<VehicleDetailsCardProps> = ({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-2">
-          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
-            <Calendar className="h-4 w-4 text-primary/70 flex-shrink-0" />
-            <span className="text-sm font-semibold text-foreground">{vehicle.year}</span>
-          </div>
-          
-          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
-            <Gauge className="h-4 w-4 text-primary/70 flex-shrink-0" />
-            <span className="text-sm font-semibold text-foreground">{formatMileage(vehicle.mileage || 0)} km</span>
-          </div>
-          
-          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
-            <Fuel className="h-4 w-4 text-primary/70 flex-shrink-0" />
-            <span className="text-sm font-semibold text-foreground">{vehicle.fuel}</span>
-          </div>
-          
-          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
-            <Settings className="h-4 w-4 text-primary/70 flex-shrink-0" />
-            <span className="text-sm font-semibold text-foreground">{vehicle.transmission}</span>
-          </div>
-          
-          {vehicle.color && (
-            <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
-              <Palette className="h-4 w-4 text-primary/70 flex-shrink-0" />
-              <span className="text-sm font-semibold text-foreground">{vehicle.color}</span>
-            </div>
-          )}
-          
-          {vehicle.countryCode && (
-            <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
-              <MapPin className="h-4 w-4 text-primary/70 flex-shrink-0" />
-              <span className="text-sm font-semibold text-foreground">{vehicle.countryCode.toUpperCase()}</span>
-            </div>
-          )}
+          {[
+            { icon: Calendar, value: vehicle.year, show: true },
+            { icon: Gauge, value: `${formatMileage(vehicle.mileage || 0)} km`, show: true },
+            { icon: Fuel, value: vehicle.fuel, show: true },
+            { icon: Settings, value: vehicle.transmission, show: true },
+            { icon: Palette, value: vehicle.color, show: !!vehicle.color },
+            { icon: MapPin, value: vehicle.countryCode?.toUpperCase(), show: !!vehicle.countryCode },
+          ].filter(item => item.show).map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div key={idx} className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 hover:-translate-y-0.5 transition-all duration-200" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+                <Icon className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                <span className="text-sm font-semibold text-foreground">{item.value}</span>
+              </div>
+            );
+          })}
         </div>
         
         {/* Calculadora de Importación Automática */}
