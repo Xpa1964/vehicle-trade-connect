@@ -5,6 +5,8 @@ import BackButton from '@/components/shared/BackButton';
 import { ArrowRight, Search, FileText, PlusCircle } from 'lucide-react';
 import { useStaticImage } from '@/hooks/useStaticImage';
 import galleryScreenshot from '@/assets/gallery-screenshot.png';
+import vehicleFormScreenshot from '@/assets/vehicle-form-screenshot.png';
+import vehicleDetailScreenshot from '@/assets/vehicle-detail-screenshot.png';
 
 const VehicleGalleryInfoPage = () => {
   // Use registry-based images that update from Storage
