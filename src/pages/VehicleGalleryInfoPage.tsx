@@ -4,11 +4,12 @@ import { Button } from '@/components/ui/button';
 import BackButton from '@/components/shared/BackButton';
 import { ArrowRight, Search, FileText, PlusCircle } from 'lucide-react';
 import { useStaticImage } from '@/hooks/useStaticImage';
+import galleryScreenshot from '@/assets/gallery-screenshot.png';
 
 const VehicleGalleryInfoPage = () => {
   // Use registry-based images that update from Storage
   const { src: showroomHeroSrc } = useStaticImage('hero.vehicles');
-  const { src: galleryViewSrc } = useStaticImage('info.gallery.view');
+  const galleryViewSrc = galleryScreenshot;
   const { src: vehicleDetailSrc } = useStaticImage('info.gallery.detail');
   const { src: vehicleFormSrc } = useStaticImage('info.gallery.form');
   const navigate = useNavigate();
