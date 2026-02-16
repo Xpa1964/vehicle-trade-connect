@@ -140,50 +140,38 @@ const VehicleDetailsCard: React.FC<VehicleDetailsCardProps> = ({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-foreground">
-              <span className="font-medium">{t('vehicles.year')}:</span> {vehicle.year}
-            </span>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+            <Calendar className="h-4 w-4 text-primary/70 flex-shrink-0" />
+            <span className="text-sm font-semibold text-foreground">{vehicle.year}</span>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Gauge className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-foreground">
-              <span className="font-medium">{t('vehicles.mileage')}:</span> {formatMileage(vehicle.mileage || 0)} km
-            </span>
+          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+            <Gauge className="h-4 w-4 text-primary/70 flex-shrink-0" />
+            <span className="text-sm font-semibold text-foreground">{formatMileage(vehicle.mileage || 0)} km</span>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Fuel className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-foreground">
-              <span className="font-medium">{t('vehicles.fuel')}:</span> {vehicle.fuel}
-            </span>
+          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+            <Fuel className="h-4 w-4 text-primary/70 flex-shrink-0" />
+            <span className="text-sm font-semibold text-foreground">{vehicle.fuel}</span>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Settings className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-foreground">
-              <span className="font-medium">{t('vehicles.transmission')}:</span> {vehicle.transmission}
-            </span>
+          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+            <Settings className="h-4 w-4 text-primary/70 flex-shrink-0" />
+            <span className="text-sm font-semibold text-foreground">{vehicle.transmission}</span>
           </div>
           
           {vehicle.color && (
-            <div className="flex items-center gap-2">
-              <Palette className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-foreground">
-                <span className="font-medium">{t('vehicles.color')}:</span> {vehicle.color}
-              </span>
+            <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+              <Palette className="h-4 w-4 text-primary/70 flex-shrink-0" />
+              <span className="text-sm font-semibold text-foreground">{vehicle.color}</span>
             </div>
           )}
           
           {vehicle.countryCode && (
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-foreground">
-                <span className="font-medium">{t('vehicles.location')}:</span> {vehicle.countryCode.toUpperCase()}
-              </span>
+            <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+              <MapPin className="h-4 w-4 text-primary/70 flex-shrink-0" />
+              <span className="text-sm font-semibold text-foreground">{vehicle.countryCode.toUpperCase()}</span>
             </div>
           )}
         </div>

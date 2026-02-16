@@ -106,121 +106,81 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
               <NearlyNewBadge isNearlyNew={isNearlyNew(vehicle.mileage || 0, vehicle.year)} />
             </div>
 
-            {/* Línea 4: Información técnica - Grid 3 columnas */}
-            <div className="grid grid-cols-3 gap-x-4 gap-y-3">
-              {/* FILA 1: Datos básicos */}
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                <span className="text-sm font-body">
-                  <span className="font-medium text-muted-foreground">{t('vehicles.year')}:</span> 
-                  <span className="font-semibold text-foreground ml-1">{vehicle.year}</span>
-                </span>
+            {/* Línea 4: Información técnica - Grid 3 columnas con celdas individuales */}
+            <div className="grid grid-cols-3 gap-2">
+              <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                <Calendar className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                <span className="text-sm font-semibold text-foreground">{vehicle.year}</span>
               </div>
               
-              <div className="flex items-center gap-2">
-                <Gauge className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                <span className="text-sm font-body">
-                  <span className="font-medium text-muted-foreground">{t('vehicles.mileage')}:</span> 
-                  <span className="font-semibold text-foreground ml-1">{formatMileage(vehicle.mileage || 0)} km</span>
-                </span>
+              <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                <Gauge className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                <span className="text-sm font-semibold text-foreground">{formatMileage(vehicle.mileage || 0)} km</span>
               </div>
               
-              <div className="flex items-center gap-2">
-                <Fuel className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                <span className="text-sm font-body">
-                  <span className="font-medium text-muted-foreground">{t('vehicles.fuel')}:</span> 
-                  <span className="font-semibold text-foreground ml-1">{vehicle.fuel}</span>
-                </span>
+              <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                <Fuel className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                <span className="text-sm font-semibold text-foreground">{vehicle.fuel}</span>
               </div>
               
-              {/* FILA 2: Mecánica */}
-              <div className="flex items-center gap-2">
-                <Settings className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                <span className="text-sm font-body">
-                  <span className="font-medium text-muted-foreground">{t('vehicles.transmission')}:</span> 
-                  <span className="font-semibold text-foreground ml-1">{vehicle.transmission}</span>
-                </span>
+              <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                <Settings className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                <span className="text-sm font-semibold text-foreground">{vehicle.transmission}</span>
               </div>
               
               {vehicle.enginePower && (
-                <div className="flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm font-body">
-                    <span className="font-medium text-muted-foreground">{t('vehicles.power', { fallback: 'Potencia' })}:</span> 
-                    <span className="font-semibold text-foreground ml-1">{vehicle.enginePower} CV</span>
-                  </span>
+                <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                  <Zap className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-foreground">{vehicle.enginePower} CV</span>
                 </div>
               )}
               
               {vehicle.engineSize && (
-                <div className="flex items-center gap-2">
-                  <CircleDot className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm font-body">
-                    <span className="font-medium text-muted-foreground">{t('vehicles.engineSize', { fallback: 'Cilindrada' })}:</span> 
-                    <span className="font-semibold text-foreground ml-1">{vehicle.engineSize} cc</span>
-                  </span>
+                <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                  <CircleDot className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-foreground">{vehicle.engineSize} cc</span>
                 </div>
               )}
               
-              {/* FILA 3: Características físicas */}
               {vehicle.doors && (
-                <div className="flex items-center gap-2">
-                  <DoorOpen className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm font-body">
-                    <span className="font-medium text-muted-foreground">{t('vehicles.doors', { fallback: 'Puertas' })}:</span> 
-                    <span className="font-semibold text-foreground ml-1">{vehicle.doors}</span>
-                  </span>
+                <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                  <DoorOpen className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-foreground">{vehicle.doors}</span>
                 </div>
               )}
               
               {vehicle.color && (
-                <div className="flex items-center gap-2">
-                  <Palette className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm font-body">
-                    <span className="font-medium text-muted-foreground">{t('vehicles.color')}:</span> 
-                    <span className="font-semibold text-foreground ml-1">{vehicle.color}</span>
-                  </span>
+                <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                  <Palette className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-foreground">{vehicle.color}</span>
                 </div>
               )}
               
               {vehicle.vehicleType && (
-                <div className="flex items-center gap-2">
-                  <Car className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm font-body">
-                    <span className="font-medium text-muted-foreground">{t('vehicles.type', { fallback: 'Tipo' })}:</span> 
-                    <span className="font-semibold text-foreground ml-1">{vehicle.vehicleType}</span>
-                  </span>
+                <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                  <Car className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-foreground">{vehicle.vehicleType}</span>
                 </div>
               )}
               
-              {/* FILA 4: Emisiones y normativas */}
               {vehicle.euroStandard && (
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm font-body">
-                    <span className="font-medium text-muted-foreground">{t('vehicles.euroStandard', { fallback: 'Normativa' })}:</span> 
-                    <span className="font-semibold text-foreground ml-1">{vehicle.euroStandard.toUpperCase()}</span>
-                  </span>
+                <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                  <ShieldCheck className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-foreground">{vehicle.euroStandard.toUpperCase()}</span>
                 </div>
               )}
               
               {vehicle.co2Emissions && (
-                <div className="flex items-center gap-2">
-                  <CloudOff className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm font-body">
-                    <span className="font-medium text-muted-foreground">{t('vehicles.co2', { fallback: 'CO₂' })}:</span> 
-                    <span className="font-semibold text-foreground ml-1">{vehicle.co2Emissions} g/km</span>
-                  </span>
+                <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                  <CloudOff className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-foreground">{vehicle.co2Emissions} g/km</span>
                 </div>
               )}
               
               {vehicle.countryCode && (
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm font-body">
-                    <span className="font-medium text-muted-foreground">{t('vehicles.location')}:</span> 
-                    <span className="font-semibold text-foreground ml-1">{vehicle.countryCode.toUpperCase()}</span>
-                  </span>
+                <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+                  <MapPin className="h-4 w-4 text-primary/70 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-foreground">{vehicle.countryCode.toUpperCase()}</span>
                 </div>
               )}
             </div>
