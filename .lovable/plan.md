@@ -1,109 +1,46 @@
 
+# Aplicar estilo de clasificacion con celdas individuales a las fichas de vehiculos
 
-# Vehicle Image Upload - Root Cause Analysis and Fix Plan
+## Resumen
+Transformar la seccion de especificaciones tecnicas de los vehiculos del formato actual (texto plano con iconos en linea) al estilo de "celdas individuales con borde" que se ve en el mockup: una cuadricula 3x3 donde cada especificacion tiene su propia celda con fondo oscuro, borde sutil, icono y valor centrados.
 
-## Problem Summary
+## Componentes afectados
 
-Images are uploaded to storage but **never appear** on the vehicle page after update. The system says "updated successfully" but no images are shown.
+### 1. VehicleTechnicalData.tsx (Ficha de detalle del vehiculo)
+- Reemplazar el grid actual de `grid-cols-3 gap-x-4 gap-y-3` con items en texto plano
+- Cada especificacion se convierte en una celda individual con:
+  - Fondo `bg-muted/50` con borde `border border-border`
+  - Esquinas redondeadas `rounded-lg`
+  - Padding interior `p-3`
+  - Icono y valor centrados verticalmente
+  - Texto del valor en blanco/foreground, etiqueta en muted
 
-## Root Cause Analysis
+### 2. VehicleCard.tsx (Tarjetas en listados)
+- Aplicar el mismo patron de celdas al grid de 2 columnas existente
+- Cada dato (km, combustible, transmision, puertas) en su propia celda con borde
+- Mantener el layout compacto adaptado al tamano de la tarjeta
 
-After a thorough audit of the entire upload pipeline, I identified **three distinct issues**:
+### 3. VehicleDetailsCard.tsx (Card alternativa de detalles)
+- Mismo tratamiento de celdas individuales para consistencia visual
 
----
+## Detalles tecnicos
 
-### Issue 1: TWO DUPLICATE UPLOAD PATHS (Critical)
-
-There are **two completely separate image upload implementations** that compete with each other:
-
-1. **`useVehicleSubmit.ts`** (lines 280-358) - Has its own `handleImageUploads` function that uploads directly to storage and inserts into `vehicle_images` table. Used for **new vehicle creation**.
-
-2. **`vehicleImageServiceCore.ts`** - A separate service with `uploadMultipleImages()` used by `useVehicleUpdater.ts` for **vehicle editing/updates**.
-
-When editing a vehicle (the current case with `/upload-vehicle/b762c97b-...`), the flow goes:
-- `useVehicleUploadForm` -> `useVehicleEdit` -> `useVehicleUpdater` -> `vehicleImageServiceCore.uploadMultipleImages()`
-
-The `vehicleImageServiceCore` has a **critical bug on line 248**:
-
-```typescript
-const optimizationResult = await imageOptimizer.optimizeMultipleImages(new FileList() as any);
+Estilo CSS de cada celda:
+```
+className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3"
 ```
 
-This creates an **empty FileList** instead of using the actual files. However, this line only executes if `needsOptimization` is true, so it may not always crash - but the optimization path corrupts the upload.
-
-### Issue 2: Silent Validation Failure (Critical)
-
-In `vehicleImageServiceCore.uploadMultipleImages()` (line 226):
-
-```typescript
-const validation = await imageValidator.validateForUpload(images, vehicleId, currentCount);
-if (!validation.isValid) {
-  results.failed = images.length;
-  results.errors = validation.errors;
-  return results;  // <-- SILENTLY RETURNS WITHOUT UPLOADING
-}
+La estructura interna de cada celda:
+```
+<div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+  <Icon className="h-4 w-4 text-primary/70 flex-shrink-0" />
+  <span className="text-sm font-semibold text-foreground">{value}</span>
+</div>
 ```
 
-The **caller in `useVehicleUpdater.ts` (line 155)** does NOT check the result:
+Se eliminan las etiquetas redundantes (ej: "Ano:", "Combustible:") y se deja solo el icono + valor, como en el mockup, para un aspecto mas limpio y visual.
 
-```typescript
-await handleImageUploads(imagesArray, id, existingImages?.length || 0);
-console.log('Images processed successfully');  // <-- ALWAYS LOGS SUCCESS
-```
-
-It logs "success" regardless of whether images actually uploaded. The toast "updated successfully" comes from the vehicle data update which succeeds independently of images.
-
-### Issue 3: Database Confirms Zero Images
-
-Query result for vehicle `b762c97b-...`:
-- `vehicle_images` table: **0 rows** for this vehicle
-- `thumbnailurl`: **null**
-- Storage bucket `vehicles`: exists with correct RLS policies
-- The existing `vehicle_images` records in the DB all point to the **old project URL** (`inqqnsvlimtpjxjxuzaf.supabase.co`), confirming they were migrated data, not new uploads.
-
----
-
-## Fix Plan
-
-### Step 1: Add proper error reporting in `useVehicleUpdater.ts`
-
-Check the result returned by `handleImageUploads` and show errors to the user instead of silently ignoring failures.
-
-### Step 2: Fix the broken optimization path in `vehicleImageServiceCore.ts`
-
-Line 248 creates `new FileList()` instead of using the actual files. Fix:
-- Pass the actual `filesToUpload` array to the optimization
-- Or disable the broken optimization path entirely (safer)
-
-### Step 3: Add upload result logging
-
-Add `console.log` of the full upload result (including `errors` and `warnings` arrays) in `useVehicleUpdater.ts` so failures are visible in console.
-
-### Step 4: Show user-facing error when images fail
-
-In `useVehicleUpdater.ts`, after calling `handleImageUploads`, check `result.failed > 0` and show a toast error with the specific failure reason.
-
----
-
-## Technical Details
-
-### Files to modify:
-
-1. **`src/services/vehicleImageServiceCore.ts`**
-   - Fix line 248: remove the broken `new FileList()` call
-   - Simplify the optimization block to use the actual `filesToUpload` array
-
-2. **`src/hooks/vehicle-edit/useVehicleUpdater.ts`**
-   - Capture the return value from `handleImageUploads`
-   - Log the full result including errors
-   - Show toast.error if `result.failed > 0`
-   - Show toast.warning with specific error messages
-
-3. **`src/hooks/vehicle-edit/useVehicleImageHandler.ts`**
-   - Return the result object from `handleImageUploads` so the caller can inspect it
-
-### Files NOT modified:
-- No UI changes
-- No schema changes
-- No RLS changes (storage and table policies are already correct)
-
+## Archivos a modificar
+- `src/components/vehicle/preview/VehicleTechnicalData.tsx` - Grid principal de la ficha
+- `src/components/vehicle/VehicleCard.tsx` - Tarjetas del listado
+- `src/components/vehicle/VehicleDetailsCard.tsx` - Card alternativa
