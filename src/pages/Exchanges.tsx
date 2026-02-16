@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeftRight, ArrowLeft, Plus } from 'lucide-react';
+import { ArrowLeftRight, ArrowLeft, Plus, MessageCircle, ArrowRightLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SafeImage from '@/components/shared/SafeImage';
 import { useNavigate } from 'react-router-dom';
@@ -245,6 +245,38 @@ const Exchanges: React.FC = () => {
                               <p className="text-xs text-muted-foreground">
                                 {new Date(request.created_at).toLocaleDateString()}
                               </p>
+                              {!isOwn && request.status === 'pending' && user && (
+                                <div className="flex flex-col gap-2 mt-2">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="flex items-center gap-1"
+                                    onClick={() => {
+                                      const params = new URLSearchParams();
+                                      if (request.offered_vehicle_id) {
+                                        params.append('targetVehicleId', request.offered_vehicle_id);
+                                      }
+                                      params.append('sellerId', request.initiator_id);
+                                      params.append('exchangeId', request.id);
+                                      navigate(`/exchange-proposal?${params.toString()}`);
+                                    }}
+                                  >
+                                    <ArrowRightLeft className="h-3.5 w-3.5" />
+                                    {t('exchanges.proposeExchange', { fallback: 'Proponer Intercambio' })}
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="flex items-center gap-1"
+                                    onClick={() => {
+                                      navigate(`/messages?contactUser=${request.initiator_id}&source=exchange&sourceId=${request.id}`);
+                                    }}
+                                  >
+                                    <MessageCircle className="h-3.5 w-3.5" />
+                                    {t('exchanges.contactPublisher', { fallback: 'Contactar' })}
+                                  </Button>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </Card>
