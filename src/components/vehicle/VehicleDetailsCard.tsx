@@ -141,35 +141,35 @@ const VehicleDetailsCard: React.FC<VehicleDetailsCardProps> = ({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-2">
-          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
             <Calendar className="h-4 w-4 text-primary/70 flex-shrink-0" />
             <span className="text-sm font-semibold text-foreground">{vehicle.year}</span>
           </div>
           
-          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
             <Gauge className="h-4 w-4 text-primary/70 flex-shrink-0" />
             <span className="text-sm font-semibold text-foreground">{formatMileage(vehicle.mileage || 0)} km</span>
           </div>
           
-          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
             <Fuel className="h-4 w-4 text-primary/70 flex-shrink-0" />
             <span className="text-sm font-semibold text-foreground">{vehicle.fuel}</span>
           </div>
           
-          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+          <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
             <Settings className="h-4 w-4 text-primary/70 flex-shrink-0" />
             <span className="text-sm font-semibold text-foreground">{vehicle.transmission}</span>
           </div>
           
           {vehicle.color && (
-            <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+            <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
               <Palette className="h-4 w-4 text-primary/70 flex-shrink-0" />
               <span className="text-sm font-semibold text-foreground">{vehicle.color}</span>
             </div>
           )}
           
           {vehicle.countryCode && (
-            <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
+            <div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 transition-all duration-200">
               <MapPin className="h-4 w-4 text-primary/70 flex-shrink-0" />
               <span className="text-sm font-semibold text-foreground">{vehicle.countryCode.toUpperCase()}</span>
             </div>

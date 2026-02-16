@@ -100,20 +100,20 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
           {/* Vehicle Details */}
           <div className="grid grid-cols-2 gap-1.5 mb-3">
-            <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5">
+            <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5 shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
               <Calendar className="h-3 w-3 text-primary/70 flex-shrink-0" />
               <span className="text-xs font-semibold text-foreground">{vehicle.year}</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5">
+            <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5 shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
               <Gauge className="h-3 w-3 text-primary/70 flex-shrink-0" />
               <span className="text-xs font-semibold text-foreground">{formatMileage(vehicle.mileage || 0)} km</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5">
+            <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5 shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
               <Fuel className="h-3 w-3 text-primary/70 flex-shrink-0" />
               <span className="text-xs font-semibold text-foreground">{vehicle.fuel}</span>
             </div>
             {vehicle.countryCode && (
-              <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5">
+              <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5 shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
                 <MapPin className="h-3 w-3 text-primary/70 flex-shrink-0" />
                 <span className="text-xs font-semibold text-foreground">{vehicle.countryCode.toUpperCase()}</span>
               </div>

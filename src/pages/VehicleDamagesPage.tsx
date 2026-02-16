@@ -35,10 +35,7 @@ const VehicleDamagesPage: React.FC = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('vehicle_damages')
-        .select(`
-          *,
-          vehicle_damage_images (*)
-        `)
+        .select('*')
         .eq('vehicle_id', id)
         .order('created_at', { ascending: true });
       
@@ -138,19 +135,15 @@ const VehicleDamagesPage: React.FC = () => {
                     <p className="text-gray-700 mb-4">{damage.description}</p>
                   )}
                   
-                  {damage.vehicle_damage_images && damage.vehicle_damage_images.length > 0 && (
+                  {damage.image_url && (
                     <div>
-                      <h5 className="font-medium mb-2">Imágenes del daño:</h5>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                        {damage.vehicle_damage_images.map((image: any) => (
-                          <div key={image.id} className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                            <img 
-                              src={image.image_url} 
-                              alt={image.description || 'Imagen de daño'}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        ))}
+                      <h5 className="font-medium mb-2">Imagen del daño:</h5>
+                      <div className="aspect-video bg-muted rounded-lg overflow-hidden w-48">
+                        <img 
+                          src={damage.image_url} 
+                          alt="Imagen de daño"
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     </div>
                   )}
