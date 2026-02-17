@@ -85,7 +85,7 @@ const ExchangeProposal: React.FC = () => {
 
       if (targetVehicleError || !targetVehicle) {
         console.error('Target vehicle not found:', targetVehicleError);
-        toast.error('El vehículo objetivo no existe');
+        toast.error(t('exchanges.missingInformation'));
         return;
       }
 
@@ -97,7 +97,7 @@ const ExchangeProposal: React.FC = () => {
 
       if (offeredVehicleError || !offeredVehicle) {
         console.error('Offered vehicle not found:', offeredVehicleError);
-        toast.error('El vehículo ofrecido no existe');
+        toast.error(t('exchanges.missingInformation'));
         return;
       }
 

@@ -55,7 +55,7 @@ export const useChatImageUpload = () => {
           isUploading: false
         }));
 
-        toast.success('✅ Imagen guardada correctamente en el proyecto');
+        toast.success('✅ Image saved successfully');
         
         // Guardar timestamp del último upload
         localStorage.setItem('last-image-upload', new Date().toISOString());
@@ -75,7 +75,7 @@ export const useChatImageUpload = () => {
         error: errorMessage
       }));
 
-      toast.error(`❌ Error al guardar imagen: ${errorMessage}`);
+      toast.error(`❌ Error saving image: ${errorMessage}`);
       
       return {
         success: false,

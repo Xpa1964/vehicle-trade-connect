@@ -33,7 +33,7 @@ export const directChatService: DirectChatService = {
           buyer_id: buyerId,
           seller_id: sellerId,
           source_type: 'direct',
-          source_title: 'Conversación directa',
+          source_title: 'Direct conversation',
           status: 'active'
         })
         .select('id')
@@ -60,7 +60,7 @@ export const directChatService: DirectChatService = {
       return conversation.id;
     } catch (error) {
       console.error('[DirectChat] Error in createDirectConversation:', error);
-      toast.error('Error al crear la conversación');
+      toast.error('Error creating conversation');
       return null;
     }
   },
@@ -87,17 +87,17 @@ export const directChatService: DirectChatService = {
       const failed = results.length - successful;
 
       if (successful > 0) {
-        toast.success(`Mensajes enviados correctamente: ${successful}${failed > 0 ? `, ${failed} fallaron` : ''}`);
+        toast.success(`Messages sent successfully: ${successful}${failed > 0 ? `, ${failed} failed` : ''}`);
       }
       
       if (failed > 0 && successful === 0) {
-        toast.error('Error al enviar todos los mensajes');
+        toast.error('Error sending all messages');
       }
 
       console.log('[DirectChat] Bulk messaging completed:', { successful, failed });
     } catch (error) {
       console.error('[DirectChat] Error in createBulkConversations:', error);
-      toast.error('Error al enviar mensajes masivos');
+      toast.error('Error sending bulk messages');
     }
   }
 };

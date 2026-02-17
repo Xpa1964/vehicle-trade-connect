@@ -5,6 +5,7 @@ import { safeSignOut } from '@/utils/authUtils';
 import { toast as sonnerToast } from 'sonner';
 import { logSystemActivity } from '@/utils/activityLogger';
 import { useCallback } from 'react';
+import { getTranslation } from '@/utils/getTranslation';
 
 export const useLogout = (setUser: (user: any) => void) => {
   const { toast } = useToast();
@@ -40,9 +41,7 @@ export const useLogout = (setUser: (user: any) => void) => {
         });
       }
       
-      sonnerToast.success("Sesión cerrada", {
-        description: "Has cerrado sesión correctamente"
-      });
+      sonnerToast.success(getTranslation('toast.logoutSuccess'));
       
       // Redirect to home page after logout using window.location for reliability
       setTimeout(() => {
@@ -53,7 +52,7 @@ export const useLogout = (setUser: (user: any) => void) => {
       console.error('[useLogout] Logout error:', error);
       toast({
         title: "Error",
-        description: "Hubo un problema al cerrar sesión, pero se ha cerrado la sesión local",
+        description: getTranslation('toast.sessionError'),
         variant: "destructive",
       });
       

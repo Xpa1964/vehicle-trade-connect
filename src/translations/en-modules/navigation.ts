@@ -26,5 +26,6 @@ export default {
   'nav.dashboard': 'Dashboard',
   'nav.auctionRoom': 'Auction Room',
   'nav.publishAuction': 'Publish Auction',
-  'navigation.backToControlPanel': 'Back to Control Panel'
+  'navigation.backToControlPanel': 'Back to Control Panel',
+  'nav.backToHome': 'Back to Home',
 };

@@ -176,31 +176,31 @@ export const autoRecovery = async (): Promise<boolean> => {
     }
     
     // Mostrar notificación al usuario
-    const toastId = toast.loading('Resincronizando sesión...', {
-      description: 'Detectamos un problema de sesión, intentando solucionarlo automáticamente'
+    const toastId = toast.loading('Resynchronizing session...', {
+      description: 'Session issue detected, attempting automatic fix'
     });
     
     // Intentar resincronización
     const syncResult = await forceSynchronization();
     
     if (syncResult.synchronized) {
-      toast.success('Sesión resincronizada correctamente', {
+      toast.success('Session resynchronized successfully', {
         id: toastId,
-        description: 'La aplicación está lista para continuar'
+        description: 'The application is ready to continue'
       });
       return true;
     } else {
-      toast.error('No se pudo resincronizar la sesión', {
+      toast.error('Could not resynchronize session', {
         id: toastId,
-        description: 'Por favor, recarga la página e inicia sesión nuevamente'
+        description: 'Please reload the page and sign in again'
       });
       return false;
     }
     
   } catch (error) {
     console.error('❌ [SYNC] Error en recovery automático:', error);
-    toast.error('Error en recovery automático', {
-      description: 'Recarga la página e inicia sesión nuevamente'
+    toast.error('Automatic recovery error', {
+      description: 'Please reload the page and sign in again'
     });
     return false;
   }

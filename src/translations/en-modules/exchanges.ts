@@ -96,5 +96,7 @@ export default {
   'exchanges.newVehicleTab': 'New Vehicle',
   'exchanges.vehicleSelectionTab': 'Vehicle Selection',
   'exchanges.vehicleDetailsTab': 'Vehicle Details',
-  'exchanges.noVehiclesInInventory': 'No vehicles in your inventory'
+  'exchanges.noVehiclesInInventory': 'No vehicles in your inventory',
+  'exchanges.cannotExchangeWithSelf': 'You cannot propose an exchange with your own vehicle',
+  'exchanges.vehicleNotBelongsToUser': 'The selected vehicle does not belong to you',
 };

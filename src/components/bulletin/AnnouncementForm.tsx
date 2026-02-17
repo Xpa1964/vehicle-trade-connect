@@ -84,7 +84,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
       const validation = await validateUserSession();
       if (!validation.isValid) {
         console.error('❌ [FORM] Validación de sesión falló:', validation.error);
-        toast.error(validation.error || 'Sesión inválida. Por favor, recarga la página e intenta nuevamente.');
+        toast.error(validation.error || t('toast.sessionError'));
         return;
       }
       
@@ -111,7 +111,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
       if (error) {
         console.error('❌ [FORM] Error adding announcement:', error);
         const userFriendlyError = handleRLSError(error);
-        toast.error('Error al crear anuncio', {
+        toast.error(t('toast.announcementDeleteError'), {
           description: userFriendlyError
         });
         throw error;
@@ -157,7 +157,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
     } catch (error) {
       console.error('Error submitting announcement:', error);
       toast.error(t('common.error'), {
-        description: 'Error al crear el anuncio',
+        description: t('toast.announcementDeleteError'),
       });
     } finally {
       setIsSubmitting(false);
@@ -276,10 +276,10 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
               <div className="space-y-1 leading-none">
                 <FormLabel className="flex items-center text-foreground">
                   <Star className="h-4 w-4 mr-2 text-amber-400" />
-                  Anuncio Destacado
+                  {t('bulletin.featuredAnnouncement', { fallback: 'Featured Announcement' })}
                 </FormLabel>
                 <FormDescription className="text-muted-foreground">
-                  Los anuncios destacados aparecen al principio de la lista y tienen mayor visibilidad durante 30 días.
+                  {t('bulletin.featuredDescription', { fallback: 'Featured announcements appear at the top of the list with greater visibility for 30 days.' })}
                 </FormDescription>
               </div>
             </FormItem>
@@ -288,7 +288,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
         
         {/* File Attachments */}
         <FormItem>
-          <FormLabel className="text-foreground">Archivos adjuntos</FormLabel>
+          <FormLabel className="text-foreground">{t('bulletin.attachments', { fallback: 'File attachments' })}</FormLabel>
           <PendingFileUpload
             onFilesChange={handlePendingFilesChange}
             acceptedTypes=".xlsx,.xls,.docx,.doc,.pdf,.jpg,.jpeg,.png,.gif,.webp"
@@ -296,7 +296,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
             className="w-full"
           />
           <FormDescription className="text-muted-foreground">
-            Puedes seleccionar hasta 5 archivos. Se subirán después de crear el anuncio. Las imágenes se mostrarán en el anuncio, otros archivos estarán disponibles para descarga.
+            {t('bulletin.attachmentsDescription', { fallback: 'You can select up to 5 files. They will be uploaded after creating the announcement.' })}
           </FormDescription>
         </FormItem>
         

@@ -3,8 +3,10 @@ import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { RegisterFormData } from '@/schemas/registerSchema';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const useRegisterForm = () => {
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [companyLogo, setCompanyLogo] = useState<File | null>(null);
@@ -53,19 +55,19 @@ export const useRegisterForm = () => {
         console.error('=== EMAIL ERROR ===');
         console.error('Status:', response.status);
         console.error('Result:', result);
-        toast.error(`Error enviando email: ${result.error || 'Error desconocido'}`);
+        toast.error(t('toast.contactError'));
         return false;
       }
       
       console.log('=== EMAIL SUCCESS ===');
       console.log('Email sent successfully:', result);
-      toast.success('Email de confirmación enviado correctamente');
+      toast.success(t('toast.contactSuccess'));
       return true;
     } catch (error) {
       console.error('=== EMAIL EXCEPTION ===');
       console.error('Error completo:', error);
       console.error('Error message:', error instanceof Error ? error.message : 'Unknown error');
-      toast.error(`Excepción enviando email: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+      toast.error(t('toast.contactError'));
       return false;
     }
   };
@@ -141,7 +143,7 @@ export const useRegisterForm = () => {
       if (error) {
         console.error('=== DATABASE ERROR ===');
         console.error('Error inserting registration request:', error);
-        toast.error('Error al enviar la solicitud. Por favor, inténtelo de nuevo más tarde.');
+        toast.error(t('toast.registerError'));
         setIsSubmitting(false);
         return false;
       }
@@ -162,16 +164,16 @@ export const useRegisterForm = () => {
       setIsSuccess(true);
       
       if (emailSent) {
-        toast.success('Solicitud enviada correctamente. Recibirá un email de confirmación en breve.');
+        toast.success(t('toast.registerSuccess'));
       } else {
-        toast.success('Solicitud enviada correctamente. Nota: Hubo un problema enviando el email de confirmación, pero su solicitud fue registrada.');
+        toast.success(t('toast.registerSuccess'));
       }
       
       return true;
     } catch (error) {
       console.error('=== UNEXPECTED ERROR ===');
       console.error('Unexpected error in registration submission:', error);
-      toast.error('Error inesperado al procesar su solicitud. Por favor, inténtelo de nuevo más tarde.');
+      toast.error(t('toast.registerError'));
       return false;
     } finally {
       setIsSubmitting(false);

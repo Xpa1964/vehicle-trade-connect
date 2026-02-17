@@ -132,4 +132,6 @@ export default {
   'auth.register.importer': 'Importer',
   'auth.register.exporter': 'Exporter',
   'auth.register.other': 'Other',
+  'auth.register.generatedUsername': 'Your username',
+  'auth.register.usernameExplanation': 'Automatically generated from your company name and manager last name',
 };
