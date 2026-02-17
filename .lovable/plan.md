@@ -1,185 +1,118 @@
 
+# Fix Remaining Hardcoded Spanish in Public Pages
 
-# Multilingual Fixes - Non-Structural
-
-## Overview
-Remove all hardcoded Spanish text from public-facing components. The work covers four areas: the vehicle data sheet (PDF), toast messages, Spanish fallback patterns, and dialog/form placeholders. Admin panel is excluded.
-
----
-
-## 1. Vehicle Data Sheet (`VehicleDataSheet.tsx`)
-
-The entire print HTML template contains ~30 hardcoded Spanish strings. These will be replaced with `t()` calls using a mix of existing keys and new `datasheet.*` keys.
-
-### Hardcoded strings to replace:
-- "Ficha tecnica profesional del vehiculo" (subtitle)
-- "IVA incluido" / "IVA deducible" / "IVA no incluido"
-- "Ano", "Kilometraje", "Combustible", "Transmision", "Ubicacion" (key info labels)
-- "Descripcion del vehiculo" (section header)
-- "Detalles tecnicos" (section header)
-- "Equipamiento" (section header)
-- "Estado del vehiculo" (section header)
-- "Danos reportados" / "Sin danos reportados"
-- "Bajo", "Medio", "Alto" (severity)
-- "Dano", "Ubicacion:", "Coste estimado:"
-- "Vehiculo revisado", "Disponible"
-- "Color", "Combustible", "Transmision", "Kilometraje", "VIN", "Potencia", "Cilindrada", "Puertas", "Emisiones CO2", "Norma Euro", "Acepta intercambios"
-- "Si" / "No" / "No especificado"
-- "Marketplace Automotriz Profesional"
-- "Documento generado el..."
-- "Ver vehiculo en la plataforma"
-- "Ficha Tecnica" (card title, line 264)
-- Date formatting locale (`'es-ES'`)
-- `getSeverityText()` returns hardcoded Spanish
-
-### Approach:
-- Pass `t()` resolved strings into the HTML template as variables
-- Use existing keys where available (`vehicles.year`, `vehicles.mileage`, `vehicles.fuel`, `vehicles.noDamagesReported`, `vehicles.highSeverity`, etc.)
-- Add ~20 new `datasheet.*` keys for PDF-specific labels
-
-### New translation keys needed (added to all 9 language commission modules):
-
-```text
-datasheet.professionalSubtitle
-datasheet.ivaIncluded / ivaDeductible / ivaNotIncluded
-datasheet.year / mileage / fuel / transmission / location
-datasheet.vehicleDescription
-datasheet.technicalDetails
-datasheet.equipment
-datasheet.vehicleCondition
-datasheet.damagesReported
-datasheet.noDamagesReported
-datasheet.reviewed / available
-datasheet.damageLabel / damageLocation / estimatedCost
-datasheet.color / vin / power / displacement / doors / co2Emissions / euroNorm / acceptsExchange
-datasheet.yes / no / notSpecified
-datasheet.marketplaceSubtitle
-datasheet.generatedOn
-datasheet.viewOnPlatform
-```
-
-### Translation files to update:
-- `src/translations/de-modules/commission.ts` (add datasheet.* keys)
-- `src/translations/nl-modules/commission.ts` (add datasheet.* keys)
-- `src/translations/pl-modules/commission.ts` (add datasheet.* keys)
-- `src/translations/dk-modules/commission.ts` (add datasheet.* keys)
-- `src/translations/pt-modules/commission.ts` (add datasheet.* keys)
-- Verify existing keys in es, en, fr, it commission modules and extend them
+## Problem
+The vehicle preview page (`VehicleContentLayout.tsx`) and sub-components contain ~15 hardcoded Spanish strings visible in all languages. The Exchanges page uses Spanish fallback patterns. Several translation keys used in code (`common.user`, `common.owner`, `vehicles.noDescription`) do not exist in any translation file, causing `[MISSING: ...]` labels.
 
 ---
 
-## 2. Toast Messages
+## Part A: Missing Translation Keys (causes [MISSING: ...] labels)
 
-Replace all hardcoded Spanish toast strings in non-admin files with `t()` calls. New translation keys will be added under a `toast.*` namespace.
+These keys are used in code but do not exist in ANY translation file:
 
-### Files to fix (non-admin only):
+| Key | Used In | Fix |
+|-----|---------|-----|
+| `common.user` | VehicleContentLayout, SellerContactCard | Add to all 9 language common modules |
+| `common.owner` | VehicleContentLayout, SellerContactCard | Add to all 9 language common modules |
+| `vehicles.noDescription` | VehicleContentLayout | Add to all 9 language vehicles modules |
 
-| File | Hardcoded toasts |
-|------|-----------------|
-| `src/components/vehicle/preview/ContactSellerDialog.tsx` | 3 toasts |
-| `src/components/messages/ContactKontactModal.tsx` | 2 toasts |
-| `src/components/bulletin/AnnouncementForm.tsx` | 1 toast |
-| `src/pages/BulletinBoard.tsx` | 2 toasts |
-| `src/components/shared/UserCardWithSelection.tsx` | 3 toasts |
-| `src/hooks/useRegisterForm.ts` | 5 toasts |
-| `src/services/vehicleDeletionService.ts` | 5 toasts |
-| `src/hooks/useAnnouncementAttachments.ts` | 3 toasts |
-| `src/hooks/useChatImageUpload.ts` | 1 toast |
-| `src/components/transport/TransportQuotesList.tsx` | 4 toasts |
-| `src/components/profile/PrivacySettings.tsx` | 3 toasts |
-| `src/components/vehicle-reports/ReportRequestForm.tsx` | 3 toasts |
-| `src/hooks/useRolesAndPermissions.ts` | 1 toast |
-| `src/hooks/auth/useLogout.ts` | 1 toast |
-| `src/hooks/auth/useRegister.ts` | 1 toast |
-| `src/utils/sessionSynchronizer.ts` | 3 toasts |
-| `src/pages/ExchangeProposal.tsx` | 2 toasts |
-| `src/services/directChat.ts` | 3 toasts |
-
-### Approach:
-- Add a new `toast.*` translation module for each language (9 files)
-- Replace each hardcoded string with `t('toast.keyName')`
-- Import `useLanguage` or pass `t` where needed (some are in services/utils - will need to accept `t` as parameter or use a standalone translation getter)
-
-For non-React files (`vehicleDeletionService.ts`, `directChat.ts`, `sessionSynchronizer.ts`), the `t` function will be passed as a parameter from the calling component, or we use a direct import from the translations object with stored language.
+**Files to update:** `src/translations/{es,en,fr,de,it,nl,pt,pl,dk}-modules/common.ts` and `vehicles.ts`
 
 ---
 
-## 3. Remove Spanish Fallbacks
+## Part B: VehicleContentLayout.tsx (~15 hardcoded Spanish strings)
 
-111 files use `t('key', { fallback: 'Spanish text' })`. The `t()` function already falls back to English then Spanish automatically (lines 101-124 of LanguageContext). The manual fallbacks are redundant and cause Spanish to leak through.
+| Line | Hardcoded Spanish | Replace With |
+|------|------------------|--------------|
+| 122 | `'Vendido'` / `'Reservado'` | `t('vehicles.sold')` / `t('vehicles.reserved')` |
+| 134 | `"Potencia"` | `t('vehicles.enginePower')` |
+| 157 | `"Gastos de importacion"` | `t('vehicles.importCosts')` -- new key |
+| 169 | `"Inicia sesion para contactar"` | `t('vehicles.loginToContact')` -- new key |
+| 178 | `"Venta Comisionada"` | `t('vehicles.commissionSaleLabel')` -- new key |
+| 180 | `"PVP:"` | `t('vehicles.pvp')` -- new key |
+| 209 | `"Vendedor"` | `t('vehicles.seller')` |
+| 234 | `'Profesional'` / `'Particular'` | `t('vehicles.professional')` / `t('vehicles.private')` -- new keys |
+| 312 | `"Equipamiento"` | `t('vehicles.equipment')` |
+| 327 | `"Informacion"` | `t('vehicles.information')` |
+| 343 | `"Calculadora de Comisiones"` | `t('commission.title')` (existing key) |
+| 360 | `"Ficha Tecnica"` | `t('datasheet.title')` -- new key |
+| 373 | `"Estado"` | `t('vehicles.condition')` |
+| 386 | `"Archivos"` | `t('vehicles.files')` |
+| 401 | `'Vendedor'` (fallback) | `t('common.user')` |
 
-### Approach:
-- Replace `t('key', { fallback: 'Spanish text' })` with `t('key')` across all non-admin files
-- Ensure the English translation file has the key so the built-in fallback chain (current language -> en -> es) works correctly
-- Add any missing English keys found during the cleanup
-
-This affects ~71 non-admin component files.
-
----
-
-## 4. Dialog and Form Placeholders
-
-### ContactSellerDialog.tsx (fully hardcoded in Spanish):
-- "Contactar al vendedor" (title)
-- "Envia un mensaje a {name}" (description)
-- "Contenido del mensaje" (label)
-- "Escribe tu mensaje aqui..." (placeholder)
-- "Enviando..." / "Enviar" (button)
-
-### Other forms with hardcoded placeholders:
-- Rating forms (check for inline Spanish)
-- Contact forms (verify all use `t()`)
-- EmptyChatPlaceholder (already uses `t()` with Spanish fallbacks - fix under task 3)
-
-### New translation keys:
-```text
-seller.contactTitle
-seller.contactDescription
-seller.messageLabel
-seller.messagePlaceholder
-seller.sending
-seller.send
-```
-
-Added to the `seller` module for all 9 languages.
+**File:** `src/components/vehicle/preview/VehicleContentLayout.tsx`
 
 ---
 
-## 5. Date Formatting
+## Part C: Sub-components with hardcoded Spanish
 
-In `VehicleDataSheet.tsx`, the date is formatted with `'es-ES'` locale. This will be replaced with a locale map based on `currentLanguage`:
+### DamageAccessCard.tsx (lines 52, 59)
+- `"Estado"` --> `t('vehicles.condition')`
+- `"Acceder para conocer el estado del vehiculo"` --> `t('vehicles.damagesDescription')`
 
-```typescript
-const localeMap = { es: 'es-ES', en: 'en-GB', fr: 'fr-FR', de: 'de-DE', it: 'it-IT', nl: 'nl-NL', pt: 'pt-PT', pl: 'pl-PL', dk: 'da-DK' };
-```
+### DocumentAccessCard.tsx (lines 52, 59)
+- `"Archivos"` --> `t('vehicles.files')`
+- `"Acceso a archivos adicionales"` --> `t('vehicles.filesDescription')`
+
+### VehicleTechnicalData.tsx (lines 157, 170)
+- `"Conoce los gastos de importacion"` --> `t('vehicles.importCosts')`
+- `'Vendedor'` fallback --> `t('common.user')`
 
 ---
 
-## Summary of files to create/modify
+## Part D: Exchanges page fallback cleanup
 
-### New files (9 toast translation modules):
-- `src/translations/es-modules/toast.ts`
-- `src/translations/en-modules/toast.ts`
-- `src/translations/fr-modules/toast.ts`
-- `src/translations/de-modules/toast.ts`
-- `src/translations/it-modules/toast.ts`
-- `src/translations/nl-modules/toast.ts`
-- `src/translations/pt-modules/toast.ts`
-- `src/translations/pl-modules/toast.ts`
-- `src/translations/dk-modules/toast.ts`
+The file `src/pages/Exchanges.tsx` has ~20 instances of `t('key', { fallback: 'Spanish text' })`. Since the `t()` function now ignores fallbacks, these already fall through to EN. However, several keys used in Exchanges.tsx do NOT exist in the EN exchanges module:
 
-### Modified files:
-- 9 commission translation modules (add datasheet.* keys)
-- 9 seller translation modules (add contact dialog keys)
-- 9 language barrel files (import toast module)
-- `src/components/vehicle/VehicleDataSheet.tsx` (full i18n)
-- `src/components/vehicle/preview/ContactSellerDialog.tsx` (full i18n)
-- ~18 files with hardcoded toasts (replace with t() calls)
-- ~71 files with Spanish fallbacks (remove fallback params)
+New keys to add to `src/translations/en-modules/exchanges.ts`:
+- `exchanges.subtitle` = "Find exchange opportunities"
+- `exchanges.search` = "Search vehicles"
+- `exchanges.searchDescription` = "Search vehicles other users want to exchange"
+- `exchanges.searchPlaceholder` = "Search by brand, model..."
+- `exchanges.createRequest` = "Create Exchange Request"
+- `exchanges.availableVehicles` = "Available Vehicles"
+- `exchanges.exchangeRequestsDescription` = "Exchange requests published by users"
+- `exchanges.unknownVehicle` = "Vehicle not specified"
+- `exchanges.yours` = "Your request"
+- `exchanges.contactPublisher` = "Contact"
+- `exchanges.acceptsExchange` = "Accepts exchange" (already exists)
+- `exchanges.noVehiclesFound` = "No vehicles found matching your search"
+- `exchanges.noVehicles` = "No vehicles available for exchange at this time"
+- `exchanges.ownVehiclesExcluded` = "Note: Your own vehicles are not shown"
 
-### Not modified:
-- Admin panel files (`src/pages/admin/*`, `src/components/admin/*`)
+Then add the same keys in the other 8 languages (es, fr, de, it, nl, pt, pl, dk).
+
+---
+
+## Part E: New translation keys for vehicles module (all 9 languages)
+
+| Key | ES | EN |
+|-----|----|----|
+| `vehicles.noDescription` | Sin descripcion | No description available |
+| `vehicles.importCosts` | Gastos de importacion | Import costs |
+| `vehicles.loginToContact` | Inicia sesion para contactar | Log in to contact |
+| `vehicles.commissionSaleLabel` | Venta Comisionada | Commission Sale |
+| `vehicles.pvp` | PVP | RRP |
+| `vehicles.professional` | Profesional | Professional |
+| `vehicles.private` | Particular | Private |
+| `datasheet.title` | Ficha Tecnica | Data Sheet |
+
+---
+
+## Files Summary
+
+### Modified components (4 files):
+- `src/components/vehicle/preview/VehicleContentLayout.tsx`
+- `src/components/vehicle/preview/DamageAccessCard.tsx`
+- `src/components/vehicle/preview/DocumentAccessCard.tsx`
+- `src/components/vehicle/preview/VehicleTechnicalData.tsx`
+
+### Modified translation modules (27 files):
+- `src/translations/{es,en,fr,de,it,nl,pt,pl,dk}-modules/common.ts` (add `common.user`, `common.owner`)
+- `src/translations/{es,en,fr,de,it,nl,pt,pl,dk}-modules/vehicles.ts` (add ~7 new keys)
+- `src/translations/{es,en,fr,de,it,nl,pt,pl,dk}-modules/exchanges.ts` (add ~13 new keys)
+
+### NOT modified:
+- Admin panel
 - Database schema
 - API contracts
-- `supabase/config.toml`, `client.ts`, `types.ts`, `.env`
-
