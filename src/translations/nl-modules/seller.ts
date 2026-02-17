@@ -1,5 +1,4 @@
 export default {
-  // Seller
   'seller.title': 'Verkoper',
   'seller.profile': 'Verkopersprofiel',
   'seller.listings': 'Advertenties',
@@ -14,4 +13,12 @@ export default {
   'seller.responseTime': 'Reactietijd',
   'seller.location': 'Locatie',
   'seller.languages': 'Talen',
+  'seller.contactSeller': 'Verkoper Contacteren',
+  'seller.viewProfile': 'Profiel Bekijken en Beoordelen',
+  'seller.contactTitle': 'Contact verkoper',
+  'seller.contactDescription': 'Stuur een bericht naar {name}',
+  'seller.messageLabel': 'Berichtinhoud',
+  'seller.messagePlaceholder': 'Schrijf uw bericht hier...',
+  'seller.sending': 'Verzenden...',
+  'seller.send': 'Verzenden',
 };

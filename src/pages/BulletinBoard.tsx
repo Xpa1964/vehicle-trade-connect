@@ -105,11 +105,11 @@ const BulletinBoard: React.FC = () => {
 
       if (error) throw error;
 
-      toast.success('Anuncio eliminado correctamente');
+      toast.success(t('toast.announcementDeleted'));
       refetch();
     } catch (error) {
       console.error('Error deleting announcement:', error);
-      toast.error('Error al eliminar el anuncio');
+      toast.error(t('toast.announcementDeleteError'));
     }
   };
 

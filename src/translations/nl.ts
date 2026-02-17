@@ -35,6 +35,7 @@ import community from './nl-modules/community';
 import api from './nl-modules/api';
 import xlsxTemplate from './nl-modules/xlsxTemplate';
 import xlsxValidation from './nl-modules/xlsxValidation';
+import toast from './nl-modules/toast';
 
 export default {
   ...navigation,
@@ -73,5 +74,6 @@ export default {
   ...community,
   ...api,
   ...xlsxTemplate,
-  ...xlsxValidation
+  ...xlsxValidation,
+  ...toast
 };

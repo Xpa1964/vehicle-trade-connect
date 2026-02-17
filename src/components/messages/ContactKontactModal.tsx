@@ -31,15 +31,15 @@ const ContactKontactModal: React.FC<ContactKontactModalProps> = ({ isOpen, onClo
       });
 
       if (success) {
-        toast.success(t('messages.contactKontactModal.success', {}));
+        toast.success(t('toast.messageSent'));
         setMessage('');
         onClose();
       } else {
-        toast.error('Error al enviar el mensaje');
+        toast.error(t('toast.messageError'));
       }
     } catch (error) {
       console.error('Error sending message to KONTACT VO:', error);
-      toast.error('Error al enviar el mensaje');
+      toast.error(t('toast.messageError'));
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +67,7 @@ const ContactKontactModal: React.FC<ContactKontactModalProps> = ({ isOpen, onClo
         <div className="p-4 space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Mensaje
+              {t('seller.messageLabel')}
             </label>
             <Textarea
               value={message}
@@ -94,7 +94,7 @@ const ContactKontactModal: React.FC<ContactKontactModalProps> = ({ isOpen, onClo
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Enviando...</span>
+                  <span>{t('seller.sending')}</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">

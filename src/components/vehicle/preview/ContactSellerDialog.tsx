@@ -43,7 +43,7 @@ const ContactSellerDialog: React.FC<ContactSellerDialogProps> = ({
     if (!message.trim()) return;
     
     if (!user) {
-      toast.error('Debes iniciar sesión para enviar mensajes');
+      toast.error(t('toast.loginRequired'));
       navigate('/login');
       return;
     }
@@ -52,17 +52,15 @@ const ContactSellerDialog: React.FC<ContactSellerDialogProps> = ({
     try {
       console.log(`Starting conversation with seller ${sellerId} about vehicle ${vehicleId}`);
       
-      // Iniciar conversación pasando el vehicleId
       const conversation = await startConversation(sellerId, vehicleId);
       
       if (conversation && 'id' in conversation) {
         const conversationId = conversation.id;
         console.log(`Sending message to conversation ${conversationId}`);
         
-        // Enviar el mensaje
         await sendMessage(conversationId, message);
         
-        toast.success('Mensaje enviado correctamente');
+        toast.success(t('toast.messageSent'));
         onOpenChange(false);
         setMessage('');
         navigate('/messages');
@@ -72,7 +70,7 @@ const ContactSellerDialog: React.FC<ContactSellerDialogProps> = ({
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      toast.error('Error al enviar mensaje');
+      toast.error(t('toast.messageError'));
     } finally {
       setIsSending(false);
     }
@@ -82,22 +80,22 @@ const ContactSellerDialog: React.FC<ContactSellerDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px] bg-card border-border">
         <DialogHeader>
-          <DialogTitle className="text-foreground">Contactar al vendedor</DialogTitle>
+          <DialogTitle className="text-foreground">{t('seller.contactTitle')}</DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            Envía un mensaje a {sellerName}
+            {t('seller.contactDescription', { name: sellerName })}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-1 items-center gap-4">
             <label htmlFor="message" className="text-sm font-medium text-foreground">
-              Contenido del mensaje
+              {t('seller.messageLabel')}
             </label>
             <Textarea 
               id="message" 
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={5}
-              placeholder="Escribe tu mensaje aquí..."
+              placeholder={t('seller.messagePlaceholder')}
               className="bg-secondary border-border text-foreground placeholder:text-muted-foreground"
             />
           </div>
@@ -112,9 +110,9 @@ const ContactSellerDialog: React.FC<ContactSellerDialogProps> = ({
             {isSending ? (
               <>
                 <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></div>
-                Enviando...
+                {t('seller.sending')}
               </>
-            ) : 'Enviar'}
+            ) : t('seller.send')}
           </Button>
         </DialogFooter>
       </DialogContent>

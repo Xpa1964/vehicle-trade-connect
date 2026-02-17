@@ -61,7 +61,7 @@ const TransportQuotesList: React.FC = () => {
       const { data: user } = await supabase.auth.getUser();
       
       if (!user.user) {
-        toast.error('Usuario no autenticado');
+        toast.error(t('toast.loginRequired'));
         return;
       }
 
@@ -74,7 +74,7 @@ const TransportQuotesList: React.FC = () => {
 
       if (quotesError) {
         console.error('Error loading quotes:', quotesError);
-        toast.error('Error al cargar las cotizaciones');
+        toast.error(t('toast.quoteError'));
         return;
       }
 
@@ -100,7 +100,7 @@ const TransportQuotesList: React.FC = () => {
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al cargar las cotizaciones');
+      toast.error(t('toast.quoteError'));
     } finally {
       setLoading(false);
     }
@@ -132,11 +132,11 @@ const TransportQuotesList: React.FC = () => {
         return;
       }
 
-      toast.success('Cotización aceptada correctamente');
+      toast.success(t('toast.quoteAccepted'));
       loadUserQuotes();
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al aceptar la cotización');
+      toast.error(t('toast.quoteError'));
     }
   };
 
@@ -153,11 +153,11 @@ const TransportQuotesList: React.FC = () => {
         return;
       }
 
-      toast.success('Cotización rechazada');
+      toast.success(t('toast.quoteRejected'));
       loadUserQuotes();
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al rechazar la cotización');
+      toast.error(t('toast.quoteError'));
     }
   };
 
