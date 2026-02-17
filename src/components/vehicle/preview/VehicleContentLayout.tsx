@@ -119,7 +119,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
                     variant={vehicle.status === 'sold' ? 'destructive' : 'gold'}
                     className="text-xs"
                   >
-                    {vehicle.status === 'sold' ? 'Vendido' : vehicle.status === 'reserved' ? 'Reservado' : vehicle.status}
+                    {vehicle.status === 'sold' ? t('vehicles.sold') : vehicle.status === 'reserved' ? t('vehicles.reserved') : vehicle.status}
                   </Badge>
                 )}
               </div>
@@ -131,7 +131,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
                 <SpecItem icon={<Fuel className="h-4 w-4" />} label={t('vehicles.fuel')} value={vehicle.fuel} />
                 <SpecItem icon={<Settings className="h-4 w-4" />} label={t('vehicles.transmission')} value={vehicle.transmission} />
                 {vehicle.enginePower && (
-                  <SpecItem icon={<Zap className="h-4 w-4" />} label="Potencia" value={`${vehicle.enginePower} CV`} />
+                  <SpecItem icon={<Zap className="h-4 w-4" />} label={t('vehicles.enginePower')} value={`${vehicle.enginePower} CV`} />
                 )}
                 <SpecItem icon={<MapPin className="h-4 w-4" />} label={t('vehicles.location')} value={vehicle.location || vehicle.country || '—'} />
               </div>
@@ -154,7 +154,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
                       onClick={() => navigate(`/import-calculator?from_vehicle=${vehicle.id}&vehicle_info=${encodeURIComponent(`${vehicle.brand} ${vehicle.model} ${vehicle.year}`)}`)}
                     >
                       <Calculator className="h-4 w-4 mr-2" />
-                      Gastos de importación
+                      {t('vehicles.importCosts')}
                     </Button>
                   )}
                 </div>
@@ -166,7 +166,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
                   onClick={() => navigate('/auth')}
                 >
                   <MessageCircle className="h-5 w-5 mr-2" />
-                  Inicia sesión para contactar
+                  {t('vehicles.loginToContact')}
                 </Button>
               )}
 
@@ -175,9 +175,9 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
                 <div className="flex items-center gap-2 p-3 bg-secondary/40 rounded-xl">
                   <Info className="h-4 w-4 text-purple-400" />
                   <div>
-                    <span className="text-sm font-medium text-foreground">Venta Comisionada</span>
+                    <span className="text-sm font-medium text-foreground">{t('vehicles.commissionSaleLabel')}</span>
                     {vehicle.publicSalePrice && (
-                      <p className="text-xs text-muted-foreground">PVP: {formatPrice(vehicle.publicSalePrice)}</p>
+                      <p className="text-xs text-muted-foreground">{t('vehicles.pvp')}: {formatPrice(vehicle.publicSalePrice)}</p>
                     )}
                   </div>
                 </div>
@@ -206,7 +206,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Building2 className="h-5 w-5 text-muted-foreground" />
-                Vendedor
+                {t('vehicles.seller')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -231,7 +231,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
                       </h3>
                       {sellerProfile?.trader_type && (
                         <Badge variant="outline" className="text-xs border-border text-muted-foreground flex-shrink-0">
-                          {sellerProfile.trader_type === 'professional' ? 'Profesional' : 'Particular'}
+                          {sellerProfile.trader_type === 'professional' ? t('vehicles.professional') : t('vehicles.private')}
                         </Badge>
                       )}
                       {isOwner && (
@@ -309,7 +309,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Wrench className="h-5 w-5 text-muted-foreground" />
-                Equipamiento
+                {t('vehicles.equipment')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -324,7 +324,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Info className="h-5 w-5 text-muted-foreground" />
-                Información
+                {t('vehicles.information')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -340,7 +340,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Calculator className="h-5 w-5 text-muted-foreground" />
-                Calculadora de Comisiones
+                {t('commission.title')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -357,7 +357,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Download className="h-5 w-5 text-muted-foreground" />
-                Ficha Técnica
+                {t('datasheet.title')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -370,7 +370,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <ShieldCheck className="h-5 w-5 text-muted-foreground" />
-                Estado
+                {t('vehicles.condition')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -383,7 +383,7 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <FileText className="h-5 w-5 text-muted-foreground" />
-                Archivos
+                {t('vehicles.files')}
               </CardTitle>
             </CardHeader>
             <CardContent>

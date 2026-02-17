@@ -49,14 +49,14 @@ const DocumentAccessCard: React.FC<DocumentAccessCardProps> = ({
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-3">
             <FileText className="h-5 w-5 text-[#0EA5E9]" />
-            <span className="font-medium text-foreground">Archivos</span>
+            <span className="font-medium text-foreground">{t('vehicles.files')}</span>
           </div>
           <Badge variant="secondary" className="px-2 py-1 bg-secondary text-foreground">
             {documentsCount}
           </Badge>
         </div>
         <p className="text-sm text-muted-foreground">
-          Acceso a archivos adicionales
+          {t('vehicles.filesDescription')}
         </p>
       </CardContent>
     </Card>

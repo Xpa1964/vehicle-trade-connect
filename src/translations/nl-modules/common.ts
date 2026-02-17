@@ -98,5 +98,7 @@ export default {
   'common.clearSearch': 'Zoekopdracht wissen',
   'common.important': 'Belangrijk',
   'common.brandName': 'KONTACT',
-  'common.brandSuffix': 'AUTOMOTIVE'
+  'common.brandSuffix': 'AUTOMOTIVE',
+  'common.user': 'Gebruiker',
+  'common.owner': 'Eigenaar',
 };

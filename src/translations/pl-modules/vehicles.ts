@@ -341,5 +341,15 @@ export default {
   'vehicles.imageNamingByFolder': 'Według Folderów:',
   'vehicles.imageNamingExampleVin': 'WVWZZZ1KZBW123456_przod.jpg',
   'vehicles.imageNamingExamplePlate': 'ABC1234_bok.jpg',
-  'vehicles.imageNamingExampleFolder': 'WVWZZZ1KZBW123456/ → przod.jpg, bok.jpg'
+  'vehicles.imageNamingExampleFolder': 'WVWZZZ1KZBW123456/ → przod.jpg, bok.jpg',
+
+  // New keys for vehicle preview localization
+  'vehicles.noDescription': 'Brak opisu',
+  'vehicles.importCosts': 'Koszty importu',
+  'vehicles.loginToContact': 'Zaloguj się, aby skontaktować',
+  'vehicles.commissionSaleLabel': 'Sprzedaż Prowizyjna',
+  'vehicles.pvp': 'Cena detaliczna',
+  'vehicles.professional': 'Profesjonalista',
+  'vehicles.private': 'Osoba prywatna',
+  'datasheet.title': 'Karta Techniczna',
 };

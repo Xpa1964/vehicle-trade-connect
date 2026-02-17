@@ -97,5 +97,21 @@ export default {
   'exchanges.compensationDescription': 'Ajouter une compensation financière pour équilibrer l\'échange',
   'exchanges.conditionsDescription': 'Inclure toutes conditions ou exigences pour l\'échange',
   'exchanges.chooseOptionTitle': 'Choisissez une option pour continuer',
-  'exchanges.chooseOptionDescription': 'Vous pouvez sélectionner un véhicule déjà enregistré ou saisir les données d\'un nouveau véhicule'
+  'exchanges.chooseOptionDescription': 'Vous pouvez sélectionner un véhicule déjà enregistré ou saisir les données d\'un nouveau véhicule',
+
+  // New keys for exchanges page
+  'exchanges.subtitle': 'Trouvez des opportunités d\'échange',
+  'exchanges.search': 'Rechercher des véhicules',
+  'exchanges.searchDescription': 'Recherchez des véhicules que d\'autres utilisateurs souhaitent échanger',
+  'exchanges.searchPlaceholder': 'Rechercher par marque, modèle...',
+  'exchanges.createRequest': 'Créer une Demande d\'Échange',
+  'exchanges.availableVehicles': 'Véhicules Disponibles',
+  'exchanges.exchangeRequestsDescription': 'Demandes d\'échange publiées par les utilisateurs',
+  'exchanges.unknownVehicle': 'Véhicule non spécifié',
+  'exchanges.yours': 'Votre demande',
+  'exchanges.contactPublisher': 'Contacter',
+  'exchanges.acceptsExchange': 'Accepte l\'échange',
+  'exchanges.noVehiclesFound': 'Aucun véhicule trouvé correspondant à votre recherche',
+  'exchanges.noVehicles': 'Aucun véhicule disponible pour échange actuellement',
+  'exchanges.ownVehiclesExcluded': 'Note : Vos propres véhicules ne sont pas affichés',
 };

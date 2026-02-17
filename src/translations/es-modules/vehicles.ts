@@ -427,4 +427,14 @@ export default {
   'vehicles.uploadTip2': 'Tamaño máximo por imagen: 10MB',
   'vehicles.uploadTip3': 'Máximo 25 imágenes por vehículo',
   'vehicles.uploadTip4': 'La primera imagen será la principal',
+
+  // New keys for vehicle preview localization
+  'vehicles.noDescription': 'Sin descripción disponible',
+  'vehicles.importCosts': 'Gastos de importación',
+  'vehicles.loginToContact': 'Inicia sesión para contactar',
+  'vehicles.commissionSaleLabel': 'Venta Comisionada',
+  'vehicles.pvp': 'PVP',
+  'vehicles.professional': 'Profesional',
+  'vehicles.private': 'Particular',
+  'datasheet.title': 'Ficha Técnica',
 };

@@ -96,5 +96,21 @@ export default {
   'exchanges.compensationDescription': 'Finanzielle Entschädigung hinzufügen, um den Austausch auszugleichen',
   'exchanges.conditionsDescription': 'Alle Bedingungen oder Anforderungen für den Austausch hinzufügen',
   'exchanges.chooseOptionTitle': 'Wählen Sie eine Option zum Fortfahren',
-  'exchanges.chooseOptionDescription': 'Sie können ein bereits registriertes Fahrzeug auswählen oder Daten für ein neues Fahrzeug eingeben'
+  'exchanges.chooseOptionDescription': 'Sie können ein bereits registriertes Fahrzeug auswählen oder Daten für ein neues Fahrzeug eingeben',
+
+  // New keys for exchanges page
+  'exchanges.subtitle': 'Tauschgelegenheiten finden',
+  'exchanges.search': 'Fahrzeuge suchen',
+  'exchanges.searchDescription': 'Suchen Sie Fahrzeuge, die andere Nutzer tauschen möchten',
+  'exchanges.searchPlaceholder': 'Suche nach Marke, Modell...',
+  'exchanges.createRequest': 'Tauschanfrage erstellen',
+  'exchanges.availableVehicles': 'Verfügbare Fahrzeuge',
+  'exchanges.exchangeRequestsDescription': 'Von Nutzern veröffentlichte Tauschanfragen',
+  'exchanges.unknownVehicle': 'Fahrzeug nicht angegeben',
+  'exchanges.yours': 'Ihre Anfrage',
+  'exchanges.contactPublisher': 'Kontaktieren',
+  'exchanges.acceptsExchange': 'Akzeptiert Tausch',
+  'exchanges.noVehiclesFound': 'Keine Fahrzeuge gefunden, die Ihrer Suche entsprechen',
+  'exchanges.noVehicles': 'Derzeit keine Fahrzeuge zum Tausch verfügbar',
+  'exchanges.ownVehiclesExcluded': 'Hinweis: Ihre eigenen Fahrzeuge werden nicht angezeigt',
 };

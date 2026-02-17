@@ -449,5 +449,15 @@ export default {
   'vehicles.imageNamingByFolder': 'Per Map:',
   'vehicles.imageNamingExampleVin': 'WVWZZZ1KZBW123456_front.jpg',
   'vehicles.imageNamingExamplePlate': 'ABC1234_side.jpg',
-  'vehicles.imageNamingExampleFolder': 'WVWZZZ1KZBW123456/ → front.jpg, side.jpg'
+  'vehicles.imageNamingExampleFolder': 'WVWZZZ1KZBW123456/ → front.jpg, side.jpg',
+
+  // New keys for vehicle preview localization
+  'vehicles.noDescription': 'Geen beschrijving beschikbaar',
+  'vehicles.importCosts': 'Importkosten',
+  'vehicles.loginToContact': 'Log in om contact op te nemen',
+  'vehicles.commissionSaleLabel': 'Commissieverkoop',
+  'vehicles.pvp': 'Adviesprijs',
+  'vehicles.professional': 'Professioneel',
+  'vehicles.private': 'Particulier',
+  'datasheet.title': 'Technische Fiche',
 };

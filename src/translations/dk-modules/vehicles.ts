@@ -345,5 +345,15 @@ export default {
   'vehicles.imageNamingByFolder': 'Efter Mapper:',
   'vehicles.imageNamingExampleVin': 'WVWZZZ1KZBW123456_front.jpg',
   'vehicles.imageNamingExamplePlate': 'ABC1234_side.jpg',
-  'vehicles.imageNamingExampleFolder': 'WVWZZZ1KZBW123456/ → front.jpg, side.jpg'
+  'vehicles.imageNamingExampleFolder': 'WVWZZZ1KZBW123456/ → front.jpg, side.jpg',
+
+  // New keys for vehicle preview localization
+  'vehicles.noDescription': 'Ingen beskrivelse tilgængelig',
+  'vehicles.importCosts': 'Importomkostninger',
+  'vehicles.loginToContact': 'Log ind for at kontakte',
+  'vehicles.commissionSaleLabel': 'Provisionssalg',
+  'vehicles.pvp': 'Vejledende pris',
+  'vehicles.professional': 'Professionel',
+  'vehicles.private': 'Privat',
+  'datasheet.title': 'Datablad',
 };

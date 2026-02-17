@@ -93,5 +93,7 @@ export default {
   'common.showOriginal': 'Mostrar original',
   'common.translatedFrom': 'Traduzido de',
   'common.viewDetails': 'Ver detalhes',
-  'common.noData': 'Nenhum dado disponível'
+  'common.noData': 'Nenhum dado disponível',
+  'common.user': 'Utilizador',
+  'common.owner': 'Proprietário',
 };

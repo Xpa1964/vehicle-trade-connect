@@ -341,4 +341,14 @@ export default {
   'vehicles.truck': 'Truck',
   'vehicles.motorcycle': 'Motorcycle',
   'vehicles.other': 'Other',
+
+  // New keys for vehicle preview localization
+  'vehicles.noDescription': 'No description available',
+  'vehicles.importCosts': 'Import costs',
+  'vehicles.loginToContact': 'Log in to contact',
+  'vehicles.commissionSaleLabel': 'Commission Sale',
+  'vehicles.pvp': 'RRP',
+  'vehicles.professional': 'Professional',
+  'vehicles.private': 'Private',
+  'datasheet.title': 'Data Sheet',
 };
