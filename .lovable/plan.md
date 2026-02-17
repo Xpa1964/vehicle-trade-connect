@@ -1,46 +1,58 @@
 
-# Aplicar estilo de clasificacion con celdas individuales a las fichas de vehiculos
+# Rediseño Premium de la Ficha Técnica Descargable
 
 ## Resumen
-Transformar la seccion de especificaciones tecnicas de los vehiculos del formato actual (texto plano con iconos en linea) al estilo de "celdas individuales con borde" que se ve en el mockup: una cuadricula 3x3 donde cada especificacion tiene su propia celda con fondo oscuro, borde sutil, icono y valor centrados.
+Reemplazar el contenido HTML generado por `VehicleDataSheet.tsx` con un diseño premium tipo catálogo automotriz profesional, siguiendo el briefing proporcionado. No se crea ninguna página nueva; se sustituye el HTML que se abre en la ventana de impresión.
 
-## Componentes afectados
+## Cambios en el diseño del PDF
 
-### 1. VehicleTechnicalData.tsx (Ficha de detalle del vehiculo)
-- Reemplazar el grid actual de `grid-cols-3 gap-x-4 gap-y-3` con items en texto plano
-- Cada especificacion se convierte en una celda individual con:
-  - Fondo `bg-muted/50` con borde `border border-border`
-  - Esquinas redondeadas `rounded-lg`
-  - Padding interior `p-3`
-  - Icono y valor centrados verticalmente
-  - Texto del valor en blanco/foreground, etiqueta en muted
+### Header (Cabecera)
+- Imagen hero del vehículo a gran tamaño (ancho completo, altura controlada con object-cover)
+- Nombre del vehículo en tipografía grande y elegante
+- Subtítulo: "Ficha técnica profesional del vehículo"
+- Precio prominente con nota de IVA en un banner con gradiente naranja
 
-### 2. VehicleCard.tsx (Tarjetas en listados)
-- Aplicar el mismo patron de celdas al grid de 2 columnas existente
-- Cada dato (km, combustible, transmision, puertas) en su propia celda con borde
-- Mantener el layout compacto adaptado al tamano de la tarjeta
+### Key Information (Fila de datos clave)
+- Fila horizontal con 5 tarjetas con iconos SVG inline:
+  - Año, Kilometraje, Combustible, Transmisión, Ubicación
+- Cada tarjeta con fondo gris claro, borde izquierdo naranja y sombra suave
 
-### 3. VehicleDetailsCard.tsx (Card alternativa de detalles)
-- Mismo tratamiento de celdas individuales para consistencia visual
+### Descripcion del vehiculo
+- Parrafo profesional con el campo `vehicle.description`
+
+### Technical Details (Detalles tecnicos)
+- Grid de 2 columnas con tarjetas tipo card con sombra suave:
+  - Color, Combustible, Transmision, Kilometraje, VIN, Potencia, Cilindrada, Puertas, Emisiones CO2, Norma Euro, Acepta intercambios
+
+### Equipment (Equipamiento)
+- Lista con iconos check en verde para cada item
+- Layout en 2-3 columnas
+
+### Vehicle Condition (Estado del vehiculo)
+- Card destacada con borde verde o rojo segun haya danos
+- Texto: "Sin danos reportados" / lista de danos si los hay
+- Badges: "Vehiculo revisado", "Disponible"
+
+### Footer
+- Logo Kontact VO centrado
+- Texto: "Marketplace Automotriz Profesional"
+- Fecha de generacion
+- CTA: "Ver vehiculo en la plataforma"
 
 ## Detalles tecnicos
 
-Estilo CSS de cada celda:
-```
-className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3"
-```
+### Archivo a modificar
+- `src/components/vehicle/VehicleDataSheet.tsx` - Unico archivo. Se reescribe el template HTML dentro de `handleDownloadPDF` con el nuevo diseno premium.
 
-La estructura interna de cada celda:
-```
-<div className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3">
-  <Icon className="h-4 w-4 text-primary/70 flex-shrink-0" />
-  <span className="text-sm font-semibold text-foreground">{value}</span>
-</div>
-```
+### Estructura del componente (sin cambios)
+- Se mantiene el mismo flujo: boton "Descargar PDF" abre `window.open()` con HTML estilizado
+- Se mantiene el hook `useEnhancedVehicleData` para obtener equipamiento, danos e imagen
+- Se mantienen las traducciones existentes
 
-Se eliminan las etiquetas redundantes (ej: "Ano:", "Combustible:") y se deja solo el icono + valor, como en el mockup, para un aspecto mas limpio y visual.
-
-## Archivos a modificar
-- `src/components/vehicle/preview/VehicleTechnicalData.tsx` - Grid principal de la ficha
-- `src/components/vehicle/VehicleCard.tsx` - Tarjetas del listado
-- `src/components/vehicle/VehicleDetailsCard.tsx` - Card alternativa
+### Estilo del nuevo HTML
+- Fuente: Inter (Google Fonts)
+- Colores: blanco (#ffffff), gris claro (#f8fafc), azul oscuro (#0f172a), acento naranja (#f97316)
+- Cards con `border-radius: 12px`, `box-shadow: 0 1px 3px rgba(0,0,0,0.1)`
+- Espaciado generoso (white space)
+- Iconos SVG inline para los datos clave (sin dependencia de Lucide en el HTML de impresion)
+- Layout responsivo para impresion A4
