@@ -409,11 +409,11 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
 
 /* ─── Spec Item Component ─── */
 const SpecItem: React.FC<{ icon: React.ReactNode; label: string; value: string }> = ({ icon, label, value }) => (
-  <div className="flex items-center gap-3 p-3 bg-secondary/40 rounded-xl">
-    <div className="text-muted-foreground flex-shrink-0">{icon}</div>
+  <div className="flex items-center gap-3 p-3 rounded-xl border border-white/[0.12] hover:-translate-y-0.5 transition-all duration-200" style={{ background: 'hsl(222, 20%, 22%)', boxShadow: '0 4px 14px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)' }}>
+    <div className="text-primary/70 flex-shrink-0">{icon}</div>
     <div className="min-w-0">
       <p className="text-xs text-muted-foreground leading-none">{label}</p>
-      <p className="text-sm font-medium text-foreground truncate mt-0.5">{value}</p>
+      <p className="text-sm font-semibold text-foreground truncate mt-0.5">{value}</p>
     </div>
   </div>
 );
