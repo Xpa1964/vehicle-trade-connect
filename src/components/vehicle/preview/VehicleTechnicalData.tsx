@@ -124,7 +124,7 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
               ].filter(item => item.show).map((item, idx) => {
                 const Icon = item.icon;
                 return (
-                  <div key={idx} className="flex items-center gap-2 bg-muted/50 border border-border rounded-lg p-3 shadow-[0_2px_6px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_10px_rgba(0,0,0,0.4)] hover:-translate-y-0.5 transition-all duration-200" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+                  <div key={idx} className="flex items-center gap-2 rounded-lg p-3 border border-white/[0.08] hover:-translate-y-0.5 transition-all duration-200" style={{ background: 'hsl(222, 28%, 10%)', boxShadow: '0 4px 12px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                     <Icon className="h-4 w-4 text-primary/70 flex-shrink-0" />
                     <span className="text-sm font-semibold text-foreground">{item.value}</span>
                   </div>

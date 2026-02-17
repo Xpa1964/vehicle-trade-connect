@@ -82,19 +82,19 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
       <CardContent className="space-y-3">
         {/* Vehicle Details */}
         <div className="grid grid-cols-2 gap-1.5">
-          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5" style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+          <div className="flex items-center gap-1.5 rounded-md px-2 py-1.5 border border-white/[0.08]" style={{ background: 'hsl(222, 28%, 10%)', boxShadow: '0 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
             <Gauge className="w-3.5 h-3.5 text-primary/70 flex-shrink-0" />
             <span className="text-xs font-semibold text-foreground">{vehicle.mileage?.toLocaleString()} km</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5" style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+          <div className="flex items-center gap-1.5 rounded-md px-2 py-1.5 border border-white/[0.08]" style={{ background: 'hsl(222, 28%, 10%)', boxShadow: '0 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
             <Fuel className="w-3.5 h-3.5 text-primary/70 flex-shrink-0" />
             <span className="text-xs font-semibold text-foreground capitalize">{vehicle.fuel}</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5" style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+          <div className="flex items-center gap-1.5 rounded-md px-2 py-1.5 border border-white/[0.08]" style={{ background: 'hsl(222, 28%, 10%)', boxShadow: '0 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
             <Settings className="w-3.5 h-3.5 text-primary/70 flex-shrink-0" />
             <span className="text-xs font-semibold text-foreground capitalize">{vehicle.transmission}</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5" style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+          <div className="flex items-center gap-1.5 rounded-md px-2 py-1.5 border border-white/[0.08]" style={{ background: 'hsl(222, 28%, 10%)', boxShadow: '0 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
             <Users className="w-3.5 h-3.5 text-primary/70 flex-shrink-0" />
             <span className="text-xs font-semibold text-foreground">{vehicle.doors} {t('vehicles.doors').toLowerCase()}</span>
           </div>

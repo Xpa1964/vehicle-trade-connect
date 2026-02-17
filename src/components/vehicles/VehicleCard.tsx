@@ -100,20 +100,20 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
           {/* Vehicle Details */}
           <div className="grid grid-cols-2 gap-1.5 mb-3">
-            <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5" style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+            <div className="flex items-center gap-1.5 rounded-md px-2 py-1.5 border border-white/[0.08]" style={{ background: 'hsl(222, 28%, 10%)', boxShadow: '0 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
               <Calendar className="h-3 w-3 text-primary/70 flex-shrink-0" />
               <span className="text-xs font-semibold text-foreground">{vehicle.year}</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5" style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+            <div className="flex items-center gap-1.5 rounded-md px-2 py-1.5 border border-white/[0.08]" style={{ background: 'hsl(222, 28%, 10%)', boxShadow: '0 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
               <Gauge className="h-3 w-3 text-primary/70 flex-shrink-0" />
               <span className="text-xs font-semibold text-foreground">{formatMileage(vehicle.mileage || 0)} km</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5" style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+            <div className="flex items-center gap-1.5 rounded-md px-2 py-1.5 border border-white/[0.08]" style={{ background: 'hsl(222, 28%, 10%)', boxShadow: '0 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
               <Fuel className="h-3 w-3 text-primary/70 flex-shrink-0" />
               <span className="text-xs font-semibold text-foreground">{vehicle.fuel}</span>
             </div>
             {vehicle.countryCode && (
-              <div className="flex items-center gap-1.5 bg-muted/50 border border-border rounded-md px-2 py-1.5" style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
+              <div className="flex items-center gap-1.5 rounded-md px-2 py-1.5 border border-white/[0.08]" style={{ background: 'hsl(222, 28%, 10%)', boxShadow: '0 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                 <MapPin className="h-3 w-3 text-primary/70 flex-shrink-0" />
                 <span className="text-xs font-semibold text-foreground">{vehicle.countryCode.toUpperCase()}</span>
               </div>
