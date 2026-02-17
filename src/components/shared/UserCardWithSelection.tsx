@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import UserRatingBadge from './UserRatingBadge';
 import { useRatings } from '@/hooks/useRatings';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { directChatService } from '@/services/directChat';
 import { toast } from 'sonner';
 
@@ -36,6 +37,7 @@ const UserCardWithSelection: React.FC<UserCardWithSelectionProps> = ({
   showSelection = false
 }) => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { ratingSummary } = useRatings(userId);
   
@@ -56,12 +58,12 @@ const UserCardWithSelection: React.FC<UserCardWithSelectionProps> = ({
 
   const handleDirectContact = async () => {
     if (!user) {
-      toast.error('Debes iniciar sesión para contactar');
+      toast.error(t('toast.loginRequired'));
       return;
     }
 
     if (user.id === userId) {
-      toast.error('No puedes contactarte a ti mismo');
+      toast.error(t('toast.contactError'));
       return;
     }
 
@@ -73,7 +75,7 @@ const UserCardWithSelection: React.FC<UserCardWithSelectionProps> = ({
 
     if (conversationId) {
       navigate('/messages');
-      toast.success('Conversación iniciada correctamente');
+      toast.success(t('toast.chatStarted'));
     }
   };
 

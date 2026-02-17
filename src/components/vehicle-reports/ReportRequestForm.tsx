@@ -72,7 +72,7 @@ export const ReportRequestForm: React.FC<ReportRequestFormProps> = ({ onSuccess 
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast.error('Debes iniciar sesión para solicitar un informe');
+        toast.error(t('toast.loginRequired'));
         return;
       }
 
@@ -99,13 +99,13 @@ export const ReportRequestForm: React.FC<ReportRequestFormProps> = ({ onSuccess 
 
       if (error) throw error;
 
-      toast.success('Solicitud enviada correctamente. Te notificaremos cuando esté lista.');
+      toast.success(t('toast.reportSubmitted'));
 
       form.reset();
       onSuccess?.();
     } catch (error) {
       console.error('Error submitting report request:', error);
-      toast.error('No se pudo enviar la solicitud. Inténtalo de nuevo.');
+      toast.error(t('toast.reportError'));
     } finally {
       setIsSubmitting(false);
     }

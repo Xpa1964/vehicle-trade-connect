@@ -35,6 +35,7 @@ import community from './dk-modules/community';
 import api from './dk-modules/api';
 import xlsxTemplate from './dk-modules/xlsxTemplate';
 import xlsxValidation from './dk-modules/xlsxValidation';
+import toast from './dk-modules/toast';
 
 export default {
   ...navigation,
@@ -73,5 +74,6 @@ export default {
   ...community,
   ...api,
   ...xlsxTemplate,
-  ...xlsxValidation
+  ...xlsxValidation,
+  ...toast
 };

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface PrivacySettingsProps {
   initialSettings?: {
@@ -18,6 +19,7 @@ interface PrivacySettingsProps {
 
 const PrivacySettings: React.FC<PrivacySettingsProps> = ({ initialSettings }) => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [settings, setSettings] = useState({
     show_contact_details: initialSettings?.show_contact_details ?? true,
     show_location_details: initialSettings?.show_location_details ?? false,
@@ -34,7 +36,7 @@ const PrivacySettings: React.FC<PrivacySettingsProps> = ({ initialSettings }) =>
 
   const saveSettings = async () => {
     if (!user?.id) {
-      toast.error('Usuario no encontrado');
+      toast.error(t('toast.privacyError'));
       return;
     }
 
@@ -47,14 +49,14 @@ const PrivacySettings: React.FC<PrivacySettingsProps> = ({ initialSettings }) =>
 
       if (error) {
         console.error('Error updating privacy settings:', error);
-        toast.error('Error al guardar la configuración');
+        toast.error(t('toast.privacyError'));
         return;
       }
 
-      toast.success('Configuración de privacidad actualizada');
+      toast.success(t('toast.privacyUpdated'));
     } catch (error) {
       console.error('Unexpected error:', error);
-      toast.error('Error inesperado al guardar');
+      toast.error(t('toast.privacyError'));
     } finally {
       setSaving(false);
     }

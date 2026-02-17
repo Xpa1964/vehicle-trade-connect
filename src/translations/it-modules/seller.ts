@@ -17,5 +17,11 @@ export default {
   'seller.businessTypes.trader': 'Commerciante',
   'seller.businessTypes.other': 'Altro',
   'seller.ratings': 'valutazioni',
-  'seller.verified': 'verificate'
+  'seller.verified': 'verificate',
+  'seller.contactTitle': 'Contatta il venditore',
+  'seller.contactDescription': 'Invia un messaggio a {name}',
+  'seller.messageLabel': 'Contenuto del messaggio',
+  'seller.messagePlaceholder': 'Scrivi il tuo messaggio qui...',
+  'seller.sending': 'Invio in corso...',
+  'seller.send': 'Invia',
 };
