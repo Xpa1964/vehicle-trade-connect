@@ -49,14 +49,14 @@ const DamageAccessCard: React.FC<DamageAccessCardProps> = ({
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-3">
             <AlertTriangle className="h-5 w-5 text-primary" />
-            <span className="font-medium text-foreground">Estado</span>
+            <span className="font-medium text-foreground">{t('vehicles.condition')}</span>
           </div>
           <Badge variant="secondary" className="px-2 py-1 bg-secondary text-foreground">
             {damagesCount}
           </Badge>
         </div>
         <p className="text-sm text-muted-foreground">
-          Acceder para conocer el estado del vehículo
+          {t('vehicles.damagesDescription')}
         </p>
       </CardContent>
     </Card>

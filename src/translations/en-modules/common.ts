@@ -73,5 +73,6 @@ export default {
   'common.learnMore': 'Learn more',
   'common.brandName': 'KONTACT',
   'common.brandSuffix': 'AUTOMOTIVE',
-  'common.goBack': 'Go back',
+  'common.user': 'User',
+  'common.owner': 'Owner',
 };

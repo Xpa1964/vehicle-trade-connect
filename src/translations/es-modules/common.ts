@@ -93,5 +93,8 @@ export default {
   'common.rights': 'Todos los derechos reservados',
   'common.learnMore': 'Saber más',
   'common.brandName': 'KONTACT',
-  'common.brandSuffix': 'AUTOMOTIVE'
+  'common.brandSuffix': 'AUTOMOTIVE',
+  'common.user': 'Usuario',
+  'common.owner': 'Propietario',
+  'common.goBack': 'Volver',
 };

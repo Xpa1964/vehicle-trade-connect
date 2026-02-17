@@ -154,7 +154,7 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
                   onClick={() => navigate(`/import-calculator?from_vehicle=${vehicle.id}&vehicle_info=${encodeURIComponent(`${vehicle.brand} ${vehicle.model} ${vehicle.year}`)}`)}
                 >
                   <Calculator className="h-4 w-4 mr-2" />
-                  Conoce los gastos de importación
+                  {t('vehicles.importCosts')}
                 </Button>
               )}
             </div>
@@ -167,7 +167,7 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
         <ContactSellerDialog
           sellerId={vehicle.user_id}
           vehicleId={vehicle.id}
-          sellerName={sellerProfile.full_name || sellerProfile.company_name || 'Vendedor'}
+          sellerName={sellerProfile.full_name || sellerProfile.company_name || t('common.user')}
           isOpen={isContactDialogOpen}
           onOpenChange={setIsContactDialogOpen}
         />

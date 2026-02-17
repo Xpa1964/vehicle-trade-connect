@@ -99,4 +99,20 @@ export default {
   'exchanges.noVehiclesInInventory': 'No vehicles in your inventory',
   'exchanges.cannotExchangeWithSelf': 'You cannot propose an exchange with your own vehicle',
   'exchanges.vehicleNotBelongsToUser': 'The selected vehicle does not belong to you',
+
+  // New keys for exchanges page
+  'exchanges.subtitle': 'Find exchange opportunities',
+  'exchanges.search': 'Search vehicles',
+  'exchanges.searchDescription': 'Search vehicles other users want to exchange',
+  'exchanges.searchPlaceholder': 'Search by brand, model...',
+  'exchanges.createRequest': 'Create Exchange Request',
+  'exchanges.availableVehicles': 'Available Vehicles',
+  'exchanges.exchangeRequestsDescription': 'Exchange requests published by users',
+  'exchanges.unknownVehicle': 'Vehicle not specified',
+  'exchanges.yours': 'Your request',
+  'exchanges.contactPublisher': 'Contact',
+  'exchanges.acceptsExchange': 'Accepts exchange',
+  'exchanges.noVehiclesFound': 'No vehicles found matching your search',
+  'exchanges.noVehicles': 'No vehicles available for exchange at this time',
+  'exchanges.ownVehiclesExcluded': 'Note: Your own vehicles are not shown',
 };

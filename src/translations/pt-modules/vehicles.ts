@@ -431,5 +431,15 @@ export default {
   'vehicles.imageNamingByFolder': 'Por Pastas:',
   'vehicles.imageNamingExampleVin': 'WVWZZZ1KZBW123456_frontal.jpg',
   'vehicles.imageNamingExamplePlate': 'ABC1234_lateral.jpg',
-  'vehicles.imageNamingExampleFolder': 'WVWZZZ1KZBW123456/ → frontal.jpg, lateral.jpg'
+  'vehicles.imageNamingExampleFolder': 'WVWZZZ1KZBW123456/ → frontal.jpg, lateral.jpg',
+
+  // New keys for vehicle preview localization
+  'vehicles.noDescription': 'Nenhuma descrição disponível',
+  'vehicles.importCosts': 'Custos de importação',
+  'vehicles.loginToContact': 'Faça login para contactar',
+  'vehicles.commissionSaleLabel': 'Venda Comissionada',
+  'vehicles.pvp': 'PVP',
+  'vehicles.professional': 'Profissional',
+  'vehicles.private': 'Particular',
+  'datasheet.title': 'Ficha Técnica',
 };

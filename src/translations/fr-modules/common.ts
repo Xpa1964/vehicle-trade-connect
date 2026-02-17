@@ -75,5 +75,7 @@ export default {
   'common.important': 'Important',
   'common.learnMore': 'En savoir plus',
   'common.brandName': 'KONTACT',
-  'common.brandSuffix': 'AUTOMOTIVE'
+  'common.brandSuffix': 'AUTOMOTIVE',
+  'common.user': 'Utilisateur',
+  'common.owner': 'Propriétaire',
 };

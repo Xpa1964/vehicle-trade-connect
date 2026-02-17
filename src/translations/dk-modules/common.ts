@@ -71,5 +71,7 @@ export default {
   'common.important': 'Vigtigt',
   'common.learnMore': 'Lær mere',
   'common.brandName': 'KONTACT',
-  'common.brandSuffix': 'AUTOMOTIVE'
+  'common.brandSuffix': 'AUTOMOTIVE',
+  'common.user': 'Bruger',
+  'common.owner': 'Ejer',
 };

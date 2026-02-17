@@ -438,4 +438,14 @@ export default {
   'equipment.driving_modes': 'Modes de conduite',
   'equipment.antilock_braking_system': 'Système de freinage antiblocage',
   'equipment.startstop_system': 'Système Start/Stop',
+
+  // New keys for vehicle preview localization
+  'vehicles.noDescription': 'Aucune description disponible',
+  'vehicles.importCosts': 'Frais d\'importation',
+  'vehicles.loginToContact': 'Connectez-vous pour contacter',
+  'vehicles.commissionSaleLabel': 'Vente Commissionnée',
+  'vehicles.pvp': 'PPC',
+  'vehicles.professional': 'Professionnel',
+  'vehicles.private': 'Particulier',
+  'datasheet.title': 'Fiche Technique',
 };

@@ -58,4 +58,23 @@ export default {
   'exchanges.exchangeErrorDescription': 'Ocorreu um erro ao publicar sua solicitação de troca. Tente novamente.',
   'exchanges.chooseOptionTitle': 'Escolha uma opção para continuar',
   'exchanges.chooseOptionDescription': 'Você pode selecionar um veículo que já tem registrado ou inserir os dados de um veículo novo.',
+
+  // New keys for exchanges page
+  'exchanges.subtitle': 'Encontre oportunidades de troca',
+  'exchanges.search': 'Buscar veículos',
+  'exchanges.searchDescription': 'Busque veículos que outros usuários querem trocar',
+  'exchanges.searchPlaceholder': 'Buscar por marca, modelo...',
+  'exchanges.createRequest': 'Criar Solicitação de Troca',
+  'exchanges.availableVehicles': 'Veículos Disponíveis',
+  'exchanges.exchangeRequestsDescription': 'Solicitações de troca publicadas por usuários',
+  'exchanges.unknownVehicle': 'Veículo não especificado',
+  'exchanges.yours': 'Sua solicitação',
+  'exchanges.contactPublisher': 'Contactar',
+  'exchanges.acceptsExchange': 'Aceita troca',
+  'exchanges.noVehiclesFound': 'Nenhum veículo encontrado correspondente à sua busca',
+  'exchanges.noVehicles': 'Nenhum veículo disponível para troca no momento',
+  'exchanges.ownVehiclesExcluded': 'Nota: Seus próprios veículos não são exibidos',
+  'exchanges.noExchanges': 'Nenhuma solicitação de troca disponível',
+  'exchanges.createFirst': 'Crie sua primeira solicitação de troca',
+  'exchanges.proposeExchange': 'Propor Troca',
 };

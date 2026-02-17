@@ -82,4 +82,20 @@ export default {
   'exchanges.sendCounterOffer': 'Enviar Contraoferta',
   'exchanges.chooseOptionTitle': 'Elige una opción para continuar',
   'exchanges.chooseOptionDescription': 'Puedes seleccionar un vehículo que ya tienes registrado o ingresar los datos de un vehículo nuevo.',
+
+  // New keys for exchanges page
+  'exchanges.subtitle': 'Encuentra oportunidades de intercambio',
+  'exchanges.search': 'Buscar vehículos',
+  'exchanges.searchDescription': 'Busca vehículos que otros usuarios quieren intercambiar',
+  'exchanges.searchPlaceholder': 'Buscar por marca, modelo...',
+  'exchanges.createRequest': 'Crear Solicitud de Intercambio',
+  'exchanges.availableVehicles': 'Vehículos Disponibles',
+  'exchanges.exchangeRequestsDescription': 'Solicitudes de intercambio publicadas por los usuarios',
+  'exchanges.unknownVehicle': 'Vehículo no especificado',
+  'exchanges.yours': 'Tu solicitud',
+  'exchanges.contactPublisher': 'Contactar',
+  'exchanges.acceptsExchange': 'Acepta intercambio',
+  'exchanges.noVehiclesFound': 'No se encontraron vehículos que coincidan con tu búsqueda',
+  'exchanges.noVehicles': 'No hay vehículos disponibles para intercambio en este momento',
+  'exchanges.ownVehiclesExcluded': 'Nota: Tus propios vehículos no se muestran en esta lista',
 };

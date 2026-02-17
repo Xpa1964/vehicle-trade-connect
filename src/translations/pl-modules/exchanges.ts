@@ -96,5 +96,21 @@ export default {
   'exchanges.newVehicleTab': 'Nowy Pojazd',
   'exchanges.vehicleSelectionTab': 'Wybór Pojazdu',
   'exchanges.vehicleDetailsTab': 'Szczegóły Pojazdu',
-  'exchanges.noVehiclesInInventory': 'Brak pojazdów w Twoim inwentarzu'
+  'exchanges.noVehiclesInInventory': 'Brak pojazdów w Twoim inwentarzu',
+
+  // New keys for exchanges page
+  'exchanges.subtitle': 'Znajdź możliwości wymiany',
+  'exchanges.search': 'Szukaj pojazdów',
+  'exchanges.searchDescription': 'Szukaj pojazdów, które inni użytkownicy chcą wymienić',
+  'exchanges.searchPlaceholder': 'Szukaj po marce, modelu...',
+  'exchanges.createRequest': 'Utwórz Prośbę o Wymianę',
+  'exchanges.availableVehicles': 'Dostępne Pojazdy',
+  'exchanges.exchangeRequestsDescription': 'Prośby o wymianę opublikowane przez użytkowników',
+  'exchanges.unknownVehicle': 'Pojazd nie określony',
+  'exchanges.yours': 'Twoja prośba',
+  'exchanges.contactPublisher': 'Kontakt',
+  'exchanges.acceptsExchange': 'Akceptuje wymianę',
+  'exchanges.noVehiclesFound': 'Nie znaleziono pojazdów pasujących do wyszukiwania',
+  'exchanges.noVehicles': 'Brak pojazdów dostępnych do wymiany w tej chwili',
+  'exchanges.ownVehiclesExcluded': 'Uwaga: Twoje własne pojazdy nie są wyświetlane',
 };

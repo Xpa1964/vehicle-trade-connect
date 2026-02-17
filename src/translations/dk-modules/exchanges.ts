@@ -96,5 +96,21 @@ export default {
   'exchanges.newVehicleTab': 'Nyt Køretøj',
   'exchanges.vehicleSelectionTab': 'Køretøjsvalg',
   'exchanges.vehicleDetailsTab': 'Køretøjsdetaljer',
-  'exchanges.noVehiclesInInventory': 'Ingen køretøjer i dit lager'
+  'exchanges.noVehiclesInInventory': 'Ingen køretøjer i dit lager',
+
+  // New keys for exchanges page
+  'exchanges.subtitle': 'Find udvekslingsmuligheder',
+  'exchanges.search': 'Søg køretøjer',
+  'exchanges.searchDescription': 'Søg køretøjer som andre brugere vil udveksle',
+  'exchanges.searchPlaceholder': 'Søg efter mærke, model...',
+  'exchanges.createRequest': 'Opret Udvekslingsanmodning',
+  'exchanges.availableVehicles': 'Tilgængelige Køretøjer',
+  'exchanges.exchangeRequestsDescription': 'Udvekslingsanmodninger udgivet af brugere',
+  'exchanges.unknownVehicle': 'Køretøj ikke angivet',
+  'exchanges.yours': 'Din anmodning',
+  'exchanges.contactPublisher': 'Kontakt',
+  'exchanges.acceptsExchange': 'Accepterer udveksling',
+  'exchanges.noVehiclesFound': 'Ingen køretøjer fundet der matcher din søgning',
+  'exchanges.noVehicles': 'Ingen køretøjer tilgængelige for udveksling i øjeblikket',
+  'exchanges.ownVehiclesExcluded': 'Bemærk: Dine egne køretøjer vises ikke',
 };

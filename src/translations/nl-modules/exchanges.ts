@@ -96,5 +96,21 @@ export default {
   'exchanges.newVehicleTab': 'Nieuw',
   'exchanges.vehicleSelectionTab': 'Selectie',
   'exchanges.vehicleDetailsTab': 'Details',
-  'exchanges.noVehiclesInInventory': 'Geen voertuigen'
+  'exchanges.noVehiclesInInventory': 'Geen voertuigen',
+
+  // New keys for exchanges page
+  'exchanges.subtitle': 'Vind uitwisselingsmogelijkheden',
+  'exchanges.search': 'Voertuigen zoeken',
+  'exchanges.searchDescription': 'Zoek voertuigen die andere gebruikers willen uitwisselen',
+  'exchanges.searchPlaceholder': 'Zoeken op merk, model...',
+  'exchanges.createRequest': 'Uitwisselingsverzoek Aanmaken',
+  'exchanges.availableVehicles': 'Beschikbare Voertuigen',
+  'exchanges.exchangeRequestsDescription': 'Door gebruikers gepubliceerde uitwisselingsverzoeken',
+  'exchanges.unknownVehicle': 'Voertuig niet gespecificeerd',
+  'exchanges.yours': 'Uw verzoek',
+  'exchanges.contactPublisher': 'Contact',
+  'exchanges.acceptsExchange': 'Accepteert uitwisseling',
+  'exchanges.noVehiclesFound': 'Geen voertuigen gevonden die overeenkomen met uw zoekopdracht',
+  'exchanges.noVehicles': 'Momenteel geen voertuigen beschikbaar voor uitwisseling',
+  'exchanges.ownVehiclesExcluded': 'Let op: Uw eigen voertuigen worden niet weergegeven',
 };

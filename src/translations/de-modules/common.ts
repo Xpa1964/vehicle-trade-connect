@@ -88,5 +88,7 @@ export default {
   'common.rights': 'Alle Rechte vorbehalten',
   'common.learnMore': 'Mehr erfahren',
   'common.brandName': 'KONTACT',
-  'common.brandSuffix': 'AUTOMOTIVE'
+  'common.brandSuffix': 'AUTOMOTIVE',
+  'common.user': 'Benutzer',
+  'common.owner': 'Eigentümer',
 };
