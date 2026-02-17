@@ -69,4 +69,10 @@ export default {
   'bulletin.vehicle_search_desc': 'Find specific vehicles or post your requirements',
   'bulletin.available_vehicles_desc': 'Explore vehicles currently available for purchase or export',
   'bulletin.professional_services_desc': 'Access specialized services for the automotive sector',
+  'bulletin.featuredAnnouncement': 'Featured Announcement',
+  'bulletin.featuredDescription': 'Featured announcements appear at the top of the list with greater visibility for 30 days.',
+  'bulletin.attachments': 'File attachments',
+  'bulletin.attachmentsDescription': 'You can select up to 5 files. They will be uploaded after creating the announcement.',
+  'bulletin.share': 'Share',
+  'bulletin.publishedIn': 'Article published on Kontact Automotive',
 };

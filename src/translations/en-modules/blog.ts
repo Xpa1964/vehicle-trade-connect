@@ -7,5 +7,7 @@ export default {
   'blog.date': 'Date',
   'blog.category': 'Category',
   'blog.tags': 'Tags',
-  'blog.share': 'Share'
+  'blog.share': 'Share',
+  'blog.postNotFound': 'Blog post not found',
+  'blog.editPost': 'Edit Blog Post',
 };

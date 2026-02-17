@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast as sonnerToast } from 'sonner';
 import { logSystemActivity } from '@/utils/activityLogger';
 import { useCallback } from 'react';
+import { getTranslation } from '@/utils/getTranslation';
 
 export const useRegister = () => {
   const { toast } = useToast();
@@ -25,7 +26,7 @@ export const useRegister = () => {
 
       if (signUpError) {
         toast({
-          title: "Error de registro",
+          title: getTranslation('toast.registerError'),
           description: signUpError.message,
           variant: "destructive",
         });
@@ -39,9 +40,7 @@ export const useRegister = () => {
         return false;
       }
 
-      sonnerToast.success("Registro exitoso", {
-        description: "Tu cuenta ha sido creada correctamente"
-      });
+      sonnerToast.success(getTranslation('toast.registerComplete'));
       
       // Log successful registration
       if (data?.user) {
@@ -61,7 +60,7 @@ export const useRegister = () => {
       console.error('[useRegister] Registration error:', error);
       toast({
         title: "Error",
-        description: "Ha ocurrido un error inesperado",
+        description: getTranslation('toast.registerError'),
         variant: "destructive",
       });
       

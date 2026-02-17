@@ -38,7 +38,7 @@ export const useAnnouncementAttachments = (announcementId?: string) => {
       setAttachments(data || []);
     } catch (error) {
       console.error('Error in fetchAttachments:', error);
-      toast.error('Error al cargar archivos adjuntos');
+      toast.error('Error loading attachments');
     } finally {
       setLoading(false);
     }
@@ -81,11 +81,11 @@ export const useAnnouncementAttachments = (announcementId?: string) => {
 
       // Actualizar estado local
       setAttachments(prev => prev.filter(att => att.id !== attachmentId));
-      toast.success('Archivo eliminado exitosamente');
+      toast.success('Attachment deleted');
       
     } catch (error) {
       console.error('Error deleting attachment:', error);
-      toast.error('Error al eliminar archivo');
+      toast.error('Error deleting attachment');
     } finally {
       setDeleting(null);
     }

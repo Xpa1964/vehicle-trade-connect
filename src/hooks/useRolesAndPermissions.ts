@@ -148,7 +148,7 @@ export const useRolesAndPermissions = () => {
         });
       } catch (error: any) {
         console.error("Error loading roles and permissions:", error);
-        toast.error("Error al cargar roles y permisos");
+        toast.error("Error loading roles and permissions");
         
         // Fallback to minimal mock data if everything fails
         setAllPermissions([

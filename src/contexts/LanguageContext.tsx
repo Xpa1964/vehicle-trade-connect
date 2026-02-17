@@ -124,15 +124,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children, on
       }
     }
     
-    // 3. Usar fallback proporcionado manualmente
-    if (params?.fallback) {
-      if (import.meta.env.DEV) {
-        console.warn(
-          `🌐 [LanguageContext] Using manual fallback for key: ${key} in ${currentLanguage}`
-        );
-      }
-      return params.fallback;
-    }
+    // 3. Manual fallback parameter is intentionally ignored to prevent
+    // Spanish text from leaking through when another language is selected.
+    // The fallback chain (current -> en -> es) handles all cases.
     
     // 4. En desarrollo, mostrar la clave claramente. En producción, última parte de la clave
     if (import.meta.env.DEV) {

@@ -5,14 +5,15 @@ import { toast } from 'sonner';
 export const deleteVehicleWithRelatedRecords = async (
   vehicleId: string,
   userId: string | undefined,
-  onSuccess?: () => void
+  onSuccess?: () => void,
+  t?: (key: string) => string
 ) => {
   try {
     console.log(`Starting deletion process for vehicle ${vehicleId} by user ${userId}`);
     
     if (!userId) {
       console.error('User ID is required for deletion');
-      toast.error('Error: Se requiere autenticación para eliminar el vehículo');
+      toast.error(t ? t('toast.vehicleDeleteError') : 'Error deleting vehicle');
       return false;
     }
 
@@ -25,13 +26,13 @@ export const deleteVehicleWithRelatedRecords = async (
     
     if (vehicleCheckError) {
       console.error('Error checking vehicle ownership:', vehicleCheckError);
-      toast.error('Error: No se pudo verificar la propiedad del vehículo');
+      toast.error(t ? t('toast.vehicleDeleteError') : 'Error deleting vehicle');
       return false;
     }
     
     if (vehicleData.user_id !== userId) {
       console.error('User is not the owner of the vehicle');
-      toast.error('Error: No tienes permisos para eliminar este vehículo');
+      toast.error(t ? t('toast.vehicleDeleteError') : 'Error deleting vehicle');
       return false;
     }
 
@@ -147,12 +148,12 @@ export const deleteVehicleWithRelatedRecords = async (
     
     if (vehicleError) {
       console.error('Error deleting vehicle:', vehicleError);
-      toast.error('Error al eliminar el vehículo');
+      toast.error(t ? t('toast.vehicleDeleteError') : 'Error deleting vehicle');
       return false;
     }
     
     console.log('Vehicle deletion completed successfully');
-    toast.success('Vehículo eliminado correctamente');
+    toast.success(t ? t('toast.vehicleDeleted') : 'Vehicle deleted successfully');
     
     if (onSuccess) {
       onSuccess();
@@ -161,7 +162,7 @@ export const deleteVehicleWithRelatedRecords = async (
     return true;
   } catch (error) {
     console.error('Error in cascade deletion process:', error);
-    toast.error('Error durante el proceso de eliminación');
+    toast.error(t ? t('toast.vehicleDeleteError') : 'Error deleting vehicle');
     return false;
   }
 };
