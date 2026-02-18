@@ -36,6 +36,7 @@ import api from './pt-modules/api';
 import xlsxTemplate from './pt-modules/xlsxTemplate';
 import xlsxValidation from './pt-modules/xlsxValidation';
 import toast from './pt-modules/toast';
+import inspection from './pt-modules/inspection';
 
 export default {
   ...navigation,
@@ -75,5 +76,6 @@ export default {
   ...api,
   ...xlsxTemplate,
   ...xlsxValidation,
-  ...toast
+  ...toast,
+  ...inspection
 };

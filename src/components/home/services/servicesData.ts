@@ -48,15 +48,6 @@ export const servicesData: ServiceItem[] = [
     registryId: 'services.messaging'
   },
   {
-    icon: FileText,
-    titleKey: 'services.vehicleReports',
-    descriptionKey: 'services.vehicleReportsDesc',
-    link: '/vehicle-reports-info',
-    gradient: '',
-    backgroundImage: getStaticImagePath('services.inspection'),
-    registryId: 'services.inspection'
-  },
-  {
     icon: RefreshCw,
     titleKey: 'services.exchanges',
     descriptionKey: 'services.exchangesDesc',
