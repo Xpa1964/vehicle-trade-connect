@@ -30,5 +30,7 @@ export default {
   'inspection.premium.f7': 'Anbefalet til fjernkøb',
   'inspection.extras': 'Valgfrie tilvalg',
   'inspection.extras.dgt': 'DGT-rapport',
+  'inspection.extras.dgt.price': '19 €',
   'inspection.extras.carfax': 'CARFAX-rapport',
+  'inspection.extras.carfax.price': '29 €',
 };

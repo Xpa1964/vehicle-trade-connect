@@ -30,5 +30,7 @@ export default {
   'inspection.premium.f7': 'Empfohlen für Fernkäufe',
   'inspection.extras': 'Optionale Extras',
   'inspection.extras.dgt': 'DGT-Bericht',
+  'inspection.extras.dgt.price': '19 €',
   'inspection.extras.carfax': 'CARFAX-Bericht',
+  'inspection.extras.carfax.price': '29 €',
 };
