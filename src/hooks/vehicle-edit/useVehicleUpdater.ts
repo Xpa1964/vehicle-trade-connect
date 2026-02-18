@@ -163,12 +163,11 @@ export const useVehicleUpdater = () => {
         await supabase.from('vehicle_damages').delete().eq('vehicle_id', id);
         const damageItems = formData.damages.map(damage => ({
           vehicle_id: id,
-          damage_type: damage.damage_type,
-          title: damage.title,
+          damage_type: damage.damage_type || damage.title || 'other',
           description: damage.description || null,
-          severity: damage.severity,
+          severity: damage.severity || 'minor',
           location: damage.location || null,
-          estimated_cost: damage.estimated_cost || null
+          repair_cost: damage.estimated_cost || null
         }));
         const { error: damageError } = await supabase
           .from('vehicle_damages')
