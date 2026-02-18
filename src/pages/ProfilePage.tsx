@@ -57,11 +57,22 @@ const ProfilePage: React.FC = () => {
     queryFn: async () => {
       console.log('🔍 Fetching profile for ID:', id);
       
-      const { data, error } = await supabase
+      // Try by primary id first, then by user_id
+      let { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', id)
         .maybeSingle();
+      
+      if (!data && !error) {
+        const result = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', id)
+          .maybeSingle();
+        data = result.data;
+        error = result.error;
+      }
         
       if (error) {
         console.error('Error fetching profile:', error);
