@@ -28,7 +28,8 @@ export function useConversationDataWithDeletion(userId: string | undefined) {
           *,
           vehicles(id, brand, model, year, thumbnailurl)
         `)
-        .or(`and(seller_id.eq.${userId},deleted_by_seller.is.null),and(seller_id.eq.${userId},deleted_by_seller.eq.false),and(buyer_id.eq.${userId},deleted_by_buyer.is.null),and(buyer_id.eq.${userId},deleted_by_buyer.eq.false)`)
+        .or(`seller_id.eq.${userId},buyer_id.eq.${userId}`)
+        .neq('status', 'deleted')
         .order('is_pinned', { ascending: false })
         .order('updated_at', { ascending: false });
         
