@@ -16,7 +16,16 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    const { email, password, userData, profileData, roleData } = await req.json();
+    const { email, password, userData, profileData, roleData, action, userId: targetUserId } = await req.json();
+
+    // Update existing user password
+    if (action === "update_password" && targetUserId) {
+      const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(targetUserId, { password });
+      if (updateError) throw updateError;
+      return new Response(JSON.stringify({ success: true, userId: targetUserId }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     // Create user with admin API (auto-confirmed)
     const { data: user, error: createError } = await supabaseAdmin.auth.admin.createUser({
