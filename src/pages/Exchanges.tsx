@@ -226,7 +226,7 @@ const Exchanges: React.FC = () => {
                                 className="w-28 h-22 object-cover rounded-md border border-border cursor-pointer hover:opacity-80 transition-opacity"
                                 onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
                                 onClick={() => {
-                                  if (request.offered_vehicle_id) navigate(`/vehicles/${request.offered_vehicle_id}`);
+                                  if (request.offered_vehicle_id) navigate(`/vehicle-preview/${request.offered_vehicle_id}`);
                                 }}
                               />
                             </div>
@@ -259,7 +259,7 @@ const Exchanges: React.FC = () => {
                                   size="sm"
                                   variant="link"
                                   className="p-0 h-auto text-primary"
-                                  onClick={() => navigate(`/vehicles/${request.offered_vehicle_id}`)}
+                                  onClick={() => navigate(`/vehicle-preview/${request.offered_vehicle_id}`)}
                                 >
                                   <Eye className="h-3.5 w-3.5 mr-1" />
                                   {t('exchanges.viewVehicle', { fallback: 'Ver ficha del vehículo' })}
