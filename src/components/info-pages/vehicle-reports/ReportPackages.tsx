@@ -51,6 +51,22 @@ const ReportPackages: React.FC<ReportPackagesProps> = ({ translations, lang }) =
                 </li>
               ))}
             </ul>
+            <div className="mt-4 pt-4 border-t border-border/50 space-y-1.5">
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <Plus className="h-3.5 w-3.5 text-primary" />
+                  {t('inspection.extras.dgt')}
+                </span>
+                <span className="text-muted-foreground font-medium">{t('inspection.extras.dgt.price')}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <Plus className="h-3.5 w-3.5 text-primary" />
+                  {t('inspection.extras.carfax')}
+                </span>
+                <span className="text-muted-foreground font-medium">{t('inspection.extras.carfax.price')}</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -75,6 +91,22 @@ const ReportPackages: React.FC<ReportPackagesProps> = ({ translations, lang }) =
                 </li>
               ))}
             </ul>
+            <div className="mt-4 pt-4 border-t border-border/50 space-y-1.5">
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <Plus className="h-3.5 w-3.5 text-primary" />
+                  {t('inspection.extras.dgt')}
+                </span>
+                <span className="text-muted-foreground font-medium">{t('inspection.extras.dgt.price')}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <Plus className="h-3.5 w-3.5 text-primary" />
+                  {t('inspection.extras.carfax')}
+                </span>
+                <span className="text-muted-foreground font-medium">{t('inspection.extras.carfax.price')}</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -96,20 +128,24 @@ const ReportPackages: React.FC<ReportPackagesProps> = ({ translations, lang }) =
                 </li>
               ))}
             </ul>
+            <div className="mt-4 pt-4 border-t border-border/50 space-y-1.5">
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <Plus className="h-3.5 w-3.5 text-primary" />
+                  {t('inspection.extras.dgt')}
+                </span>
+                <span className="text-muted-foreground font-medium">{t('inspection.extras.dgt.price')}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <Plus className="h-3.5 w-3.5 text-primary" />
+                  {t('inspection.extras.carfax')}
+                </span>
+                <span className="text-muted-foreground font-medium">{t('inspection.extras.carfax.price')}</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
-      </div>
-
-      {/* Extras informativos */}
-      <div className="mt-8 flex flex-wrap justify-center gap-4">
-        <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground bg-card border border-border rounded-full px-4 py-2">
-          <Plus className="h-3.5 w-3.5 text-primary" />
-          {t('inspection.extras.dgt')}
-        </span>
-        <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground bg-card border border-border rounded-full px-4 py-2">
-          <Plus className="h-3.5 w-3.5 text-primary" />
-          {t('inspection.extras.carfax')}
-        </span>
       </div>
     </div>
   );
