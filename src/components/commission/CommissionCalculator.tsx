@@ -72,23 +72,23 @@ const CommissionCalculator: React.FC<CommissionCalculatorProps> = ({
                   {t('commission.filteredByProfile')}
                 </p>
               )}
-              <RadioGroup value={type} onValueChange={handleTypeChange} className="flex flex-wrap gap-x-4 gap-y-2">
+              <RadioGroup value={type} onValueChange={handleTypeChange} className="flex flex-col gap-1.5">
                 {allowedTypes.includes('comprador') && (
                   <div className="flex items-center space-x-1">
-                    <RadioGroupItem value="comprador" id="comprador-compact" className="h-3 w-3" />
-                    <Label htmlFor="comprador-compact" className="text-xs text-foreground">{t('commission.buyer')}</Label>
+                    <RadioGroupItem value="comprador" id="comprador-compact" className="h-3 w-3 flex-shrink-0" />
+                    <Label htmlFor="comprador-compact" className="text-xs text-foreground truncate">{t('commission.buyer')}</Label>
                   </div>
                 )}
                 {allowedTypes.includes('vendedor') && (
                   <div className="flex items-center space-x-1">
-                    <RadioGroupItem value="vendedor" id="vendedor-compact" className="h-3 w-3" />
-                    <Label htmlFor="vendedor-compact" className="text-xs text-foreground">{t('commission.seller')}</Label>
+                    <RadioGroupItem value="vendedor" id="vendedor-compact" className="h-3 w-3 flex-shrink-0" />
+                    <Label htmlFor="vendedor-compact" className="text-xs text-foreground truncate">{t('commission.seller')}</Label>
                   </div>
                 )}
                 {allowedTypes.includes('trader') && (
                   <div className="flex items-center space-x-1">
-                    <RadioGroupItem value="trader" id="trader-compact" className="h-3 w-3" />
-                    <Label htmlFor="trader-compact" className="text-xs text-foreground">{t('commission.trader')}</Label>
+                    <RadioGroupItem value="trader" id="trader-compact" className="h-3 w-3 flex-shrink-0" />
+                    <Label htmlFor="trader-compact" className="text-xs text-foreground truncate">{t('commission.trader')}</Label>
                   </div>
                 )}
               </RadioGroup>
