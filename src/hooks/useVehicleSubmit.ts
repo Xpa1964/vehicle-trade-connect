@@ -184,12 +184,11 @@ export const useVehicleSubmit = () => {
         // Insert damage record
         const damageData = {
           vehicle_id: vehicleId,
-          damage_type: damage.damage_type,
-          title: damage.title,
+          damage_type: damage.damage_type || damage.title || 'other',
           description: damage.description || null,
-          severity: damage.severity,
+          severity: damage.severity || 'minor',
           location: damage.location || null,
-          estimated_cost: damage.estimated_cost || null
+          repair_cost: damage.estimated_cost || null
         };
         
         console.log('🔧 [handleDamagesUpload] Inserting damage:', damageData);
