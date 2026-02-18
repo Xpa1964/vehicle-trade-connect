@@ -29,13 +29,13 @@ const VehicleDamagesPage: React.FC = () => {
     }
   });
 
-  // Query para obtener daños del vehículo
+  // Query para obtener daños del vehículo con sus imágenes
   const { data: damages, isLoading: damagesLoading } = useQuery({
     queryKey: ['vehicle-damages', id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('vehicle_damages')
-        .select('*')
+        .select('*, vehicle_damage_images(*)')
         .eq('vehicle_id', id)
         .order('created_at', { ascending: true });
       
@@ -135,15 +135,28 @@ const VehicleDamagesPage: React.FC = () => {
                     <p className="text-gray-700 mb-4">{damage.description}</p>
                   )}
                   
-                  {damage.image_url && (
+                  {(damage.image_url || (damage.vehicle_damage_images && damage.vehicle_damage_images.length > 0)) && (
                     <div>
-                      <h5 className="font-medium mb-2">Imagen del daño:</h5>
-                      <div className="aspect-video bg-muted rounded-lg overflow-hidden w-48">
-                        <img 
-                          src={damage.image_url} 
-                          alt="Imagen de daño"
-                          className="w-full h-full object-cover"
-                        />
+                      <h5 className="font-medium mb-2">Imágenes del daño:</h5>
+                      <div className="flex flex-wrap gap-2">
+                        {damage.image_url && (
+                          <div className="aspect-video bg-muted rounded-lg overflow-hidden w-48">
+                            <img 
+                              src={damage.image_url} 
+                              alt="Imagen de daño"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+                        {damage.vehicle_damage_images?.map((img: any) => (
+                          <div key={img.id} className="aspect-video bg-muted rounded-lg overflow-hidden w-48">
+                            <img 
+                              src={img.image_url} 
+                              alt={img.description || "Imagen de daño"}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}

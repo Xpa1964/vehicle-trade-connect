@@ -209,7 +209,20 @@ export const useVehicleSubmit = () => {
         // Handle damage images if provided
         if (damage.images && damage.images.length > 0) {
           console.log('🖼️ [handleDamagesUpload] Processing damage images:', damage.images.length);
-          await handleDamageImagesUpload(damage.images, insertedDamage.id, vehicleId);
+          const imageUrls = await handleDamageImagesUpload(damage.images, insertedDamage.id, vehicleId);
+          
+          // Set first image as the main image_url on the damage record
+          if (imageUrls && imageUrls.length > 0) {
+            const { error: updateError } = await supabase
+              .from('vehicle_damages')
+              .update({ image_url: imageUrls[0] })
+              .eq('id', insertedDamage.id);
+            if (updateError) {
+              console.error('❌ [handleDamagesUpload] Error setting damage image_url:', updateError);
+            } else {
+              console.log('✅ [handleDamagesUpload] Damage image_url set:', imageUrls[0]);
+            }
+          }
         }
       }
       
@@ -219,35 +232,34 @@ export const useVehicleSubmit = () => {
     }
   };
 
-  const handleDamageImagesUpload = async (images: File[], damageId: string, vehicleId: string) => {
+  const handleDamageImagesUpload = async (images: File[], damageId: string, vehicleId: string): Promise<string[]> => {
+    const uploadedUrls: string[] = [];
     try {
       console.log('🖼️ [handleDamageImagesUpload] Starting damage images upload for damage:', damageId);
       
-      const imagePromises = images.map(async (file, index) => {
+      for (let index = 0; index < images.length; index++) {
+        const file = images[index];
         try {
           console.log(`🖼️ [handleDamageImagesUpload] Processing image ${index + 1}/${images.length}:`, file.name);
           const fileExt = file.name.split('.').pop();
           const fileName = `damage-${Date.now()}-${index}.${fileExt}`;
           const filePath = `${vehicleId}/damages/${fileName}`;
           
-          // Upload the file to storage
           const { error: uploadError } = await supabase.storage
             .from('vehicles')
             .upload(filePath, file);
             
           if (uploadError) {
             console.error(`❌ [handleDamageImagesUpload] Error uploading image ${index}:`, uploadError);
-            return null;
+            continue;
           }
           
-          // Get the public URL
           const { data: { publicUrl } } = supabase.storage
             .from('vehicles')
             .getPublicUrl(filePath);
           
-          console.log(`✅ [handleDamageImagesUpload] Image ${index} uploaded successfully:`, publicUrl);
+          console.log(`✅ [handleDamageImagesUpload] Image ${index} uploaded:`, publicUrl);
           
-          // Add to vehicle_damage_images table
           const { error: imageInsertError } = await supabase
             .from('vehicle_damage_images')
             .insert({
@@ -259,21 +271,20 @@ export const useVehicleSubmit = () => {
             
           if (imageInsertError) {
             console.error(`❌ [handleDamageImagesUpload] Error inserting image record ${index}:`, imageInsertError);
-            return null;
+            continue;
           }
           
-          return publicUrl;
+          uploadedUrls.push(publicUrl);
         } catch (err) {
           console.error(`❌ [handleDamageImagesUpload] Error processing image ${index}:`, err);
-          return null;
         }
-      });
+      }
       
-      await Promise.all(imagePromises);
-      console.log('🎉 [handleDamageImagesUpload] All damage images processed successfully');
+      console.log('🎉 [handleDamageImagesUpload] All damage images processed:', uploadedUrls.length, 'uploaded');
     } catch (err) {
       console.error('❌ [handleDamageImagesUpload] Error uploading damage images:', err);
     }
+    return uploadedUrls;
   };
 
   const handleImageUploads = async (images: FileList | File[], vehicleId: string) => {
