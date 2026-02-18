@@ -98,4 +98,10 @@ export default {
   'exchanges.noVehiclesFound': 'No se encontraron vehículos que coincidan con tu búsqueda',
   'exchanges.noVehicles': 'No hay vehículos disponibles para intercambio en este momento',
   'exchanges.ownVehiclesExcluded': 'Nota: Tus propios vehículos no se muestran en esta lista',
+  'exchanges.viewVehicle': 'Ver ficha del vehículo',
+  'exchanges.myExchanges': 'Solicitudes de Intercambio',
+  'exchanges.status.pending': 'Pendiente',
+  'exchanges.status.accepted': 'Aceptado',
+  'exchanges.status.rejected': 'Rechazado',
+  'exchanges.status.countered': 'Contraoferta',
 };
