@@ -1,11 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Trash2, AlertTriangle, Wrench, Home } from 'lucide-react';
+import { Plus, Trash2, AlertTriangle, Wrench, Home, Image } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { VehicleFormData } from '@/types/vehicle';
 import { DamageEditor } from './DamageEditor';
@@ -149,42 +149,57 @@ export const DamagesSection: React.FC<DamagesSectionProps> = ({ form }) => {
                         onCancel={() => setEditingDamage(null)}
                       />
                     ) : (
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h5 className="font-medium">{damage.title || t('vehicles.noTitle')}</h5>
-                            <Badge className={getSeverityColor(damage.severity)}>
-                              {damage.severity}
-                            </Badge>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h5 className="font-medium">{damage.title || t('vehicles.noTitle')}</h5>
+                              <Badge className={getSeverityColor(damage.severity)}>
+                                {damage.severity}
+                              </Badge>
+                            </div>
+                            {damage.description && (
+                              <p className="text-sm text-muted-foreground mb-2">{damage.description}</p>
+                            )}
+                            {damage.location && (
+                              <p className="text-xs text-muted-foreground">{t('vehicles.location')}: {damage.location}</p>
+                            )}
+                            {damage.estimated_cost && (
+                              <p className="text-xs text-muted-foreground">{t('vehicles.estimatedCost')}: €{damage.estimated_cost}</p>
+                            )}
                           </div>
-                          {damage.description && (
-                            <p className="text-sm text-muted-foreground mb-2">{damage.description}</p>
-                          )}
-                          {damage.location && (
-                            <p className="text-xs text-muted-foreground">{t('vehicles.location')}: {damage.location}</p>
-                          )}
-                          {damage.estimated_cost && (
-                            <p className="text-xs text-muted-foreground">{t('vehicles.estimatedCost')}: €{damage.estimated_cost}</p>
-                          )}
+                          <div className="flex gap-2">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setEditingDamage(damage.id!)}
+                            >
+                              {t('common.edit')}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeDamage(damage.id!)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setEditingDamage(damage.id!)}
-                          >
-                            {t('common.edit')}
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeDamage(damage.id!)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                        {damage.images && damage.images.length > 0 && (
+                          <div className="flex gap-2 flex-wrap">
+                            {damage.images.map((img: File, idx: number) => (
+                              <div key={idx} className="relative w-16 h-16 rounded-md overflow-hidden border border-border">
+                                <img
+                                  src={URL.createObjectURL(img)}
+                                  alt={img.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </CardContent>
@@ -229,42 +244,57 @@ export const DamagesSection: React.FC<DamagesSectionProps> = ({ form }) => {
                         onCancel={() => setEditingDamage(null)}
                       />
                     ) : (
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h5 className="font-medium">{damage.title || t('vehicles.noTitle')}</h5>
-                            <Badge className={getSeverityColor(damage.severity)}>
-                              {damage.severity}
-                            </Badge>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h5 className="font-medium">{damage.title || t('vehicles.noTitle')}</h5>
+                              <Badge className={getSeverityColor(damage.severity)}>
+                                {damage.severity}
+                              </Badge>
+                            </div>
+                            {damage.description && (
+                              <p className="text-sm text-muted-foreground mb-2">{damage.description}</p>
+                            )}
+                            {damage.location && (
+                              <p className="text-xs text-muted-foreground">{t('vehicles.location')}: {damage.location}</p>
+                            )}
+                            {damage.estimated_cost && (
+                              <p className="text-xs text-muted-foreground">{t('vehicles.estimatedCost')}: €{damage.estimated_cost}</p>
+                            )}
                           </div>
-                          {damage.description && (
-                            <p className="text-sm text-muted-foreground mb-2">{damage.description}</p>
-                          )}
-                          {damage.location && (
-                            <p className="text-xs text-muted-foreground">{t('vehicles.location')}: {damage.location}</p>
-                          )}
-                          {damage.estimated_cost && (
-                            <p className="text-xs text-muted-foreground">{t('vehicles.estimatedCost')}: €{damage.estimated_cost}</p>
-                          )}
+                          <div className="flex gap-2">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setEditingDamage(damage.id!)}
+                            >
+                              {t('common.edit')}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeDamage(damage.id!)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setEditingDamage(damage.id!)}
-                          >
-                            {t('common.edit')}
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeDamage(damage.id!)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                        {damage.images && damage.images.length > 0 && (
+                          <div className="flex gap-2 flex-wrap">
+                            {damage.images.map((img: File, idx: number) => (
+                              <div key={idx} className="relative w-16 h-16 rounded-md overflow-hidden border border-border">
+                                <img
+                                  src={URL.createObjectURL(img)}
+                                  alt={img.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </CardContent>
@@ -309,42 +339,57 @@ export const DamagesSection: React.FC<DamagesSectionProps> = ({ form }) => {
                         onCancel={() => setEditingDamage(null)}
                       />
                     ) : (
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h5 className="font-medium">{damage.title || t('vehicles.noTitle')}</h5>
-                            <Badge className={getSeverityColor(damage.severity)}>
-                              {damage.severity}
-                            </Badge>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h5 className="font-medium">{damage.title || t('vehicles.noTitle')}</h5>
+                              <Badge className={getSeverityColor(damage.severity)}>
+                                {damage.severity}
+                              </Badge>
+                            </div>
+                            {damage.description && (
+                              <p className="text-sm text-muted-foreground mb-2">{damage.description}</p>
+                            )}
+                            {damage.location && (
+                              <p className="text-xs text-muted-foreground">{t('vehicles.location')}: {damage.location}</p>
+                            )}
+                            {damage.estimated_cost && (
+                              <p className="text-xs text-muted-foreground">{t('vehicles.estimatedCost')}: €{damage.estimated_cost}</p>
+                            )}
                           </div>
-                          {damage.description && (
-                            <p className="text-sm text-muted-foreground mb-2">{damage.description}</p>
-                          )}
-                          {damage.location && (
-                            <p className="text-xs text-muted-foreground">{t('vehicles.location')}: {damage.location}</p>
-                          )}
-                          {damage.estimated_cost && (
-                            <p className="text-xs text-muted-foreground">{t('vehicles.estimatedCost')}: €{damage.estimated_cost}</p>
-                          )}
+                          <div className="flex gap-2">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setEditingDamage(damage.id!)}
+                            >
+                              {t('common.edit')}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeDamage(damage.id!)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setEditingDamage(damage.id!)}
-                          >
-                            {t('common.edit')}
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeDamage(damage.id!)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                        {damage.images && damage.images.length > 0 && (
+                          <div className="flex gap-2 flex-wrap">
+                            {damage.images.map((img: File, idx: number) => (
+                              <div key={idx} className="relative w-16 h-16 rounded-md overflow-hidden border border-border">
+                                <img
+                                  src={URL.createObjectURL(img)}
+                                  alt={img.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </CardContent>
