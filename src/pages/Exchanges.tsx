@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeftRight, ArrowLeft, Plus, MessageCircle, ArrowRightLeft } from 'lucide-react';
+import { ArrowLeftRight, ArrowLeft, Plus, MessageCircle, ArrowRightLeft, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SafeImage from '@/components/shared/SafeImage';
 import { useNavigate } from 'react-router-dom';
@@ -27,6 +27,8 @@ interface ExchangeRequest {
     brand: string;
     model: string;
     year: number;
+    thumbnailurl?: string;
+    id?: string;
   } | null;
 }
 
@@ -49,7 +51,7 @@ const Exchanges: React.FC = () => {
           .from('exchanges')
           .select(`
             id, initiator_id, status, message, offered_vehicle_id, created_at,
-            vehicle:vehicles!exchanges_offered_vehicle_id_fkey(brand, model, year)
+            vehicle:vehicles!exchanges_offered_vehicle_id_fkey(id, brand, model, year, thumbnailurl)
           `)
           .order('created_at', { ascending: false });
 
@@ -215,8 +217,22 @@ const Exchanges: React.FC = () => {
 
                       return (
                         <Card key={request.id} className="p-4">
-                          <div className="flex justify-between items-start">
-                            <div className="space-y-2">
+                          <div className="flex gap-4 items-start">
+                            {/* Vehicle Image */}
+                            <div className="flex-shrink-0">
+                              <img 
+                                src={request.vehicle?.thumbnailurl || '/placeholder.svg'} 
+                                alt={vehicleInfo}
+                                className="w-28 h-22 object-cover rounded-md border border-border cursor-pointer hover:opacity-80 transition-opacity"
+                                onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
+                                onClick={() => {
+                                  if (request.offered_vehicle_id) navigate(`/vehicles/${request.offered_vehicle_id}`);
+                                }}
+                              />
+                            </div>
+
+                            {/* Info */}
+                            <div className="flex-1 space-y-2">
                               <div className="flex items-center gap-2">
                                 <ArrowLeftRight className="h-4 w-4 text-primary" />
                                 <h3 className="font-semibold">{vehicleInfo}</h3>
@@ -237,8 +253,22 @@ const Exchanges: React.FC = () => {
                                   {messageData.initiator_vehicle.kilometers} km
                                 </p>
                               )}
+                              {/* View vehicle detail link */}
+                              {request.offered_vehicle_id && (
+                                <Button
+                                  size="sm"
+                                  variant="link"
+                                  className="p-0 h-auto text-primary"
+                                  onClick={() => navigate(`/vehicles/${request.offered_vehicle_id}`)}
+                                >
+                                  <Eye className="h-3.5 w-3.5 mr-1" />
+                                  {t('exchanges.viewVehicle', { fallback: 'Ver ficha del vehículo' })}
+                                </Button>
+                              )}
                             </div>
-                            <div className="text-right space-y-2">
+
+                            {/* Actions */}
+                            <div className="text-right space-y-2 flex-shrink-0">
                               <Badge variant={request.status === 'pending' ? 'secondary' : 'default'}>
                                 {t(`exchanges.status.${request.status}`, { fallback: request.status })}
                               </Badge>
