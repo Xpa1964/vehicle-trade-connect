@@ -7,8 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, AlertTriangle, Wrench, Home, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { ArrowLeft, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from '@/components/ui/carousel';
 
 interface DamageImage {
   url: string;
@@ -23,7 +29,6 @@ const VehicleDamagesPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
@@ -55,7 +60,6 @@ const VehicleDamagesPage: React.FC = () => {
 
   const isLoading = vehicleLoading || damagesLoading;
 
-  // Flatten all damages into a single array of image items for carousel
   const damageItems: DamageImage[] = React.useMemo(() => {
     if (!damages) return [];
     const items: DamageImage[] = [];
@@ -67,7 +71,7 @@ const VehicleDamagesPage: React.FC = () => {
         for (const img of images) {
           items.push({
             url: img.image_url,
-            description: damage.description || damage.damage_type || 'Daño',
+            description: damage.description || damage.damage_type || t('vehicles.damage') || 'Daño',
             severity: damage.severity || 'minor',
             location: damage.location,
             repairCost: damage.repair_cost,
@@ -77,7 +81,7 @@ const VehicleDamagesPage: React.FC = () => {
       } else if (damage.image_url) {
         items.push({
           url: damage.image_url,
-          description: damage.description || damage.damage_type || 'Daño',
+          description: damage.description || damage.damage_type || t('vehicles.damage') || 'Daño',
           severity: damage.severity || 'minor',
           location: damage.location,
           repairCost: damage.repair_cost,
@@ -86,41 +90,24 @@ const VehicleDamagesPage: React.FC = () => {
       }
     }
     return items;
-  }, [damages]);
+  }, [damages, t]);
 
   const getSeverityLabel = (severity: string) => {
     switch (severity) {
-      case 'minor': return 'Menor';
-      case 'moderate': return 'Moderado';
-      case 'severe': return 'Severo';
+      case 'minor': return t('vehicles.severityMinor') || 'Menor';
+      case 'moderate': return t('vehicles.severityModerate') || 'Moderado';
+      case 'severe': return t('vehicles.severitySevere') || 'Severo';
       default: return severity;
     }
   };
 
-  const getSeverityColor = (severity: string) => {
+  const getSeverityVariant = (severity: string): "gold" | "default" | "destructive" => {
     switch (severity) {
-      case 'minor': return 'bg-yellow-100 text-yellow-800';
-      case 'moderate': return 'bg-orange-100 text-orange-800';
-      case 'severe': return 'bg-red-100 text-red-800';
-      default: return 'bg-muted text-muted-foreground';
+      case 'minor': return 'gold';
+      case 'moderate': return 'default';
+      case 'severe': return 'destructive';
+      default: return 'default';
     }
-  };
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'exterior': return <AlertTriangle className="h-4 w-4" />;
-      case 'mechanical': return <Wrench className="h-4 w-4" />;
-      case 'interior': return <Home className="h-4 w-4" />;
-      default: return null;
-    }
-  };
-
-  const goToPrev = () => {
-    setCurrentIndex(prev => prev === 0 ? damageItems.length - 1 : prev - 1);
-  };
-
-  const goToNext = () => {
-    setCurrentIndex(prev => prev === damageItems.length - 1 ? 0 : prev + 1);
   };
 
   const openLightbox = (index: number) => {
@@ -146,9 +133,6 @@ const VehicleDamagesPage: React.FC = () => {
       </div>
     );
   }
-
-  // Items visible at once in the thumbnail strip
-  const visibleCount = Math.min(4, damageItems.length);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -177,110 +161,73 @@ const VehicleDamagesPage: React.FC = () => {
       {damageItems.length === 0 ? (
         <Card>
           <CardContent className="p-8 text-center text-muted-foreground">
-            No se han reportado daños para este vehículo
+            {t('vehicles.noDamages') || 'No se han reportado daños para este vehículo'}
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-6">
-          {/* Main carousel image */}
-          <Card className="overflow-hidden">
-            <CardContent className="p-0 relative">
-              <div 
-                className="relative aspect-video bg-muted cursor-pointer"
-                onClick={() => openLightbox(currentIndex)}
-              >
-                <img
-                  src={damageItems[currentIndex].url}
-                  alt={damageItems[currentIndex].description}
-                  className="w-full h-full object-contain bg-black/5"
-                  loading="eager"
-                />
-                
-                {/* Navigation arrows */}
-                {damageItems.length > 1 && (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background/90 backdrop-blur-sm h-10 w-10 rounded-full"
-                      onClick={(e) => { e.stopPropagation(); goToPrev(); }}
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background/90 backdrop-blur-sm h-10 w-10 rounded-full"
-                      onClick={(e) => { e.stopPropagation(); goToNext(); }}
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </Button>
-                  </>
-                )}
+          {/* Carousel de daños */}
+          <div className="px-10">
+            <Carousel
+              opts={{ align: 'start', loop: damageItems.length > 3 }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-3">
+                {damageItems.map((item, index) => (
+                  <CarouselItem
+                    key={index}
+                    className="pl-3 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+                  >
+                    <Card className="overflow-hidden h-full">
+                      <CardContent className="p-0 flex flex-col h-full">
+                        {/* Imagen */}
+                        <div
+                          className="aspect-[4/3] relative cursor-pointer overflow-hidden"
+                          onClick={() => openLightbox(index)}
+                        >
+                          <img
+                            src={item.url}
+                            alt={item.description}
+                            className="w-full h-full object-cover transition-transform hover:scale-105"
+                            loading="lazy"
+                          />
+                        </div>
 
-                {/* Counter */}
-                <div className="absolute top-3 right-3 bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
-                  {currentIndex + 1} / {damageItems.length}
-                </div>
-              </div>
-
-              {/* Description below main image */}
-              <div className="p-4 space-y-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  {getTypeIcon(damageItems[currentIndex].damageType)}
-                  <span className="font-medium capitalize">{damageItems[currentIndex].damageType}</span>
-                  <Badge className={getSeverityColor(damageItems[currentIndex].severity)}>
-                    {getSeverityLabel(damageItems[currentIndex].severity)}
-                  </Badge>
-                </div>
-                <p className="text-foreground">{damageItems[currentIndex].description}</p>
-                {damageItems[currentIndex].location && (
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Ubicación:</strong> {damageItems[currentIndex].location}
-                  </p>
-                )}
-                {damageItems[currentIndex].repairCost && (
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Costo estimado:</strong> €{damageItems[currentIndex].repairCost}
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Thumbnail strip */}
-          {damageItems.length > 1 && (
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              {damageItems.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={cn(
-                    'flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all',
-                    index === currentIndex
-                      ? 'border-primary ring-2 ring-primary/30'
-                      : 'border-border hover:border-primary/50'
-                  )}
-                >
-                  <img
-                    src={item.url}
-                    alt={item.description}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
+                        {/* Info debajo */}
+                        <div className="p-3 space-y-2 flex-1">
+                          <Badge variant={getSeverityVariant(item.severity)}>
+                            {getSeverityLabel(item.severity)}
+                          </Badge>
+                          <p className="text-sm font-medium line-clamp-2 text-foreground">
+                            {item.description}
+                          </p>
+                          {item.location && (
+                            <p className="text-xs text-muted-foreground">
+                              {item.location}
+                            </p>
+                          )}
+                          {item.repairCost != null && (
+                            <p className="text-xs font-semibold text-muted-foreground">
+                              €{item.repairCost}
+                            </p>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
 
           {/* Summary */}
-          <Card>
-            <CardContent className="p-4">
-              <p className="text-sm text-muted-foreground text-center">
-                Total: {damageItems.length} {damageItems.length === 1 ? 'daño registrado' : 'daños registrados'}
-              </p>
-            </CardContent>
-          </Card>
+          <p className="text-sm text-muted-foreground text-center">
+            {damageItems.length} {damageItems.length === 1
+              ? (t('vehicles.damageRegistered') || 'daño registrado')
+              : (t('vehicles.damagesRegistered') || 'daños registrados')}
+          </p>
         </div>
       )}
 
