@@ -160,19 +160,79 @@ export const useVehicleUpdater = () => {
       
       // Handle damages
       if (formData.damages && formData.damages.length > 0) {
-        await supabase.from('vehicle_damages').delete().eq('vehicle_id', id);
-        const damageItems = formData.damages.map(damage => ({
-          vehicle_id: id,
-          damage_type: damage.damage_type || damage.title || 'other',
-          description: damage.description || null,
-          severity: damage.severity || 'minor',
-          location: damage.location || null,
-          repair_cost: damage.estimated_cost || null
-        }));
-        const { error: damageError } = await supabase
+        // Delete existing damage images first
+        const { data: existingDamages } = await supabase
           .from('vehicle_damages')
-          .insert(damageItems);
-        if (damageError) console.warn('⚠️ Damages update error:', damageError);
+          .select('id')
+          .eq('vehicle_id', id);
+        
+        if (existingDamages && existingDamages.length > 0) {
+          for (const d of existingDamages) {
+            await supabase.from('vehicle_damage_images').delete().eq('damage_id', d.id);
+          }
+        }
+        
+        await supabase.from('vehicle_damages').delete().eq('vehicle_id', id);
+        
+        for (const damage of formData.damages) {
+          const damageData = {
+            vehicle_id: id,
+            damage_type: damage.damage_type || damage.title || 'other',
+            description: damage.description || null,
+            severity: damage.severity || 'minor',
+            location: damage.location || null,
+            repair_cost: damage.estimated_cost || null
+          };
+          
+          const { data: insertedDamage, error: damageError } = await supabase
+            .from('vehicle_damages')
+            .insert(damageData)
+            .select()
+            .single();
+          
+          if (damageError) {
+            console.warn('⚠️ Damages insert error:', damageError);
+            continue;
+          }
+          
+          // Upload damage images
+          if (damage.images && damage.images.length > 0) {
+            for (let i = 0; i < damage.images.length; i++) {
+              const file = damage.images[i];
+              const fileExt = file.name.split('.').pop() || 'jpg';
+              const fileName = `damage-${Date.now()}-${i}.${fileExt}`;
+              const filePath = `${id}/damages/${fileName}`;
+              
+              const { error: uploadError } = await supabase.storage
+                .from('vehicles')
+                .upload(filePath, file);
+              
+              if (uploadError) {
+                console.error('❌ Damage image upload error:', uploadError);
+                continue;
+              }
+              
+              const { data: { publicUrl } } = supabase.storage
+                .from('vehicles')
+                .getPublicUrl(filePath);
+              
+              await supabase.from('vehicle_damage_images').insert({
+                damage_id: insertedDamage.id,
+                image_url: publicUrl,
+                display_order: i,
+                description: file.name
+              });
+              
+              // Set first image as main image_url
+              if (i === 0) {
+                await supabase.from('vehicle_damages')
+                  .update({ image_url: publicUrl })
+                  .eq('id', insertedDamage.id);
+              }
+            }
+          }
+        }
+        console.log('✅ Damages updated with images');
       }
       
       // DIRECT IMAGE UPLOAD - simple path, no complex service layers
