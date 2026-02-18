@@ -50,8 +50,8 @@ export const enhanceUser = async (user: User | null): Promise<UserWithMeta | nul
       const { data: profile } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', user.id)
-        .single();
+        .eq('user_id', user.id)
+        .maybeSingle();
       
       if (profile) {
         profileData = profile;
