@@ -37,6 +37,7 @@ import api from './en-modules/api';
 import xlsxTemplate from './en-modules/xlsxTemplate';
 import xlsxValidation from './en-modules/xlsxValidation';
 import toast from './en-modules/toast';
+import inspection from './en-modules/inspection';
 
 export default {
   ...navigation,
@@ -76,5 +77,6 @@ export default {
   ...api,
   ...xlsxTemplate,
   ...xlsxValidation,
-  ...toast
+  ...toast,
+  ...inspection
 };
