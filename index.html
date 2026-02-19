@@ -79,19 +79,10 @@
     <link rel="preload" href="/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png" as="image" fetchpriority="high" imagesizes="192px" />
     <link rel="preload" href="/lovable-uploads/d756e9c6-4a89-45dc-a824-7c846cdb6c2b.png" as="image" imagesizes="100vw" />
     
-    <!-- DNS prefetch and preconnect for external domains -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <!-- Preconnect: only essential origins -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
-    <!-- Supabase connection optimization -->
-    <link rel="dns-prefetch" href="https://aexqafqrvpabevrlxqjd.supabase.co" />
-    <link rel="preconnect" href="https://aexqafqrvpabevrlxqjd.supabase.co" crossorigin />
-    
-    <!-- Module preload for critical chunks -->
-    <link rel="modulepreload" href="/src/main.tsx" />
-    <link rel="modulepreload" href="/src/App.tsx" />
+    <link rel="preconnect" href="https://vbqvzumjmnblcdkkxuqq.supabase.co" crossorigin />
     
     <!-- Critical inline CSS for instant FCP - expanded for hero section -->
     <style>
@@ -164,9 +155,7 @@
       }
     </style>
     
-    <!-- Load fonts asynchronously after page load to eliminate render blocking -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Load fonts asynchronously after page load -->
     <script>
       // Load fonts after first paint to eliminate render blocking
       if ('requestIdleCallback' in window) {

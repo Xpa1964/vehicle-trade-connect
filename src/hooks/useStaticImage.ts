@@ -225,11 +225,17 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
 
           const { data: urlData } = supabase.storage
             .from(STORAGE_BUCKET)
-            .getPublicUrl(`${prefix}${latestFile.name}`);
+            .getPublicUrl(`${prefix}${latestFile.name}`, {
+              transform: {
+                width: registryData.isCritical ? 1200 : 800,
+                quality: 75,
+                format: 'origin',
+              }
+            });
 
           if (urlData?.publicUrl && mountedRef.current) {
             // IMPORTANT: use file name as version so mobile browsers update reliably
-            const urlWithVersion = `${urlData.publicUrl}?v=${encodeURIComponent(latestFile.name)}`;
+            const urlWithVersion = `${urlData.publicUrl}&v=${encodeURIComponent(latestFile.name)}`;
             storageUrlCache.set(imageId, {
               url: urlWithVersion,
               timestamp: Date.now(),
