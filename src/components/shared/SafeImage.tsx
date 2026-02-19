@@ -161,6 +161,7 @@ const SafeImage: React.FC<SafeImageProps> = ({
   const isCritical = registryData?.isCritical || preload;
   const effectiveLoading = loading || (isCritical ? 'eager' : 'lazy');
   const effectiveFetchPriority = fetchPriority || (isCritical ? 'high' : 'auto');
+  const effectiveDecoding = isCritical ? 'sync' : 'async';
 
   return (
     <img
@@ -173,6 +174,7 @@ const SafeImage: React.FC<SafeImageProps> = ({
       )}
       loading={effectiveLoading}
       fetchPriority={effectiveFetchPriority}
+      decoding={effectiveDecoding}
       onError={handleError}
       onLoad={handleLoad}
       data-registry-id={imageId}

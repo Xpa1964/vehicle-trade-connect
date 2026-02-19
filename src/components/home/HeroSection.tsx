@@ -86,8 +86,9 @@ const HeroSection: React.FC = () => {
           alt="Fondo de vehículos de lujo profesionales"
           className="w-full h-full object-cover object-center"
           loading="eager"
-          width={1818}
-          height={1280}
+          fetchpriority="high"
+          width={1200}
+          height={844}
           onError={(e) => {
             // Fallback from registry
             if (heroBackground.fallback) {
