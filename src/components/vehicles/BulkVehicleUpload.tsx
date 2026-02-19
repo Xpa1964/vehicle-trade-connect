@@ -15,6 +15,7 @@ import { associateImagesToVehicles, ImageAssociation } from '@/utils/imageVehicl
 import { toast } from 'sonner';
 import { Save, Trash2, Upload as UploadIcon, Info, Key } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { CorrectionEntry } from '../vehicles/upload/EditableErrorTable';
 
 const BulkVehicleUpload: React.FC = () => {
   const { t, currentLanguage } = useLanguage();
@@ -359,8 +360,75 @@ const BulkVehicleUpload: React.FC = () => {
           parseResult={parseResult}
           onCorrectionsApplied={(correctedErrors) => {
             toast.success(t('vehicles.correctionsApplied', { 
-              fallback: '✓ Correcciones aplicadas. Vuelve a validar el archivo.' 
+              fallback: '✓ Correcciones aplicadas.' 
             }));
+          }}
+          onApplyCorrections={(corrections: CorrectionEntry[]) => {
+            // Patch vehicle data with corrections
+            const updatedVehicles = [...previewData];
+            const appliedRows = new Set<number>();
+            
+            corrections.forEach(({ row, field, correctedValue }) => {
+              // row is 1-indexed from XLSX (header=1, data starts at 2)
+              // previewData is 0-indexed for valid vehicles
+              // We need to find the vehicle that came from this row
+              // Since validVehicles may skip rows, we search by matching
+              const vehicleIdx = previewData.findIndex((v: any, idx: number) => {
+                // The row in parseResult corresponds to XLSX row number
+                // We try matching by index offset (row - 2 for 0-indexed)
+                return idx === row - 2;
+              });
+              
+              if (vehicleIdx >= 0) {
+                const numericFields = ['year', 'price', 'mileage', 'doors', 'engineSize', 'enginePower', 'co2Emissions'];
+                const boolFields = ['acceptsExchange', 'cocStatus', 'commissionSale'];
+                
+                if (numericFields.includes(field)) {
+                  updatedVehicles[vehicleIdx] = { ...updatedVehicles[vehicleIdx], [field]: parseInt(correctedValue) };
+                } else if (boolFields.includes(field)) {
+                  updatedVehicles[vehicleIdx] = { ...updatedVehicles[vehicleIdx], [field]: correctedValue === 'true' };
+                } else {
+                  updatedVehicles[vehicleIdx] = { ...updatedVehicles[vehicleIdx], [field]: correctedValue };
+                }
+                appliedRows.add(row);
+              }
+            });
+            
+            setPreviewData(updatedVehicles);
+            
+            // Remove corrected errors from parseResult
+            const remainingErrors = parseResult.errors.filter(
+              e => !corrections.some(c => c.row === e.row && c.field === e.field)
+            );
+            
+            const errorRowSet = new Set(remainingErrors.map(e => e.row));
+            const newValid = remainingErrors.length === 0;
+            
+            setParseResult({
+              ...parseResult,
+              valid: newValid,
+              errors: remainingErrors,
+              validVehicles: updatedVehicles,
+              summary: {
+                ...parseResult.summary,
+                errorRows: errorRowSet.size,
+                validRows: parseResult.summary.totalRows - errorRowSet.size,
+              },
+            });
+            
+            if (newValid) {
+              setSelectedVehicleIndices(updatedVehicles.map((_, i) => i));
+              toast.success(t('vehicles.allErrorsFixed', { 
+                fallback: '🎉 ¡Todos los errores corregidos! Los vehículos están listos para subir.' 
+              }));
+            } else {
+              toast.success(t('vehicles.someErrorsFixed', { 
+                fallback: `✓ ${corrections.length} correcciones aplicadas. Quedan ${remainingErrors.length} errores.` 
+              }));
+            }
+            
+            // Save draft with updated data
+            saveDraft(updatedVehicles, imageAssociations, file?.name);
           }}
         />
       )}
