@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -22,12 +22,21 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { AlertCircle, CheckCircle2, Lightbulb, X, ArrowUpDown } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Lightbulb, ArrowUpDown, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { cn } from '@/lib/utils';
+
+export interface CorrectionEntry {
+  row: number;
+  field: string;
+  correctedValue: any;
+}
 
 interface EditableErrorTableProps {
   errors: ValidationError[];
   onErrorsUpdate: (updatedErrors: ValidationError[]) => void;
+  /** Called with correction entries that should be applied to actual vehicle data */
+  onApplyToVehicles?: (corrections: CorrectionEntry[]) => void;
 }
 
 interface ErrorRow extends ValidationError {
@@ -37,11 +46,10 @@ interface ErrorRow extends ValidationError {
   isCorrected?: boolean;
 }
 
-export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, onErrorsUpdate }) => {
+export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, onErrorsUpdate, onApplyToVehicles }) => {
   const { t } = useLanguage();
   const [sorting, setSorting] = useState<SortingState>([]);
   
-  // Convertir errores a filas editables
   const [errorRows, setErrorRows] = useState<ErrorRow[]>(() =>
     errors.map((error, index) => ({
       ...error,
@@ -52,7 +60,7 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
     }))
   );
 
-  const handleValueChange = (rowId: string, newValue: any) => {
+  const handleValueChange = useCallback((rowId: string, newValue: any) => {
     setErrorRows(prev =>
       prev.map(row => {
         if (row.id === rowId) {
@@ -61,16 +69,18 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
             ...row,
             correctedValue: newValue,
             isCorrected: validation.valid,
-            error: validation.valid ? '✓ Corregido' : validation.error || row.error,
+            error: validation.valid 
+              ? t('vehicles.corrected', { fallback: '✓ Corregido' }) 
+              : validation.error || row.error,
             severity: validation.valid ? 'warning' : 'error' as 'error' | 'warning',
           };
         }
         return row;
       })
     );
-  };
+  }, [t]);
 
-  const handleApplySuggestion = (rowId: string) => {
+  const handleApplySuggestion = useCallback((rowId: string) => {
     setErrorRows(prev =>
       prev.map(row => {
         if (row.id === rowId) {
@@ -81,7 +91,9 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
               ...row,
               correctedValue: suggestion,
               isCorrected: validation.valid,
-              error: validation.valid ? '✓ Corregido' : validation.error || row.error,
+              error: validation.valid 
+                ? t('vehicles.corrected', { fallback: '✓ Corregido' }) 
+                : validation.error || row.error,
               severity: validation.valid ? 'warning' : 'error' as 'error' | 'warning',
             };
           }
@@ -89,15 +101,15 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
         return row;
       })
     );
-  };
+  }, [t]);
 
-  const handleToggleExclude = (rowId: string) => {
+  const handleToggleExclude = useCallback((rowId: string) => {
     setErrorRows(prev =>
       prev.map(row => (row.id === rowId ? { ...row, excluded: !row.excluded } : row))
     );
-  };
+  }, []);
 
-  const handleApplyAllSuggestions = () => {
+  const handleApplyAllSuggestions = useCallback(() => {
     setErrorRows(prev =>
       prev.map(row => {
         if (row.excluded || row.isCorrected) return row;
@@ -109,14 +121,16 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
             ...row,
             correctedValue: suggestion,
             isCorrected: validation.valid,
-            error: validation.valid ? '✓ Corregido' : validation.error || row.error,
+            error: validation.valid 
+              ? t('vehicles.corrected', { fallback: '✓ Corregido' }) 
+              : validation.error || row.error,
             severity: validation.valid ? 'warning' : 'error' as 'error' | 'warning',
           };
         }
         return row;
       })
     );
-  };
+  }, [t]);
 
   const columns = useMemo<ColumnDef<ErrorRow>[]>(
     () => [
@@ -177,14 +191,13 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
             return <span className="text-muted-foreground">(excluido)</span>;
           }
 
-          // Si el campo tiene opciones predefinidas, mostrar select
           if (fieldOptions.length > 0) {
             return (
               <Select
                 value={row.original.correctedValue?.toString() || ''}
                 onValueChange={(value) => handleValueChange(row.original.id, value)}
               >
-                <SelectTrigger className="h-8">
+                <SelectTrigger className={cn("h-8", row.original.isCorrected && "border-green-500/50 bg-green-500/5")}>
                   <SelectValue placeholder={t('common.select', { fallback: 'Seleccionar' })} />
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
@@ -198,13 +211,12 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
             );
           }
 
-          // Para campos de texto/número
           return (
             <Input
               type={['year', 'price', 'mileage', 'doors', 'engineSize', 'enginePower', 'co2Emissions'].includes(row.original.field) ? 'number' : 'text'}
               value={row.original.correctedValue?.toString() || ''}
               onChange={(e) => handleValueChange(row.original.id, e.target.value)}
-              className="h-8"
+              className={cn("h-8", row.original.isCorrected && "border-green-500/50 bg-green-500/5")}
               placeholder={t('vehicles.enterValue', { fallback: 'Introducir valor' })}
             />
           );
@@ -213,15 +225,21 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
       },
       {
         accessorKey: 'error',
-        header: t('vehicles.errorDescription', { fallback: 'Descripción del Error' }),
+        header: t('vehicles.status', { fallback: 'Estado' }),
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
             {row.original.isCorrected ? (
-              <CheckCircle2 className="h-4 w-4 text-success" />
+              <CheckCircle2 className="h-4 w-4 text-green-600" />
+            ) : row.original.excluded ? (
+              <AlertCircle className="h-4 w-4 text-muted-foreground" />
             ) : (
               <AlertCircle className="h-4 w-4 text-destructive" />
             )}
-            <span className={row.original.isCorrected ? 'text-success' : 'text-destructive'}>
+            <span className={cn(
+              "text-sm",
+              row.original.isCorrected && "text-green-600",
+              !row.original.isCorrected && !row.original.excluded && "text-destructive"
+            )}>
               {row.original.error}
             </span>
           </div>
@@ -230,14 +248,14 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
       },
       {
         id: 'actions',
-        header: t('common.actions', { fallback: 'Acciones' }),
+        header: '',
         cell: ({ row }) => {
           if (row.original.excluded || row.original.isCorrected) return null;
 
           const suggestion = getSuggestion(row.original.field, row.original.value, row.original.error);
 
           return (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               {suggestion && (
                 <TooltipProvider>
                   <Tooltip>
@@ -262,10 +280,10 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
             </div>
           );
         },
-        size: 80,
+        size: 60,
       },
     ],
-    [t]
+    [t, handleValueChange, handleApplySuggestion, handleToggleExclude]
   );
 
   const table = useReactTable({
@@ -275,46 +293,54 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
-    state: {
-      sorting,
-    },
+    state: { sorting },
   });
 
-  const handleApplyCorrections = () => {
-    const updatedErrors = errorRows
-      .filter(row => !row.excluded && row.isCorrected)
-      .map(row => ({
-        ...row,
-        value: row.correctedValue,
-      }));
+  const handleApplyCorrections = useCallback(() => {
+    const corrected = errorRows.filter(row => !row.excluded && row.isCorrected);
+    
+    // Build correction entries for patching vehicle data
+    const corrections: CorrectionEntry[] = corrected.map(row => ({
+      row: row.row,
+      field: row.field,
+      correctedValue: row.correctedValue,
+    }));
 
-    onErrorsUpdate(updatedErrors);
-  };
+    // Notify parent with corrections to apply to vehicles
+    if (onApplyToVehicles) {
+      onApplyToVehicles(corrections);
+    }
+
+    // Also call legacy callback
+    onErrorsUpdate(corrected.map(row => ({ ...row, value: row.correctedValue })));
+  }, [errorRows, onErrorsUpdate, onApplyToVehicles]);
 
   const stats = useMemo(() => {
     const corrected = errorRows.filter(r => r.isCorrected && !r.excluded).length;
     const excluded = errorRows.filter(r => r.excluded).length;
     const pending = errorRows.filter(r => !r.isCorrected && !r.excluded).length;
-    return { corrected, excluded, pending };
+    return { corrected, excluded, pending, total: errorRows.length };
   }, [errorRows]);
 
   return (
     <div className="space-y-4">
-      {/* Barra de acciones */}
-      <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-        <div className="flex gap-4 text-sm">
+      {/* Action bar with stats */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 bg-muted/50 rounded-lg">
+        <div className="flex flex-wrap gap-3 text-sm">
           <div className="flex items-center gap-2">
             <Badge variant="destructive">{stats.pending}</Badge>
             <span>{t('vehicles.pendingErrors', { fallback: 'Pendientes' })}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="default" className="bg-success">{stats.corrected}</Badge>
+            <Badge className="bg-green-600 hover:bg-green-700">{stats.corrected}</Badge>
             <span>{t('vehicles.correctedErrors', { fallback: 'Corregidos' })}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary">{stats.excluded}</Badge>
-            <span>{t('vehicles.excludedErrors', { fallback: 'Excluidos' })}</span>
-          </div>
+          {stats.excluded > 0 && (
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary">{stats.excluded}</Badge>
+              <span>{t('vehicles.excludedErrors', { fallback: 'Excluidos' })}</span>
+            </div>
+          )}
         </div>
 
         <div className="flex gap-2">
@@ -324,21 +350,38 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
             size="sm"
             disabled={stats.pending === 0}
           >
-            <Lightbulb className="mr-2 h-4 w-4" />
-            {t('vehicles.applyAllSuggestions', { fallback: 'Aplicar Todas las Sugerencias' })}
+            <Sparkles className="mr-2 h-4 w-4" />
+            {t('vehicles.autoFix', { fallback: 'Auto-corregir todo' })}
           </Button>
           <Button
             onClick={handleApplyCorrections}
             size="sm"
             disabled={stats.corrected === 0}
+            className="bg-green-600 hover:bg-green-700"
           >
             <CheckCircle2 className="mr-2 h-4 w-4" />
-            {t('vehicles.applyCorrections', { fallback: 'Aplicar Correcciones' })} ({stats.corrected})
+            {t('vehicles.applyAndValidate', { fallback: 'Aplicar y Re-validar' })} ({stats.corrected})
           </Button>
         </div>
       </div>
 
-      {/* Tabla */}
+      {/* Progress indicator */}
+      {stats.total > 0 && (
+        <div className="space-y-1">
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>{t('vehicles.correctionProgress', { fallback: 'Progreso de corrección' })}</span>
+            <span>{Math.round(((stats.corrected + stats.excluded) / stats.total) * 100)}%</span>
+          </div>
+          <div className="h-2 bg-muted rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-green-600 transition-all duration-300 rounded-full"
+              style={{ width: `${((stats.corrected + stats.excluded) / stats.total) * 100}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Table */}
       <div className="rounded-md border overflow-auto">
         <table className="w-full">
           <thead>
@@ -362,9 +405,11 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className={`border-b transition-colors hover:bg-muted/50 ${
-                  row.original.excluded ? 'opacity-50' : ''
-                } ${row.original.isCorrected ? 'bg-success/5' : ''}`}
+                className={cn(
+                  "border-b transition-colors hover:bg-muted/50",
+                  row.original.excluded && "opacity-40 bg-muted/20",
+                  row.original.isCorrected && "bg-green-500/5"
+                )}
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="p-2 align-middle">
@@ -376,6 +421,13 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
           </tbody>
         </table>
       </div>
+
+      {/* Help text */}
+      {stats.pending > 0 && (
+        <p className="text-xs text-muted-foreground text-center">
+          {t('vehicles.editHint', { fallback: 'Edita directamente los valores en la columna "Valor Corregido" o usa el botón 💡 para aplicar sugerencias automáticas.' })}
+        </p>
+      )}
     </div>
   );
 };
