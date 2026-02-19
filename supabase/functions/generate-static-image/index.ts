@@ -108,56 +108,71 @@ serve(async (req) => {
     console.log(`[generate-static-image] Prompt: ${finalPrompt.slice(0, 100)}...`);
 
     // Call Lovable AI Gateway for image generation
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash-image",
-        messages: [
-          {
-            role: "user",
-            content: `Generate an image with dimensions ${width}x${height}. Ultra high resolution. ${finalPrompt}`
-          }
-        ],
-        modalities: ["image", "text"]
-      }),
-    });
+    // Use a direct, image-focused prompt to maximize generation success
+    const imagePrompt = `Create this image: ${finalPrompt}`;
 
-    if (!response.ok) {
-      if (response.status === 429) {
-        console.error("Rate limit exceeded");
-        return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      if (response.status === 402) {
-        console.error("Payment required");
-        return new Response(
-          JSON.stringify({ error: "AI credits exhausted. Please add credits to continue." }),
-          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
+    let imageData: string | null = null;
+    let textResponse = "";
+
+    // Try with flash model first, then pro model as fallback
+    const models = ["google/gemini-2.5-flash-image", "google/gemini-3-pro-image-preview"];
+
+    for (const model of models) {
+      console.log(`[generate-static-image] Trying model: ${model}`);
       
-      const errorText = await response.text();
-      console.error(`AI gateway error [${response.status}]:`, errorText);
-      return new Response(
-        JSON.stringify({ error: "Failed to generate image" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            {
+              role: "user",
+              content: imagePrompt
+            }
+          ],
+          modalities: ["image", "text"]
+        }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          console.error("Rate limit exceeded");
+          return new Response(
+            JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        if (response.status === 402) {
+          console.error("Payment required");
+          return new Response(
+            JSON.stringify({ error: "AI credits exhausted. Please add credits to continue." }),
+            { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        
+        const errorText = await response.text();
+        console.error(`AI gateway error [${response.status}] with ${model}:`, errorText);
+        continue; // Try next model
+      }
+
+      const data = await response.json();
+      imageData = data.choices?.[0]?.message?.images?.[0]?.image_url?.url || null;
+      textResponse = data.choices?.[0]?.message?.content || "";
+
+      if (imageData) {
+        console.log(`[generate-static-image] Success with model: ${model}`);
+        break;
+      }
+
+      console.warn(`[generate-static-image] No image from ${model}, trying next...`);
     }
 
-    const data = await response.json();
-    
-    // Extract the generated image
-    const imageData = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-    const textResponse = data.choices?.[0]?.message?.content || "";
-
     if (!imageData) {
-      console.error("No image data in response:", JSON.stringify(data).slice(0, 500));
+      console.error("No image data from any model");
       return new Response(
         JSON.stringify({ error: "No image generated. Try a different prompt." }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
