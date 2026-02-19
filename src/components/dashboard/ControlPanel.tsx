@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { ReportRequestForm } from '@/components/vehicle-reports/ReportRequestForm';
 import DashboardServiceCard from './DashboardServiceCard';
+import APIKeyCard from './APIKeyCard';
 
 const ControlPanel: React.FC = () => {
   const { t } = useLanguage();
@@ -108,6 +109,15 @@ const ControlPanel: React.FC = () => {
       }
     },
     {
+      imageId: 'services.api',
+      title: t('nav.apiKeys', { fallback: 'API Keys' }),
+      primaryAction: { 
+        label: t('common.view', { fallback: 'Ver' }), 
+        href: '/dashboard' 
+      },
+      isApiCard: true
+    },
+    {
       imageId: 'services.blog',
       title: t('nav.blog', { fallback: 'Blog' }),
       primaryAction: { 
@@ -126,15 +136,19 @@ const ControlPanel: React.FC = () => {
       {/* Grid 3 columnas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {serviceCards.map((card, index) => (
-          <DashboardServiceCard
-            key={index}
-            imageId={card.imageId}
-            title={card.title}
-            primaryAction={card.primaryAction}
-            secondaryAction={card.secondaryAction}
-            onClick={card.isReportRequest ? () => setIsReportDialogOpen(true) : undefined}
-            imagePosition={(card as any).imagePosition}
-          />
+          (card as any).isApiCard ? (
+            <APIKeyCard key={index} />
+          ) : (
+            <DashboardServiceCard
+              key={index}
+              imageId={card.imageId}
+              title={card.title}
+              primaryAction={card.primaryAction}
+              secondaryAction={card.secondaryAction}
+              onClick={card.isReportRequest ? () => setIsReportDialogOpen(true) : undefined}
+              imagePosition={(card as any).imagePosition}
+            />
+          )
         ))}
       </div>
 
