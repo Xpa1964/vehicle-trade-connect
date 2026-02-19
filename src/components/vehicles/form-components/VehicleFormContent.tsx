@@ -1,14 +1,15 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { UseFormReturn } from 'react-hook-form';
 import { VehicleFormData } from '@/types/vehicle';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useVehicleFormScroll } from '@/hooks/useVehicleFormScroll';
-import { VehicleFormScrollSections } from '../form-scroll/VehicleFormScrollSections';
-import { SidebarNavigation } from '../form-scroll/SidebarNavigation';
-import { MobileFormActions } from '../form-navigation/MobileFormActions';
+import { WizardStepIndicator } from '../wizard/WizardStepIndicator';
+import { Step1VinIdentification } from '../wizard/Step1VinIdentification';
+import { Step2TechnicalDetails } from '../wizard/Step2TechnicalDetails';
+import { Step3MediaPrice } from '../wizard/Step3MediaPrice';
+import { ChevronLeft, ChevronRight, Upload, Save } from 'lucide-react';
 
 interface VehicleFormContentProps {
   form: UseFormReturn<VehicleFormData>;
@@ -32,25 +33,35 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
   previewUrl
 }) => {
   const { t } = useLanguage();
-  const {
-    activeSection,
-    completedSections,
-    handleSectionChange,
-    markSectionCompleted,
-    goToSection
-  } = useVehicleFormScroll();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
-  const formData = form.getValues();
+  const markStepCompleted = (step: number) => {
+    setCompletedSteps(prev => prev.includes(step) ? prev : [...prev, step]);
+  };
+
+  const goToStep = (step: number) => {
+    // Mark current step as completed when moving forward
+    if (step > currentStep) {
+      markStepCompleted(currentStep);
+    }
+    setCurrentStep(step);
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleFormSubmit = async () => {
     const allFormValues = form.getValues();
-    await onSubmit(allFormValues);
-    markSectionCompleted('published');
-    goToSection('published');
+    try {
+      await onSubmit(allFormValues);
+      markStepCompleted(3);
+    } catch (error) {
+      console.error('❌ [VehicleForm] Submit error:', error);
+    }
   };
 
   const onValidationError = (errors: any) => {
-    console.error('❌ [VehicleForm] Validation errors preventing submit:', JSON.stringify(errors, null, 2));
+    console.error('❌ [VehicleForm] Validation errors:', JSON.stringify(errors, null, 2));
     const fieldNames = Object.keys(errors);
     if (fieldNames.length > 0) {
       const firstError = errors[fieldNames[0]];
@@ -63,108 +74,106 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
     }
   };
 
-  // Prevent browser from navigating to dropped files (causes full page reload + data loss)
+  // Prevent browser from navigating to dropped files
   const preventDragNavigation = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
   return (
-    <div 
+    <div
       className="relative bg-background"
       onDragOver={preventDragNavigation}
       onDrop={preventDragNavigation}
     >
       <Form {...form}>
-        <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit(onSubmit, onValidationError)(e); }} className="relative">
-          {/* Layout: Sidebar siempre visible en desktop */}
-          <div className="flex flex-col lg:flex-row gap-6 xl:gap-8">
-            
-            {/* Sidebar Navigation - Siempre visible en desktop */}
-            <aside className="w-64 xl:w-72 flex-shrink-0">
-              <SidebarNavigation
-                activeSection={activeSection}
-                onSectionClick={goToSection}
-                completedSections={completedSections}
-              />
-            </aside>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit(onSubmit, onValidationError)(e);
+          }}
+          className="relative"
+        >
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            {/* Wizard Step Indicator */}
+            <WizardStepIndicator
+              currentStep={currentStep}
+              completedSteps={completedSteps}
+            />
 
-            {/* Main Content Area */}
-            <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-0 lg:pr-6 xl:pr-8">
-              <div className="max-w-4xl">
-                <VehicleFormScrollSections
+            {/* Step Content */}
+            <div className="min-h-[500px]">
+              {currentStep === 1 && (
+                <Step1VinIdentification
                   form={form}
-                  formData={formData}
                   onChange={onChange}
                   onBrandChange={onBrandChange}
-                  availableModels={availableModels}
+                />
+              )}
+
+              {currentStep === 2 && (
+                <Step2TechnicalDetails form={form} />
+              )}
+
+              {currentStep === 3 && (
+                <Step3MediaPrice
+                  form={form}
+                  onChange={onChange}
                   onImageChange={onImageChange}
                   previewUrl={previewUrl}
-                  isVehiclePublished={completedSections.includes('published')}
-                  activeSection={activeSection}
-                  onSectionChange={handleSectionChange}
                 />
+              )}
+            </div>
 
-                {/* Desktop Submit Button */}
-                <div className="hidden lg:flex mt-12 justify-center pb-8">
-                  <Button 
-                    type="button" 
-                    onClick={handleFormSubmit}
-                    size="lg"
-                    className="min-h-[48px] px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-xl transition-all duration-200"
-                  >
-                    {isEditing ? t('vehicles.updateVehicle') : t('vehicles.publishVehicle')}
-                  </Button>
-                </div>
-              </div>
-            </main>
+            {/* Navigation Buttons */}
+            <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
+              {currentStep > 1 ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => goToStep(currentStep - 1)}
+                  className="min-h-[48px] px-6 rounded-xl"
+                >
+                  <ChevronLeft className="h-4 w-4 mr-2" />
+                  {t('common.previous', { fallback: 'Anterior' })}
+                </Button>
+              ) : (
+                <div />
+              )}
+
+              {currentStep < 3 ? (
+                <Button
+                  type="button"
+                  onClick={() => goToStep(currentStep + 1)}
+                  className="min-h-[48px] px-6 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
+                >
+                  {t('common.next', { fallback: 'Siguiente' })}
+                  <ChevronRight className="h-4 w-4 ml-2" />
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  onClick={handleFormSubmit}
+                  className="min-h-[48px] px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                >
+                  {isEditing ? (
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      {t('vehicles.updateVehicle')}
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4 mr-2" />
+                      {t('vehicles.publishVehicle')}
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
           </div>
 
-          {/* Mobile Form Actions - Integradas */}
-          <div className="lg:hidden">
-            <MobileFormActions
-              tabs={[
-                { id: 'basic', label: 'Básicos' },
-                { id: 'identification', label: 'Identificación' },
-                { id: 'transaction', label: 'Transacción' },
-                { id: 'specs', label: 'Especificaciones' },
-                { id: 'equipment', label: 'Equipamiento' },
-                { id: 'additional', label: 'Adicional' },
-                { id: 'damages', label: 'Daños' },
-                { id: 'media', label: 'Imágenes' },
-                { id: 'published', label: 'Publicar' }
-              ]}
-              activeTab={activeSection}
-              onPrevious={() => {
-                const sections = ['basic', 'identification', 'transaction', 'specs', 'equipment', 'additional', 'damages', 'media', 'published'];
-                const currentIndex = sections.indexOf(activeSection);
-                if (currentIndex > 0) {
-                  const prevSection = sections[currentIndex - 1];
-                  handleSectionChange(prevSection);
-                  const element = document.getElementById(prevSection);
-                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }}
-              onNext={() => {
-                const sections = ['basic', 'identification', 'transaction', 'specs', 'equipment', 'additional', 'damages', 'media', 'published'];
-                const currentIndex = sections.indexOf(activeSection);
-                if (currentIndex < sections.length - 1) {
-                  const nextSection = sections[currentIndex + 1];
-                  handleSectionChange(nextSection);
-                  const element = document.getElementById(nextSection);
-                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }}
-              isEditing={isEditing}
-              t={t}
-              isLoading={false}
-            />
-          </div>
-
-          {/* Hidden submit button for form validation */}
-          <Button type="submit" className="hidden">
-            Submit
-          </Button>
+          {/* Hidden submit for form validation */}
+          <Button type="submit" className="hidden">Submit</Button>
         </form>
       </Form>
     </div>
