@@ -9,7 +9,8 @@ import {
   SortingState,
 } from '@tanstack/react-table';
 import { ValidationError } from '@/utils/xlsxParser';
-import { getSuggestion, validateCorrectedValue, getFieldOptions } from '@/utils/vehicleValidationSuggestions';
+import { getSuggestion, validateCorrectedValue, getLocalizedOptions } from '@/utils/vehicleValidationSuggestions';
+import { hasMultilingualDictionary, getLocalizedLabel } from '@/utils/xlsxMultilingualDictionary';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -47,7 +48,7 @@ interface ErrorRow extends ValidationError {
 }
 
 export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, onErrorsUpdate, onApplyToVehicles }) => {
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
   const [sorting, setSorting] = useState<SortingState>([]);
   
   const [errorRows, setErrorRows] = useState<ErrorRow[]>(() =>
@@ -185,25 +186,32 @@ export const EditableErrorTable: React.FC<EditableErrorTableProps> = ({ errors, 
         id: 'correctedValue',
         header: t('vehicles.correctedValue', { fallback: 'Valor Corregido' }),
         cell: ({ row }) => {
-          const fieldOptions = getFieldOptions(row.original.field);
+          const localizedOptions = getLocalizedOptions(row.original.field, currentLanguage);
           
           if (row.original.excluded) {
             return <span className="text-muted-foreground">(excluido)</span>;
           }
 
-          if (fieldOptions.length > 0) {
+          if (localizedOptions.length > 0) {
+            // For multilingual fields, show localized label but store DB value
+            const currentLabel = hasMultilingualDictionary(row.original.field) 
+              ? getLocalizedLabel(row.original.field, row.original.correctedValue?.toString() || '', currentLanguage)
+              : row.original.correctedValue?.toString() || '';
+            
             return (
               <Select
                 value={row.original.correctedValue?.toString() || ''}
                 onValueChange={(value) => handleValueChange(row.original.id, value)}
               >
                 <SelectTrigger className={cn("h-8", row.original.isCorrected && "border-green-500/50 bg-green-500/5")}>
-                  <SelectValue placeholder={t('common.select', { fallback: 'Seleccionar' })} />
+                  <SelectValue placeholder={t('common.select', { fallback: 'Seleccionar' })}>
+                    {currentLabel}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
-                  {fieldOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
+                  {localizedOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
                     </SelectItem>
                   ))}
                 </SelectContent>

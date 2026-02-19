@@ -4,6 +4,7 @@ import { countries } from './countryUtils';
 import { getCurrentYear } from './dateUtils';
 import { Language } from '@/config/languages';
 import { translations } from '@/translations';
+import { resolveMultilingualValue, detectExcelLanguage } from './xlsxMultilingualDictionary';
 
 export interface ValidationError {
   row: number;
@@ -163,6 +164,7 @@ const parseUnifiedVehicleData = (data: any[][], t: (key: string, params?: Record
   const warnings: ValidationError[] = [];
   
   const headers = data[0] as string[];
+  const detectedLang = detectExcelLanguage(headers.map(h => h?.toString() || ''));
   const totalRows = data.length - 1;
   let validRowCount = 0;
   const errorRows = new Set<number>();
@@ -336,8 +338,8 @@ const parseUnifiedVehicleData = (data: any[][], t: (key: string, params?: Record
       });
       hasError = true;
     } else {
-      const matchedFuel = findClosestMatch(fuel, FUEL_TYPES);
-      if (!matchedFuel) {
+      const resolvedFuel = resolveMultilingualValue('fuel', fuel);
+      if (!resolvedFuel) {
         errors.push({
           row: rowNumber,
           column: 'F',
@@ -348,7 +350,7 @@ const parseUnifiedVehicleData = (data: any[][], t: (key: string, params?: Record
         });
         hasError = true;
       } else {
-        vehicle.fuel = matchedFuel;
+        vehicle.fuel = resolvedFuel;
       }
     }
     
@@ -365,8 +367,8 @@ const parseUnifiedVehicleData = (data: any[][], t: (key: string, params?: Record
       });
       hasError = true;
     } else {
-      const matchedTransmission = findClosestMatch(transmission, TRANSMISSIONS);
-      if (!matchedTransmission) {
+      const resolvedTransmission = resolveMultilingualValue('transmission', transmission);
+      if (!resolvedTransmission) {
         errors.push({
           row: rowNumber,
           column: 'G',
@@ -377,7 +379,7 @@ const parseUnifiedVehicleData = (data: any[][], t: (key: string, params?: Record
         });
         hasError = true;
       } else {
-        vehicle.transmission = matchedTransmission;
+        vehicle.transmission = resolvedTransmission;
       }
     }
     
@@ -446,7 +448,10 @@ const parseUnifiedVehicleData = (data: any[][], t: (key: string, params?: Record
     }
     
     if (row[10]) vehicle.licensePlate = row[10].toString().trim();
-    if (row[11]) vehicle.vehicleType = row[11].toString().trim();
+    if (row[11]) {
+      const resolvedType = resolveMultilingualValue('vehicleType', row[11].toString().trim());
+      vehicle.vehicleType = resolvedType || row[11].toString().trim();
+    }
     if (row[12]) vehicle.color = row[12].toString().trim();
     if (row[13]) vehicle.doors = parseInt(row[13].toString(), 10);
     if (row[14]) vehicle.engineSize = parseInt(row[14].toString(), 10);
@@ -454,16 +459,16 @@ const parseUnifiedVehicleData = (data: any[][], t: (key: string, params?: Record
     
     const euroStandard = row[16]?.toString().trim();
     if (euroStandard) {
-      const matchedEuro = findClosestMatch(euroStandard, EURO_STANDARDS);
-      if (matchedEuro) vehicle.euroStandard = matchedEuro;
+      const resolvedEuro = resolveMultilingualValue('euroStandard', euroStandard);
+      if (resolvedEuro) vehicle.euroStandard = resolvedEuro;
     }
     
     if (row[17]) vehicle.co2Emissions = parseFloat(row[17].toString());
     
     const ivaStatus = row[18]?.toString().trim();
     if (ivaStatus) {
-      const matchedIva = findClosestMatch(ivaStatus, IVA_STATUS);
-      if (matchedIva) vehicle.ivaStatus = matchedIva;
+      const resolvedIva = resolveMultilingualValue('ivaStatus', ivaStatus);
+      if (resolvedIva) vehicle.ivaStatus = resolvedIva;
     }
     
     if (row[19]) vehicle.cocStatus = row[19].toString().toLowerCase() === 'true';
@@ -703,8 +708,8 @@ const parseVehicleData = (mandatoryData: any[][], optionalData: any[][], t: (key
       });
       hasError = true;
     } else {
-      const matchedFuel = findClosestMatch(fuel, FUEL_TYPES);
-      if (!matchedFuel) {
+      const resolvedFuel = resolveMultilingualValue('fuel', fuel);
+      if (!resolvedFuel) {
         errors.push({
           row: rowNumber,
           column: 'F',
@@ -715,7 +720,7 @@ const parseVehicleData = (mandatoryData: any[][], optionalData: any[][], t: (key
         });
         hasError = true;
       } else {
-        vehicle.fuel = matchedFuel;
+        vehicle.fuel = resolvedFuel;
       }
     }
     
@@ -732,8 +737,8 @@ const parseVehicleData = (mandatoryData: any[][], optionalData: any[][], t: (key
       });
       hasError = true;
     } else {
-      const matchedTransmission = findClosestMatch(transmission, TRANSMISSIONS);
-      if (!matchedTransmission) {
+      const resolvedTransmission = resolveMultilingualValue('transmission', transmission);
+      if (!resolvedTransmission) {
         errors.push({
           row: rowNumber,
           column: 'G',
@@ -744,7 +749,7 @@ const parseVehicleData = (mandatoryData: any[][], optionalData: any[][], t: (key
         });
         hasError = true;
       } else {
-        vehicle.transmission = matchedTransmission;
+        vehicle.transmission = resolvedTransmission;
       }
     }
     
@@ -826,7 +831,8 @@ const parseVehicleData = (mandatoryData: any[][], optionalData: any[][], t: (key
       // Vehicle Type (columna C de opcional)
       const vehicleType = optionalRow[2]?.toString().trim();
       if (vehicleType) {
-        vehicle.vehicleType = vehicleType;
+        const resolvedType = resolveMultilingualValue('vehicleType', vehicleType);
+        vehicle.vehicleType = resolvedType || vehicleType;
       }
       
       // Color (columna D de opcional)
@@ -865,9 +871,9 @@ const parseVehicleData = (mandatoryData: any[][], optionalData: any[][], t: (key
       // Euro Standard (columna H de opcional)
       const euroStandard = optionalRow[7]?.toString().trim();
       if (euroStandard) {
-        const matchedEuro = findClosestMatch(euroStandard, EURO_STANDARDS);
-        if (matchedEuro) {
-          vehicle.euroStandard = matchedEuro;
+        const resolvedEuro = resolveMultilingualValue('euroStandard', euroStandard);
+        if (resolvedEuro) {
+          vehicle.euroStandard = resolvedEuro;
         }
       }
       
@@ -883,9 +889,9 @@ const parseVehicleData = (mandatoryData: any[][], optionalData: any[][], t: (key
       // IVA Status (columna J de opcional)
       const ivaStatus = optionalRow[9]?.toString().trim();
       if (ivaStatus) {
-        const matchedIva = findClosestMatch(ivaStatus, IVA_STATUS);
-        if (matchedIva) {
-          vehicle.ivaStatus = matchedIva;
+        const resolvedIva = resolveMultilingualValue('ivaStatus', ivaStatus);
+        if (resolvedIva) {
+          vehicle.ivaStatus = resolvedIva;
         }
       }
       
