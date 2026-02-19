@@ -223,12 +223,18 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
             return;
           }
 
+          // Responsive image sizes: mobile gets 600px@50%, desktop gets 1200/800@50%
+          const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+          const imgWidth = isMobile 
+            ? 600 
+            : (registryData.isCritical ? 1200 : 800);
+
           const { data: urlData } = supabase.storage
             .from(STORAGE_BUCKET)
             .getPublicUrl(`${prefix}${latestFile.name}`, {
               transform: {
-                width: registryData.isCritical ? 1200 : 800,
-                quality: 75,
+                width: imgWidth,
+                quality: 50,
                 format: 'origin',
               }
             });

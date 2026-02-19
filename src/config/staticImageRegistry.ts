@@ -245,6 +245,17 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     source: "product"
   },
 
+  SERVICE_API: {
+    id: "services.api",
+    currentPath: "/images/api-keys-image.png",
+    usage: "ControlPanel → APIKeyCard",
+    purpose: "API Keys service card background",
+    critical: false,
+    aiEditable: true,
+    category: "services",
+    source: "product"
+  },
+
   // ═══════════════════════════════════════════════════════════════
   // DASHBOARD CONTROL PANEL IMAGES (src/assets/)
   // ═══════════════════════════════════════════════════════════════
