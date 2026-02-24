@@ -1,0 +1,1 @@
+ALTER TABLE public.vehicle_images ADD COLUMN source text;
