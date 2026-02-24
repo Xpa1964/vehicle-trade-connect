@@ -76,7 +76,7 @@ const HeroSection: React.FC = () => {
   return (
     <section 
       ref={heroRef}
-      className="relative w-full h-screen overflow-hidden print:hidden"
+      className="relative w-full h-[85vh] md:h-[90vh] overflow-hidden print:hidden"
       aria-label="Hero section"
     >
       {/* Hero Image Layer - Direct local image for full scene visibility */}
