@@ -72,7 +72,7 @@ serve(async (req) => {
 
     // Handle different methods
     if (req.method === 'POST') {
-      return await handleBulkSync(req, supabase, userId, apiKeyId);
+      return await handleInventorySync(req, supabase, userId, apiKeyId);
     } else if (req.method === 'DELETE') {
       return await handleDelete(req, supabase, userId);
     } else {
@@ -90,7 +90,13 @@ serve(async (req) => {
   }
 });
 
-async function handleBulkSync(req: Request, supabase: any, userId: string, apiKeyId?: string) {
+/**
+ * INVENTORY RECONCILIATION
+ * Each POST represents the COMPLETE CURRENT INVENTORY of the partner.
+ * - Upsert vehicles by (partner_id + external_id)
+ * - Mark unseen vehicles as unpublished (never delete)
+ */
+async function handleInventorySync(req: Request, supabase: any, userId: string, apiKeyId?: string) {
   const { vehicles } = await req.json();
 
   if (!vehicles || !Array.isArray(vehicles)) {
@@ -100,37 +106,51 @@ async function handleBulkSync(req: Request, supabase: any, userId: string, apiKe
     );
   }
 
-  console.log(`📦 Processing ${vehicles.length} vehicles for user ${userId}`);
+  console.log(`📦 Inventory sync: ${vehicles.length} vehicles from partner ${userId}`);
+
+  // 1) Generate sync timestamp
+  const syncTimestamp = new Date().toISOString();
 
   const results = {
-    total: vehicles.length,
-    successful: 0,
-    failed: 0,
-    errors: [] as any[]
+    processed: vehicles.length,
+    created: 0,
+    updated: 0,
+    deactivated: 0,
+    errors: [] as { external_id: string; reason: string }[]
   };
 
+  // 2) Process each vehicle (upsert)
   for (const vehicle of vehicles) {
     try {
       const { external_id, images, ...vehicleData } = vehicle;
 
       if (!external_id) {
-        results.errors.push({ external_id: 'missing', error: 'external_id is required' });
-        results.failed++;
+        results.errors.push({ external_id: 'missing', reason: 'external_id is required' });
         continue;
       }
 
-      // Check if vehicle exists
+      // Validate language field
+      if (!vehicleData.language) {
+        results.errors.push({ external_id, reason: 'language field is required (ISO code, e.g. "es", "en", "fr")' });
+        continue;
+      }
+
+      // Check if vehicle exists by (partner_id + external_id)
       const { data: existingVehicle } = await supabase
         .from('vehicles')
         .select('id')
-        .eq('user_id', userId)
+        .eq('partner_id', userId)
         .eq('external_id', external_id)
         .maybeSingle();
 
       // Normalize and prepare vehicle data
       const dbVehicleData = {
-        user_id: userId,
+        seller_id: userId,
+        partner_id: userId,
         external_id,
+        source: 'api' as const,
+        last_seen_at: syncTimestamp,
+        language: vehicleData.language,
         brand: vehicleData.brand || '',
         model: vehicleData.model || '',
         version: vehicleData.version || '',
@@ -138,7 +158,7 @@ async function handleBulkSync(req: Request, supabase: any, userId: string, apiKe
         license_plate: vehicleData.license_plate || '',
         price: vehicleData.price || 0,
         currency: vehicleData.currency || 'EUR',
-        status: normalizeStatus(vehicleData.status),
+        status: normalizeStatus(vehicleData.status) || 'available',
         fuel_type: normalizeFuelType(vehicleData.fuel_type),
         transmission: normalizeTransmission(vehicleData.transmission),
         body_type: normalizeBodyType(vehicleData.body_type),
@@ -152,14 +172,15 @@ async function handleBulkSync(req: Request, supabase: any, userId: string, apiKe
       let vehicleId: string;
 
       if (existingVehicle) {
-        // Update existing vehicle
+        // Update existing vehicle - re-activate if it was deactivated
         const { error: updateError } = await supabase
           .from('vehicles')
-          .update(dbVehicleData)
+          .update({ ...dbVehicleData, status: normalizeStatus(vehicleData.status) || 'available' })
           .eq('id', existingVehicle.id);
 
         if (updateError) throw updateError;
         vehicleId = existingVehicle.id;
+        results.updated++;
         console.log(`✅ Updated vehicle ${external_id}`);
       } else {
         // Insert new vehicle
@@ -171,10 +192,11 @@ async function handleBulkSync(req: Request, supabase: any, userId: string, apiKe
 
         if (insertError) throw insertError;
         vehicleId = newVehicle.id;
+        results.created++;
         console.log(`✅ Created vehicle ${external_id}`);
       }
 
-      // Handle images if provided (limit 10-25)
+      // Handle images if provided (limit 25)
       if (images && Array.isArray(images) && images.length > 0) {
         const MAX_IMAGES = 25;
         const imagesToProcess = images.slice(0, MAX_IMAGES);
@@ -185,35 +207,64 @@ async function handleBulkSync(req: Request, supabase: any, userId: string, apiKe
         
         await processImages(supabase, vehicleId, imagesToProcess);
       }
-
-      results.successful++;
     } catch (error: unknown) {
       console.error(`Error processing vehicle ${vehicle.external_id}:`, error);
       results.errors.push({
-        external_id: vehicle.external_id,
-        error: error instanceof Error ? error.message : String(error)
+        external_id: vehicle.external_id || 'unknown',
+        reason: error instanceof Error ? error.message : String(error)
       });
-      results.failed++;
     }
+  }
+
+  // 3) RECONCILIATION: Deactivate vehicles not seen in this sync
+  try {
+    const { data: deactivated, error: deactivateError } = await supabase
+      .from('vehicles')
+      .update({ status: 'inactive' })
+      .eq('partner_id', userId)
+      .eq('source', 'api')
+      .lt('last_seen_at', syncTimestamp)
+      .neq('status', 'inactive')
+      .select('id');
+
+    if (deactivateError) {
+      console.error('Error deactivating stale vehicles:', deactivateError);
+    } else {
+      results.deactivated = deactivated?.length || 0;
+      if (results.deactivated > 0) {
+        console.log(`🔻 Deactivated ${results.deactivated} vehicles no longer in partner inventory`);
+      }
+    }
+  } catch (error: unknown) {
+    console.error('Error in reconciliation:', error);
   }
 
   // Log sync activity
   await supabase.from('api_sync_logs').insert({
-    user_id: userId,
     api_key_id: apiKeyId,
-    action: 'bulk_sync',
-    vehicle_count: results.total,
-    success_count: results.successful,
-    error_count: results.failed,
-    errors: results.errors.length > 0 ? results.errors : null
+    action: 'inventory_sync',
+    vehicle_count: results.processed,
+    success_count: results.created + results.updated,
+    error_count: results.errors.length,
+    details: {
+      created: results.created,
+      updated: results.updated,
+      deactivated: results.deactivated,
+      errors: results.errors.length > 0 ? results.errors : null,
+      sync_timestamp: syncTimestamp
+    }
   });
 
-  console.log(`📊 Sync complete: ${results.successful}/${results.total} successful`);
+  console.log(`📊 Sync complete: created=${results.created}, updated=${results.updated}, deactivated=${results.deactivated}, errors=${results.errors.length}`);
 
   return new Response(
     JSON.stringify({
       success: true,
-      results
+      processed: results.processed,
+      created: results.created,
+      updated: results.updated,
+      deactivated: results.deactivated,
+      errors: results.errors
     }),
     { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
   );
@@ -230,24 +281,25 @@ async function handleDelete(req: Request, supabase: any, userId: string) {
     );
   }
 
+  // Soft-delete: mark as inactive instead of physical delete
   const { error } = await supabase
     .from('vehicles')
-    .delete()
-    .eq('user_id', userId)
+    .update({ status: 'inactive' })
+    .eq('partner_id', userId)
     .eq('external_id', externalId);
 
   if (error) {
-    console.error('Error deleting vehicle:', error);
+    console.error('Error deactivating vehicle:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 
-  console.log(`🗑️ Deleted vehicle ${externalId}`);
+  console.log(`🔻 Deactivated vehicle ${externalId}`);
 
   return new Response(
-    JSON.stringify({ success: true, message: 'Vehicle deleted successfully' }),
+    JSON.stringify({ success: true, message: 'Vehicle deactivated successfully' }),
     { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
   );
 }
@@ -293,10 +345,6 @@ function normalizeFuelType(fuel: string | undefined): string | undefined {
     'benzin': 'gasoline',
     'elektrisch': 'electric',
     
-    // Dutch (using different keys to avoid duplicates)
-    'brandstof': 'gasoline',
-    // 'elektrisch' already defined in German
-    
     // Portuguese
     'gasóleo': 'diesel',
     'elétrico': 'electric',
@@ -307,7 +355,7 @@ function normalizeFuelType(fuel: string | undefined): string | undefined {
     'elektryczny': 'electric',
     'hybrydowy': 'hybrid',
     
-    // Danish (benzin already defined in German)
+    // Danish
     'elektrisk': 'electric',
   };
   
@@ -319,46 +367,29 @@ function normalizeTransmission(transmission: string | undefined): string | undef
   const normalized = transmission.toLowerCase().trim();
   
   const transMap: { [key: string]: string } = {
-    // Spanish
     'manual': 'manual',
     'automatica': 'automatic',
     'automática': 'automatic',
     'semiautomatica': 'semi-automatic',
     'semiautomática': 'semi-automatic',
-    
-    // English
     'automatic': 'automatic',
     'auto': 'automatic',
     'semi-automatic': 'semi-automatic',
-    
-    // French
     'manuelle': 'manual',
     'automatique': 'automatic',
     'semi-automatique': 'semi-automatic',
-    
-    // Italian
     'manuale': 'manual',
     'automatico': 'automatic',
     'semiautomatico': 'semi-automatic',
-    
-    // German
     'schaltgetriebe': 'manual',
     'automatik': 'automatic',
     'halbautomatik': 'semi-automatic',
-    
-    // Dutch
     'handgeschakeld': 'manual',
     'automaat': 'automatic',
     'semi-automaat': 'semi-automatic',
-    
-    // Portuguese (automática and semiautomática already defined in Spanish)
-    
-    // Polish
     'manualna': 'manual',
     'automatyczna': 'automatic',
     'półautomatyczna': 'semi-automatic',
-    
-    // Danish
     'manuel': 'manual',
     'automatisk': 'automatic',
     'semi-automatisk': 'semi-automatic',
@@ -372,7 +403,6 @@ function normalizeBodyType(bodyType: string | undefined): string | undefined {
   const normalized = bodyType.toLowerCase().trim();
   
   const bodyMap: { [key: string]: string } = {
-    // Spanish
     'sedan': 'sedan',
     'berlina': 'sedan',
     'suv': 'suv',
@@ -383,38 +413,22 @@ function normalizeBodyType(bodyType: string | undefined): string | undefined {
     'coupé': 'coupe',
     'familiar': 'wagon',
     'monovolumen': 'minivan',
-    
-    // English
     'wagon': 'wagon',
     'minivan': 'minivan',
     'pickup': 'pickup',
     'truck': 'pickup',
-    
-    // French
     'berline': 'sedan',
     'break': 'wagon',
     'monospace': 'minivan',
-    
-    // Italian
     'station wagon': 'wagon',
     'monovolume': 'minivan',
-    
-    // German
     'limousine': 'sedan',
     'kombi': 'wagon',
     'van': 'minivan',
-    
-    // Dutch
     'stationwagen': 'wagon',
     'mpv': 'minivan',
-    
-    // Portuguese
     'carrinha': 'wagon',
     'cupê': 'coupe',
-    
-    // Polish (kombi already defined in German)
-    
-    // Danish
     'stationcar': 'wagon',
   };
   
@@ -426,45 +440,27 @@ function normalizeStatus(status: string | undefined): string {
   const normalized = status.toLowerCase().trim();
   
   const statusMap: { [key: string]: string } = {
-    // Spanish
     'disponible': 'available',
     'vendido': 'sold',
     'reservado': 'reserved',
-    
-    // English
     'available': 'available',
     'sold': 'sold',
     'reserved': 'reserved',
-    
-    // French (disponible already defined in Spanish)
     'vendu': 'sold',
     'réservé': 'reserved',
-    
-    // Italian
     'disponibile': 'available',
     'venduto': 'sold',
     'riservato': 'reserved',
-    
-    // German
     'verfügbar': 'available',
     'verkauft': 'sold',
     'reserviert': 'reserved',
-    
-    // Dutch
     'beschikbaar': 'available',
     'verkocht': 'sold',
     'gereserveerd': 'reserved',
-    
-    // Portuguese
     'disponível': 'available',
-    // 'vendido' already defined in Spanish
-    
-    // Polish
     'dostępny': 'available',
     'sprzedany': 'sold',
     'zarezerwowany': 'reserved',
-    
-    // Danish
     'tilgængelig': 'available',
     'solgt': 'sold',
     'reserveret': 'reserved',
