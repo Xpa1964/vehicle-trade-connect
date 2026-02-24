@@ -1,8 +1,6 @@
 import React, { useRef, useLayoutEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import SimpleImage from '@/components/shared/SimpleImage';
-import { useImagePreload } from '@/hooks/useImagePreload';
-import { useStaticImage } from '@/hooks/useStaticImage';
 import kontactLogoCircle from '@/assets/kontact-vo-logo-circle.png';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -17,12 +15,6 @@ const HeroSection: React.FC = () => {
   const logoRef = useRef<HTMLDivElement>(null);
   const [logoStyle, setLogoStyle] = useState<React.CSSProperties>({});
   const [isDesktop, setIsDesktop] = useState(false);
-  
-  // Get background image from registry (with storage override)
-  const heroBackground = useStaticImage('home.hero');
-
-  // Preload critical LCP image
-  useImagePreload([heroBackground.src]);
   
   // Check if current language is Spanish or French
   const isSpanishOrFrench = currentLanguage === 'es' || currentLanguage === 'fr';
