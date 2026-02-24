@@ -79,23 +79,42 @@ const HeroSection: React.FC = () => {
       className="relative w-full h-screen overflow-hidden print:hidden"
       aria-label="Hero section"
     >
-      {/* Hero Image Layer - Using Registry */}
+      {/* Hero Image Layer - Responsive <picture> for LCP optimization */}
       <div className="absolute inset-0 w-full h-full" aria-hidden="true">
-        <SimpleImage
-          src={heroBackground.src}
-          alt="Fondo de vehículos de lujo profesionales"
-          className="w-full h-full object-cover object-center"
-          loading="eager"
-          fetchpriority="high"
-          width={1200}
-          height={844}
-          onError={(e) => {
-            // Fallback from registry
-            if (heroBackground.fallback) {
-              e.currentTarget.src = heroBackground.fallback;
-            }
-          }}
-        />
+        <picture>
+          {/* Mobile: 800px wide, WebP, 50% quality */}
+          {heroBackground.src && (
+            <source
+              media="(max-width: 767px)"
+              srcSet={heroBackground.src.includes('supabase') 
+                ? heroBackground.src.replace(/width=\d+/, 'width=800').replace(/quality=\d+/, 'quality=50').replace(/format=\w+/, 'format=webp')
+                : heroBackground.src}
+              type="image/webp"
+            />
+          )}
+          {/* Desktop: full quality */}
+          {heroBackground.src && (
+            <source
+              media="(min-width: 1025px)"
+              srcSet={heroBackground.src}
+            />
+          )}
+          <img
+            src={heroBackground.src}
+            alt="Fondo de vehículos de lujo profesionales"
+            className="w-full h-full object-cover object-center"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
+            width={1200}
+            height={844}
+            onError={(e) => {
+              if (heroBackground.fallback) {
+                e.currentTarget.src = heroBackground.fallback;
+              }
+            }}
+          />
+        </picture>
       </div>
 
       {/* Logo independiente - posicionado dinámicamente bajo "Vehículos" en desktop, centrado en móvil */}
