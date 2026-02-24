@@ -12,7 +12,7 @@
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       img-src 'self' data: https: blob:;
       font-src 'self' data: https://fonts.gstatic.com;
-      connect-src 'self' https://*.supabase.co https://inqqnsvlimtpjxjxuzaf.supabase.co wss://*.supabase.co https://api.openai.com https://translate.googleapis.com;
+      connect-src 'self' https://*.supabase.co https://vbqvzumjmnblcdkkxuqq.supabase.co wss://*.supabase.co https://api.openai.com https://translate.googleapis.com;
       media-src 'self' https://*.supabase.co blob:;
       object-src 'none';
       frame-ancestors 'self';
@@ -77,7 +77,7 @@
     
     <!-- High priority preloads for critical assets with proper sizing -->
     <link rel="preload" href="/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png" as="image" fetchpriority="high" imagesizes="192px" />
-    <link rel="preload" href="/lovable-uploads/d756e9c6-4a89-45dc-a824-7c846cdb6c2b.png" as="image" imagesizes="100vw" />
+    <!-- Hero image preload removed: now handled by <picture> with responsive sources in HeroSection -->
     
     <!-- Preconnect: only essential origins -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
@@ -87,13 +87,13 @@
     <!-- Critical inline CSS for instant FCP - expanded for hero section -->
     <style>
       /* Reset and base */
-      * { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid rgb(219, 226, 237); }
+      * { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid hsl(217 19% 27%); }
       
-      /* Immediate text visibility with system fonts */
+      /* Immediate text visibility with system fonts - matches dark theme */
       body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: rgb(244, 246, 250);
-        color: rgb(48, 60, 77);
+        background: hsl(222 47% 5%);
+        color: hsl(210 40% 98%);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
@@ -111,6 +111,7 @@
         width: 100%;
         height: 100vh;
         overflow: hidden;
+        background: hsl(222 47% 5%);
       }
       
       .hero-image {
@@ -145,13 +146,13 @@
       @media (min-width: 768px) { .hero-title { font-size: 5rem; } }
       @media (min-width: 1024px) { .hero-title { font-size: 6rem; } }
       
-      /* Loading state */
+      /* Loading state - matches dark theme */
       #root:empty::before {
         content: '';
         display: block;
         width: 100%;
         height: 100vh;
-        background: rgb(244, 246, 250);
+        background: hsl(222 47% 5%);
       }
     </style>
     
@@ -162,27 +163,27 @@
         requestIdleCallback(function() {
           var link = document.createElement('link');
           link.rel = 'stylesheet';
-          link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Nunito+Sans:wght@300;400;500;600;700;800&display=swap';
+          link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap';
           document.head.appendChild(link);
         });
       } else {
         window.addEventListener('load', function() {
           var link = document.createElement('link');
           link.rel = 'stylesheet';
-          link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Nunito+Sans:wght@300;400;500;600;700;800&display=swap';
+          link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap';
           document.head.appendChild(link);
         });
       }
     </script>
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Nunito+Sans:wght@300;400;500;600;700;800&display=swap" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" />
     </noscript>
     
     <!-- Structured Data - Automotive Business -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "AutomobileBusinesses",
+      "@type": "AutoDealer",
       "name": "KONTACT VO",
       "description": "Professional B2B automotive marketplace for used vehicle trading, auctions, and business networking",
       "url": "https://kontact-vo.lovable.app",
@@ -230,10 +231,11 @@
     </script>
     
     <!-- Alternative languages -->
+    <!-- All languages served from same URL via client-side detection -->
     <link rel="alternate" hreflang="es" href="https://kontact-vo.lovable.app/" />
-    <link rel="alternate" hreflang="en" href="https://kontact-vo.lovable.app/en" />
-    <link rel="alternate" hreflang="fr" href="https://kontact-vo.lovable.app/fr" />
-    <link rel="alternate" hreflang="it" href="https://kontact-vo.lovable.app/it" />
+    <link rel="alternate" hreflang="en" href="https://kontact-vo.lovable.app/" />
+    <link rel="alternate" hreflang="fr" href="https://kontact-vo.lovable.app/" />
+    <link rel="alternate" hreflang="it" href="https://kontact-vo.lovable.app/" />
     <link rel="alternate" hreflang="x-default" href="https://kontact-vo.lovable.app/" />
   </head>
 
