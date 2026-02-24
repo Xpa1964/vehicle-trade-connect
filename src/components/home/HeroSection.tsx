@@ -100,7 +100,7 @@ const HeroSection: React.FC = () => {
           <img
             src={heroBackground.src || '/images/home-hero.png'}
             alt="Fondo de vehículos de lujo profesionales"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-bottom"
             loading="eager"
             fetchPriority="high"
             decoding="sync"
