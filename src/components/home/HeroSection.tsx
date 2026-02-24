@@ -80,7 +80,7 @@ const HeroSection: React.FC = () => {
       aria-label="Hero section"
     >
       {/* Hero Image Layer - Responsive <picture> for LCP optimization */}
-      <div className="absolute inset-0 w-full h-full bg-black" aria-hidden="true">
+      <div className="absolute inset-0 w-full h-full" aria-hidden="true">
         <picture>
           {/* Mobile: smaller, WebP */}
           {heroBackground.src && heroBackground.src.includes('supabase') && (
@@ -100,7 +100,7 @@ const HeroSection: React.FC = () => {
           <img
             src={heroBackground.src || '/images/home-hero.png'}
             alt="Fondo de vehículos de lujo profesionales"
-            className="w-full h-full object-contain object-center"
+            className="w-full h-full object-cover object-center"
             loading="eager"
             fetchPriority="high"
             decoding="sync"
