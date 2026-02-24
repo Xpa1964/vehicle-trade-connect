@@ -89,6 +89,7 @@ export const STATIC_IMAGE_REGISTRY: Record<string, StaticImageEntry> = {
     purpose: "Main hero background - luxury vehicles",
     critical: true,
     aiEditable: true,
+    fallback: "/images/home-hero.png",
     category: "home",
     source: "product"
   },
