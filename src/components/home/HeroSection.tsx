@@ -79,41 +79,16 @@ const HeroSection: React.FC = () => {
       className="relative w-full h-screen overflow-hidden print:hidden"
       aria-label="Hero section"
     >
-      {/* Hero Image Layer - Responsive <picture> for LCP optimization */}
+      {/* Hero Image Layer - Direct local image for full scene visibility */}
       <div className="absolute inset-0 w-full h-full" aria-hidden="true">
-        <picture>
-          {/* Mobile: smaller, WebP */}
-          {heroBackground.src && heroBackground.src.includes('supabase') && (
-            <source
-              media="(max-width: 767px)"
-              srcSet={heroBackground.src.replace(/width=\d+/, 'width=800').replace(/quality=\d+/, 'quality=50').replace(/format=\w+/, 'format=webp')}
-              type="image/webp"
-            />
-          )}
-          {/* Desktop: full quality */}
-          {heroBackground.src && heroBackground.src.includes('supabase') && (
-            <source
-              media="(min-width: 1025px)"
-              srcSet={heroBackground.src}
-            />
-          )}
-          <img
-            src={heroBackground.src || '/images/home-hero.png'}
-            alt="Fondo de vehículos de lujo profesionales"
-            className="w-full h-full object-cover object-bottom"
-            loading="eager"
-            fetchPriority="high"
-            decoding="sync"
-            width={1200}
-            height={844}
-            onError={(e) => {
-              const localFallback = '/images/home-hero.png';
-              if (e.currentTarget.src !== localFallback) {
-                e.currentTarget.src = localFallback;
-              }
-            }}
-          />
-        </picture>
+        <img
+          src="/images/home-hero.png"
+          alt="Fondo de vehículos de lujo profesionales"
+          className="w-full h-full object-cover object-center"
+          loading="eager"
+          fetchPriority="high"
+          decoding="sync"
+        />
       </div>
 
       {/* Logo independiente - posicionado dinámicamente bajo "Vehículos" en desktop, centrado en móvil */}
