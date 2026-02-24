@@ -472,6 +472,19 @@ function normalizeStatus(status: string | undefined): string {
 async function processImages(supabase: any, vehicleId: string, imageUrls: string[]) {
   console.log(`🖼️ Processing ${imageUrls.length} images for vehicle ${vehicleId}`);
 
+  // Delete previous API-sourced images (DB records only, not storage files)
+  const { error: deleteError } = await supabase
+    .from('vehicle_images')
+    .delete()
+    .eq('vehicle_id', vehicleId)
+    .eq('source', 'api');
+
+  if (deleteError) {
+    console.error('Error deleting previous API images:', deleteError);
+  } else {
+    console.log(`🗑️ Cleaned previous API images for vehicle ${vehicleId}`);
+  }
+
   for (let i = 0; i < imageUrls.length; i++) {
     try {
       const imageUrl = imageUrls[i];
@@ -505,12 +518,13 @@ async function processImages(supabase: any, vehicleId: string, imageUrls: string
         .from('Vehicles Images')
         .getPublicUrl(fileName);
 
-      // Insert into vehicle_images table
+      // Insert into vehicle_images table with source = 'api'
       await supabase.from('vehicle_images').insert({
         vehicle_id: vehicleId,
         image_url: publicUrl,
         display_order: i,
-        is_primary: i === 0
+        is_primary: i === 0,
+        source: 'api'
       });
 
       // Update vehicle thumbnail if first image
