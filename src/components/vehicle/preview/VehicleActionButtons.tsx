@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Vehicle } from '@/types/vehicle';
-import { Edit, Trash2, Info } from 'lucide-react';
+import { Edit, Trash2, Info, Lock } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import CommissionSaleModal from './CommissionSaleModal';
 import { VehicleStatusActions } from '@/components/vehicles/VehicleStatusActions';
 import { useVehicleStatusChange } from '@/hooks/useVehicleStatusChange';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface VehicleActionButtonsProps {
   vehicle: Vehicle;
@@ -28,12 +29,15 @@ const VehicleActionButtons: React.FC<VehicleActionButtonsProps> = ({
   const [localStatus, setLocalStatus] = useState(vehicle.status);
   const { markVehicleStatus } = useVehicleStatusChange();
 
+  const isApiSource = vehicle.source === 'api';
+
   // Sync local status with external changes
   useEffect(() => {
     setLocalStatus(vehicle.status);
   }, [vehicle.status]);
 
   const handleEdit = () => {
+    if (isApiSource) return;
     if (onEdit) {
       onEdit();
     } else {
@@ -46,7 +50,7 @@ const VehicleActionButtons: React.FC<VehicleActionButtonsProps> = ({
   };
 
   const handleStatusChange = (status: 'reserved' | 'sold' | 'available') => {
-    setLocalStatus(status); // Immediate UI update
+    setLocalStatus(status);
     markVehicleStatus.mutate({ vehicleId: vehicle.id, status });
   };
 
@@ -68,12 +72,28 @@ const VehicleActionButtons: React.FC<VehicleActionButtonsProps> = ({
         {/* Botones de propietario */}
         {isOwner && (
           <>
-            <Button variant="outline" onClick={handleEdit} className="flex-1 min-w-[100px] text-xs">
-              <Edit className="h-3 w-3 mr-1" />
-              {t('common.edit')}
-            </Button>
+            {isApiSource ? (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline" disabled className="flex-1 min-w-[100px] text-xs opacity-60">
+                      <Lock className="h-3 w-3 mr-1" />
+                      {t('common.edit')}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t('vehicles.apiSourceEditBlocked', { fallback: 'This vehicle is managed via API. Edit through your integration.' })}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <Button variant="outline" onClick={handleEdit} className="flex-1 min-w-[100px] text-xs">
+                <Edit className="h-3 w-3 mr-1" />
+                {t('common.edit')}
+              </Button>
+            )}
             
-            {onDelete && (
+            {onDelete && !isApiSource && (
               <Button variant="destructive" onClick={onDelete} className="flex-1 min-w-[100px] text-xs">
                 <Trash2 className="h-3 w-3 mr-1" />
                 {t('common.delete')}

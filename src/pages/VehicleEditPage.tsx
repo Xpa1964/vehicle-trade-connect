@@ -1,21 +1,41 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Lock } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import VehicleUploadForm from '@/components/vehicles/VehicleUploadForm';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const VehicleEditPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [isApiSource, setIsApiSource] = useState(false);
+  const [checking, setChecking] = useState(!!id);
+
+  useEffect(() => {
+    if (id) {
+      supabase
+        .from('vehicles')
+        .select('source')
+        .eq('id', id)
+        .single()
+        .then(({ data }) => {
+          setIsApiSource(data?.source === 'api');
+          setChecking(false);
+        });
+    }
+  }, [id]);
 
   if (!user) {
     return <div>{t('auth.loginRequired', { fallback: 'Login required' })}</div>;
   }
+
+  if (checking) return null;
 
   return (
     <div className="space-y-6">
@@ -30,7 +50,17 @@ const VehicleEditPage: React.FC = () => {
           {t('common.back')}
         </Button>
       </div>
-      <VehicleUploadForm vehicleId={id} />
+
+      {isApiSource ? (
+        <Alert>
+          <Lock className="h-4 w-4" />
+          <AlertDescription>
+            {t('vehicles.apiSourceEditBlocked', { fallback: 'This vehicle is managed via API. Edit through your integration.' })}
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <VehicleUploadForm vehicleId={id} />
+      )}
     </div>
   );
 };

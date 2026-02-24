@@ -2489,6 +2489,7 @@ export type Database = {
           doors: number | null
           engine_power: number | null
           engine_size: string | null
+          external_id: string | null
           features: Json | null
           first_registration_date: string | null
           fuel: string | null
@@ -2497,6 +2498,8 @@ export type Database = {
           images: Json | null
           is_featured: boolean | null
           itv_expiry: string | null
+          language: string | null
+          last_seen_at: string | null
           license_plate: string | null
           location: string | null
           mileage: number | null
@@ -2505,6 +2508,7 @@ export type Database = {
           needs_repairs: boolean | null
           origin_city: string | null
           origin_country: string | null
+          partner_id: string | null
           plate_country: string | null
           power_hp: number | null
           previous_owners: number | null
@@ -2518,6 +2522,7 @@ export type Database = {
           service_history: boolean | null
           sold: boolean | null
           sold_date: string | null
+          source: string
           status: string | null
           thumbnailurl: string | null
           transaction_type: string | null
@@ -2552,6 +2557,7 @@ export type Database = {
           doors?: number | null
           engine_power?: number | null
           engine_size?: string | null
+          external_id?: string | null
           features?: Json | null
           first_registration_date?: string | null
           fuel?: string | null
@@ -2560,6 +2566,8 @@ export type Database = {
           images?: Json | null
           is_featured?: boolean | null
           itv_expiry?: string | null
+          language?: string | null
+          last_seen_at?: string | null
           license_plate?: string | null
           location?: string | null
           mileage?: number | null
@@ -2568,6 +2576,7 @@ export type Database = {
           needs_repairs?: boolean | null
           origin_city?: string | null
           origin_country?: string | null
+          partner_id?: string | null
           plate_country?: string | null
           power_hp?: number | null
           previous_owners?: number | null
@@ -2581,6 +2590,7 @@ export type Database = {
           service_history?: boolean | null
           sold?: boolean | null
           sold_date?: string | null
+          source?: string
           status?: string | null
           thumbnailurl?: string | null
           transaction_type?: string | null
@@ -2615,6 +2625,7 @@ export type Database = {
           doors?: number | null
           engine_power?: number | null
           engine_size?: string | null
+          external_id?: string | null
           features?: Json | null
           first_registration_date?: string | null
           fuel?: string | null
@@ -2623,6 +2634,8 @@ export type Database = {
           images?: Json | null
           is_featured?: boolean | null
           itv_expiry?: string | null
+          language?: string | null
+          last_seen_at?: string | null
           license_plate?: string | null
           location?: string | null
           mileage?: number | null
@@ -2631,6 +2644,7 @@ export type Database = {
           needs_repairs?: boolean | null
           origin_city?: string | null
           origin_country?: string | null
+          partner_id?: string | null
           plate_country?: string | null
           power_hp?: number | null
           previous_owners?: number | null
@@ -2644,6 +2658,7 @@ export type Database = {
           service_history?: boolean | null
           sold?: boolean | null
           sold_date?: string | null
+          source?: string
           status?: string | null
           thumbnailurl?: string | null
           transaction_type?: string | null

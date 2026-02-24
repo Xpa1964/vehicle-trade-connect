@@ -30,6 +30,13 @@ export interface Vehicle {
   condition?: string;
   description?: string;
   
+  // Inventory sync fields
+  source?: string;
+  partner_id?: string;
+  external_id?: string;
+  last_seen_at?: string;
+  language?: string;
+  
   // New fields
   vin?: string;
   licensePlate?: string;
