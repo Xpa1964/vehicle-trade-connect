@@ -7,7 +7,6 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { HelmetProvider } from 'react-helmet-async';
 import AppRoutes from '@/routes/AppRoutes';
-import { preloadCriticalImages } from '@/utils/imagePreloader';
 import { initializePhase0 } from '@/utils/security/phase0Setup';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { initializePWA } from '@/utils/pwa';
@@ -29,9 +28,6 @@ function App() {
       console.error('[App] Error inicializando Fase 0:', error);
     });
     
-    // Use the unified preloader for critical images
-    preloadCriticalImages();
-    
     // Initialize PWA features
     initializePWA();
 
@@ -43,31 +39,6 @@ function App() {
 
     // Initialize Core Web Vitals monitoring
     reportWebVitals();
-
-    // Static Image Platform - runs AFTER React is mounted
-    const initStaticImagePlatform = async () => {
-      try {
-        const { initRegistryIntegrityCheck } = await import('@/lib/registryIntegrityCheck');
-        const { initCriticalImagePreload } = await import('@/lib/criticalImagePreloader');
-        const { initDevImageGuard } = await import('@/lib/devImageGuard');
-        const { STATIC_IMAGE_REGISTRY } = await import('@/config/staticImageRegistry');
-        
-        initRegistryIntegrityCheck();
-        initCriticalImagePreload();
-        initDevImageGuard();
-        
-        // Freeze registry in production
-        if (!import.meta.env.DEV) {
-          Object.freeze(STATIC_IMAGE_REGISTRY);
-        }
-        
-        console.log('[App] Static Image Platform inicializado');
-      } catch (error) {
-        console.error('[App] Error inicializando Static Image Platform:', error);
-      }
-    };
-    
-    initStaticImagePlatform();
   }, []);
 
   console.log('🚀 [App] Renderizando...');
