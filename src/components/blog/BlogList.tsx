@@ -47,7 +47,7 @@ const BlogList: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900">Últimas Publicaciones</h2>
           <p className="text-gray-600 mt-1">Mantente informado con nuestros artículos especializados</p>
         </div>
-        <Button variant="outline" onClick={() => navigate('/blog-view')}>
+        <Button variant="outline" onClick={() => navigate('/blog')}>
           Ver todos los artículos
           <ArrowRight className="h-4 w-4 ml-2" />
         </Button>

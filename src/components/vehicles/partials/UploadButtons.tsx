@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { FileText } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { generateXLSXTemplate } from '@/utils/xlsxTemplateGenerator';
+const loadXLSXTemplate = () => import('@/utils/xlsxTemplateGenerator').then(m => m.generateXLSXTemplate);
 
 interface UploadButtonsProps {
   isUploading: boolean;
@@ -16,7 +16,7 @@ export const UploadButtons = ({ isUploading }: UploadButtonsProps) => {
     <div>
       <Button
         variant="outline"
-        onClick={() => generateXLSXTemplate(currentLanguage)}
+        onClick={async () => { const gen = await loadXLSXTemplate(); gen(currentLanguage); }}
         className="flex items-center gap-2 w-full md:w-auto"
         disabled={isUploading}
       >

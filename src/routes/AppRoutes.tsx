@@ -51,9 +51,7 @@ const MessagingInfoPage = lazy(() => import("../pages/MessagingInfoPage").catch(
 const BulletinInfoPage = lazy(() => import("../pages/BulletinInfoPage").catch(() => ({ default: () => <div>Error loading BulletinInfoPage page</div> })));
 const AuctionsInfoPage = lazy(() => import("../pages/AuctionsInfoPage").catch(() => ({ default: () => <div>Error loading AuctionsInfoPage page</div> })));
 const ExchangesInfoPage = lazy(() => import("../pages/ExchangesInfoPage").catch(() => ({ default: () => <div>Error loading ExchangesInfoPage page</div> })));
-const OtherServicesPage = lazy(() => import("../pages/OtherServicesPage").catch(() => ({ default: () => <div>Error loading OtherServicesPage page</div> })));
 const BlogList = lazy(() => import("../pages/blog/BlogList").catch(() => ({ default: () => <div>Error loading BlogList page</div> })));
-const BlogView = lazy(() => import("../pages/blog/BlogView").catch(() => ({ default: () => <div>Error loading BlogView page</div> })));
 const BlogPostView = lazy(() => import("../pages/blog/BlogPostView").catch(() => ({ default: () => <div>Error loading BlogPostView page</div> })));
 const BlogMainPage = lazy(() => import("../pages/BlogMainPage").catch(() => ({ default: () => <div>Error loading BlogMainPage page</div> })));
 const UsersDirectory = lazy(() => import("../pages/UsersDirectory").catch(() => ({ default: () => <div>Error loading UsersDirectory page</div> })));
@@ -107,8 +105,6 @@ const BlogManagement = lazy(() => import("../pages/blog/BlogManagement").catch((
 const BlogPostCreate = lazy(() => import("../pages/blog/BlogPostCreate").catch(() => ({ default: () => <div>Error loading BlogPostCreate page</div> })));
 const BlogPostEdit = lazy(() => import("../pages/blog/BlogPostEdit").catch(() => ({ default: () => <div>Error loading BlogPostEdit page</div> })));
 const TranslationManagement = lazy(() => import("../pages/TranslationManagement").catch(() => ({ default: () => <div>Error loading TranslationManagement page</div> })));
-const ImageDiagnosticPage = lazy(() => import("../pages/ImageDiagnosticPage").catch(() => ({ default: () => <div>Error loading ImageDiagnosticPage page</div> })));
-const VideoUploader = lazy(() => import("../components/admin/VideoUploader").then(module => ({ default: module.VideoUploader })).catch(() => ({ default: () => <div>Error loading VideoUploader</div> })));
 const AdminReportPayments = lazy(() => import("../pages/admin/ReportPayments").catch(() => ({ default: () => <div>Error loading ReportPayments page</div> })));
 const AdminReportProcessing = lazy(() => import("../pages/admin/ReportProcessing").catch(() => ({ default: () => <div>Error loading ReportProcessing page</div> })));
 const AdminAPIManagement = lazy(() => import("../pages/admin/APIManagement").catch(() => ({ default: () => <div>Error loading APIManagement page</div> })));
@@ -123,9 +119,6 @@ const AppRoutes = () => {
     <Suspense fallback={<LoadingFallback />}>
       <main id="main-content">
         <Routes>
-        {/* Ruta temporal sin layout para subir video */}
-        <Route path="upload-video" element={<VideoUploader />} />
-        
         {/* Rutas con Layout principal */}
         <Route path="/" element={<Layout />}>
           {/* Rutas públicas */}
@@ -165,9 +158,7 @@ const AppRoutes = () => {
           <Route path="bulletin-info" element={<BulletinInfoPage />} />
           <Route path="auctions-info" element={<AuctionsInfoPage />} />
           <Route path="exchanges-info" element={<ExchangesInfoPage />} />
-          <Route path="other-services" element={<OtherServicesPage />} />
           <Route path="blog" element={<BlogMainPage />} />
-          <Route path="blog-view" element={<BlogView />} />
           <Route path="blog/:id" element={<BlogPostView />} />
           {/* CORREGIDO: Usar ProfilePage para la ruta de usuario */}
           <Route path="user/:id" element={<ProfilePage />} />
@@ -177,9 +168,6 @@ const AppRoutes = () => {
           <Route path="privacy" element={<PrivacyPolicyPage />} />
           <Route path="cookies" element={<CookiesPage />} />
           <Route path="auction-policies" element={<AuctionPoliciesPage />} />
-          
-          {/* Rutas de diagnóstico y generación de imágenes */}
-          <Route path="image-diagnostic" element={<ImageDiagnosticPage />} />
           
           {/* Rutas protegidas */}
           <Route path="dashboard" element={

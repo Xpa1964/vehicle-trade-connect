@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, FileSpreadsheet, CheckCircle, AlertCircle } from 'lucide-react';
-import { generateXLSXTemplate } from '@/utils/xlsxTemplateGenerator';
+const loadXLSXTemplate = () => import('@/utils/xlsxTemplateGenerator').then(m => m.generateXLSXTemplate);
 
 export const BulkUploadTemplate: React.FC = () => {
   const { t, currentLanguage } = useLanguage();
@@ -106,7 +106,7 @@ export const BulkUploadTemplate: React.FC = () => {
 
         {/* Botón de descarga destacado */}
         <Button 
-          onClick={() => generateXLSXTemplate(currentLanguage)}
+          onClick={async () => { const gen = await loadXLSXTemplate(); gen(currentLanguage); }}
           className="w-full h-12 text-base font-semibold gap-2 shadow-lg hover:shadow-xl transition-all"
           size="lg"
         >
