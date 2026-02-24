@@ -35,7 +35,7 @@ export const SEO = ({
   nofollow = false,
   canonical,
 }: SEOProps) => {
-  const siteUrl = 'https://kontact-vo.lovable.app';
+  const siteUrl = 'https://kontactvo.com';
   const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
   const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
   const fullTitle = title 
