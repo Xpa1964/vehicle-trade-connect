@@ -8,8 +8,9 @@ import { Button } from '@/components/ui/button';
 import { showProgressToast } from '@/components/ui/progress-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { generateAuditData, type AuditData } from '@/utils/auditDataGenerator';
-import { generatePDF } from '@/utils/pdfGenerator';
-import { generateWord } from '@/utils/wordGenerator';
+// Dynamic imports for heavy doc generation libs (not in main bundle)
+const loadPdfGenerator = () => import('@/utils/pdfGenerator').then(m => m.generatePDF);
+const loadWordGenerator = () => import('@/utils/wordGenerator').then(m => m.generateWord);
 import { AuditReportHeader } from '@/components/admin/audit/AuditReportHeader';
 import { SecurityAuditSection } from '@/components/admin/audit/SecurityAuditSection';
 import { UXAuditSection } from '@/components/admin/audit/UXAuditSection';
@@ -63,6 +64,7 @@ const AuditReportPage: React.FC = () => {
     const toastId = showProgressToast.loading('Generando PDF', 'pdf-generation');
     
     try {
+      const generatePDF = await loadPdfGenerator();
       await generatePDF(auditData);
       showProgressToast.success('✅ PDF generado correctamente', toastId);
     } catch (error) {
@@ -78,6 +80,7 @@ const AuditReportPage: React.FC = () => {
     const toastId = showProgressToast.loading('Generando documento Word', 'word-generation');
     
     try {
+      const generateWord = await loadWordGenerator();
       await generateWord(auditData);
       showProgressToast.success('✅ Documento Word generado correctamente', toastId);
     } catch (error) {

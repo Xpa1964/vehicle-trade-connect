@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { FileText, Upload, AlertCircle, Image, FolderOpen, Info } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { generateXLSXTemplate } from '@/utils/xlsxTemplateGenerator';
+const loadXLSXTemplate = () => import('@/utils/xlsxTemplateGenerator').then(m => m.generateXLSXTemplate);
 
 interface UploadFormProps {
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -30,7 +30,7 @@ export const UploadForm = ({
       <div>
         <Button
           variant="outline"
-          onClick={() => generateXLSXTemplate(currentLanguage)}
+          onClick={async () => { const gen = await loadXLSXTemplate(); gen(currentLanguage); }}
           className="flex items-center gap-2 w-full md:w-auto"
         >
           <FileText className="w-4 h-4" />
