@@ -1,170 +1,169 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
-  <!-- Homepage - Multiple languages -->
+
+  <!-- Homepage -->
   <url>
-    <loc>https://kontact-vo.lovable.app/</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="es" href="https://kontact-vo.lovable.app/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://kontact-vo.lovable.app/en" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kontact-vo.lovable.app/fr" />
-    <xhtml:link rel="alternate" hreflang="it" href="https://kontact-vo.lovable.app/it" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://kontactvo.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://kontactvo.com/en" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kontactvo.com/fr" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://kontactvo.com/it" />
   </url>
 
-  <!-- Vehicle Gallery -->
+  <!-- Vehicle Inventory -->
   <url>
-    <loc>https://kontact-vo.lovable.app/vehicles</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/vehicles</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Auctions -->
   <url>
-    <loc>https://kontact-vo.lovable.app/auctions</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/auctions</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Import Calculator -->
   <url>
-    <loc>https://kontact-vo.lovable.app/import-calculator</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/import-calculator</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Bulletin Board -->
   <url>
-    <loc>https://kontact-vo.lovable.app/bulletin</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/bulletin</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Exchanges -->
   <url>
-    <loc>https://kontact-vo.lovable.app/exchanges</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/exchanges</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Services -->
   <url>
-    <loc>https://kontact-vo.lovable.app/services</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/services</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
-  <!-- Transport Services -->
+  <!-- Transport -->
   <url>
-    <loc>https://kontact-vo.lovable.app/transport</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/transport</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Vehicle Reports -->
   <url>
-    <loc>https://kontact-vo.lovable.app/vehicle-reports</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/vehicle-reports</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
-  <!-- Information Pages -->
+  <!-- Blog -->
   <url>
-    <loc>https://kontact-vo.lovable.app/info/vehicle-gallery</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/blog</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Info Pages -->
+  <url>
+    <loc>https://kontactvo.com/info/vehicle-gallery</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://kontact-vo.lovable.app/info/exchanges</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/info/exchanges</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://kontact-vo.lovable.app/info/bulletin</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/info/bulletin</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://kontact-vo.lovable.app/info/transport</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/info/transport</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://kontact-vo.lovable.app/info/vehicle-reports</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/info/vehicle-reports</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Users Directory -->
   <url>
-    <loc>https://kontact-vo.lovable.app/users</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/users</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- Blog -->
-  <url>
-    <loc>https://kontact-vo.lovable.app/blog</loc>
-    <lastmod>2024-12-14</lastmod>
-    <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Community -->
   <url>
-    <loc>https://kontact-vo.lovable.app/community</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/community</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <!-- Contact -->
   <url>
-    <loc>https://kontact-vo.lovable.app/contact</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/contact</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
-  <!-- Legal Pages -->
+  <!-- Legal -->
   <url>
-    <loc>https://kontact-vo.lovable.app/terms</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/terms</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://kontact-vo.lovable.app/privacy</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/privacy</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://kontact-vo.lovable.app/cookies</loc>
-    <lastmod>2024-12-14</lastmod>
+    <loc>https://kontactvo.com/cookies</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
