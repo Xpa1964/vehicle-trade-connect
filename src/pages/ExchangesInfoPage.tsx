@@ -278,13 +278,13 @@ const ExchangesInfoPage: React.FC = () => {
           <img 
             src={exchangesHeroSrc}
             alt="Exchanges Background"
-            className="w-full h-full object-cover object-[center_22%] md:object-[center_30%]"
+            className="w-full h-full object-cover object-center"
             loading="lazy"
             decoding="async"
           />
         </div>
         
-        <div className="relative z-10 p-8 min-h-[300px] md:min-h-[400px]">
+        <div className="relative z-10 p-8 min-h-[420px] md:min-h-[500px] lg:min-h-[560px]">
           <div className="flex flex-col md:flex-row justify-between items-start gap-6 h-full">
             <div className="flex flex-col justify-end flex-1 h-full">
               <div className="mb-4">
