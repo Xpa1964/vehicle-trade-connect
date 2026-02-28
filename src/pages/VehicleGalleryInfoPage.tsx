@@ -9,7 +9,7 @@ import vehicleDetailScreenshot from '@/assets/vehicle-detail-screenshot.png';
 
 const VehicleGalleryInfoPage = () => {
   // Use registry-based images that update from Storage
-  const { src: showroomHeroSrc } = useStaticImage('hero.vehicles');
+  const { src: showroomHeroSrc, objectPosition: showroomPos } = useStaticImage('hero.vehicles');
   const { src: galleryViewSrc } = useStaticImage('services.showroom');
   const vehicleDetailSrc = vehicleDetailScreenshot;
   const vehicleFormSrc = vehicleFormScreenshot;
@@ -25,7 +25,7 @@ const VehicleGalleryInfoPage = () => {
             src={showroomHeroSrc}
             alt="Vehicle Gallery Background"
             className="w-full h-full object-cover"
-            style={{ objectPosition: 'center' }}
+            style={{ objectPosition: showroomPos }}
           />
         </div>
         <div className="relative z-10 p-8 bg-gradient-to-r from-black/30 to-transparent" style={{ minHeight: '320px' }}>

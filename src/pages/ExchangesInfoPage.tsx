@@ -10,7 +10,7 @@ import { useStaticImage } from '@/hooks/useStaticImage';
 
 const ExchangesInfoPage: React.FC = () => {
   // Use registry-based image that updates from Storage
-  const { src: exchangesHeroSrc } = useStaticImage('hero.exchanges');
+  const { src: exchangesHeroSrc, objectPosition } = useStaticImage('hero.exchanges');
   const { currentLanguage, t } = useLanguage();
   const navigate = useNavigate();
   
@@ -278,7 +278,8 @@ const ExchangesInfoPage: React.FC = () => {
           <img 
             src={exchangesHeroSrc}
             alt="Exchanges Background"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover"
+            style={{ objectPosition }}
             loading="lazy"
             decoding="async"
           />

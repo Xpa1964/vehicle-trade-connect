@@ -9,7 +9,7 @@ import { useStaticImage } from '@/hooks/useStaticImage';
 
 const BulletinInfoPage: React.FC = () => {
   // Use registry-based image that updates from Storage
-  const { src: bulletinHeroSrc } = useStaticImage('hero.bulletin');
+  const { src: bulletinHeroSrc, objectPosition } = useStaticImage('hero.bulletin');
   const { t } = useLanguage();
   const navigate = useNavigate();
   
@@ -20,7 +20,8 @@ const BulletinInfoPage: React.FC = () => {
           <img 
             src={bulletinHeroSrc}
             alt="Bulletin Board Background"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover"
+            style={{ objectPosition }}
             loading="lazy"
             decoding="async"
           />

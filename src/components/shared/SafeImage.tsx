@@ -163,6 +163,9 @@ const SafeImage: React.FC<SafeImageProps> = ({
   const effectiveFetchPriority = fetchPriority || (isCritical ? 'high' : 'auto');
   const effectiveDecoding = isCritical ? 'sync' : 'async';
 
+  // Get object-position from registry
+  const objectPosition = registryData?.objectPosition || undefined;
+
   return (
     <img
       src={currentSrc}
@@ -172,6 +175,10 @@ const SafeImage: React.FC<SafeImageProps> = ({
         isLoaded ? 'opacity-100' : 'opacity-0',
         className
       )}
+      style={{ 
+        ...(objectPosition && objectPosition !== 'center center' ? { objectPosition } : {}),
+        ...(props.style || {})
+      }}
       loading={effectiveLoading}
       fetchPriority={effectiveFetchPriority}
       decoding={effectiveDecoding}

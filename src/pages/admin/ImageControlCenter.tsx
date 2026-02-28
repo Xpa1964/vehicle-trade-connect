@@ -42,7 +42,7 @@ import ImageGenerationModal from '@/components/admin/ImageGenerationModal';
 import ImagePickerModal from '@/components/admin/ImagePickerModal';
 
 const GLOBAL_STYLE_KEY = 'imageControlCenter_globalStyle';
-const ZOOM_LEVELS_KEY = 'imageControlCenter_zoomLevels';
+const POSITIONS_KEY = 'imageControlCenter_positions';
 
 const DEFAULT_GLOBAL_STYLE =
   'Dark, cinematic automotive marketplace style, premium lighting, high contrast, modern UI-friendly compositions, professional product photography aesthetic.';
@@ -86,10 +86,10 @@ const ImageControlCenter: React.FC = () => {
     setIsGlobalStyleLocked(true);
   }, []);
 
-  // Zoom levels per image
-  const [zoomLevels, setZoomLevels] = useState<Record<string, number>>(() => {
+  // Positions per image
+  const [positions, setPositions] = useState<Record<string, { x: number; y: number }>>(() => {
     try {
-      const stored = localStorage.getItem(ZOOM_LEVELS_KEY);
+      const stored = localStorage.getItem(POSITIONS_KEY);
       return stored ? JSON.parse(stored) : {};
     } catch {
       return {};
@@ -198,16 +198,16 @@ const ImageControlCenter: React.FC = () => {
     }
   }, [globalStyle]);
 
-  // Zoom handlers
-  const handleZoomChange = useCallback((imageId: string, zoom: number) => {
-    setZoomLevels(prev => ({ ...prev, [imageId]: zoom }));
+  // Position handlers
+  const handlePositionChange = useCallback((imageId: string, pos: { x: number; y: number }) => {
+    setPositions(prev => ({ ...prev, [imageId]: pos }));
   }, []);
 
-  const handleSaveZoom = useCallback((imageId: string) => {
-    const updated = { ...zoomLevels };
-    localStorage.setItem(ZOOM_LEVELS_KEY, JSON.stringify(updated));
-    toast.success(`Zoom guardado para ${imageId}`);
-  }, [zoomLevels]);
+  const handleSavePosition = useCallback((imageId: string) => {
+    const updated = { ...positions };
+    localStorage.setItem(POSITIONS_KEY, JSON.stringify(updated));
+    toast.success(`Posición guardada para ${imageId}`);
+  }, [positions]);
 
   // Delete image from storage
   const handleDeleteImage = useCallback(async (imageId: string) => {
@@ -590,9 +590,9 @@ const ImageControlCenter: React.FC = () => {
             key={image.id}
             image={image}
             refreshToken={imageRefreshToken[image.id] || 0}
-            zoomLevel={zoomLevels[image.id] || 100}
-            onZoomChange={handleZoomChange}
-            onSaveZoom={handleSaveZoom}
+            position={positions[image.id] || { x: 50, y: 50 }}
+            onPositionChange={handlePositionChange}
+            onSavePosition={handleSavePosition}
             onDelete={handleDeleteImage}
             onUpload={handleUploadImage}
             onGenerateAI={handleOpenGenerateModal}

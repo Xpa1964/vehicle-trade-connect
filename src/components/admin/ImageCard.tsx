@@ -17,7 +17,6 @@ import {
   Upload, 
   Wand2, 
   Check, 
-  ZoomIn,
   Save,
   ImageIcon,
   AlertTriangle,
@@ -53,9 +52,9 @@ interface ImageCardProps {
   image: StaticImageEntry;
   /** Changes to force a re-check of storage after replace/upload/delete */
   refreshToken?: number;
-  zoomLevel: number;
-  onZoomChange: (imageId: string, zoom: number) => void;
-  onSaveZoom: (imageId: string) => void;
+  position: { x: number; y: number };
+  onPositionChange: (imageId: string, pos: { x: number; y: number }) => void;
+  onSavePosition: (imageId: string) => void;
   onDelete: (imageId: string) => void;
   onUpload: (imageId: string, file: File) => void;
   onGenerateAI: (image: StaticImageEntry, currentUrl?: string) => void;
@@ -68,9 +67,9 @@ interface ImageCardProps {
 const ImageCard: React.FC<ImageCardProps> = ({
   image,
   refreshToken = 0,
-  zoomLevel,
-  onZoomChange,
-  onSaveZoom,
+  position,
+  onPositionChange,
+  onSavePosition,
   onDelete,
   onUpload,
   onGenerateAI,
@@ -80,7 +79,7 @@ const ImageCard: React.FC<ImageCardProps> = ({
   onStatusChange
 }) => {
   const [imageLoaded, setImageLoaded] = useState<boolean | null>(null);
-  const [localZoom, setLocalZoom] = useState(zoomLevel);
+  const [localPos, setLocalPos] = useState(position);
   const [displayUrl, setDisplayUrl] = useState<string | null>(null);
   const [isCheckingStorage, setIsCheckingStorage] = useState(true);
   const [imageSource, setImageSource] = useState<'storage' | 'original' | 'none'>('none');
@@ -178,9 +177,16 @@ const ImageCard: React.FC<ImageCardProps> = ({
     }
   };
 
-  const handleZoomChange = (value: number[]) => {
-    setLocalZoom(value[0]);
-    onZoomChange(image.id, value[0]);
+  const handlePosXChange = (value: number[]) => {
+    const newPos = { ...localPos, x: value[0] };
+    setLocalPos(newPos);
+    onPositionChange(image.id, newPos);
+  };
+
+  const handlePosYChange = (value: number[]) => {
+    const newPos = { ...localPos, y: value[0] };
+    setLocalPos(newPos);
+    onPositionChange(image.id, newPos);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,15 +250,9 @@ const ImageCard: React.FC<ImageCardProps> = ({
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
             </div>
           ) : (
-            <div 
-              className="w-full h-full flex items-center justify-center overflow-hidden"
-              style={{ 
-                transform: `scale(${localZoom / 100})`,
-                transformOrigin: 'center center'
-              }}
-            >
+            <div className="w-full h-full overflow-hidden">
               {imageLoaded === false ? (
-                <div className="text-center text-muted-foreground p-2">
+                <div className="w-full h-full flex items-center justify-center text-center text-muted-foreground p-2">
                   <ImageIcon className="h-8 w-8 mx-auto mb-1 opacity-40" />
                   <p className="text-[10px]">Sin archivo</p>
                 </div>
@@ -260,7 +260,8 @@ const ImageCard: React.FC<ImageCardProps> = ({
                 <img
                   src={displayUrl}
                   alt={image.purpose}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: `${localPos.x}% ${localPos.y}%` }}
                   onLoad={handleImageLoad}
                   onError={handleImageError}
                 />
@@ -269,30 +270,44 @@ const ImageCard: React.FC<ImageCardProps> = ({
           )}
         </div>
 
-        {/* Zoom Control */}
+        {/* Position Control */}
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <ZoomIn className="h-3 w-3 text-muted-foreground shrink-0" />
+            <span className="text-[10px] text-muted-foreground w-4 shrink-0">X</span>
             <Slider
-              value={[localZoom]}
-              onValueChange={handleZoomChange}
-              min={50}
-              max={200}
-              step={10}
+              value={[localPos.x]}
+              onValueChange={handlePosXChange}
+              min={0}
+              max={100}
+              step={5}
               className="flex-1"
             />
-            <span className="text-xs text-muted-foreground w-10 text-right">
-              {localZoom}%
+            <span className="text-xs text-muted-foreground w-8 text-right">
+              {localPos.x}%
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground w-4 shrink-0">Y</span>
+            <Slider
+              value={[localPos.y]}
+              onValueChange={handlePosYChange}
+              min={0}
+              max={100}
+              step={5}
+              className="flex-1"
+            />
+            <span className="text-xs text-muted-foreground w-8 text-right">
+              {localPos.y}%
             </span>
           </div>
           <Button
             variant="ghost"
             size="sm"
             className="w-full h-7 text-xs"
-            onClick={() => onSaveZoom(image.id)}
+            onClick={() => onSavePosition(image.id)}
           >
             <Save className="h-3 w-3 mr-1" />
-            Guardar zoom
+            Guardar posición
           </Button>
         </div>
 
