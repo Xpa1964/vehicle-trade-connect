@@ -27,6 +27,23 @@ import {
 
 const FALLBACK_IMAGE = '/placeholder.svg';
 const STORAGE_BUCKET = 'static-images';
+const POSITIONS_KEY = 'imageControlCenter_positions';
+
+/**
+ * Read saved object-position for an image from localStorage
+ */
+const getImagePosition = (imageId: string): string => {
+  try {
+    const stored = localStorage.getItem(POSITIONS_KEY);
+    if (!stored) return 'center center';
+    const positions = JSON.parse(stored) as Record<string, { x: number; y: number }>;
+    const pos = positions[imageId];
+    if (!pos) return 'center center';
+    return `${pos.x}% ${pos.y}%`;
+  } catch {
+    return 'center center';
+  }
+};
 
 export interface UseStaticImageResult {
   /** The resolved image path (storage URL, currentPath, or fallback) */
@@ -47,6 +64,8 @@ export interface UseStaticImageResult {
   isFromStorage: boolean;
   /** Whether the hook is still checking storage */
   isLoading: boolean;
+  /** CSS object-position value from Image Control Center */
+  objectPosition: string;
 }
 
 const isDev = import.meta.env.DEV;
@@ -289,6 +308,8 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
     ? ''
     : (storageUrl || registryData.resolvedSrc);
 
+  const objectPosition = useMemo(() => getImagePosition(imageId), [imageId]);
+
   return useMemo(() => ({
     src: effectiveSrc,
     isValid: registryData.isValid,
@@ -298,8 +319,9 @@ export const useStaticImage = (imageId: string): UseStaticImageResult => {
     isCritical: registryData.isCritical,
     isAIEditable: registryData.isAIEditable,
     isFromStorage,
-    isLoading
-  }), [effectiveSrc, registryData, isFromStorage, isLoading]);
+    isLoading,
+    objectPosition
+  }), [effectiveSrc, registryData, isFromStorage, isLoading, objectPosition]);
 };
 
 /**
@@ -337,7 +359,8 @@ export const useStaticImages = (imageIds: string[]): Record<string, UseStaticIma
           isCritical: false,
           isAIEditable: false,
           isFromStorage: false,
-          isLoading: false
+          isLoading: false,
+          objectPosition: getImagePosition(imageId)
         };
         continue;
       }
@@ -359,7 +382,8 @@ export const useStaticImages = (imageIds: string[]): Record<string, UseStaticIma
         isCritical: entry.critical,
         isAIEditable: entry.aiEditable,
         isFromStorage: false,
-        isLoading: false
+        isLoading: false,
+        objectPosition: getImagePosition(imageId)
       };
     }
     

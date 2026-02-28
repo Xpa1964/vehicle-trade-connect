@@ -14,7 +14,7 @@ import { useStaticImage } from '@/hooks/useStaticImage';
 const LiveAuctionsPage: React.FC = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const { src: heroSrc } = useStaticImage('hero.auctions');
+  const { src: heroSrc, objectPosition } = useStaticImage('hero.auctions');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<AuctionStatus | 'all'>('all');
   const [priceMin, setPriceMin] = useState<number | undefined>();
@@ -37,8 +37,8 @@ const LiveAuctionsPage: React.FC = () => {
       <img 
         src={heroSrc}
         alt={t('auctions.title')}
-            className="w-full h-full object-cover object-center"
-            style={{ minHeight: '320px' }}
+            className="w-full h-full object-cover"
+            style={{ objectPosition, minHeight: '320px' }}
           />
         </div>
         
