@@ -55,7 +55,7 @@ const BulletinInfoPage: React.FC = () => {
       </div>
 
       <div className="mt-8 mb-12">
-        <p className="max-w-3xl mx-auto text-gray-600">
+        <p className="max-w-3xl mx-auto text-foreground">
           {t('bulletinInfo.description')}
         </p>
       </div>
@@ -65,7 +65,7 @@ const BulletinInfoPage: React.FC = () => {
           <CardContent className="p-6 flex flex-col items-center">
             <Briefcase className="h-12 w-12 text-blue-500 mb-4" />
             <h3 className="text-lg font-semibold mb-2">{t('bulletinInfo.examples.business.title')}</h3>
-            <p className="text-center text-gray-600">{t('bulletin.business_opportunities_desc')}</p>
+            <p className="text-center text-muted-foreground">{t('bulletin.business_opportunities_desc')}</p>
           </CardContent>
         </Card>
 
@@ -73,7 +73,7 @@ const BulletinInfoPage: React.FC = () => {
           <CardContent className="p-6 flex flex-col items-center">
             <Search className="h-12 w-12 text-green-500 mb-4" />
             <h3 className="text-lg font-semibold mb-2">{t('bulletinInfo.examples.search.title')}</h3>
-            <p className="text-center text-gray-600">{t('bulletin.vehicle_search_desc')}</p>
+            <p className="text-center text-muted-foreground">{t('bulletin.vehicle_search_desc')}</p>
           </CardContent>
         </Card>
 
@@ -81,7 +81,7 @@ const BulletinInfoPage: React.FC = () => {
           <CardContent className="p-6 flex flex-col items-center">
             <Car className="h-12 w-12 text-red-500 mb-4" />
             <h3 className="text-lg font-semibold mb-2">{t('bulletinInfo.examples.vehicles.title')}</h3>
-            <p className="text-center text-gray-600">{t('bulletin.available_vehicles_desc')}</p>
+            <p className="text-center text-muted-foreground">{t('bulletin.available_vehicles_desc')}</p>
           </CardContent>
         </Card>
 
@@ -89,7 +89,7 @@ const BulletinInfoPage: React.FC = () => {
           <CardContent className="p-6 flex flex-col items-center">
             <Wrench className="h-12 w-12 text-purple-500 mb-4" />
             <h3 className="text-lg font-semibold mb-2">{t('bulletinInfo.examples.services.title')}</h3>
-            <p className="text-center text-gray-600">{t('bulletin.professional_services_desc')}</p>
+            <p className="text-center text-muted-foreground">{t('bulletin.professional_services_desc')}</p>
           </CardContent>
         </Card>
       </div>
@@ -122,7 +122,7 @@ const BulletinInfoPage: React.FC = () => {
           <TabsContent value="business">
             <Card>
               <CardContent className="p-6">
-                <p className="text-gray-700 italic">
+                <p className="text-foreground italic">
                   "{t('bulletinInfo.examples.business.content')}"
                 </p>
               </CardContent>
@@ -132,7 +132,7 @@ const BulletinInfoPage: React.FC = () => {
           <TabsContent value="search">
             <Card>
               <CardContent className="p-6">
-                <p className="text-gray-700 italic">
+                <p className="text-foreground italic">
                   "{t('bulletinInfo.examples.search.content')}"
                 </p>
               </CardContent>
@@ -142,7 +142,7 @@ const BulletinInfoPage: React.FC = () => {
           <TabsContent value="vehicles">
             <Card>
               <CardContent className="p-6">
-                <p className="text-gray-700 italic">
+                <p className="text-foreground italic">
                   "{t('bulletinInfo.examples.vehicles.content')}"
                 </p>
               </CardContent>
@@ -152,7 +152,7 @@ const BulletinInfoPage: React.FC = () => {
           <TabsContent value="services">
             <Card>
               <CardContent className="p-6">
-                <p className="text-gray-700 italic">
+                <p className="text-foreground italic">
                   "{t('bulletinInfo.examples.services.content')}"
                 </p>
               </CardContent>
