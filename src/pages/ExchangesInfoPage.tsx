@@ -278,13 +278,13 @@ const ExchangesInfoPage: React.FC = () => {
           <img 
             src={exchangesHeroSrc}
             alt="Exchanges Background"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-[center_30%]"
             loading="lazy"
             decoding="async"
           />
         </div>
         
-        <div className="relative z-10 p-8" style={{ minHeight: '320px' }}>
+        <div className="relative z-10 p-8" style={{ minHeight: '400px' }}>
           <div className="flex flex-col md:flex-row justify-between items-start gap-6 h-full">
             <div className="flex flex-col justify-end flex-1 h-full">
               <div className="mb-4">
@@ -311,7 +311,7 @@ const ExchangesInfoPage: React.FC = () => {
       </div>
 
       <div className="mt-8 mb-12">
-        <p className="max-w-3xl mx-auto text-gray-600">
+        <p className="max-w-3xl mx-auto text-foreground">
           {translations.description[lang] || translations.description.es}
         </p>
       </div>
@@ -321,7 +321,7 @@ const ExchangesInfoPage: React.FC = () => {
           <CardContent className="p-6 flex flex-col items-center">
             <ArrowRightLeft className="h-12 w-12 text-blue-500 mb-4" />
             <h3 className="text-lg font-semibold mb-2">{translations.features.matching.title[lang] || translations.features.matching.title.es}</h3>
-            <p className="text-center text-gray-600">{translations.features.matching.description[lang] || translations.features.matching.description.es}</p>
+            <p className="text-center text-muted-foreground">{translations.features.matching.description[lang] || translations.features.matching.description.es}</p>
           </CardContent>
         </Card>
 
@@ -329,7 +329,7 @@ const ExchangesInfoPage: React.FC = () => {
           <CardContent className="p-6 flex flex-col items-center">
             <Search className="h-12 w-12 text-green-500 mb-4" />
             <h3 className="text-lg font-semibold mb-2">{translations.features.preferences.title[lang] || translations.features.preferences.title.es}</h3>
-            <p className="text-center text-gray-600">{translations.features.preferences.description[lang] || translations.features.preferences.description.es}</p>
+            <p className="text-center text-muted-foreground">{translations.features.preferences.description[lang] || translations.features.preferences.description.es}</p>
           </CardContent>
         </Card>
 
@@ -337,7 +337,7 @@ const ExchangesInfoPage: React.FC = () => {
           <CardContent className="p-6 flex flex-col items-center">
             <Car className="h-12 w-12 text-red-500 mb-4" />
             <h3 className="text-lg font-semibold mb-2">{translations.features.direct.title[lang] || translations.features.direct.title.es}</h3>
-            <p className="text-center text-gray-600">{translations.features.direct.description[lang] || translations.features.direct.description.es}</p>
+            <p className="text-center text-muted-foreground">{translations.features.direct.description[lang] || translations.features.direct.description.es}</p>
           </CardContent>
         </Card>
 
@@ -345,7 +345,7 @@ const ExchangesInfoPage: React.FC = () => {
           <CardContent className="p-6 flex flex-col items-center">
             <Truck className="h-12 w-12 text-purple-500 mb-4" />
             <h3 className="text-lg font-semibold mb-2">{translations.features.logistics.title[lang] || translations.features.logistics.title.es}</h3>
-            <p className="text-center text-gray-600">{translations.features.logistics.description[lang] || translations.features.logistics.description.es}</p>
+            <p className="text-center text-muted-foreground">{translations.features.logistics.description[lang] || translations.features.logistics.description.es}</p>
           </CardContent>
         </Card>
       </div>
@@ -378,7 +378,7 @@ const ExchangesInfoPage: React.FC = () => {
           <TabsContent value="simple">
             <Card>
               <CardContent className="p-6">
-                <p className="text-gray-700 italic">
+                <p className="text-foreground italic">
                   "{translations.examples.simple.content[lang] || translations.examples.simple.content.es}"
                 </p>
               </CardContent>
@@ -388,7 +388,7 @@ const ExchangesInfoPage: React.FC = () => {
           <TabsContent value="multiple">
             <Card>
               <CardContent className="p-6">
-                <p className="text-gray-700 italic">
+                <p className="text-foreground italic">
                   "{translations.examples.multiple.content[lang] || translations.examples.multiple.content.es}"
                 </p>
               </CardContent>
@@ -398,7 +398,7 @@ const ExchangesInfoPage: React.FC = () => {
           <TabsContent value="brands">
             <Card>
               <CardContent className="p-6">
-                <p className="text-gray-700 italic">
+                <p className="text-foreground italic">
                   "{translations.examples.brands.content[lang] || translations.examples.brands.content.es}"
                 </p>
               </CardContent>
@@ -408,7 +408,7 @@ const ExchangesInfoPage: React.FC = () => {
           <TabsContent value="fleet">
             <Card>
               <CardContent className="p-6">
-                <p className="text-gray-700 italic">
+                <p className="text-foreground italic">
                   "{translations.examples.fleet.content[lang] || translations.examples.fleet.content.es}"
                 </p>
               </CardContent>
