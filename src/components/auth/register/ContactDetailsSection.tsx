@@ -9,8 +9,6 @@ interface ContactDetailsSectionProps {
     contactPerson: string;
     phone: string;
     email: string;
-    password: string;
-    confirmPassword: string;
   };
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isSubmitting: boolean;
