@@ -120,18 +120,9 @@ export const useRegisterForm = () => {
       
       const requestData = {
         email: data.email,
-        password: data.password,
         company_name: data.companyName,
-        city: data.city,
-        country: data.country,
-        postal_code: data.postalCode,
-        manager_name: `${data.managerFirstName} ${data.managerLastName}`,
-        contact_person: data.contactPerson,
+        contact_name: data.contactPerson,
         phone: data.phone,
-        business_type: data.businessType,
-        trader_type: data.traderType,
-        description: data.description,
-        documents_paths: [],
       };
       
       console.log('=== DIAGNOSIS: Inserting into database with password ===');
