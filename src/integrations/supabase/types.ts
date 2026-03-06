@@ -1881,8 +1881,6 @@ export type Database = {
           id: string
           is_read: boolean | null
           link: string | null
-          message: string | null
-          read: boolean | null
           subject: string | null
           title: string
           type: string | null
@@ -1894,8 +1892,6 @@ export type Database = {
           id?: string
           is_read?: boolean | null
           link?: string | null
-          message?: string | null
-          read?: boolean | null
           subject?: string | null
           title: string
           type?: string | null
@@ -1907,8 +1903,6 @@ export type Database = {
           id?: string
           is_read?: boolean | null
           link?: string | null
-          message?: string | null
-          read?: boolean | null
           subject?: string | null
           title?: string
           type?: string | null
