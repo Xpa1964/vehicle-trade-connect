@@ -56,7 +56,7 @@ export const safeSignOut = async (supabaseClient: any) => {
  */
 export const sendRegistrationConfirmationEmail = async (email: string, companyName: string) => {
   try {
-    const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/registration-emails', {
+    const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/registration-emails`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
