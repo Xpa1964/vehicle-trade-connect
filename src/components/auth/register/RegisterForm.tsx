@@ -67,8 +67,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     form.reset({
       companyName: '',
       email: '',
-      password: '',
-      confirmPassword: '',
       contactPerson: '',
       phone: '',
       businessType: '',
