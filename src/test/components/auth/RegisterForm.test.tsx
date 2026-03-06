@@ -11,8 +11,6 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => {
     defaultValues: {
       companyName: '',
       email: '',
-      password: '',
-      confirmPassword: '',
       contactPerson: '',
       phone: '',
       businessType: '',
