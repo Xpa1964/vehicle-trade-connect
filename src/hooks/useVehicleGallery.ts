@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -6,7 +6,6 @@ import { Vehicle } from '@/types/vehicle';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { isNearlyNew } from '@/utils/vehicleClassification';
 import { useDebounce } from '@/hooks/useDebounce';
-import { QUERY_CONFIG } from '@/lib/react-query';
 
 export const useVehicleGallery = () => {
   const { t } = useLanguage();
@@ -18,8 +17,6 @@ export const useVehicleGallery = () => {
   const [viewMode, setViewMode] = useState<'compact' | 'normal'>('compact');
   const currentYear = new Date().getFullYear();
   
-  // Ref para control de estado realtime
-  const realtimeConnectedRef = useRef(false);
   
   const [filters, setFilters] = useState({
     country: 'all',
@@ -132,12 +129,11 @@ export const useVehicleGallery = () => {
         return [];
       }
     },
-    // CONFIGURACIÓN OPTIMIZADA: Reduce conexiones innecesarias
-    staleTime: 30 * 1000, // 30 segundos - realtime se encarga de actualizaciones
-    gcTime: 5 * 60 * 1000, // 5 minutos en cache
-    refetchOnWindowFocus: false, // Controlamos manualmente via realtime
-    refetchOnMount: true, // Solo refetch si está stale (no 'always')
-    refetchOnReconnect: true, // Refetch cuando se reconecta
+    staleTime: 60 * 1000, // 1 minuto — suficiente para un listado de búsqueda
+    gcTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: true, // Refresca al volver a la pestaña
+    refetchOnMount: true,
+    refetchOnReconnect: true,
   });
 
   // FUNCIÓN PARA ACTUALIZACIÓN OPTIMISTA DE VEHÍCULO ESPECÍFICO
@@ -155,67 +151,6 @@ export const useVehicleGallery = () => {
     });
   }, [queryClient]);
 
-  // FASE 2: ELIMINADO - Polling fallback redundante con realtime subscription
-
-  // SUSCRIPCIÓN REALTIME MEJORADA CON CANAL ESPECÍFICO
-  useEffect(() => {
-    console.log('🔴 [useVehicleGallery] Setting up enhanced real-time subscription');
-    
-    const channel = supabase
-      .channel('vehicles-changes') // Canal específico para vehículos
-      .on(
-        'postgres_changes',
-        {
-          event: '*', // Todos los eventos
-          schema: 'public',
-          table: 'vehicles'
-        },
-        (payload) => {
-          console.log('🔄 [useVehicleGallery] Real-time change detected:', {
-            event: payload.eventType,
-            vehicleId: (payload.new as any)?.id || (payload.old as any)?.id,
-            payload
-          });
-          
-          // ACTUALIZACIÓN OPTIMISTA INMEDIATA
-          if (payload.eventType === 'UPDATE' && payload.new) {
-            const vehicleData = payload.new as any;
-            if (vehicleData.id) {
-              updateVehicleOptimistically(vehicleData.id, {
-                status: vehicleData.status,
-                country: vehicleData.country,
-                countryCode: vehicleData.country_code,
-                price: vehicleData.price,
-                // Añadir otros campos que puedan cambiar
-              });
-            }
-          }
-          
-          // FASE 2: Reducir frecuencia de invalidación (era 100ms, ahora 1000ms)
-          setTimeout(() => {
-            console.log('🔄 [useVehicleGallery] Cache invalidation after optimistic update');
-            queryClient.refetchQueries({ queryKey: ['vehicles'] });
-          }, 1000); // 1 segundo de delay
-        }
-      )
-      .subscribe((status) => {
-        console.log('📡 [useVehicleGallery] Realtime subscription status:', status);
-        
-        if (status === 'SUBSCRIBED') {
-          realtimeConnectedRef.current = true;
-          console.log('✅ [useVehicleGallery] Realtime subscription active');
-        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
-          realtimeConnectedRef.current = false;
-          console.error('❌ [useVehicleGallery] Realtime connection lost');
-        }
-      });
-
-    return () => {
-      console.log('🔴 [useVehicleGallery] Cleaning up realtime subscription');
-      realtimeConnectedRef.current = false;
-      supabase.removeChannel(channel);
-    };
-  }, [queryClient, updateVehicleOptimistically]);
 
   // Memoized filter calculations
   const availableBrands = useMemo(() => {
