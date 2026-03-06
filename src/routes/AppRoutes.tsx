@@ -3,7 +3,7 @@ import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
-import AdminLayout from "@/components/layouts/AdminLayout";
+import AdminLayout from "@/components/layout/AdminLayout";
 import { PageSkeleton } from "@/components/ui/skeletons/PageSkeleton";
 
 // Enhanced fallback component with skeleton for better UX

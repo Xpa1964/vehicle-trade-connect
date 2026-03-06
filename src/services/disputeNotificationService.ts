@@ -1,4 +1,4 @@
-
+// DISABLED - feature pendiente de activación
 import { supabase } from '@/integrations/supabase/client';
 
 export interface DisputeNotification {
