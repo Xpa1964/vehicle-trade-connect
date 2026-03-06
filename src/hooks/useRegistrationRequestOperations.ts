@@ -46,7 +46,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
       }
 
       // Use the Edge Function to update notes
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/update-registration-notes', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/update-registration-notes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
