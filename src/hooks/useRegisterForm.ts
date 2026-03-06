@@ -12,16 +12,34 @@ export const useRegisterForm = () => {
   const [companyLogo, setCompanyLogo] = useState<File | null>(null);
   const [companyLogoPreview, setCompanyLogoPreview] = useState<string | null>(null);
 
+  const LOGO_ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+  const LOGO_MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
+
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setCompanyLogo(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCompanyLogoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // Validate file type
+    if (!LOGO_ALLOWED_TYPES.includes(file.type)) {
+      toast.error(`Tipo de archivo no permitido: ${file.type}. Solo se aceptan JPEG, PNG y WebP.`);
+      e.target.value = '';
+      return;
     }
+
+    // Validate file size
+    if (file.size > LOGO_MAX_SIZE_BYTES) {
+      const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      toast.error(`El logo es demasiado grande (${sizeMB}MB). Tamaño máximo: 2MB.`);
+      e.target.value = '';
+      return;
+    }
+
+    setCompanyLogo(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCompanyLogoPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   };
 
   const sendConfirmationEmail = async (email: string, companyName: string) => {
@@ -121,6 +139,18 @@ export const useRegisterForm = () => {
       // Upload company logo to Storage if provided
       let logoUrl: string | null = null;
       if (companyLogo) {
+        // Double-check validation before upload
+        if (!LOGO_ALLOWED_TYPES.includes(companyLogo.type)) {
+          toast.error(`Tipo de logo no permitido: ${companyLogo.type}`);
+          setIsSubmitting(false);
+          return false;
+        }
+        if (companyLogo.size > LOGO_MAX_SIZE_BYTES) {
+          toast.error('El logo excede el tamaño máximo de 2MB.');
+          setIsSubmitting(false);
+          return false;
+        }
+
         const fileExt = companyLogo.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
         const filePath = `registration-logos/${fileName}`;
