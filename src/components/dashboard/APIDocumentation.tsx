@@ -386,7 +386,7 @@ const APIDocumentation: React.FC = () => {
                     {t('api.docs.integration.endpoint')}
                   </h4>
                   <div className="bg-muted p-3 rounded-lg">
-                    <code className="text-sm">POST https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/sync-vehicles</code>
+                    <code className="text-sm">POST {import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-vehicles</code>
                   </div>
                 </div>
 
