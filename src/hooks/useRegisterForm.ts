@@ -125,8 +125,7 @@ export const useRegisterForm = () => {
         phone: data.phone,
       };
       
-      console.log('=== DIAGNOSIS: Inserting into database with password ===');
-      // 1. Insert registration request in database INCLUDING password
+      console.log('=== DIAGNOSIS: Inserting into registration_requests ===');
       const { error } = await supabase
         .from('registration_requests')
         .insert([requestData]);
