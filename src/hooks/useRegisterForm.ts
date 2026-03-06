@@ -153,19 +153,18 @@ export const useRegisterForm = () => {
 
         const fileExt = companyLogo.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-        const filePath = `registration-logos/${fileName}`;
         
         console.log('=== DIAGNOSIS: Uploading company logo ===');
         const { error: uploadError } = await supabase.storage
-          .from('vehicles')
-          .upload(filePath, companyLogo, { upsert: false });
+          .from('company-logos')
+          .upload(fileName, companyLogo, { upsert: false });
         
         if (uploadError) {
           console.error('=== LOGO UPLOAD ERROR ===', uploadError);
         } else {
           const { data: publicUrlData } = supabase.storage
-            .from('vehicles')
-            .getPublicUrl(filePath);
+            .from('company-logos')
+            .getPublicUrl(fileName);
           logoUrl = publicUrlData.publicUrl;
           console.log('Logo uploaded:', logoUrl);
         }
