@@ -139,7 +139,7 @@ export const useRegisterForm = () => {
         return false;
       }
       
-      console.log('=== DATABASE SUCCESS (with password) ===');
+      console.log('=== DATABASE SUCCESS ===');
       console.log('Registration request submitted successfully');
       
       // 2. Send confirmation email to user
