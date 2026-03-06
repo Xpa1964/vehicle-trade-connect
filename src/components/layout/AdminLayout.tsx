@@ -3,7 +3,11 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import AdminNavigation from '@/components/layout/AdminNavigation';
 
-const AdminLayout: React.FC = () => {
+interface AdminLayoutProps {
+  children?: React.ReactNode;
+}
+
+const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Admin header with navigation */}
@@ -15,7 +19,7 @@ const AdminLayout: React.FC = () => {
       
       {/* Main content */}
       <div className="container mx-auto px-4 py-8">
-        <Outlet />
+        {children || <Outlet />}
       </div>
     </div>
   );
