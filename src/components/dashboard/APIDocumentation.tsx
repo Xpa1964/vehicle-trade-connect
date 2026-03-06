@@ -439,7 +439,7 @@ Content-Type: application/json`}
                       <div className="bg-muted p-4 rounded-lg">
                       <pre className="text-sm overflow-x-auto">
 {`const response = await fetch(
-  'https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/sync-vehicles',
+  '${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-vehicles',
   {
     method: 'POST',
     headers: {
