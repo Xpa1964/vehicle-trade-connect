@@ -142,7 +142,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     {
       id: 'contact-details',
       label: t('auth.register.contactDetails'),
-      fieldsToValidate: ['contactPerson', 'phone', 'email', 'password', 'confirmPassword'],
+      fieldsToValidate: ['contactPerson', 'phone', 'email'],
       component: (
         <ContactDetailsStep
           form={form}
