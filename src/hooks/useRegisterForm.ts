@@ -77,7 +77,7 @@ export const useRegisterForm = () => {
       console.log('=== DIAGNOSIS: Sending admin notification ===');
       const adminEmail = 'admin@kontactvo.com';
       
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/registration-emails', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/registration-emails`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

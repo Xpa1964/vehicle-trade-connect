@@ -519,7 +519,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
       // 3. Handle rejection flow
       else if (status === 'rejected') {
         // Update the status in the database using Edge Function
-        const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/update-registration-status', {
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/update-registration-status`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

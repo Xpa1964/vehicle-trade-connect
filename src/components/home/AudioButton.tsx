@@ -46,7 +46,7 @@ const AudioButton: React.FC<AudioButtonProps> = ({
     // Si es alemán, abrir el modal de video
     if (languageCode === 'de') {
       if (onVideoClick) {
-        const videoUrl = 'https://inqqnsvlimtpjxjxuzaf.supabase.co/storage/v1/object/public/audio-files/okosystem-fur-fahrzeugprofis_wAkbhkCG.mp4';
+        const videoUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/audio-files/okosystem-fur-fahrzeugprofis_wAkbhkCG.mp4`;
         onVideoClick(videoUrl);
       }
       return;

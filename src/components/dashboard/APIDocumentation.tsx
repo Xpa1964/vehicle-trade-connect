@@ -473,7 +473,7 @@ Content-Type: application/json`}
 {`import requests
 
 response = requests.post(
-    'https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/sync-vehicles',
+    '${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-vehicles',
     headers={
         'Authorization': 'Bearer YOUR_API_KEY',
         'Content-Type': 'application/json'
