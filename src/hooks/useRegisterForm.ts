@@ -139,6 +139,18 @@ export const useRegisterForm = () => {
       // Upload company logo to Storage if provided
       let logoUrl: string | null = null;
       if (companyLogo) {
+        // Double-check validation before upload
+        if (!LOGO_ALLOWED_TYPES.includes(companyLogo.type)) {
+          toast.error(`Tipo de logo no permitido: ${companyLogo.type}`);
+          setIsSubmitting(false);
+          return false;
+        }
+        if (companyLogo.size > LOGO_MAX_SIZE_BYTES) {
+          toast.error('El logo excede el tamaño máximo de 2MB.');
+          setIsSubmitting(false);
+          return false;
+        }
+
         const fileExt = companyLogo.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
         const filePath = `registration-logos/${fileName}`;
