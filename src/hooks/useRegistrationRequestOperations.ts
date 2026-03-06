@@ -26,7 +26,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
   const [selectedRequest, setSelectedRequest] = useState<RegistrationRequest | null>(null);
   const [adminNotes, setAdminNotes] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [createdCredentials, setCreatedCredentials] = useState<{email: string, password: string, isExistingUser?: boolean} | null>(null);
+  const [createdCredentials, setCreatedCredentials] = useState<{email: string, isExistingUser?: boolean, message?: string} | null>(null);
   
   const handleOpenDetails = (request: RegistrationRequest) => {
     setSelectedRequest(request);
@@ -441,18 +441,17 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
           throw new Error(errorData.error || 'Failed to create/update user account');
         }
 
-        const credentials = await response.json();
-        console.log('User processed with credentials:', { 
-          email: credentials.email, 
-          hasPassword: !!credentials.password,
-          isExistingUser: credentials.isExistingUser 
+        const result = await response.json();
+        console.log('User processed:', { 
+          email: result.email, 
+          isExistingUser: result.isExistingUser 
         });
         
-        // Store credentials for display - ensure all properties are included
+        // Store result for display (no password)
         const credentialsToStore = {
-          email: credentials.email,
-          password: credentials.password,
-          isExistingUser: credentials.isExistingUser || false
+          email: result.email,
+          isExistingUser: result.isExistingUser || false,
+          message: result.message
         };
         
         console.log('Setting credentials to display:', credentialsToStore);
@@ -477,42 +476,22 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
           throw new Error(errorData.error || 'Failed to update status');
         }
 
-        // 3. Wait a moment for the trigger to execute, then validate profile creation
-        setTimeout(async () => {
-          const profileValidated = await validateProfileCreation(id);
-          if (profileValidated) {
-            console.log('Profile created and validated successfully');
-          } else {
-            console.warn('Profile validation failed - manual review may be needed');
-          }
-        }, 2000);
-
-        // 4. Send approval email with credentials
-        try {
-          await sendApprovalEmail(currentRequest, credentialsToStore);
-          console.log('Approval email sent successfully');
-        } catch (emailError) {
-          console.error('Email sending failed:', emailError);
-          toast.error('Usuario creado exitosamente, pero el email no se pudo enviar. Revisa los logs del administrador.');
-        }
-        
-        // 5. Log activity
+        // 3. Log activity
         await logActivity({
-          action_type: credentials.isExistingUser ? 'reapprove_registration' : 'approve_registration',
+          action_type: result.isExistingUser ? 'reapprove_registration' : 'approve_registration',
           entity_type: 'registration_request',
           entity_id: id,
           details: { 
             company: currentRequest.company_name, 
-            userId: credentials.userId,
-            isExistingUser: credentials.isExistingUser,
-            profileAutoCreated: true
+            userId: result.userId,
+            isExistingUser: result.isExistingUser,
           },
           severity: 'success'
         });
         
-        const successMessage = credentials.isExistingUser 
-          ? 'Solicitud re-aprobada - Contraseña actualizada'
-          : 'Solicitud aprobada - Usuario creado exitosamente';
+        const successMessage = result.isExistingUser 
+          ? 'Solicitud re-aprobada — perfil actualizado'
+          : 'Solicitud aprobada — email de confirmación enviado al usuario';
         
         toast.success(successMessage);
       } 

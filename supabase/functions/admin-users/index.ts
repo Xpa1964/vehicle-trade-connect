@@ -225,29 +225,11 @@ serve(async (req) => {
         console.error('Registration not found:', regError);
         return new Response(
           JSON.stringify({ error: 'Registration not found' }),
-          {
-            status: 404,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          }
+          { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
 
-      // MODIFICADO: Usar la contraseña original en lugar de generar una nueva
-      const password = registration.password;
-      
-      if (!password) {
-        console.error('No password found in registration request');
-        return new Response(
-          JSON.stringify({ error: 'No password found in registration request' }),
-          {
-            status: 400,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          }
-        );
-      }
-      
-      console.log(`Using original password from registration for: ${registration.email}`);
-      console.log(`Checking if user already exists for: ${registration.email}`);
+      console.log(`Processing approval for: ${registration.email}`);
 
       // Check if user already exists
       const { data: existingUsers, error: listError } = await supabaseAdmin.auth.admin.listUsers();
@@ -256,25 +238,20 @@ serve(async (req) => {
         console.error('Error listing users:', listError);
         return new Response(
           JSON.stringify({ error: `Failed to check existing users: ${listError.message}` }),
-          {
-            status: 500,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          }
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
 
       const existingUser = existingUsers.users.find(u => u.email === registration.email);
 
       if (existingUser) {
-        console.log(`User already exists: ${existingUser.id}, updating password to original`);
+        console.log(`User already exists: ${existingUser.id}, updating metadata`);
         
-        // Update existing user's password to the original one
-        const { data: updatedUser, error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+        const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
           existingUser.id,
           {
-            password: password, // MODIFICADO: Usar la contraseña original
             user_metadata: {
-              full_name: registration.contact_person,
+              full_name: registration.contact_name,
               company_name: registration.company_name,
               business_type: registration.business_type,
               source: 'admin_reapproval'
@@ -286,35 +263,45 @@ serve(async (req) => {
           console.error('Error updating existing user:', updateError);
           return new Response(
             JSON.stringify({ error: `Failed to update user: ${updateError.message}` }),
-            {
-              status: 500,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-            }
+            { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
 
-        console.log(`Existing user updated successfully with original password: ${existingUser.id}`);
-        console.log(`Returning credentials for existing user: ${registration.email}`);
+        // Update profile with registration data
+        await supabaseAdmin.from('profiles').upsert({
+          user_id: existingUser.id,
+          email: registration.email,
+          company_name: registration.company_name,
+          contact_name: registration.contact_name,
+          phone: registration.phone,
+          city: registration.city,
+          country: registration.country,
+          postal_code: registration.postal_code,
+          full_name: registration.manager_name,
+          business_type: registration.business_type,
+          trader_type: registration.trader_type,
+          company_logo: registration.company_logo_url,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'user_id' });
 
         return new Response(JSON.stringify({
           userId: existingUser.id,
           email: registration.email,
-          password: password, // MODIFICADO: Devolver la contraseña original
-          message: 'User password updated to original successfully',
+          message: 'Existing user updated. User can log in with their existing credentials.',
           isExistingUser: true
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       } else {
-        console.log(`Creating new user account with original password for: ${registration.email}`);
+        console.log(`Creating new user account for: ${registration.email}`);
 
-        // Create the auth user with original password
+        // Create the auth user WITHOUT password — email_confirm: false
+        // so Supabase sends the confirmation/magic-link email
         const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
           email: registration.email,
-          password: password, // MODIFICADO: Usar la contraseña original
-          email_confirm: true, // Auto-confirm email
+          email_confirm: false,
           user_metadata: {
-            full_name: registration.contact_person,
+            full_name: registration.contact_name,
             company_name: registration.company_name,
             business_type: registration.business_type,
             source: 'admin_approval'
@@ -325,35 +312,75 @@ serve(async (req) => {
           console.error('Error creating auth user:', authError);
           return new Response(
             JSON.stringify({ error: `Failed to create user: ${authError.message}` }),
-            {
-              status: 500,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-            }
+            { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
 
-        console.log(`Auth user created successfully with original password: ${authData.user.id}`);
+        console.log(`Auth user created: ${authData.user.id}`);
 
-        // Assign user role (default to 'user')
+        // Assign dealer role
         const { error: roleError } = await supabaseAdmin
           .from('user_roles')
-          .insert({
-            user_id: authData.user.id,
-            role: 'user'
-          });
+          .insert({ user_id: authData.user.id, role: 'dealer' });
 
         if (roleError) {
           console.error('Error assigning user role:', roleError);
         }
 
-        console.log("User account setup completed - profile will be created automatically by trigger");
-        console.log(`Returning original credentials for new user: ${registration.email}`);
+        // Create profile with registration data
+        const { error: profileError } = await supabaseAdmin.from('profiles').insert({
+          user_id: authData.user.id,
+          email: registration.email,
+          company_name: registration.company_name,
+          contact_name: registration.contact_name,
+          phone: registration.phone,
+          city: registration.city,
+          country: registration.country,
+          postal_code: registration.postal_code,
+          full_name: registration.manager_name,
+          business_type: registration.business_type,
+          trader_type: registration.trader_type,
+          company_logo: registration.company_logo_url,
+        });
+
+        if (profileError) {
+          console.error('Error creating profile:', profileError);
+        }
+
+        // Send approval notification email via Resend
+        try {
+          const resendApiKey = Deno.env.get('RESEND_API_KEY');
+          if (resendApiKey) {
+            await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${resendApiKey}`,
+              },
+              body: JSON.stringify({
+                from: 'KONTACT VO <noreply@kontactvo.com>',
+                to: [registration.email],
+                subject: 'Votre compte KONTACT VO a été approuvé',
+                html: `
+                  <h2>Bienvenue sur KONTACT VO, ${registration.contact_name}!</h2>
+                  <p>Votre demande d'inscription pour <strong>${registration.company_name}</strong> a été approuvée.</p>
+                  <p>Vous recevrez sous peu un email de Supabase pour confirmer votre adresse email et créer votre mot de passe.</p>
+                  <p>Une fois votre mot de passe créé, vous pourrez accéder à la plateforme.</p>
+                  <br>
+                  <p>Cordialement,<br>L'équipe KONTACT VO</p>
+                `,
+              }),
+            });
+            console.log('Approval notification email sent via Resend');
+          }
+        } catch (emailErr) {
+          console.error('Failed to send approval email:', emailErr);
+        }
 
         return new Response(JSON.stringify({
           userId: authData.user.id,
           email: registration.email,
-          password: password, // MODIFICADO: Devolver la contraseña original
-          message: 'User created successfully with original password',
+          message: 'User created. Confirmation email sent by Supabase for password setup.',
           isExistingUser: false
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },

@@ -1,0 +1,10 @@
+ALTER TABLE public.registration_requests ADD COLUMN IF NOT EXISTS city TEXT;
+ALTER TABLE public.registration_requests ADD COLUMN IF NOT EXISTS country TEXT;
+ALTER TABLE public.registration_requests ADD COLUMN IF NOT EXISTS postal_code TEXT;
+ALTER TABLE public.registration_requests ADD COLUMN IF NOT EXISTS manager_name TEXT;
+ALTER TABLE public.registration_requests ADD COLUMN IF NOT EXISTS business_type TEXT;
+ALTER TABLE public.registration_requests ADD COLUMN IF NOT EXISTS trader_type TEXT;
+ALTER TABLE public.registration_requests ADD COLUMN IF NOT EXISTS description TEXT;
+ALTER TABLE public.registration_requests ADD COLUMN IF NOT EXISTS documents_paths JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE public.registration_requests ADD COLUMN IF NOT EXISTS company_logo_url TEXT;
+ALTER TABLE public.registration_requests ADD COLUMN IF NOT EXISTS terms_accepted_at TIMESTAMPTZ;

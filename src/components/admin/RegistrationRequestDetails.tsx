@@ -13,7 +13,7 @@ interface RegistrationRequestDetailsProps {
   request: RegistrationRequest;
   adminNotes: string;
   isProcessing: boolean;
-  createdCredentials?: {email: string, password: string, isExistingUser?: boolean} | null;
+  createdCredentials?: {email: string, isExistingUser?: boolean, message?: string} | null;
   onNotesChange: (notes: string) => void;
   onSaveNotes: () => void;
   onApprove: () => void;

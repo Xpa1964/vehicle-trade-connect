@@ -1369,40 +1369,70 @@ export type Database = {
       registration_requests: {
         Row: {
           admin_notes: string | null
+          business_type: string | null
+          city: string | null
+          company_logo_url: string | null
           company_name: string | null
           contact_name: string | null
+          country: string | null
           created_at: string | null
+          description: string | null
+          documents_paths: Json | null
           email: string
           id: string
+          manager_name: string | null
           phone: string | null
+          postal_code: string | null
           requested_role: Database["public"]["Enums"]["app_role"] | null
           status: string | null
+          terms_accepted_at: string | null
+          trader_type: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
           admin_notes?: string | null
+          business_type?: string | null
+          city?: string | null
+          company_logo_url?: string | null
           company_name?: string | null
           contact_name?: string | null
+          country?: string | null
           created_at?: string | null
+          description?: string | null
+          documents_paths?: Json | null
           email: string
           id?: string
+          manager_name?: string | null
           phone?: string | null
+          postal_code?: string | null
           requested_role?: Database["public"]["Enums"]["app_role"] | null
           status?: string | null
+          terms_accepted_at?: string | null
+          trader_type?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
           admin_notes?: string | null
+          business_type?: string | null
+          city?: string | null
+          company_logo_url?: string | null
           company_name?: string | null
           contact_name?: string | null
+          country?: string | null
           created_at?: string | null
+          description?: string | null
+          documents_paths?: Json | null
           email?: string
           id?: string
+          manager_name?: string | null
           phone?: string | null
+          postal_code?: string | null
           requested_role?: Database["public"]["Enums"]["app_role"] | null
           status?: string | null
+          terms_accepted_at?: string | null
+          trader_type?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
