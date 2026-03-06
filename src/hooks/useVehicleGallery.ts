@@ -151,67 +151,6 @@ export const useVehicleGallery = () => {
     });
   }, [queryClient]);
 
-  // FASE 2: ELIMINADO - Polling fallback redundante con realtime subscription
-
-  // SUSCRIPCIÓN REALTIME MEJORADA CON CANAL ESPECÍFICO
-  useEffect(() => {
-    console.log('🔴 [useVehicleGallery] Setting up enhanced real-time subscription');
-    
-    const channel = supabase
-      .channel('vehicles-changes') // Canal específico para vehículos
-      .on(
-        'postgres_changes',
-        {
-          event: '*', // Todos los eventos
-          schema: 'public',
-          table: 'vehicles'
-        },
-        (payload) => {
-          console.log('🔄 [useVehicleGallery] Real-time change detected:', {
-            event: payload.eventType,
-            vehicleId: (payload.new as any)?.id || (payload.old as any)?.id,
-            payload
-          });
-          
-          // ACTUALIZACIÓN OPTIMISTA INMEDIATA
-          if (payload.eventType === 'UPDATE' && payload.new) {
-            const vehicleData = payload.new as any;
-            if (vehicleData.id) {
-              updateVehicleOptimistically(vehicleData.id, {
-                status: vehicleData.status,
-                country: vehicleData.country,
-                countryCode: vehicleData.country_code,
-                price: vehicleData.price,
-                // Añadir otros campos que puedan cambiar
-              });
-            }
-          }
-          
-          // FASE 2: Reducir frecuencia de invalidación (era 100ms, ahora 1000ms)
-          setTimeout(() => {
-            console.log('🔄 [useVehicleGallery] Cache invalidation after optimistic update');
-            queryClient.refetchQueries({ queryKey: ['vehicles'] });
-          }, 1000); // 1 segundo de delay
-        }
-      )
-      .subscribe((status) => {
-        console.log('📡 [useVehicleGallery] Realtime subscription status:', status);
-        
-        if (status === 'SUBSCRIBED') {
-          realtimeConnectedRef.current = true;
-          console.log('✅ [useVehicleGallery] Realtime subscription active');
-        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
-          realtimeConnectedRef.current = false;
-          console.error('❌ [useVehicleGallery] Realtime connection lost');
-        }
-      });
-
-    return () => {
-      console.log('🔴 [useVehicleGallery] Cleaning up realtime subscription');
-      realtimeConnectedRef.current = false;
-      supabase.removeChannel(channel);
-    };
-  }, [queryClient, updateVehicleOptimistically]);
 
   // Memoized filter calculations
   const availableBrands = useMemo(() => {
