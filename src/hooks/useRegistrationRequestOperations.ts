@@ -96,7 +96,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
       }
       
       // Update the status back to pending using Edge Function
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/update-registration-status', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/update-registration-status`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
