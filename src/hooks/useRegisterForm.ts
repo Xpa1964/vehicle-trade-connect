@@ -133,6 +133,7 @@ export const useRegisterForm = () => {
       if (error) {
         console.error('=== DATABASE ERROR ===');
         console.error('Error inserting registration request:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
         toast.error(t('toast.registerError'));
         setIsSubmitting(false);
         return false;
