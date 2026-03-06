@@ -56,6 +56,8 @@ const MessagesHero: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      <InlineLanguageSelector />
     </div>
   );
 };
