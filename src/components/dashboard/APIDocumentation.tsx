@@ -413,7 +413,7 @@ Content-Type: application/json`}
                       <div className="bg-muted p-4 rounded-lg">
                       <pre className="text-sm overflow-x-auto">
 {`curl -X POST \\
-  https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/sync-vehicles \\
+  ${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-vehicles \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
