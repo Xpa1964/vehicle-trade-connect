@@ -107,17 +107,19 @@ const VehicleManagement: React.FC = () => {
               <BulkVehicleUpload />
             </TabsContent>
             
-            <TabsContent value="debug" className="py-4 sm:py-6">
-              <div className="space-y-4">
-                <div className="bg-warning/10 border border-warning/30 rounded-lg p-3 sm:p-4">
-                  <h3 className="font-medium text-amber-400 mb-2 text-sm sm:text-base">🧪 Herramienta de Debug</h3>
-                  <p className="text-xs sm:text-sm text-amber-300 leading-relaxed">
-                    Esta herramienta te permite probar la subida de imágenes al proyecto y verificar que funciona correctamente.
-                  </p>
+            {process.env.NODE_ENV === 'development' && (
+              <TabsContent value="debug" className="py-4 sm:py-6">
+                <div className="space-y-4">
+                  <div className="bg-warning/10 border border-warning/30 rounded-lg p-3 sm:p-4">
+                    <h3 className="font-medium text-amber-400 mb-2 text-sm sm:text-base">🧪 Herramienta de Debug</h3>
+                    <p className="text-xs sm:text-sm text-amber-300 leading-relaxed">
+                      Esta herramienta te permite probar la subida de imágenes al proyecto y verificar que funciona correctamente.
+                    </p>
+                  </div>
+                  <ImageUploadTester />
                 </div>
-                <ImageUploadTester />
-              </div>
-            </TabsContent>
+              </TabsContent>
+            )}
           </Tabs>
         </div>
       </div>
