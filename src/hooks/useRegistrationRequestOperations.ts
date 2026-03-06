@@ -46,7 +46,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
       }
 
       // Use the Edge Function to update notes
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/update-registration-notes', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/update-registration-notes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
       }
       
       // Update the status back to pending using Edge Function
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/update-registration-status', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/update-registration-status`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
         headers['Authorization'] = `Bearer ${session.access_token}`;
       }
       
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/registration-emails', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/registration-emails`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -262,7 +262,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
       }
       
       // Send notification to first admin (could be extended to send to all)
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/registration-emails', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/registration-emails`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -301,7 +301,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
         headers['Authorization'] = `Bearer ${session.access_token}`;
       }
       
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/registration-emails', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/registration-emails`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -349,7 +349,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
         headers['Authorization'] = `Bearer ${session.access_token}`;
       }
       
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/registration-emails', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/registration-emails`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -425,7 +425,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
       if (status === 'approved') {
         // Create user account first using the Edge Function
         console.log('Creating/updating user account...');
-        const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/create-user-from-registration', {
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/create-user-from-registration`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -459,7 +459,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
         setCreatedCredentials(credentialsToStore);
 
         // 2. Update the status in the database using Edge Function
-        const statusResponse = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/update-registration-status', {
+        const statusResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/update-registration-status`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -519,7 +519,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
       // 3. Handle rejection flow
       else if (status === 'rejected') {
         // Update the status in the database using Edge Function
-        const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/update-registration-status', {
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/update-registration-status`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

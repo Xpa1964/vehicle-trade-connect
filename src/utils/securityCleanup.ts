@@ -55,7 +55,7 @@ export const emergencyCleanAuth = (): void => {
   console.log('[SecurityCleanup] EMERGENCY: Cleaning all auth-related localStorage');
   
   const authKeys = [
-    'sb-inqqnsvlimtpjxjxuzaf-auth-token',
+    'sb-vbqvzumjmnblcdkkxuqq-auth-token',
     'supabase.auth.token',
     'user_role_',
     'registration_draft_'

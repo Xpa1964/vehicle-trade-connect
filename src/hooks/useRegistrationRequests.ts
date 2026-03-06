@@ -43,7 +43,7 @@ export const useRegistrationRequests = () => {
       }
 
       // Use the Edge Function to fetch requests
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/registration-requests', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/registration-requests`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

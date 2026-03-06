@@ -29,9 +29,9 @@ export const useRegisterForm = () => {
       console.log('=== DIAGNOSIS: Sending confirmation email ===');
       console.log('Email:', email);
       console.log('Company:', companyName);
-      console.log('Function URL: https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/registration-emails');
+      console.log('Function URL:', `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/registration-emails`);
       
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/registration-emails', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/registration-emails`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export const useRegisterForm = () => {
       console.log('=== DIAGNOSIS: Sending admin notification ===');
       const adminEmail = 'admin@kontactvo.com';
       
-      const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/registration-emails', {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/registration-emails`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

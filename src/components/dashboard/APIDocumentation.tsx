@@ -386,7 +386,7 @@ const APIDocumentation: React.FC = () => {
                     {t('api.docs.integration.endpoint')}
                   </h4>
                   <div className="bg-muted p-3 rounded-lg">
-                    <code className="text-sm">POST https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/sync-vehicles</code>
+                    <code className="text-sm">POST {import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-vehicles</code>
                   </div>
                 </div>
 
@@ -413,7 +413,7 @@ Content-Type: application/json`}
                       <div className="bg-muted p-4 rounded-lg">
                       <pre className="text-sm overflow-x-auto">
 {`curl -X POST \\
-  https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/sync-vehicles \\
+  ${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-vehicles \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -439,7 +439,7 @@ Content-Type: application/json`}
                       <div className="bg-muted p-4 rounded-lg">
                       <pre className="text-sm overflow-x-auto">
 {`const response = await fetch(
-  'https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/sync-vehicles',
+  '${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-vehicles',
   {
     method: 'POST',
     headers: {
@@ -473,7 +473,7 @@ Content-Type: application/json`}
 {`import requests
 
 response = requests.post(
-    'https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/sync-vehicles',
+    '${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-vehicles',
     headers={
         'Authorization': 'Bearer YOUR_API_KEY',
         'Content-Type': 'application/json'
