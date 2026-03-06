@@ -1,58 +1,39 @@
 
 
-# Plan: Gestion de imagenes API con reemplazo limpio
+## Plan: Add inline flag language selector to the Messages page
 
-## Resumen
+### What you want
+Add a row of clickable flag buttons (identical style to the ones on the MessagingInfoPage) directly into the Messages hero section, so users can switch language without going to the navbar menu.
 
-Dos cambios precisos sobre el plan original aprobado, sin modificar nada mas.
+### What I'll do
 
-## Cambio 1: Migracion de base de datos
+**1. Create `src/components/messages/InlineLanguageSelector.tsx`**
 
-Anadir columna `source` a `vehicle_images` **sin valor por defecto**:
+A compact horizontal row of flag buttons reusing the exact same flag gradient definitions from `MessagingInfoPage.tsx`. Each button:
+- Shows the flag circle + language name (e.g. `ES Español`)
+- Highlights the currently active language with `bg-muted/80` border
+- Calls `changeLanguage()` from `LanguageContext` on click
+- Wraps responsively on mobile
 
-```text
-ALTER TABLE vehicle_images ADD COLUMN source text;
-```
+**2. Modify `src/components/messages/MessagesHero.tsx`**
 
-Las imagenes existentes quedaran con `source = NULL`. Solo las imagenes insertadas desde la sincronizacion API recibiran `source = 'api'`.
-
-## Cambio 2: Modificar `processImages` en la edge function
-
-En `supabase/functions/api-sync-vehicles/index.ts`, funcion `processImages` (linea 472):
-
-**Paso nuevo antes de insertar** (sin tocar storage):
+Add the `InlineLanguageSelector` component below the title/description text, inside the hero card. Layout:
 
 ```text
-DELETE FROM vehicle_images
-WHERE vehicle_id = vehicleId AND source = 'api'
+┌──────────────────────────────────────┐
+│ ← Back to Dashboard                 │
+│                                      │
+│ Mensajería                           │
+│ Gestiona tus conversaciones...       │
+│                                      │
+│ 🇪🇸 Español  🇬🇧 English  🇫🇷 Français │
+│ 🇮🇹 Italiano  🇩🇪 Deutsch  🇳🇱 Nederlands│
+│ 🇵🇹 Português  🇵🇱 Polski  🇩🇰 Dansk   │
+└──────────────────────────────────────┘
 ```
 
-**Al insertar cada imagen**, anadir `source: 'api'` al objeto:
+The flag selector will be placed **below the hero image card** (same position as in the screenshot reference), inside a `bg-card rounded-lg border` container with `flex-wrap gap-3 p-3`, matching the exact style from `MessagingInfoPage`.
 
-```text
-await supabase.from('vehicle_images').insert({
-  vehicle_id: vehicleId,
-  image_url: publicUrl,
-  display_order: i,
-  is_primary: i === 0,
-  source: 'api'        // <-- nuevo campo
-});
-```
-
-**No se eliminan archivos del bucket de storage.** Solo registros en base de datos.
-
-## Archivos modificados
-
-| Archivo | Cambio |
-|---------|--------|
-| Nueva migracion SQL | `ALTER TABLE vehicle_images ADD COLUMN source text;` |
-| `supabase/functions/api-sync-vehicles/index.ts` | Agregar DELETE previo y campo `source: 'api'` en insert |
-
-## Lo que NO se toca
-
-- Subida manual de imagenes
-- Componentes de UI
-- Bucket de storage (sin eliminar archivos fisicos)
-- RLS policies de `vehicle_images`
-- Ningun otro endpoint ni servicio
+### No translation changes needed
+The component uses `LANGUAGE_NAMES` from `src/config/languages.ts` and the existing `changeLanguage` function -- no new translation keys required.
 
