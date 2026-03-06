@@ -425,7 +425,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
       if (status === 'approved') {
         // Create user account first using the Edge Function
         console.log('Creating/updating user account...');
-        const response = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/create-user-from-registration', {
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/create-user-from-registration`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
