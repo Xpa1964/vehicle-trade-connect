@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import messagesHeroBg from '@/assets/messages-hero-bg.png';
+import InlineLanguageSelector from './InlineLanguageSelector';
 
 const MessagesHero: React.FC = () => {
   const { t } = useLanguage();
@@ -55,6 +56,8 @@ const MessagesHero: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      <InlineLanguageSelector />
     </div>
   );
 };
