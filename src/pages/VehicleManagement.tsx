@@ -90,11 +90,13 @@ const VehicleManagement: React.FC = () => {
               <TabsTrigger value="bulk" className="text-xs sm:text-sm touch-manipulation min-h-[44px]">
                 {t('vehicles.bulkUpload')}
               </TabsTrigger>
+            {process.env.NODE_ENV === 'development' && (
               <TabsTrigger value="debug" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm touch-manipulation min-h-[44px]">
                 <TestTube className="h-3 w-3 sm:h-4 sm:w-4" />
                 <span className="hidden sm:inline">Debug Imágenes</span>
                 <span className="sm:hidden">Debug</span>
               </TabsTrigger>
+            )}
             </TabsList>
             
             <TabsContent value="individual" className="py-4 sm:py-6">
