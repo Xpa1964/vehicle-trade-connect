@@ -17,8 +17,6 @@ export const useVehicleGallery = () => {
   const [viewMode, setViewMode] = useState<'compact' | 'normal'>('compact');
   const currentYear = new Date().getFullYear();
   
-  // Ref para control de estado realtime
-  const realtimeConnectedRef = useRef(false);
   
   const [filters, setFilters] = useState({
     country: 'all',
