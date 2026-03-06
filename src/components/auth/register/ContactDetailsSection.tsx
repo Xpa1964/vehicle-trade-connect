@@ -9,8 +9,6 @@ interface ContactDetailsSectionProps {
     contactPerson: string;
     phone: string;
     email: string;
-    password: string;
-    confirmPassword: string;
   };
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isSubmitting: boolean;
@@ -63,31 +61,6 @@ const ContactDetailsSection: React.FC<ContactDetailsSectionProps> = ({
         />
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="password">{t('auth.password')}</Label>
-          <Input
-            id="password"
-            type="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            disabled={isSubmitting}
-            required
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="confirmPassword">{t('auth.confirmPassword')}</Label>
-          <Input
-            id="confirmPassword"
-            type="password"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-            disabled={isSubmitting}
-            required
-          />
-        </div>
-      </div>
     </>
   );
 };

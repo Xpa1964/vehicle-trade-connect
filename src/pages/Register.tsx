@@ -29,8 +29,6 @@ const Register: React.FC = () => {
     defaultValues: {
       companyName: '',
       email: '',
-      password: '',
-      confirmPassword: '',
       contactPerson: '',
       phone: '',
       businessType: '',

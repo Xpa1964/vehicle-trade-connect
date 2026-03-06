@@ -120,22 +120,12 @@ export const useRegisterForm = () => {
       
       const requestData = {
         email: data.email,
-        password: data.password,
         company_name: data.companyName,
-        city: data.city,
-        country: data.country,
-        postal_code: data.postalCode,
-        manager_name: `${data.managerFirstName} ${data.managerLastName}`,
-        contact_person: data.contactPerson,
+        contact_name: data.contactPerson,
         phone: data.phone,
-        business_type: data.businessType,
-        trader_type: data.traderType,
-        description: data.description,
-        documents_paths: [],
       };
       
-      console.log('=== DIAGNOSIS: Inserting into database with password ===');
-      // 1. Insert registration request in database INCLUDING password
+      console.log('=== DIAGNOSIS: Inserting into registration_requests ===');
       const { error } = await supabase
         .from('registration_requests')
         .insert([requestData]);
@@ -143,12 +133,13 @@ export const useRegisterForm = () => {
       if (error) {
         console.error('=== DATABASE ERROR ===');
         console.error('Error inserting registration request:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
         toast.error(t('toast.registerError'));
         setIsSubmitting(false);
         return false;
       }
       
-      console.log('=== DATABASE SUCCESS (with password) ===');
+      console.log('=== DATABASE SUCCESS ===');
       console.log('Registration request submitted successfully');
       
       // 2. Send confirmation email to user

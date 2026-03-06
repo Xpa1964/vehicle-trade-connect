@@ -15,8 +15,6 @@ export const registerSchema = z.object({
   contactPerson: z.string().min(3, { message: 'Contact person name is required' }),
   phone: z.string().min(6, { message: 'Valid phone number is required' }),
   email: z.string().email({ message: 'Valid email is required' }),
-  password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
-  confirmPassword: z.string().min(8, { message: 'Password confirmation is required' }),
   
   // Business details
   businessType: z.string().min(1, { message: 'Business type is required' }),
@@ -30,9 +28,6 @@ export const registerSchema = z.object({
   termsAccepted: z.boolean().refine(val => val === true, {
     message: 'You must accept the terms and conditions',
   }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
 });
 
 export type RegisterFormData = z.infer<typeof registerSchema>;

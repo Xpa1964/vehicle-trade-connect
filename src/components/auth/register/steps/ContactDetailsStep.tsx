@@ -106,43 +106,6 @@ const ContactDetailsStep: React.FC<ContactDetailsStepProps> = ({
         )}
       />
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('auth.password')}</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="password"
-                  disabled={isSubmitting}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('auth.confirmPassword')}</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="password"
-                  disabled={isSubmitting}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
     </div>
   );
 };
