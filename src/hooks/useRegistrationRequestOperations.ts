@@ -26,7 +26,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
   const [selectedRequest, setSelectedRequest] = useState<RegistrationRequest | null>(null);
   const [adminNotes, setAdminNotes] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [createdCredentials, setCreatedCredentials] = useState<{email: string, password: string, isExistingUser?: boolean} | null>(null);
+  const [createdCredentials, setCreatedCredentials] = useState<{email: string, isExistingUser?: boolean, message?: string} | null>(null);
   
   const handleOpenDetails = (request: RegistrationRequest) => {
     setSelectedRequest(request);
