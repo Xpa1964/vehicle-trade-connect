@@ -118,14 +118,48 @@ export const useRegisterForm = () => {
       // La validación de roles administrativos se maneja en el backend
       // a través de la tabla admin_config y políticas RLS
       
+      // Upload company logo to Storage if provided
+      let logoUrl: string | null = null;
+      if (companyLogo) {
+        const fileExt = companyLogo.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+        const filePath = `registration-logos/${fileName}`;
+        
+        console.log('=== DIAGNOSIS: Uploading company logo ===');
+        const { error: uploadError } = await supabase.storage
+          .from('vehicles')
+          .upload(filePath, companyLogo, { upsert: false });
+        
+        if (uploadError) {
+          console.error('=== LOGO UPLOAD ERROR ===', uploadError);
+        } else {
+          const { data: publicUrlData } = supabase.storage
+            .from('vehicles')
+            .getPublicUrl(filePath);
+          logoUrl = publicUrlData.publicUrl;
+          console.log('Logo uploaded:', logoUrl);
+        }
+      }
+
       const requestData = {
         email: data.email,
         company_name: data.companyName,
         contact_name: data.contactPerson,
         phone: data.phone,
+        city: data.city,
+        country: data.country,
+        postal_code: data.postalCode,
+        manager_name: `${data.managerFirstName} ${data.managerLastName}`.trim(),
+        business_type: data.businessType,
+        trader_type: data.traderType,
+        description: data.description,
+        documents_paths: [],
+        company_logo_url: logoUrl,
+        terms_accepted_at: new Date().toISOString(),
       };
       
       console.log('=== DIAGNOSIS: Inserting into registration_requests ===');
+      console.log('Request data:', requestData);
       const { error } = await supabase
         .from('registration_requests')
         .insert([requestData]);
