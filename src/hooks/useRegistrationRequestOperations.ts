@@ -459,7 +459,7 @@ export const useRegistrationRequestOperations = (refetchRequests: () => void) =>
         setCreatedCredentials(credentialsToStore);
 
         // 2. Update the status in the database using Edge Function
-        const statusResponse = await fetch('https://inqqnsvlimtpjxjxuzaf.supabase.co/functions/v1/admin-users/update-registration-status', {
+        const statusResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users/update-registration-status`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
