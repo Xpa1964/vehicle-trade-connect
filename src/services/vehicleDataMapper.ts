@@ -1,7 +1,7 @@
 import { VehicleFormData, Vehicle } from '@/types/vehicle';
 
 export const mapFormDataToVehicle = (formData: VehicleFormData) => {
-  console.log('🔧 [vehicleDataMapper] Mapping form data to vehicle:', formData);
+  
   
   // Handle registration date properly - check if it's a Date object or string
   let registrationDateString = null;
@@ -47,12 +47,11 @@ export const mapFormDataToVehicle = (formData: VehicleFormData) => {
     commission_query: formData.commissionQuery || null,
   };
   
-  console.log('🎯 [vehicleDataMapper] Mapped vehicle data:', mappedData);
   return mappedData;
 };
 
 export const mapVehicleToFormData = (vehicle: Vehicle): VehicleFormData => {
-  console.log('🔧 [vehicleDataMapper] Mapping vehicle to form data:', vehicle);
+  
   
   // Handle registration date - use camelCase properties from Vehicle interface
   let registrationDate: Date | undefined;
@@ -104,13 +103,12 @@ export const mapVehicleToFormData = (vehicle: Vehicle): VehicleFormData => {
     damages: []
   };
   
-  console.log('🎯 [vehicleDataMapper] Mapped form data:', formData);
   return formData;
 };
 
 // Función específica para mapear datos de la base de datos (snake_case) a formulario (camelCase)
 export const mapDatabaseToFormData = (dbData: any): VehicleFormData => {
-  console.log('🔧 [vehicleDataMapper] Mapping database data to form data:', dbData);
+  
   
   // Handle registration date
   let registrationDate: Date | undefined;
@@ -162,7 +160,6 @@ export const mapDatabaseToFormData = (dbData: any): VehicleFormData => {
     damages: []
   };
   
-  console.log('🎯 [vehicleDataMapper] Mapped form data from database:', formData);
   return formData;
 };
 

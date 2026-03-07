@@ -64,7 +64,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
         };
       }
       
-      console.log('✅ [SESSION] Token refrescado exitosamente');
+      
       // Actualizar session con los nuevos datos
       session.access_token = refreshData.session.access_token;
       session.refresh_token = refreshData.session.refresh_token;
@@ -72,7 +72,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
     }
 
     // FASE 3: Verificación crítica de auth.uid() en base de datos
-    console.log('🔍 [SESSION] Verificando sincronización frontend-backend...');
+    
     
     // Primer intento con una query que REQUIERE auth.uid() válido
     let authTest;
@@ -92,14 +92,14 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
     }
 
     if (authError) {
-      console.error('❌ [SESSION] Error verificando auth.uid():', authError);
+      console.error('[SESSION] Error verifying auth.uid():', authError);
       
       // Detectar específicamente problemas de RLS que indican auth.uid() = null
       if (authError.message.includes('row-level security') || 
           authError.message.includes('RLS') ||
           authError.message.includes('policy')) {
         
-        console.warn('⚠️ [SESSION] Detectada desincronización frontend-backend, intentando recovery...');
+        
         
         // FASE 4: Intento de recovery agresivo
         try {
@@ -117,7 +117,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
             .limit(1);
           
           if (retryError) {
-            console.error('❌ [SESSION] Recovery falló, auth.uid() sigue siendo null');
+            console.error('[SESSION] Recovery failed, auth.uid() still null');
             return {
               isValid: false,
               userId: null,
@@ -125,10 +125,10 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
             };
           }
           
-          console.log('✅ [SESSION] Recovery exitoso después de reautenticación');
+          
           
         } catch (recoveryError) {
-          console.error('❌ [SESSION] Error en recovery:', recoveryError);
+          console.error('[SESSION] Recovery error:', recoveryError);
           return {
             isValid: false,
             userId: null,
@@ -145,11 +145,11 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
     }
 
     // FASE 5: Validación final de consistencia
-    console.log('🔍 [SESSION] Verificación final de consistencia...');
+    
     
     // Verificar que el usuario en sesión coincide con el auth.uid()
     if (!authTest || authTest.length === 0) {
-      console.error('❌ [SESSION] Usuario no encontrado en base de datos');
+      console.error('[SESSION] User not found in database');
       return {
         isValid: false,
         userId: null,
@@ -157,13 +157,6 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
       };
     }
 
-    console.log('✅ [SESSION] Validación agresiva completada exitosamente:', {
-      userId: session.user.id,
-      email: session.user.email,
-      expiresAt: session.expires_at,
-      tokenValid: true,
-      authUidValid: true
-    });
 
     return {
       isValid: true,
@@ -171,7 +164,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
     };
 
   } catch (error) {
-    console.error('❌ [SESSION] Error crítico en validación:', error);
+    console.error('[SESSION] Critical validation error:', error);
     return {
       isValid: false,
       userId: null,
@@ -185,22 +178,22 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
  */
 export const ensureValidSession = async (): Promise<boolean> => {
   try {
-    console.log('🔄 [SESSION] Interceptor pre-operación activado...');
+    
     
     const validation = await validateUserSession();
     
     if (validation.isValid) {
-      console.log('✅ [SESSION] Sesión válida confirmada para operación');
+      return true;
       return true;
     }
 
-    console.warn('⚠️ [SESSION] Sesión inválida detectada, iniciando recovery automático...');
+    
     
     // INTENTO 1: Refresh session estándar
     const { data, error } = await supabase.auth.refreshSession();
     
     if (error || !data.session) {
-      console.error('❌ [SESSION] Refresh falló:', error);
+      console.error('[SESSION] Refresh failed:', error);
       
       // INTENTO 2: Limpieza de sesión corrupta y notificación
       await supabase.auth.signOut();
@@ -209,23 +202,23 @@ export const ensureValidSession = async (): Promise<boolean> => {
     }
 
     // INTENTO 3: Validación agresiva post-refresh
-    console.log('🔄 [SESSION] Revalidando después de refresh...');
+    
     await new Promise(resolve => setTimeout(resolve, 1000)); // Dar tiempo para sincronización
     
     const revalidation = await validateUserSession();
     
     if (!revalidation.isValid) {
-      console.error('❌ [SESSION] Revalidación falló después de refresh');
+      console.error('[SESSION] Revalidation failed after refresh');
       toast.error('Error de sincronización de sesión. Recarga la página e inicia sesión nuevamente.');
       return false;
     }
     
-    console.log('✅ [SESSION] Recovery automático exitoso');
+    
     toast.success('Sesión restablecida automáticamente');
     return true;
 
   } catch (error) {
-    console.error('❌ [SESSION] Error crítico en interceptor:', error);
+    console.error('[SESSION] Critical interceptor error:', error);
     toast.error('Error crítico de sesión. Recarga la página.');
     return false;
   }

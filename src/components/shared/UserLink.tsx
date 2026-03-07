@@ -23,11 +23,6 @@ const UserLink: React.FC<UserLinkProps> = ({
 }) => {
   const displayName = companyName || userName || 'Usuario';
   
-  console.log('🔗 UserLink Debug:', {
-    userId,
-    displayName,
-    linkTo: `/user/${userId}`
-  });
   
   return (
     <Link

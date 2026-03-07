@@ -21,12 +21,8 @@ export interface CreateUserNotificationData {
 }
 
 export const userNotificationService = {
-  // Create a single user notification using system function
   async createUserNotification(data: CreateUserNotificationData): Promise<UserNotification | null> {
     try {
-      console.log('[userNotificationService] Creating notification:', data);
-      
-      // Use system function
       const { data: result, error } = await supabase.rpc('create_system_notification', {
         p_user_id: data.user_id,
         p_title: data.subject,
@@ -40,20 +36,17 @@ export const userNotificationService = {
         return null;
       }
       
-      console.log('[userNotificationService] Notification created with ID:', result);
-      
-      // Obtener la notificación creada
       const { data: notification, error: fetchError } = await supabase
         .from('user_notifications')
         .select('*')
         .eq('id', result)
         .single();
+
       if (fetchError) {
         console.error('[userNotificationService] Error fetching created notification:', fetchError);
         return null;
       }
       
-      console.log('[userNotificationService] ✅ Notification created successfully');
       return notification as UserNotification;
     } catch (error) {
       console.error('[userNotificationService] Unexpected error:', error);
@@ -61,12 +54,8 @@ export const userNotificationService = {
     }
   },
 
-  // Create notifications for multiple users (for mass notifications)
   async createBulkUserNotifications(notifications: CreateUserNotificationData[]): Promise<boolean> {
     try {
-      console.log('[userNotificationService] Creating bulk notifications:', notifications.length);
-      
-      // Crear notificaciones una por una usando la función de sistema
       const results = await Promise.allSettled(
         notifications.map(notification => this.createUserNotification(notification))
       );
@@ -75,7 +64,6 @@ export const userNotificationService = {
         result.status === 'fulfilled' && result.value !== null
       ).length;
       
-      console.log(`[userNotificationService] Successfully created ${successful}/${notifications.length} notifications`);
       return successful > 0;
     } catch (error) {
       console.error('[userNotificationService] Error creating bulk notifications:', error);
@@ -83,9 +71,7 @@ export const userNotificationService = {
     }
   },
 
-  // Get notifications for a specific user
   async getUserNotifications(userId: string, limit: number = 50): Promise<UserNotification[]> {
-    console.log('🔍 Getting notifications for user:', userId, 'limit:', limit);
     try {
       const { data: notifications, error } = await supabase
         .from('user_notifications')
@@ -95,19 +81,17 @@ export const userNotificationService = {
         .limit(limit);
 
       if (error) {
-        console.error('❌ Error fetching user notifications:', error);
+        console.error('[userNotificationService] Error fetching notifications:', error);
         return [];
       }
 
-      console.log('✅ Found', notifications?.length || 0, 'notifications for user', userId);
       return notifications || [];
     } catch (error) {
-      console.error('❌ Error fetching user notifications:', error);
+      console.error('[userNotificationService] Error fetching notifications:', error);
       return [];
     }
   },
 
-  // Mark a notification as read
   async markAsRead(notificationId: string): Promise<boolean> {
     try {
       const { error } = await supabase
@@ -119,18 +103,17 @@ export const userNotificationService = {
         .eq('id', notificationId);
 
       if (error) {
-        console.error('Error marking notification as read:', error);
+        console.error('[userNotificationService] Error marking as read:', error);
         return false;
       }
 
       return true;
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      console.error('[userNotificationService] Error marking as read:', error);
       return false;
     }
   },
 
-  // Mark all notifications as read for a user
   async markAllAsRead(userId: string): Promise<boolean> {
     try {
       const { error } = await supabase
@@ -143,18 +126,17 @@ export const userNotificationService = {
         .eq('is_read', false);
 
       if (error) {
-        console.error('Error marking all notifications as read:', error);
+        console.error('[userNotificationService] Error marking all as read:', error);
         return false;
       }
       
       return true;
     } catch (error) {
-      console.error('Error marking all notifications as read:', error);
+      console.error('[userNotificationService] Error marking all as read:', error);
       return false;
     }
   },
 
-  // Get unread count for a user
   async getUnreadCount(userId: string): Promise<number> {
     try {
       const { count, error } = await supabase
@@ -164,18 +146,17 @@ export const userNotificationService = {
         .eq('is_read', false);
 
       if (error) {
-        console.error('Error getting unread count:', error);
+        console.error('[userNotificationService] Error getting unread count:', error);
         return 0;
       }
       
       return count || 0;
     } catch (error) {
-      console.error('Error getting unread count:', error);
+      console.error('[userNotificationService] Error getting unread count:', error);
       return 0;
     }
   },
 
-  // Delete a notification
   async deleteNotification(notificationId: string): Promise<boolean> {
     try {
       const { error } = await supabase
@@ -184,13 +165,13 @@ export const userNotificationService = {
         .eq('id', notificationId);
 
       if (error) {
-        console.error('Error deleting notification:', error);
+        console.error('[userNotificationService] Error deleting notification:', error);
         return false;
       }
 
       return true;
     } catch (error) {
-      console.error('Error deleting notification:', error);
+      console.error('[userNotificationService] Error deleting notification:', error);
       return false;
     }
   }

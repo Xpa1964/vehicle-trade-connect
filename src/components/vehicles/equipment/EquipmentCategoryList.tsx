@@ -41,12 +41,6 @@ export const EquipmentCategoryList: React.FC<EquipmentCategoryListProps> = ({
           <h3 className="text-lg font-bold mb-2">{category.categoryName}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {category.items.map((item) => {
-              console.log('🔧 EquipmentCategoryList - Rendering equipment item:', {
-                id: item.id,
-                standardName: item.standard_name,
-                name: item.name
-              });
-              
               return (
                 <div key={item.id} className="flex items-center p-2 border rounded-md">
                   <CheckCircle2 className="w-5 h-5 mr-2 text-green-500" />

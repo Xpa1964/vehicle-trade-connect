@@ -25,11 +25,6 @@ const SellerInfoCard: React.FC<SellerInfoCardProps> = ({ sellerId, onContact }) 
   
   const isOwnProfile = user?.id === sellerId;
 
-  console.log('🔍 SellerInfoCard Debug:', {
-    sellerId,
-    currentUserId: user?.id,
-    isOwnProfile
-  });
 
   // MEJORADO: Query con mejor manejo de errores y datos por defecto
   const { data: profile, isLoading: profileLoading } = useQuery({

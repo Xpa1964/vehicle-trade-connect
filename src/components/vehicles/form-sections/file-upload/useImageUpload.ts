@@ -92,7 +92,7 @@ export const useImageUpload = (
         return combined;
       });
     } catch (error) {
-      console.error('❌ [useImageUpload] Error adding images:', error);
+      console.error('[useImageUpload] Error adding images:', error);
     }
   };
 
@@ -144,7 +144,7 @@ export const useImageUpload = (
     try {
       if (images.length === 0) {
         form.setValue('images', undefined);
-        console.log('📸 [useImageUpload] updateFormValue: cleared images');
+        
         return;
       }
 
@@ -172,10 +172,8 @@ export const useImageUpload = (
       
       // Verify the value was set
       const currentValue = form.getValues('images');
-      console.log(`📸 [useImageUpload] updateFormValue: verification - form.getValues('images') =`, 
-        currentValue ? `${Array.isArray(currentValue) ? currentValue.length : (currentValue as FileList)?.length || 'unknown'} items` : 'null/undefined');
     } catch (error) {
-      console.error('❌ [useImageUpload] Error updating form value:', error);
+      console.error('[useImageUpload] Error updating form value:', error);
     }
   };
 

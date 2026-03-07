@@ -28,7 +28,7 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
         setPreviewUrl(url);
       }
     } catch (error) {
-      console.error('❌ [VehicleUploadForm] Error handling image change:', error);
+      console.error('[VehicleUploadForm] Error handling image change:', error);
     }
   };
 
@@ -37,7 +37,7 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
   };
 
   const handleFormChange = (field: string, value: string | number) => {
-    console.log('🔧 [VehicleUploadForm] Field change:', field, '=', value);
+    
     
     formHook.form.setValue(field as any, value, { 
       shouldValidate: true,
@@ -49,14 +49,8 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
   };
   
   const handleFormSubmit = async (data: VehicleFormData) => {
-    console.log('🚀 [VehicleUploadForm] Form submitted');
-    console.log('🚀 [VehicleUploadForm] data.images:', data.images ? 
-      `${Array.isArray(data.images) ? data.images.length : (data.images as FileList)?.length || 'unknown'} items` : 'null/undefined');
-    
     try {
       const allFormValues = formHook.form.getValues();
-      console.log('🚀 [VehicleUploadForm] allFormValues.images:', allFormValues.images ?
-        `${Array.isArray(allFormValues.images) ? allFormValues.images.length : (allFormValues.images as FileList)?.length || 'unknown'} items` : 'null/undefined');
       
       const completeFormData: VehicleFormData = {
         brand: allFormValues.brand || data.brand || '',
@@ -91,13 +85,10 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
         equipment: allFormValues.equipment || data.equipment || []
       };
       
-      console.log('🎯 [VehicleUploadForm] Complete form data being sent:', completeFormData);
-      
       const result = await formHook.onSubmit(completeFormData);
-      console.log('✅ [VehicleUploadForm] Form submission completed:', result);
       return result;
     } catch (error) {
-      console.error('❌ [VehicleUploadForm] Form submission error:', error);
+      console.error('[VehicleUploadForm] Form submission error:', error);
       throw error;
     }
   };

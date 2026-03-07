@@ -30,15 +30,6 @@ export const useCommissionSaleDetection = (vehicle: Vehicle) => {
     // Auto-detectar venta comisionada
     const shouldAutoDetect = isSpanishUser && isForeignVehicle;
 
-    console.log('🔍 Commission Sale Detection:', {
-      vehicleId: vehicle.id,
-      userCountry,
-      vehicleCountry,
-      isSpanishUser,
-      isForeignVehicle,
-      shouldAutoDetect,
-      originalCommissionSale: vehicle.commissionSale
-    });
 
     return shouldAutoDetect;
   }, [vehicle, user]);

@@ -83,12 +83,10 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
       // Validar sesión
       const validation = await validateUserSession();
       if (!validation.isValid) {
-        console.error('❌ [FORM] Validación de sesión falló:', validation.error);
+        console.error('[AnnouncementForm] Session validation failed:', validation.error);
         toast.error(validation.error || t('toast.sessionError'));
         return;
       }
-      
-      console.log('✅ [FORM] Sesión validada exitosamente, procediendo con creación...');
 
       // Add the announcement to Supabase
       const { data, error } = await supabase
@@ -109,7 +107,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
         .single();
       
       if (error) {
-        console.error('❌ [FORM] Error adding announcement:', error);
+        console.error('[AnnouncementForm] Error adding announcement:', error);
         const userFriendlyError = handleRLSError(error);
         toast.error(t('toast.announcementDeleteError'), {
           description: userFriendlyError
@@ -117,28 +115,22 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
         throw error;
       }
       
-      console.log('✅ [FORM] Anuncio creado exitosamente:', data.id);
-      
       // Now upload pending files with the real announcement ID
       if (pendingFiles.length > 0) {
-        console.log(`📁 Subiendo ${pendingFiles.length} archivos para anuncio ${data.id}...`);
-        
         for (const file of pendingFiles) {
           try {
             const uploadResult = await uploadFile(file, data.id);
-            if (uploadResult.success) {
-              console.log(`✅ Archivo subido: ${file.name}`);
-            } else {
-              console.error(`❌ Error subiendo ${file.name}:`, uploadResult.error);
+            if (!uploadResult.success) {
+              console.error(`[AnnouncementForm] Error uploading ${file.name}:`, uploadResult.error);
               toast.error(`Error subiendo ${file.name}: ${uploadResult.error}`);
             }
           } catch (error) {
-            console.error(`❌ Error subiendo ${file.name}:`, error);
+            console.error(`[AnnouncementForm] Error uploading ${file.name}:`, error);
             toast.error(`Error subiendo ${file.name}`);
           }
         }
         
-        console.log('📁 Proceso de subida de archivos completado');
+        
       }
       
       // Notify parent component about the new announcement
