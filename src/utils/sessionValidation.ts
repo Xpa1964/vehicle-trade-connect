@@ -193,7 +193,7 @@ export const ensureValidSession = async (): Promise<boolean> => {
     const { data, error } = await supabase.auth.refreshSession();
     
     if (error || !data.session) {
-      console.error('❌ [SESSION] Refresh falló:', error);
+      console.error('[SESSION] Refresh failed:', error);
       
       // INTENTO 2: Limpieza de sesión corrupta y notificación
       await supabase.auth.signOut();
