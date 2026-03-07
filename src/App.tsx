@@ -38,8 +38,7 @@ function App() {
     // Initialize Core Web Vitals monitoring
     reportWebVitals();
   }, []);
-
-  console.log('🚀 [App] Renderizando...');
+  
   
   return (
     <ErrorBoundary>
