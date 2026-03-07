@@ -164,7 +164,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
     };
 
   } catch (error) {
-    console.error('❌ [SESSION] Error crítico en validación:', error);
+    console.error('[SESSION] Critical validation error:', error);
     return {
       isValid: false,
       userId: null,
