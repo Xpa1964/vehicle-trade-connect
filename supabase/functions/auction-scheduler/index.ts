@@ -168,7 +168,7 @@ const handler = async (req: Request): Promise<Response> => {
     // ============================================
     const { data: expiredAuctions, error: expiredError } = await supabase
       .from('auctions')
-      .select('id, vehicle_id, seller_id, current_price, reserve_price, end_date')
+      .select('id, vehicle_id, seller_id, current_price, reserve_price, end_date, vehicle:vehicles(brand, model, year)')
       .eq('status', 'active')
       .lte('end_date', now)
       .order('end_date', { ascending: true });
