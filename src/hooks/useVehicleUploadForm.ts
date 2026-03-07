@@ -37,7 +37,7 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
   };
 
   const handleFormChange = (field: string, value: string | number) => {
-    console.log('🔧 [VehicleUploadForm] Field change:', field, '=', value);
+    
     
     formHook.form.setValue(field as any, value, { 
       shouldValidate: true,
