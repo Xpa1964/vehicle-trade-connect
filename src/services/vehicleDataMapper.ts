@@ -51,7 +51,7 @@ export const mapFormDataToVehicle = (formData: VehicleFormData) => {
 };
 
 export const mapVehicleToFormData = (vehicle: Vehicle): VehicleFormData => {
-  console.log('🔧 [vehicleDataMapper] Mapping vehicle to form data:', vehicle);
+  
   
   // Handle registration date - use camelCase properties from Vehicle interface
   let registrationDate: Date | undefined;
