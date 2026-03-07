@@ -157,13 +157,6 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
       };
     }
 
-    console.log('✅ [SESSION] Validación agresiva completada exitosamente:', {
-      userId: session.user.id,
-      email: session.user.email,
-      expiresAt: session.expires_at,
-      tokenValid: true,
-      authUidValid: true
-    });
 
     return {
       isValid: true,
