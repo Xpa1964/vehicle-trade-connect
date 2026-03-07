@@ -168,7 +168,7 @@ const handler = async (req: Request): Promise<Response> => {
     // ============================================
     const { data: expiredAuctions, error: expiredError } = await supabase
       .from('auctions')
-      .select('id, vehicle_id, seller_id, current_price, reserve_price, end_date')
+      .select('id, vehicle_id, seller_id, current_price, reserve_price, end_date, vehicle:vehicles(brand, model, year)')
       .eq('status', 'active')
       .lte('end_date', now)
       .order('end_date', { ascending: true });
@@ -223,8 +223,24 @@ const handler = async (req: Request): Promise<Response> => {
           }
         );
 
+        // Notificar al vendedor
+        const vehicle = (auction as any).vehicle;
+        const vehicleName = vehicle ? `${vehicle.brand} ${vehicle.model} (${vehicle.year})` : 'Vehículo';
+        const notifContent = highestBid
+          ? `Tu subasta de ${vehicleName} ha finalizado. Puja más alta: €${highestBid.amount}. Revisa el resultado y toma una decisión.`
+          : `Tu subasta de ${vehicleName} ha finalizado sin pujas.`;
+
+        await supabase.rpc('create_system_notification', {
+          p_user_id: auction.seller_id,
+          p_title: 'Tu subasta ha finalizado',
+          p_message: notifContent,
+          p_type: 'auction',
+          p_link: `/auctions/${auction.id}`,
+          p_subject: 'Tu subasta ha finalizado',
+          p_content: notifContent
+        });
+
         response.ended++;
-        console.log(`✅ Ended auction ${auction.id} - Winner: ${hasMetReserve ? highestBid?.bidder_id : 'None'}`);
       }
     }
 
