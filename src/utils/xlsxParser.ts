@@ -984,11 +984,12 @@ const parseVehicleData = (mandatoryData: any[][], optionalData: any[][], t: (key
 };
 
 // Función para generar reporte de errores en XLSX
-export const generateErrorReport = (
+export const generateErrorReport = async (
   parseResult: ParseResult,
   originalMandatoryData: any[][],
   originalOptionalData: any[][]
-): Blob => {
+): Promise<Blob> => {
+  const XLSX = await loadXLSX();
   const wb = XLSX.utils.book_new();
   
   // ================== PESTAÑA 1: RESUMEN DE ERRORES ==================
