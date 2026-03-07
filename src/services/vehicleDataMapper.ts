@@ -103,7 +103,6 @@ export const mapVehicleToFormData = (vehicle: Vehicle): VehicleFormData => {
     damages: []
   };
   
-  console.log('🎯 [vehicleDataMapper] Mapped form data:', formData);
   return formData;
 };
 
