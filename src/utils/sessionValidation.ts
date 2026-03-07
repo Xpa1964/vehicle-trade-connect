@@ -218,7 +218,7 @@ export const ensureValidSession = async (): Promise<boolean> => {
     return true;
 
   } catch (error) {
-    console.error('❌ [SESSION] Error crítico en interceptor:', error);
+    console.error('[SESSION] Critical interceptor error:', error);
     toast.error('Error crítico de sesión. Recarga la página.');
     return false;
   }

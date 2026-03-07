@@ -130,7 +130,7 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
           }
         }
         
-        console.log('📁 Proceso de subida de archivos completado');
+        
       }
       
       // Notify parent component about the new announcement

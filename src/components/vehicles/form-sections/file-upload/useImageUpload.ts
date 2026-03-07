@@ -144,7 +144,7 @@ export const useImageUpload = (
     try {
       if (images.length === 0) {
         form.setValue('images', undefined);
-        console.log('📸 [useImageUpload] updateFormValue: cleared images');
+        
         return;
       }
 
