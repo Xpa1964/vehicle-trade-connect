@@ -1,7 +1,7 @@
 import { VehicleFormData, Vehicle } from '@/types/vehicle';
 
 export const mapFormDataToVehicle = (formData: VehicleFormData) => {
-  console.log('🔧 [vehicleDataMapper] Mapping form data to vehicle:', formData);
+  
   
   // Handle registration date properly - check if it's a Date object or string
   let registrationDateString = null;
