@@ -30,12 +30,6 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   // CORREGIDO: Solo verificar una condición para determinar si es el propietario
   const isOwner = user?.id === vehicle.user_id;
   
-  console.log('🔍 VehicleCard Debug:', {
-    currentUserId: user?.id,
-    vehicleUserId: vehicle.user_id,
-    isOwner,
-    vehicleId: vehicle.id
-  });
   
   const cardContent = (
     <Card className="bg-card border-border hover:border-primary/30 hover:shadow-lg transition-shadow duration-200 cursor-pointer">

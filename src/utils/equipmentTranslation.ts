@@ -28,31 +28,15 @@ export const useEquipmentTranslation = () => {
   const { t } = useLanguage();
   
   return (standardName: string | null, name: string | null): string => {
-    // Debug logging to see what data we're receiving
-    console.log('🔧 Equipment Translation Debug:', { standardName, name });
-    
-    // If we have a standard_name, try to translate it
     if (standardName) {
       const translationKey = `equipment.${generateEquipmentSlug(standardName)}`;
       const translated = t(translationKey);
       
-      console.log('🔧 Translation attempt:', { 
-        standardName, 
-        slug: generateEquipmentSlug(standardName),
-        translationKey, 
-        translated,
-        foundTranslation: translated !== translationKey 
-      });
-      
-      // If translation exists (different from key), return it
       if (translated !== translationKey) {
         return translated;
       }
     }
     
-    // Fallback to name, then to standard_name, then to generic equipment text
-    const fallback = name || standardName || t('vehicles.equipment');
-    console.log('🔧 Using fallback:', fallback);
-    return fallback;
+    return name || standardName || t('vehicles.equipment');
   };
 };

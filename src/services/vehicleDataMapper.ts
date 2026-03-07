@@ -108,7 +108,7 @@ export const mapVehicleToFormData = (vehicle: Vehicle): VehicleFormData => {
 
 // Función específica para mapear datos de la base de datos (snake_case) a formulario (camelCase)
 export const mapDatabaseToFormData = (dbData: any): VehicleFormData => {
-  console.log('🔧 [vehicleDataMapper] Mapping database data to form data:', dbData);
+  
   
   // Handle registration date
   let registrationDate: Date | undefined;

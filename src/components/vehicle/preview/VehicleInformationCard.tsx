@@ -141,25 +141,15 @@ const VehicleInformationCard: React.FC<VehicleInformationCardProps> = ({
   };
 
   const hasValidValue = (value: any): boolean => {
-    const isValid = value !== null && value !== undefined && value !== '';
-    console.log(`🔍 [VehicleInformationCard] Checking value "${value}": isValid=${isValid}`);
-    return isValid;
+    return value !== null && value !== undefined && value !== '';
   };
 
   const renderInfoSection = (title: string, icon: React.ReactNode, items: Array<{ label: string; value: any }>) => {
-    // Filtrar elementos sin valor y registrar lo que se va a mostrar
-    const validItems = items.filter(item => {
-      const hasValue = hasValidValue(item.value);
-      console.log(`🔍 [VehicleInformationCard] Field "${item.label}": value="${item.value}", hasValue=${hasValue}`);
-      return hasValue;
-    });
+    const validItems = items.filter(item => hasValidValue(item.value));
     
     if (validItems.length === 0) {
-      console.log(`⚠️ [VehicleInformationCard] No valid items for section "${title}"`);
       return null;
     }
-
-    console.log(`✅ [VehicleInformationCard] Rendering section "${title}" with ${validItems.length} items`);
 
     return (
       <div className="mb-6">
