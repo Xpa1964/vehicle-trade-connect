@@ -2,3 +2,6 @@ project_id = "vbqvzumjmnblcdkkxuqq"
 
 [functions.send-auction-contact-details]
 verify_jwt = false
+
+[functions.auction-scheduler]
+verify_jwt = false
