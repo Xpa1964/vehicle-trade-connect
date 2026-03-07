@@ -15,6 +15,7 @@ export type AuctionStatus =
 export interface Auction {
   id: string;
   vehicle_id: string;
+  seller_id: string;
   created_by: string;
   starting_price: number;
   reserve_price?: number;
