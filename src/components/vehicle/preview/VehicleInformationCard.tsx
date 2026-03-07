@@ -99,17 +99,6 @@ const VehicleInformationCard: React.FC<VehicleInformationCardProps> = ({
         cocStatus: mappedVehicle.cocStatus
       };
       
-      console.log('✅ [VehicleInformationCard] Final mapped vehicle for information display:', finalVehicle);
-      console.log('🔍 [VehicleInformationCard] Critical fields verification:');
-      console.log(`- VIN: "${finalVehicle.vin}"`);
-      console.log(`- License Plate: "${finalVehicle.licensePlate}"`);
-      console.log(`- Registration Date: "${finalVehicle.registrationDate}"`);
-      console.log(`- Vehicle Type: "${finalVehicle.vehicleType}"`);
-      console.log(`- Engine Size: "${finalVehicle.engineSize}"`);
-      console.log(`- Engine Power: "${finalVehicle.enginePower}"`);
-      console.log(`- Color: "${finalVehicle.color}"`);
-      console.log(`- Doors: "${finalVehicle.doors}"`);
-      
       return finalVehicle;
     }
   });
