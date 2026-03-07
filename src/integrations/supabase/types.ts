@@ -2819,6 +2819,7 @@ export type Database = {
         Args: { p_request_id: string }
         Returns: boolean
       }
+      auction_has_reserve: { Args: { p_auction_id: string }; Returns: boolean }
       create_system_notification:
         | {
             Args: {
@@ -2846,6 +2847,10 @@ export type Database = {
       generate_api_key: {
         Args: { p_name: string; p_user_id: string }
         Returns: string
+      }
+      get_auction_reserve_price: {
+        Args: { p_auction_id: string }
+        Returns: number
       }
       get_user_rating_summary: { Args: { p_user_id: string }; Returns: Json }
       get_user_role: {
