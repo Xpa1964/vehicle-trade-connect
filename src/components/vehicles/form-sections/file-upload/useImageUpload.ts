@@ -92,7 +92,7 @@ export const useImageUpload = (
         return combined;
       });
     } catch (error) {
-      console.error('❌ [useImageUpload] Error adding images:', error);
+      console.error('[useImageUpload] Error adding images:', error);
     }
   };
 
