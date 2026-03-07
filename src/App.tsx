@@ -22,10 +22,8 @@ function App() {
 
   useEffect(() => {
     // Initialize Phase 0 security systems
-    initializePhase0().then(status => {
-      console.log('[App] Fase 0 inicializada:', status);
-    }).catch(error => {
-      console.error('[App] Error inicializando Fase 0:', error);
+    initializePhase0().catch(() => {
+      // Phase 0 initialization failed silently
     });
     
     // Initialize PWA features
