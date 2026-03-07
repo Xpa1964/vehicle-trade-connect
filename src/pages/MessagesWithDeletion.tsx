@@ -141,14 +141,14 @@ const MessagesWithDeletion: React.FC = memo(() => {
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <div className="flex flex-col min-h-screen bg-background">
+      <div className="flex flex-col h-screen overflow-hidden bg-background">
         {/* Hero Section */}
-        <div className="p-2 sm:p-3 bg-card border-b border-border">
+        <div className="p-2 sm:p-3 bg-card border-b border-border flex-shrink-0">
           <MessagesHero />
         </div>
         
         {/* Main Content Area */}
-        <div className="hidden lg:grid lg:grid-cols-3 gap-4 p-4 flex-1 min-h-0" style={{ isolation: 'isolate' }}>
+        <div className="hidden lg:grid lg:grid-cols-3 gap-4 p-4 flex-1 min-h-0 overflow-hidden" style={{ isolation: 'isolate' }}>
           {/* Lista de conversaciones */}
           <div className="lg:col-span-1 min-h-0 flex flex-col relative z-10">
             <div className="bg-card rounded-lg shadow-sm border border-border flex-1 flex flex-col min-h-0 relative" style={{ overflow: 'visible', zIndex: 10 }}>
@@ -209,7 +209,7 @@ const MessagesWithDeletion: React.FC = memo(() => {
           </div>
 
           {/* Área de chat */}
-          <div className="bg-card rounded-lg shadow-sm border border-border lg:col-span-2 flex flex-col min-h-0 relative z-0" style={{ zIndex: 0 }}>
+          <div className="bg-card rounded-lg shadow-sm border border-border lg:col-span-2 flex flex-col min-h-0 overflow-hidden relative z-0" style={{ zIndex: 0 }}>
             {showEmptyPlaceholder ? (
               <EmptyChatPlaceholder />
             ) : (
