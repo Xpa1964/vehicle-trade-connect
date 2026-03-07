@@ -28,7 +28,7 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
         setPreviewUrl(url);
       }
     } catch (error) {
-      console.error('❌ [VehicleUploadForm] Error handling image change:', error);
+      console.error('[VehicleUploadForm] Error handling image change:', error);
     }
   };
 
