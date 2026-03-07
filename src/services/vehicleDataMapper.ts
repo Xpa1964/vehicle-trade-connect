@@ -47,7 +47,6 @@ export const mapFormDataToVehicle = (formData: VehicleFormData) => {
     commission_query: formData.commissionQuery || null,
   };
   
-  console.log('🎯 [vehicleDataMapper] Mapped vehicle data:', mappedData);
   return mappedData;
 };
 
