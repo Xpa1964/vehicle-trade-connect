@@ -208,7 +208,7 @@ export const ensureValidSession = async (): Promise<boolean> => {
     const revalidation = await validateUserSession();
     
     if (!revalidation.isValid) {
-      console.error('❌ [SESSION] Revalidación falló después de refresh');
+      console.error('[SESSION] Revalidation failed after refresh');
       toast.error('Error de sincronización de sesión. Recarga la página e inicia sesión nuevamente.');
       return false;
     }
