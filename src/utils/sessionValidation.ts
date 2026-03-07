@@ -183,7 +183,7 @@ export const ensureValidSession = async (): Promise<boolean> => {
     const validation = await validateUserSession();
     
     if (validation.isValid) {
-      console.log('✅ [SESSION] Sesión válida confirmada para operación');
+      return true;
       return true;
     }
 
