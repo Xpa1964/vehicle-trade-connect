@@ -99,7 +99,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
           authError.message.includes('RLS') ||
           authError.message.includes('policy')) {
         
-        console.warn('⚠️ [SESSION] Detectada desincronización frontend-backend, intentando recovery...');
+        
         
         // FASE 4: Intento de recovery agresivo
         try {
