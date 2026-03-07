@@ -117,19 +117,15 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
       
       // Now upload pending files with the real announcement ID
       if (pendingFiles.length > 0) {
-        console.log(`📁 Subiendo ${pendingFiles.length} archivos para anuncio ${data.id}...`);
-        
         for (const file of pendingFiles) {
           try {
             const uploadResult = await uploadFile(file, data.id);
-            if (uploadResult.success) {
-              console.log(`✅ Archivo subido: ${file.name}`);
-            } else {
-              console.error(`❌ Error subiendo ${file.name}:`, uploadResult.error);
+            if (!uploadResult.success) {
+              console.error(`[AnnouncementForm] Error uploading ${file.name}:`, uploadResult.error);
               toast.error(`Error subiendo ${file.name}: ${uploadResult.error}`);
             }
           } catch (error) {
-            console.error(`❌ Error subiendo ${file.name}:`, error);
+            console.error(`[AnnouncementForm] Error uploading ${file.name}:`, error);
             toast.error(`Error subiendo ${file.name}`);
           }
         }

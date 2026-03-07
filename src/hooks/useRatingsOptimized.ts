@@ -52,7 +52,7 @@ export const useRatingsOptimized = (userId?: string) => {
         .eq('to_user_id', userId);
         
       if (error) {
-        console.error('❌ Fast ratings query error:', error);
+        console.error('[useRatingsOptimized] Fast ratings query error:', error);
         return { average_rating: 0, total_ratings: 0, verified_ratings: 0 };
       }
 

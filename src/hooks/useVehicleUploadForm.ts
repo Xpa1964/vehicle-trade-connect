@@ -85,13 +85,10 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
         equipment: allFormValues.equipment || data.equipment || []
       };
       
-      console.log('🎯 [VehicleUploadForm] Complete form data being sent:', completeFormData);
-      
       const result = await formHook.onSubmit(completeFormData);
-      console.log('✅ [VehicleUploadForm] Form submission completed:', result);
       return result;
     } catch (error) {
-      console.error('❌ [VehicleUploadForm] Form submission error:', error);
+      console.error('[VehicleUploadForm] Form submission error:', error);
       throw error;
     }
   };

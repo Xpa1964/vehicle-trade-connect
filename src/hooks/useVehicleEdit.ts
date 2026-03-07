@@ -70,7 +70,7 @@ export const useVehicleEdit = (vehicleId?: string) => {
         }
       }
     } catch (error) {
-      console.error('❌ [useVehicleEdit] Form submission error:', error);
+      console.error('[useVehicleEdit] Form submission error:', error);
     }
   };
 
