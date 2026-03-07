@@ -64,7 +64,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
         };
       }
       
-      console.log('✅ [SESSION] Token refrescado exitosamente');
+      
       // Actualizar session con los nuevos datos
       session.access_token = refreshData.session.access_token;
       session.refresh_token = refreshData.session.refresh_token;
