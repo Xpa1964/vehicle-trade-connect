@@ -125,7 +125,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
             };
           }
           
-          console.log('✅ [SESSION] Recovery exitoso después de reautenticación');
+          
           
         } catch (recoveryError) {
           console.error('❌ [SESSION] Error en recovery:', recoveryError);
