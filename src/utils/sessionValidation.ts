@@ -213,7 +213,7 @@ export const ensureValidSession = async (): Promise<boolean> => {
       return false;
     }
     
-    console.log('✅ [SESSION] Recovery automático exitoso');
+    
     toast.success('Sesión restablecida automáticamente');
     return true;
 
