@@ -83,12 +83,10 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
       // Validar sesión
       const validation = await validateUserSession();
       if (!validation.isValid) {
-        console.error('❌ [FORM] Validación de sesión falló:', validation.error);
+        console.error('[AnnouncementForm] Session validation failed:', validation.error);
         toast.error(validation.error || t('toast.sessionError'));
         return;
       }
-      
-      console.log('✅ [FORM] Sesión validada exitosamente, procediendo con creación...');
 
       // Add the announcement to Supabase
       const { data, error } = await supabase
