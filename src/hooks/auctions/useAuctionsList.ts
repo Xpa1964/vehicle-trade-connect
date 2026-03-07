@@ -19,7 +19,21 @@ export const useAuctionsList = (params: UseAuctionsListParams = {}) => {
       let query = supabase
         .from('auctions')
         .select(`
-          *,
+          id,
+          vehicle_id,
+          created_by,
+          seller_id,
+          starting_price,
+          current_price,
+          increment_minimum,
+          start_date,
+          end_date,
+          status,
+          winner_id,
+          description,
+          has_reserve,
+          created_at,
+          updated_at,
           vehicle:vehicles(
             id,
             brand,

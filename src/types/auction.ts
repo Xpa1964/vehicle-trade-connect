@@ -18,6 +18,7 @@ export interface Auction {
   created_by: string;
   starting_price: number;
   reserve_price?: number;
+  has_reserve?: boolean;
   current_price: number;
   increment_minimum: number;
   start_date: string;

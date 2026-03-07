@@ -55,7 +55,7 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
           <div className="absolute top-2 right-2">
             {getStatusBadge()}
           </div>
-          {auction.reserve_price && auction.current_price < auction.reserve_price && (
+          {auction.has_reserve && (
             <Badge className="absolute top-2 left-2 bg-orange-500 text-white">
               {t('auctions.hasReserve', { fallback: 'Con Reserva' })}
             </Badge>
