@@ -128,7 +128,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
           
           
         } catch (recoveryError) {
-          console.error('❌ [SESSION] Error en recovery:', recoveryError);
+          console.error('[SESSION] Recovery error:', recoveryError);
           return {
             isValid: false,
             userId: null,
