@@ -209,7 +209,7 @@ const MessagesWithDeletion: React.FC = memo(() => {
           </div>
 
           {/* Área de chat */}
-          <div className="bg-card rounded-lg shadow-sm border border-border lg:col-span-2 flex flex-col min-h-0 relative z-0" style={{ zIndex: 0 }}>
+          <div className="bg-card rounded-lg shadow-sm border border-border lg:col-span-2 flex flex-col min-h-0 overflow-hidden relative z-0" style={{ zIndex: 0 }}>
             {showEmptyPlaceholder ? (
               <EmptyChatPlaceholder />
             ) : (
