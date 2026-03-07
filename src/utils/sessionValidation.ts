@@ -92,7 +92,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
     }
 
     if (authError) {
-      console.error('❌ [SESSION] Error verificando auth.uid():', authError);
+      console.error('[SESSION] Error verifying auth.uid():', authError);
       
       // Detectar específicamente problemas de RLS que indican auth.uid() = null
       if (authError.message.includes('row-level security') || 
