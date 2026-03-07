@@ -202,7 +202,7 @@ export const ensureValidSession = async (): Promise<boolean> => {
     }
 
     // INTENTO 3: Validación agresiva post-refresh
-    console.log('🔄 [SESSION] Revalidando después de refresh...');
+    
     await new Promise(resolve => setTimeout(resolve, 1000)); // Dar tiempo para sincronización
     
     const revalidation = await validateUserSession();
