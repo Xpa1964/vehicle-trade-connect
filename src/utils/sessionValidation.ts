@@ -117,7 +117,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
             .limit(1);
           
           if (retryError) {
-            console.error('❌ [SESSION] Recovery falló, auth.uid() sigue siendo null');
+            console.error('[SESSION] Recovery failed, auth.uid() still null');
             return {
               isValid: false,
               userId: null,
