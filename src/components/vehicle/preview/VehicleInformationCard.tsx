@@ -21,7 +21,7 @@ const VehicleInformationCard: React.FC<VehicleInformationCardProps> = ({
   const { data: vehicle } = useQuery({
     queryKey: ['vehicle-complete-data', vehicleId],
     queryFn: async () => {
-      console.log('🔍 [VehicleInformationCard] Fetching complete vehicle data for information display:', vehicleId);
+      
       
       // Obtener datos principales del vehículo
       const { data: vehicleData, error: vehicleError } = await supabase
