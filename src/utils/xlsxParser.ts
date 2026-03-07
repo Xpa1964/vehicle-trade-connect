@@ -1,10 +1,12 @@
-import * as XLSX from 'xlsx';
+import type * as XLSXType from 'xlsx';
 import { VehicleFormData } from '@/types/vehicle';
 import { countries } from './countryUtils';
 import { getCurrentYear } from './dateUtils';
 import { Language } from '@/config/languages';
 import { translations } from '@/translations';
 import { resolveMultilingualValue, detectExcelLanguage } from './xlsxMultilingualDictionary';
+
+const loadXLSX = () => import('xlsx') as Promise<typeof XLSXType>;
 
 export interface ValidationError {
   row: number;
