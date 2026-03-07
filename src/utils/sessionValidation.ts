@@ -187,7 +187,7 @@ export const ensureValidSession = async (): Promise<boolean> => {
       return true;
     }
 
-    console.warn('⚠️ [SESSION] Sesión inválida detectada, iniciando recovery automático...');
+    
     
     // INTENTO 1: Refresh session estándar
     const { data, error } = await supabase.auth.refreshSession();
