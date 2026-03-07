@@ -31,6 +31,7 @@ export const useAuctionsList = (params: UseAuctionsListParams = {}) => {
           status,
           winner_id,
           description,
+          has_reserve,
           created_at,
           updated_at,
           vehicle:vehicles(
