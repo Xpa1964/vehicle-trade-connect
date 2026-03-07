@@ -149,7 +149,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
     
     // Verificar que el usuario en sesión coincide con el auth.uid()
     if (!authTest || authTest.length === 0) {
-      console.error('❌ [SESSION] Usuario no encontrado en base de datos');
+      console.error('[SESSION] User not found in database');
       return {
         isValid: false,
         userId: null,
