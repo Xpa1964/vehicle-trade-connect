@@ -107,15 +107,13 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ onAnnouncementAdded
         .single();
       
       if (error) {
-        console.error('❌ [FORM] Error adding announcement:', error);
+        console.error('[AnnouncementForm] Error adding announcement:', error);
         const userFriendlyError = handleRLSError(error);
         toast.error(t('toast.announcementDeleteError'), {
           description: userFriendlyError
         });
         throw error;
       }
-      
-      console.log('✅ [FORM] Anuncio creado exitosamente:', data.id);
       
       // Now upload pending files with the real announcement ID
       if (pendingFiles.length > 0) {
