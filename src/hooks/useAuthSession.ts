@@ -19,53 +19,43 @@ export const useAuthSession = () => {
   const enhancementTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const syncMonitor = useRef<(() => void) | null>(null);
   
-  // Add detailed logging for notification debugging
-  useEffect(() => {
-    if (user) {
-      console.log('🔍 [DEBUG NOTIFICATIONS] AuthSession user state:', {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        hasProfile: !!user.profile
-      });
-    } else {
-      console.log('🔍 [DEBUG NOTIFICATIONS] AuthSession user is null');
+  const createFallbackUser = (sessionUser: any): UserWithMeta => ({
+    ...sessionUser,
+    name: sessionUser.email?.split('@')[0] || `User-${sessionUser.id.substring(0, 6)}`,
+    role: 'user' as any,
+    profile: {}
+  } as UserWithMeta);
+
+  const handleDesyncRecovery = async (session: Session): Promise<UserWithMeta | null> => {
+    const isDesync = await detectDesynchronization();
+    if (isDesync) {
+      const recoverySuccess = await autoRecovery();
+      if (!recoverySuccess) {
+        return createFallbackUser(session.user);
+      }
     }
-  }, [user]);
-  
+    return null; // No desync, proceed normally
+  };
+
   // Setup auth state and session check only once on component mount
   useEffect(() => {
-    // Set isMounted ref to true when the component mounts
     isMounted.current = true;
     
     const initAuth = async () => {
-      // Prevent multiple simultaneous initialization attempts
-      if (authInitializing.current) {
-        console.log("[useAuthSession] Auth initialization already in progress, skipping...");
-        return;
-      }
-      
+      if (authInitializing.current) return;
       authInitializing.current = true;
       
       try {
-        console.log("[useAuthSession] Initializing auth session...");
         setIsLoading(true);
         
-        // First, set up the auth state listener to avoid missing events
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
           (event, session) => {
-            console.log("[useAuthSession] Auth state changed:", event);
-            
             if (!isMounted.current) return;
             
             if (event === 'SIGNED_OUT') {
-              console.log("[useAuthSession] User signed out");
               setUser(null);
               setIsLoading(false);
               userInitialized.current = false;
-              
-              // Clear any role cache when signing out
               for (const key in localStorage) {
                 if (key.startsWith('user_role_')) {
                   localStorage.removeItem(key);
@@ -75,11 +65,9 @@ export const useAuthSession = () => {
             }
             
             if (session?.user && !userInitialized.current) {
-              console.log("[useAuthSession] Processing auth state change with session");
               userInitialized.current = true;
               enhancingUser.current = true;
               
-              // Use setTimeout to defer enhancement to prevent any deadlocks
               if (enhancementTimeout.current) {
                 clearTimeout(enhancementTimeout.current);
               }
@@ -88,87 +76,43 @@ export const useAuthSession = () => {
                 if (!isMounted.current) return;
                 
                 try {
-                  console.log("[useAuthSession] Enhancing user from auth state change");
-
-                  // Ensure we don't keep a stale role after promotions (e.g., user -> admin)
                   clearCachedRole(session.user.id);
                   
-                  // NUEVA VALIDACIÓN: Verificar sincronización antes de enhancement
-                  console.log('🔍 [useAuthSession] Verificando sincronización frontend-backend...');
-                  const isDesync = await detectDesynchronization();
-                  
-                  if (isDesync) {
-                    console.warn('⚠️ [useAuthSession] Desincronización detectada, iniciando recovery...');
-                    const recoverySuccess = await autoRecovery();
-                    
-                    if (!recoverySuccess) {
-                      console.error('❌ [useAuthSession] Recovery falló, usando fallback');
-                      const fallbackUser = { 
-                        ...session.user, 
-                        name: session.user.email?.split('@')[0] || `User-${session.user.id.substring(0, 6)}`, 
-                        role: 'user' as any, 
-                        profile: {} 
-                      } as UserWithMeta;
-                      setUser(fallbackUser);
-                      setIsLoading(false);
-                      return;
-                    }
+                  const desyncFallback = await handleDesyncRecovery(session);
+                  if (desyncFallback) {
+                    setUser(desyncFallback);
+                    setIsLoading(false);
+                    enhancingUser.current = false;
+                    return;
                   }
                   
                   const enhancedUser = await enhanceUser(session.user);
                   
-                  if (isMounted.current && enhancedUser) {
-                    console.log("[useAuthSession] ✅ Setting enhanced user:", 
-                      { id: enhancedUser.id, role: enhancedUser.role });
-                    console.log('🎯 [DEBUG NOTIFICATIONS] Enhanced user ready for notifications:', enhancedUser.id);
-                    setUser(enhancedUser);
-                    setIsLoading(false);
-                    enhancingUser.current = false;
-                  } else if (isMounted.current) {
-                    // CRITICAL: If enhanceUser fails, create a GUARANTEED working fallback
-                    console.warn("[useAuthSession] 🚨 enhanceUser returned null, creating fallback");
-                    const fallbackUser = { 
-                      ...session.user, 
-                      name: session.user.email?.split('@')[0] || `User-${session.user.id.substring(0, 6)}`, 
-                      role: 'user' as any, 
-                      profile: {} 
-                    } as UserWithMeta;
-                    console.log('🎯 [DEBUG NOTIFICATIONS] Fallback user created for notifications:', fallbackUser.id);
-                    setUser(fallbackUser);
+                  if (isMounted.current) {
+                    setUser(enhancedUser || createFallbackUser(session.user));
                     setIsLoading(false);
                     enhancingUser.current = false;
                   }
                 } catch (error) {
-                  console.error("[useAuthSession] 🚨 Critical error enhancing user:", error);
+                  console.error("[useAuthSession] Critical error enhancing user:", error);
                   if (isMounted.current) {
-                    // EMERGENCY FALLBACK: Always ensure we have a user with valid ID
-                    const emergencyUser = { 
-                      ...session.user, 
-                      name: session.user.email?.split('@')[0] || `User-${session.user.id.substring(0, 6)}`, 
-                      role: 'user' as any, 
-                      profile: {} 
-                    } as UserWithMeta;
-                    console.log('🎯 [DEBUG NOTIFICATIONS] Emergency user created for notifications:', emergencyUser.id);
-                    setUser(emergencyUser);
+                    setUser(createFallbackUser(session.user));
                     setIsLoading(false);
                     enhancingUser.current = false;
-                    
                     toast.error("Error loading user data", {
                       description: "Using basic profile. Notifications should still work."
                     });
                   }
                 }
-              }, 100); // Small delay for stability
+              }, 100);
             } else if (isMounted.current && !userInitialized.current) {
               setIsLoading(false);
             }
           }
         );
         
-        // Save the subscription to clean up later
         authSubscription.current = subscription;
         
-        // Then check for existing session
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
@@ -178,87 +122,41 @@ export const useAuthSession = () => {
           return;
         }
         
-        console.log("[useAuthSession] Initial session check:", !!session);
-        
         if (session?.user && isMounted.current && !userInitialized.current) {
           userInitialized.current = true;
           enhancingUser.current = true;
           
           try {
-            console.log("[useAuthSession] Enhancing initial user");
-
-            // Ensure we don't keep a stale role after promotions (e.g., user -> admin)
             clearCachedRole(session.user.id);
             
-            // NUEVA VALIDACIÓN: Verificar sincronización al inicio
-            console.log('🔍 [useAuthSession] Verificando sincronización inicial...');
-            const isDesync = await detectDesynchronization();
-            
-            if (isDesync) {
-              console.warn('⚠️ [useAuthSession] Desincronización inicial detectada, iniciando recovery...');
-              const recoverySuccess = await autoRecovery();
-              
-              if (!recoverySuccess) {
-                console.error('❌ [useAuthSession] Recovery inicial falló, usando fallback');
-                const fallbackUser = { 
-                  ...session.user, 
-                  name: session.user.email?.split('@')[0] || `User-${session.user.id.substring(0, 6)}`, 
-                  role: 'user' as any, 
-                  profile: {} 
-                } as UserWithMeta;
-                setUser(fallbackUser);
-                if (isMounted.current) setIsLoading(false);
-                enhancingUser.current = false;
-                return;
-              }
+            const desyncFallback = await handleDesyncRecovery(session);
+            if (desyncFallback) {
+              setUser(desyncFallback);
+              if (isMounted.current) setIsLoading(false);
+              enhancingUser.current = false;
+              return;
             }
             
             const enhancedUser = await enhanceUser(session.user);
             
-            if (isMounted.current && enhancedUser) {
-              console.log("[useAuthSession] ✅ Setting initial user:", 
-                { id: enhancedUser.id, role: enhancedUser.role });
-              console.log('🎯 [DEBUG NOTIFICATIONS] Initial enhanced user ready for notifications:', enhancedUser.id);
-              setUser(enhancedUser);
-            } else if (isMounted.current) {
-              // CRITICAL: Create guaranteed working user for notifications
-              console.warn("[useAuthSession] 🚨 Initial enhanceUser failed, creating fallback");
-              const fallbackUser = { 
-                ...session.user, 
-                name: session.user.email?.split('@')[0] || `User-${session.user.id.substring(0, 6)}`, 
-                role: 'user' as any, 
-                profile: {} 
-              } as UserWithMeta;
-              console.log('🎯 [DEBUG NOTIFICATIONS] Initial fallback user created for notifications:', fallbackUser.id);
-              setUser(fallbackUser);
+            if (isMounted.current) {
+              setUser(enhancedUser || createFallbackUser(session.user));
             }
           } catch (error) {
-            console.error("[useAuthSession] 🚨 Critical error enhancing initial user:", error);
+            console.error("[useAuthSession] Critical error enhancing initial user:", error);
             if (isMounted.current) {
-              // EMERGENCY FALLBACK: Always create a working user
-              const emergencyUser = { 
-                ...session.user, 
-                name: session.user.email?.split('@')[0] || `User-${session.user.id.substring(0, 6)}`, 
-                role: 'user' as any, 
-                profile: {} 
-              } as UserWithMeta;
-              console.log('🎯 [DEBUG NOTIFICATIONS] Initial emergency user created for notifications:', emergencyUser.id);
-              setUser(emergencyUser);
-              
+              setUser(createFallbackUser(session.user));
               toast.error("Error loading user data", {
                 description: "Using basic profile. Notifications should still work."
               });
             }
           } finally {
-            // Don't let routes decide auth before enhancement completes
             enhancingUser.current = false;
           }
         } else if (isMounted.current && !userInitialized.current) {
-          console.log("[useAuthSession] No initial user session found");
           setUser(null);
         }
 
-        // IMPORTANT: avoid flipping isLoading=false while user enhancement is still pending.
         if (isMounted.current && !enhancingUser.current) setIsLoading(false);
         authInitializing.current = false;
       } catch (error) {
@@ -268,7 +166,6 @@ export const useAuthSession = () => {
           setUser(null);
           userInitialized.current = false;
           enhancingUser.current = false;
-          
           toast.error("Error al inicializar la autenticación", {
             description: "Intente recargar la página."
           });
@@ -279,23 +176,19 @@ export const useAuthSession = () => {
     
     initAuth();
     
-    // Clean up function to run when component unmounts
     return () => {
       isMounted.current = false;
       if (authSubscription.current) {
-        console.log("[useAuthSession] Cleaning up auth subscription");
         authSubscription.current.unsubscribe();
       }
       if (enhancementTimeout.current) {
         clearTimeout(enhancementTimeout.current);
       }
       if (syncMonitor.current) {
-        console.log("[useAuthSession] Cleaning up sync monitor");
         syncMonitor.current();
       }
     };
-  }, []); // Empty dependency array ensures this effect runs only once on mount
+  }, []);
 
-  // Provide a stable interface
   return { user, setUser, isLoading };
 };
