@@ -145,7 +145,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
     }
 
     // FASE 5: Validación final de consistencia
-    console.log('🔍 [SESSION] Verificación final de consistencia...');
+    
     
     // Verificar que el usuario en sesión coincide con el auth.uid()
     if (!authTest || authTest.length === 0) {
