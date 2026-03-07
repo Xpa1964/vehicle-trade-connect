@@ -51,8 +51,8 @@ export const ValidationResultsPanel: React.FC<ValidationResultsPanelProps> = ({
     setActiveTab(parseResult.errors.length > 0 ? 'correct' : 'summary');
   }, [parseResult.errors.length]);
   
-  const handleDownloadErrorReport = () => {
-    const blob = generateErrorReport(parseResult, originalMandatoryData, originalOptionalData);
+  const handleDownloadErrorReport = async () => {
+    const blob = await generateErrorReport(parseResult, originalMandatoryData, originalOptionalData);
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;

@@ -1,10 +1,12 @@
-import * as XLSX from 'xlsx';
+import type * as XLSXType from 'xlsx';
 import { VehicleFormData } from '@/types/vehicle';
 import { countries } from './countryUtils';
 import { getCurrentYear } from './dateUtils';
 import { Language } from '@/config/languages';
 import { translations } from '@/translations';
 import { resolveMultilingualValue, detectExcelLanguage } from './xlsxMultilingualDictionary';
+
+const loadXLSX = () => import('xlsx') as Promise<typeof XLSXType>;
 
 export interface ValidationError {
   row: number;
@@ -88,8 +90,9 @@ export const parseXLSXFile = async (file: File, language: Language = 'es'): Prom
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
+        const XLSX = await loadXLSX();
         const data = new Uint8Array(e.target?.result as ArrayBuffer);
         const workbook = XLSX.read(data, { type: 'array' });
         
@@ -981,11 +984,12 @@ const parseVehicleData = (mandatoryData: any[][], optionalData: any[][], t: (key
 };
 
 // Función para generar reporte de errores en XLSX
-export const generateErrorReport = (
+export const generateErrorReport = async (
   parseResult: ParseResult,
   originalMandatoryData: any[][],
   originalOptionalData: any[][]
-): Blob => {
+): Promise<Blob> => {
+  const XLSX = await loadXLSX();
   const wb = XLSX.utils.book_new();
   
   // ================== PESTAÑA 1: RESUMEN DE ERRORES ==================
