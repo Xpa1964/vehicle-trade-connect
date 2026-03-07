@@ -80,6 +80,19 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // ============================================
+  // AUTENTICACIÓN: Solo service_role_key puede invocar
+  // ============================================
+  const authHeader = req.headers.get('Authorization');
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+  
+  if (!authHeader || authHeader !== `Bearer ${serviceRoleKey}`) {
+    return new Response(
+      JSON.stringify({ error: 'Unauthorized', message: 'Invalid or missing service role key' }),
+      { status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+    );
+  }
+
   const response: SchedulerResponse = {
     activated: 0,
     ended: 0,
