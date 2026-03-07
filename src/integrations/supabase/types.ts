@@ -415,6 +415,7 @@ export type Database = {
           description: string | null
           end_date: string | null
           end_time: string | null
+          has_reserve: boolean | null
           id: string
           increment_minimum: number | null
           reserve_price: number | null
@@ -442,6 +443,7 @@ export type Database = {
           description?: string | null
           end_date?: string | null
           end_time?: string | null
+          has_reserve?: boolean | null
           id?: string
           increment_minimum?: number | null
           reserve_price?: number | null
@@ -469,6 +471,7 @@ export type Database = {
           description?: string | null
           end_date?: string | null
           end_time?: string | null
+          has_reserve?: boolean | null
           id?: string
           increment_minimum?: number | null
           reserve_price?: number | null
