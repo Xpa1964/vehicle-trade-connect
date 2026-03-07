@@ -178,7 +178,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
  */
 export const ensureValidSession = async (): Promise<boolean> => {
   try {
-    console.log('🔄 [SESSION] Interceptor pre-operación activado...');
+    
     
     const validation = await validateUserSession();
     
