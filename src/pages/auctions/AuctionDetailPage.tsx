@@ -196,7 +196,7 @@ const AuctionDetailPage: React.FC = () => {
                   <span className="font-semibold">{formatPrice(auction.starting_price)}</span>
                 </div>
                 {/* reserve_price solo visible para el vendedor */}
-                {auction.reserve_price && user?.id === auction.created_by && (
+                {auction.reserve_price && user?.id === auction.seller_id && (
                   <div className="flex justify-between">
                     <span className="text-gray-600">{t('auctions.reservePrice', { fallback: 'Precio de Reserva' })}:</span>
                     <span className="font-semibold">{formatPrice(auction.reserve_price)}</span>
