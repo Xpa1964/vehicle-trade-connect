@@ -72,7 +72,7 @@ export const validateUserSession = async (): Promise<SessionValidationResult> =>
     }
 
     // FASE 3: Verificación crítica de auth.uid() en base de datos
-    console.log('🔍 [SESSION] Verificando sincronización frontend-backend...');
+    
     
     // Primer intento con una query que REQUIERE auth.uid() válido
     let authTest;
