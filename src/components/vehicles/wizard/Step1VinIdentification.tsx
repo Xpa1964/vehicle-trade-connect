@@ -207,12 +207,45 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>{t('vehicles.model')} *</Label>
-          <Input
-            value={formData.model || ''}
-            onChange={(e) => onChange('model', e.target.value.toUpperCase())}
-            placeholder={t('vehicles.modelExample')}
-          />
+          <Label className="flex items-center gap-2">
+            {t('vehicles.model')} *
+            {isLoadingModels && <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />}
+          </Label>
+          {availableModels.length > 0 && !modelsError ? (
+            <Select
+              value={formData.model || ''}
+              onValueChange={(v) => onChange('model', v)}
+              disabled={isLoadingModels}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t('vehicles.selectModel', { fallback: 'Seleccionar modelo' })} />
+              </SelectTrigger>
+              <SelectContent className="max-h-60">
+                {availableModels.map((model) => (
+                  <SelectItem key={model} value={model}>{model}</SelectItem>
+                ))}
+                <SelectItem value="__other__">{t('vehicles.otherModel', { fallback: 'Otro modelo...' })}</SelectItem>
+              </SelectContent>
+            </Select>
+          ) : (
+            <Input
+              value={formData.model || ''}
+              onChange={(e) => onChange('model', e.target.value.toUpperCase())}
+              placeholder={modelsError 
+                ? t('vehicles.modelManualEntry', { fallback: 'Escribe el modelo manualmente' })
+                : t('vehicles.modelExample')}
+              disabled={isLoadingModels}
+            />
+          )}
+          {formData.model === '__other__' && (
+            <Input
+              className="mt-2"
+              value=""
+              onChange={(e) => onChange('model', e.target.value.toUpperCase())}
+              placeholder={t('vehicles.modelManualEntry', { fallback: 'Escribe el modelo' })}
+              autoFocus
+            />
+          )}
         </div>
       </div>
 
