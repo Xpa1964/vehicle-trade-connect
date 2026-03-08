@@ -232,7 +232,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
         const imagesToProcess = images.slice(0, MAX_IMAGES);
         
         if (images.length > MAX_IMAGES) {
-          console.warn(`Vehicle ${external_id}: Limited to ${MAX_IMAGES} images (received ${images.length})`);
+          // Images limited to MAX_IMAGES
         }
         
         await processImages(supabase, vehicleId, imagesToProcess);
