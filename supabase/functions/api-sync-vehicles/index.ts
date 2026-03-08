@@ -262,7 +262,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
     } else {
       results.deactivated = deactivated?.length || 0;
       if (results.deactivated > 0) {
-        console.log(`🔻 Deactivated ${results.deactivated} vehicles no longer in partner inventory`);
+        // Vehicles deactivated
       }
     }
   } catch (error: unknown) {
