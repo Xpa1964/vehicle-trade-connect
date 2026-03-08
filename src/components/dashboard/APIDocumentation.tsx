@@ -588,6 +588,9 @@ response = requests.post(
                       { field: 'description', type: 'string', required: false, normalized: false, example: 'BMW en...', critical: true },
                       { field: 'images', type: 'string[]', required: false, normalized: false, example: '["https://..."]', critical: true },
                       { field: 'status', type: 'string', required: false, normalized: true, example: 'available' },
+                      { field: 'euro_standard', type: 'string', required: false, normalized: true, example: 'euro6d' },
+                      { field: 'co2_emissions', type: 'number', required: false, normalized: false, example: '120' },
+                      { field: 'commission_sale', type: 'boolean', required: false, normalized: false, example: 'false' },
                       { field: 'color', type: 'string', required: false, normalized: true, example: 'azul' },
                       { field: 'condition', type: 'string', required: false, normalized: true, example: 'usado' },
                     ].map((item, idx) => (
