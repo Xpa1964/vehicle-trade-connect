@@ -313,7 +313,7 @@ const handler = async (req: Request): Promise<Response> => {
             console.error(`Error sending contact emails for auction ${auction.id}:`, errorData);
           }
         } catch (emailError) {
-          console.error(`❌ Failed to call contact email function for auction ${auction.id}:`, emailError);
+          console.error(`Failed to call contact email function for auction ${auction.id}:`, emailError);
           // No bloqueamos la transición por error de email
         }
 
