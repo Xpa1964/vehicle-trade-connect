@@ -164,23 +164,36 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
                   <ChevronRight className="h-4 w-4 ml-2" />
                 </Button>
               ) : (
-                <Button
-                  type="button"
-                  onClick={handleFormSubmit}
-                  className="min-h-[48px] px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
-                >
-                  {isEditing ? (
-                    <>
-                      <Save className="h-4 w-4 mr-2" />
-                      {t('vehicles.updateVehicle')}
-                    </>
-                  ) : (
-                    <>
-                      <Upload className="h-4 w-4 mr-2" />
-                      {t('vehicles.publishVehicle')}
-                    </>
+                <div className="flex gap-3">
+                  {!isEditing && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleSaveDraft}
+                      className="min-h-[48px] px-6 rounded-xl"
+                    >
+                      <FileEdit className="h-4 w-4 mr-2" />
+                      {t('vehicles.saveDraft', { fallback: 'Guardar borrador' })}
+                    </Button>
                   )}
-                </Button>
+                  <Button
+                    type="button"
+                    onClick={handleFormSubmit}
+                    className="min-h-[48px] px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                  >
+                    {isEditing ? (
+                      <>
+                        <Save className="h-4 w-4 mr-2" />
+                        {t('vehicles.updateVehicle')}
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4 mr-2" />
+                        {t('vehicles.publishVehicle')}
+                      </>
+                    )}
+                  </Button>
+                </div>
               )}
             </div>
           </div>
