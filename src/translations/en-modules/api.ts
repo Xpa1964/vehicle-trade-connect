@@ -90,7 +90,26 @@ export default {
   'api.docs.integration.examples': 'Code Examples',
   'api.docs.integration.testing': 'Testing',
   'api.docs.integration.rateLimit': 'Rate Limit',
-  'api.docs.integration.rateLimitDesc': '250 requests per hour per API Key. If you exceed this limit, you will receive a 429 error with wait time.',
+  'api.docs.integration.rateLimitDesc': '100 requests/minute, 5,000/hour per API Key. If you exceed this limit, you will receive a 429 error with wait time in the Retry-After header.',
+  
+  // Common errors
+  'api.docs.integration.commonErrors': 'Common Errors and Solutions',
+  'api.docs.integration.error401': '401 Unauthorized',
+  'api.docs.integration.error401.desc': 'Invalid or revoked API key. Generate a new one from this panel.',
+  'api.docs.integration.error429': '429 Too Many Requests',
+  'api.docs.integration.error429.desc': 'Request limit reached. Wait for the time indicated in the Retry-After header.',
+  'api.docs.integration.error400': '400 Bad Request',
+  'api.docs.integration.error400.desc': 'Check that required fields (make, model, year, price, fuel_type, transmission, body_type) are present and that the language field is specified.',
+  'api.docs.integration.error500': '500 Internal Server Error',
+  'api.docs.integration.error500.desc': 'Server error. Retry in 5 minutes. If it persists, contact support.',
+
+  // Sync status banner
+  'api.sync.noSyncs': 'No synchronizations recorded yet.',
+  'api.sync.lastSync': 'Last synchronization',
+  'api.sync.vehiclesProcessed': 'vehicles processed',
+  'api.sync.success': 'successful',
+  'api.sync.errors': 'errors',
+  'api.sync.viewDetails': 'View details',
   'api.docs.normalization.title': 'Multi-language Normalization',
   'api.docs.normalization.description': 'KONTACT supports 9 languages. You can send values in any of these languages and they will be automatically normalized.',
   'api.docs.normalization.normalized': 'Normalized Value',
