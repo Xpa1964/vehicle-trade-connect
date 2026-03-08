@@ -272,7 +272,7 @@ const handler = async (req: Request): Promise<Response> => {
           .eq('status', 'accepted');
 
         if (updateError) {
-          console.error(`❌ Error sharing contact for auction ${auction.id}:`, updateError);
+          console.error(`Error sharing contact for auction ${auction.id}:`, updateError);
           response.errors.push(`contact_${auction.id}: ${updateError.message}`);
           continue;
         }
