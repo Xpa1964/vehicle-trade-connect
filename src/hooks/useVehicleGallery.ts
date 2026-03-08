@@ -45,6 +45,7 @@ export const useVehicleGallery = () => {
         const { data: vehiclesData, error: vehiclesError } = await supabase
           .from('vehicles')
           .select('*')
+          .not('status', 'in', '("draft","inactive")')
           .order('created_at', { ascending: false });
 
         if (vehiclesError) {

@@ -172,6 +172,7 @@ const MyVehicles: React.FC = () => {
                     <SelectItem value="available">{t('vehicles.statusAvailable')}</SelectItem>
                     <SelectItem value="reserved">{t('vehicles.statusReserved')}</SelectItem>
                     <SelectItem value="sold">{t('vehicles.statusSold')}</SelectItem>
+                    <SelectItem value="draft">{t('vehicles.statusDraft', { fallback: 'Borrador' })}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
