@@ -200,7 +200,7 @@ export const ImageUploadZone: React.FC<ImageUploadZoneProps> = ({
           </p>
           <p className="text-sm text-muted-foreground">
             {t('vehicles.imageFormats', {
-              fallback: `Formatos: JPG, PNG, GIF, WEBP | Máx: ${maxSizePerImage}MB por imagen`,
+              fallback: `Formatos: JPG, PNG, WEBP | Máx: ${maxSizePerImage}MB por imagen`,
             })}
           </p>
         </div>

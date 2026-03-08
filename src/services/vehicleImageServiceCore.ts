@@ -29,25 +29,16 @@ export class VehicleImageServiceCore {
    */
   async uploadToStorage(file: File, vehicleId: string): Promise<string | null> {
     try {
-      // Asegurar que el bucket existe
-      await this.ensureBucketExists();
+      const { publicUrl, error } = await uploadFileSecurely(
+        file,
+        this.bucketName,
+        vehicleId
+      );
 
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `${vehicleId}/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from(this.bucketName)
-        .upload(filePath, file);
-
-      if (uploadError) {
-        console.error('Error uploading to storage:', uploadError);
+      if (error || !publicUrl) {
+        console.error('Error uploading to storage via secure endpoint:', error);
         return null;
       }
-
-      const { data: { publicUrl } } = supabase.storage
-        .from(this.bucketName)
-        .getPublicUrl(filePath);
 
       return publicUrl;
     } catch (error) {

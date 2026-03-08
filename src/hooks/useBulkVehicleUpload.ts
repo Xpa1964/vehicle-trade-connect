@@ -110,29 +110,24 @@ export const useBulkVehicleUpload = () => {
             const image = imagesToProcess[j];
             if (!image) continue;
             
-            if (image.size > 5 * 1024 * 1024) {
+            if (image.size > 10 * 1024 * 1024) {
               console.error(`Image too large: ${(image.size/1024/1024).toFixed(2)}MB`);
-              toast.error(`Image ${j+1} is too large (max 5MB)`);
+              toast.error(`Image ${j+1} is too large (max 10MB)`);
               continue;
             }
             
             try {
-              const fileExt = image.name.split('.').pop();
-              const fileName = `${Date.now()}-${j}.${fileExt}`;
-              const filePath = `${insertedVehicle.id}/${fileName}`;
-              
-              const { error: uploadError } = await supabase.storage
-                .from(bucketName)
-                .upload(filePath, image);
+              // Upload through secure-file-upload edge function
+              const { publicUrl, error: uploadError } = await uploadFileSecurely(
+                image,
+                'vehicles',
+                insertedVehicle.id
+              );
                 
-              if (uploadError) {
+              if (uploadError || !publicUrl) {
                 console.error(`Error uploading image ${j}:`, uploadError);
                 continue;
               }
-              
-              const { data: { publicUrl } } = supabase.storage
-                .from(bucketName)
-                .getPublicUrl(filePath);
 
               const { error: imageError } = await supabase
                 .from('vehicle_images')
