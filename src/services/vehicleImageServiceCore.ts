@@ -4,6 +4,7 @@ import { VehicleImage } from '@/types/vehicleImage';
 import { imageValidator } from '@/utils/imageValidation';
 import { imageOptimizer } from '@/utils/imageOptimization';
 import { vehicleImageCache } from '@/utils/vehicleImageCache';
+import { uploadFileSecurely } from '@/utils/secureUpload';
 
 /**
  * Servicio central consolidado para manejo de imágenes de vehículos
