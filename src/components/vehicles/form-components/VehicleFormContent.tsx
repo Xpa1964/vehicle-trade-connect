@@ -18,6 +18,8 @@ interface VehicleFormContentProps {
   onChange: (field: string, value: string | number) => void;
   onBrandChange: (brand: string) => void;
   availableModels: string[];
+  isLoadingModels?: boolean;
+  modelsError?: boolean;
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   previewUrl: string | null;
 }
@@ -29,6 +31,8 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
   onChange,
   onBrandChange,
   availableModels,
+  isLoadingModels,
+  modelsError,
   onImageChange,
   previewUrl
 }) => {
@@ -121,6 +125,9 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
                   form={form}
                   onChange={onChange}
                   onBrandChange={onBrandChange}
+                  availableModels={availableModels}
+                  isLoadingModels={isLoadingModels}
+                  modelsError={modelsError}
                 />
               )}
 

@@ -19,6 +19,8 @@ const VehicleUploadForm: React.FC<VehicleUploadFormProps> = ({ vehicleId }) => {
     isEditing,
     previewUrl,
     availableModels,
+    isLoadingModels,
+    modelsError,
     handleImageChange,
     handleBrandChange,
     handleFormChange,
@@ -40,6 +42,8 @@ const VehicleUploadForm: React.FC<VehicleUploadFormProps> = ({ vehicleId }) => {
           onChange={handleFormChange}
           onBrandChange={handleBrandChange}
           availableModels={availableModels}
+          isLoadingModels={isLoadingModels}
+          modelsError={modelsError}
           onImageChange={handleImageChange}
           previewUrl={previewUrl}
         />
