@@ -502,7 +502,7 @@ async function processImages(supabase: any, vehicleId: string, imageUrls: string
 
       // Upload to Supabase Storage
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('Vehicles Images')
+        .from('vehicles')
         .upload(fileName, imageBlob, {
           contentType: imageBlob.type || 'image/jpeg',
           upsert: false
@@ -515,7 +515,7 @@ async function processImages(supabase: any, vehicleId: string, imageUrls: string
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('Vehicles Images')
+        .from('vehicles')
         .getPublicUrl(fileName);
 
       // Insert into vehicle_images table with source = 'api'
@@ -531,7 +531,7 @@ async function processImages(supabase: any, vehicleId: string, imageUrls: string
       if (i === 0) {
         await supabase
           .from('vehicles')
-          .update({ image: publicUrl })
+          .update({ thumbnailurl: publicUrl })
           .eq('id', vehicleId);
       }
 
