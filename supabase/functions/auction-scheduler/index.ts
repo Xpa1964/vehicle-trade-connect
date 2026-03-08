@@ -349,7 +349,7 @@ const handler = async (req: Request): Promise<Response> => {
           .eq('status', 'contact_shared');
 
         if (updateError) {
-          console.error(`❌ Error closing auction ${auction.id}:`, updateError);
+          console.error(`Error closing auction ${auction.id}:`, updateError);
           response.errors.push(`close_${auction.id}: ${updateError.message}`);
           continue;
         }
