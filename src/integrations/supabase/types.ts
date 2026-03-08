@@ -2519,6 +2519,7 @@ export type Database = {
           doors: number | null
           engine_power: number | null
           engine_size: string | null
+          euro_standard: string | null
           external_id: string | null
           features: Json | null
           first_registration_date: string | null
@@ -2587,6 +2588,7 @@ export type Database = {
           doors?: number | null
           engine_power?: number | null
           engine_size?: string | null
+          euro_standard?: string | null
           external_id?: string | null
           features?: Json | null
           first_registration_date?: string | null
@@ -2655,6 +2657,7 @@ export type Database = {
           doors?: number | null
           engine_power?: number | null
           engine_size?: string | null
+          euro_standard?: string | null
           external_id?: string | null
           features?: Json | null
           first_registration_date?: string | null
