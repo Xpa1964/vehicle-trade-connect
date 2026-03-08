@@ -310,9 +310,7 @@ const handler = async (req: Request): Promise<Response> => {
           
           if (!emailResponse.ok) {
             const errorData = await emailResponse.json();
-            console.error(`❌ Error sending contact emails for auction ${auction.id}:`, errorData);
-          } else {
-            console.log(`📧 Contact emails sent for auction ${auction.id}`);
+            console.error(`Error sending contact emails for auction ${auction.id}:`, errorData);
           }
         } catch (emailError) {
           console.error(`❌ Failed to call contact email function for auction ${auction.id}:`, emailError);
