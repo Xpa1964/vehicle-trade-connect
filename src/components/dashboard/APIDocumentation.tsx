@@ -507,6 +507,24 @@ response = requests.post(
                     {t('api.docs.integration.rateLimitDesc')}
                   </p>
                 </div>
+
+                {/* Common Errors Section */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-foreground flex items-center gap-2">
+                    <AlertCircle className="h-5 w-5" />
+                    {t('api.docs.integration.commonErrors')}
+                  </h4>
+                  <div className="space-y-3">
+                    {['401', '429', '400', '500'].map((code) => (
+                      <div key={code} className="border-l-4 border-destructive/50 pl-4 py-2">
+                        <code className="font-semibold text-sm">{t(`api.docs.integration.error${code}`)}</code>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {t(`api.docs.integration.error${code}.desc`)}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </TabsContent>
