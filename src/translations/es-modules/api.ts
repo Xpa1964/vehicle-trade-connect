@@ -92,15 +92,15 @@ export default {
   // Proceso
   'api.docs.process.title': 'Proceso de Solicitud de API Key',
   'api.docs.process.step1': 'Paso 1: Solicitar API Key',
-  'api.docs.process.step1.desc': 'Completa el formulario de solicitud indicando el nombre de la key y el motivo de la solicitud',
-  'api.docs.process.step2': 'Paso 2: Revisión Administrativa',
-  'api.docs.process.step2.desc': 'Un administrador revisará tu solicitud en un plazo de 24-48 horas laborables',
-  'api.docs.process.step3': 'Paso 3: Aprobación',
-  'api.docs.process.step3.desc': 'Recibirás una notificación por email y en tu panel con tu API Key aprobada',
-  'api.docs.process.step4': 'Paso 4: Configuración',
-  'api.docs.process.step4.desc': 'Configura tu DMS con la API Key y comienza la sincronización automática de vehículos',
+  'api.docs.process.step1.desc': 'Solicita tu API key desde este panel. Un administrador la revisará en un plazo de 24-48 horas.',
+  'api.docs.process.step2': 'Paso 2: Aprobación por Email',
+  'api.docs.process.step2.desc': 'Recibirás un email de aprobación con tu API key lista para usar.',
+  'api.docs.process.step3': 'Paso 3: Autenticación',
+  'api.docs.process.step3.desc': 'Usa el header x-api-key: TU_KEY en cada llamada para autenticarte.',
+  'api.docs.process.step4': 'Paso 4: Sincronización',
+  'api.docs.process.step4.desc': 'Endpoint: POST /functions/v1/sync-vehicles — envía tu inventario completo en cada llamada.',
   'api.docs.process.limits': 'Límites',
-  'api.docs.process.limitsDesc': 'Puedes tener hasta 5 API Keys activas simultáneamente. Límite de 250 peticiones por hora por key.',
+  'api.docs.process.limitsDesc': '100 peticiones/minuto, 5.000/hora por key. Máximo 5 keys activas simultáneamente.',
   
   // Formato
   'api.docs.format.title': 'Formato de Datos JSON',
