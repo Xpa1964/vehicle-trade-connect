@@ -50,7 +50,7 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
         <DialogHeader>
           <DialogTitle>{t('api.request.title') || 'Solicitar nueva API key'}</DialogTitle>
           <DialogDescription>
-            {t('api.request.description') || 'Submit a request to get a new API key. An administrator will review your request.'}
+            {t('api.request.description') || 'Envía una solicitud para obtener una nueva API key. Un administrador revisará tu solicitud.'}
           </DialogDescription>
         </DialogHeader>
 
