@@ -31,6 +31,8 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
   onChange,
   onBrandChange,
   availableModels,
+  isLoadingModels,
+  modelsError,
   onImageChange,
   previewUrl
 }) => {
