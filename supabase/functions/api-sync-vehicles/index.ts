@@ -211,7 +211,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
         if (updateError) throw updateError;
         vehicleId = existingVehicle.id;
         results.updated++;
-        console.log(`✅ Updated vehicle ${external_id}`);
+        // Vehicle updated
       } else {
         // Insert new vehicle
         const { data: newVehicle, error: insertError } = await supabase
