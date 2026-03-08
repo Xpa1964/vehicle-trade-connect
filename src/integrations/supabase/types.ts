@@ -2858,6 +2858,10 @@ export type Database = {
         Args: { p_auction_id: string }
         Returns: number
       }
+      get_public_profile_by_identifier: {
+        Args: { p_identifier: string }
+        Returns: Json
+      }
       get_user_rating_summary: { Args: { p_user_id: string }; Returns: Json }
       get_user_role: {
         Args: { p_user_id: string }
