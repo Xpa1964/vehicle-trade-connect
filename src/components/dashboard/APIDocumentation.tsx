@@ -238,6 +238,11 @@ const APIDocumentation: React.FC = () => {
                             <Badge variant="outline" className="text-xs ml-2">string</Badge>
                             <p className="text-xs text-muted-foreground mt-1">{t('api.docs.format.interiorColorDesc')}</p>
                           </div>
+                          <div className="border rounded-lg p-3">
+                            <code className="font-semibold text-sm">commission_sale</code>
+                            <Badge variant="outline" className="text-xs ml-2">boolean</Badge>
+                            <p className="text-xs text-muted-foreground mt-1">{t('api.docs.format.commissionSaleDesc')}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
