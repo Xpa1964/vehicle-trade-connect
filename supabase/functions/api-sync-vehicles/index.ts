@@ -515,7 +515,7 @@ async function processImages(supabase: any, vehicleId: string, imageUrls: string
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('Vehicles Images')
+        .from('vehicles')
         .getPublicUrl(fileName);
 
       // Insert into vehicle_images table with source = 'api'
