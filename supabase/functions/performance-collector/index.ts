@@ -35,17 +35,18 @@ serve(async (req) => {
       )
     }
 
-    // Insert metrics in batch
+    // Insert metrics in batch using the actual table schema
+    const rows = metrics.flatMap(m => [
+      { metric_name: 'active_users', metric_value: m.active_users, metric_unit: 'count', metadata: { timestamp: m.timestamp } },
+      { metric_name: 'active_queries', metric_value: m.active_queries, metric_unit: 'count', metadata: { timestamp: m.timestamp } },
+      { metric_name: 'realtime_channels', metric_value: m.realtime_channels, metric_unit: 'count', metadata: { timestamp: m.timestamp } },
+      { metric_name: 'response_time_ms', metric_value: m.response_time_ms, metric_unit: 'ms', metadata: { timestamp: m.timestamp } },
+      { metric_name: 'memory_usage', metric_value: m.memory_usage, metric_unit: 'MB', metadata: { timestamp: m.timestamp } },
+    ])
+
     const { error: insertError } = await supabase
       .from('performance_metrics')
-      .insert(metrics.map(m => ({
-        active_users: m.active_users,
-        active_queries: m.active_queries,
-        realtime_channels: m.realtime_channels,
-        average_response_time: m.response_time_ms,
-        memory_usage: m.memory_usage,
-        timestamp: m.timestamp
-      })))
+      .insert(rows)
 
     if (insertError) {
       console.error('Error inserting metrics:', insertError)
