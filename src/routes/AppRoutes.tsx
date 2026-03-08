@@ -39,109 +39,109 @@ function lazyWithRetry(importFn: () => Promise<{ default: ComponentType<any> }>,
   });
 }
 
-// Lazy loading de todas las páginas con manejo de errores mejorado
-const NotFound = lazy(() => import("../pages/NotFound").catch(() => ({ default: () => <div>Error loading page</div> })));
+// Lazy loading de todas las páginas con reintentos automáticos
+const NotFound = lazyWithRetry(() => import("../pages/NotFound"));
 
 // Páginas públicas
-const Home = lazy(() => import("../pages/Home").catch(() => ({ default: () => <div>Error loading Home page</div> })));
-const Login = lazy(() => import("../pages/Login").catch(() => ({ default: () => <div>Error loading Login page</div> })));
-const Register = lazy(() => import("../pages/Register").catch(() => ({ default: () => <div>Error loading Register page</div> })));
-const RegisterConfirmation = lazy(() => import("../pages/RegisterConfirmation").catch(() => ({ default: () => <div>Error loading RegisterConfirmation page</div> })));
-const ForgotPassword = lazy(() => import("../pages/ForgotPassword").catch(() => ({ default: () => <div>Error loading ForgotPassword page</div> })));
-const ResetPassword = lazy(() => import("../pages/ResetPassword").catch(() => ({ default: () => <div>Error loading ResetPassword page</div> })));
+const Home = lazyWithRetry(() => import("../pages/Home"));
+const Login = lazyWithRetry(() => import("../pages/Login"));
+const Register = lazyWithRetry(() => import("../pages/Register"));
+const RegisterConfirmation = lazyWithRetry(() => import("../pages/RegisterConfirmation"));
+const ForgotPassword = lazyWithRetry(() => import("../pages/ForgotPassword"));
+const ResetPassword = lazyWithRetry(() => import("../pages/ResetPassword"));
 
 // Lazy loading de todas las páginas
-const Services = lazy(() => import("../pages/Services").catch(() => ({ default: () => <div>Error loading Services page</div> })));
-const ContactPage = lazy(() => import("../pages/ContactPage").catch(() => ({ default: () => <div>Error loading ContactPage page</div> })));
-const VehicleGallery = lazy(() => import("../pages/VehicleGallery").catch(() => ({ default: () => <div>Error loading VehicleGallery page</div> })));
-const VehiclePreviewPage = lazy(() => import("../pages/VehiclePreviewPage").catch(() => ({ default: () => <div>Error loading VehiclePreviewPage page</div> })));
-const VehicleInformationPage = lazy(() => import("../pages/VehicleInformationPage").catch(() => ({ default: () => <div>Error loading VehicleInformationPage page</div> })));
-const VehicleDetailPage = lazy(() => import("../pages/VehicleDetailPage").catch(() => ({ default: () => <div>Error loading VehicleDetailPage page</div> })));
-const VehicleDetailsPage = lazy(() => import("../pages/VehicleDetailsPage").catch(() => ({ default: () => <div>Error loading VehicleDetailsPage page</div> })));
-const VehicleEquipmentPage = lazy(() => import("../pages/VehicleEquipmentPage").catch(() => ({ default: () => <div>Error loading VehicleEquipmentPage page</div> })));
-const VehicleFilesPage = lazy(() => import("../pages/VehicleFilesPage").catch(() => ({ default: () => <div>Error loading VehicleFilesPage page</div> })));
-const VehicleDamagesPage = lazy(() => import("../pages/VehicleDamagesPage").catch(() => ({ default: () => <div>Error loading VehicleDamagesPage page</div> })));
-const VehicleAdditionalInfoPage = lazy(() => import("../pages/VehicleAdditionalInfoPage").catch(() => ({ default: () => <div>Error loading VehicleAdditionalInfoPage page</div> })));
-const LiveAuctionsPage = lazy(() => import("../pages/auctions/LiveAuctionsPage").catch(() => ({ default: () => <div>Error loading LiveAuctionsPage page</div> })));
-const AuctionDetailPage = lazy(() => import("../pages/auctions/AuctionDetailPage").catch(() => ({ default: () => <div>Error loading AuctionDetailPage page</div> })));
-const PublishAuctionPage = lazy(() => import("../pages/auctions/PublishAuctionPage").catch(() => ({ default: () => <div>Error loading PublishAuctionPage page</div> })));
-const Exchanges = lazy(() => import("../pages/Exchanges").catch(() => ({ default: () => <div>Error loading Exchanges page</div> })));
-const BulletinBoard = lazy(() => import("../pages/BulletinBoard").catch(() => ({ default: () => <div>Error loading BulletinBoard page</div> })));
-const BulletinDetailPage = lazy(() => import("../pages/BulletinDetailPage").catch(() => ({ default: () => <div>Error loading BulletinDetailPage page</div> })));
-const Transport = lazy(() => import("../pages/Transport").catch(() => ({ default: () => <div>Error loading Transport page</div> })));
-const TransportExpressPage = lazy(() => import("../pages/TransportExpressPage").catch(() => ({ default: () => <div>Error loading TransportExpressPage page</div> })));
-const CommissionCalculatorPage = lazy(() => import("../pages/CommissionCalculatorPage").catch(() => ({ default: () => <div>Error loading CommissionCalculatorPage page</div> })));
-const ImportCalculator = lazy(() => import("../pages/ImportCalculator").catch(() => ({ default: () => <div>Error loading ImportCalculator page</div> })));
-const VehicleReports = lazy(() => import("../pages/VehicleReports").catch(() => ({ default: () => <div>Error loading VehicleReports page</div> })));
-const RequestReport = lazy(() => import("../pages/RequestReport").catch(() => ({ default: () => <div>Error loading RequestReport page</div> })));
-const VehicleReportsInfoPage = lazy(() => import("../pages/VehicleReportsInfoPage").catch(() => ({ default: () => <div>Error loading VehicleReportsInfoPage page</div> })));
-const VehicleGalleryInfoPage = lazy(() => import("../pages/VehicleGalleryInfoPage").catch(() => ({ default: () => <div>Error loading VehicleGalleryInfoPage page</div> })));
-const MessagingInfoPage = lazy(() => import("../pages/MessagingInfoPage").catch(() => ({ default: () => <div>Error loading MessagingInfoPage page</div> })));
+const Services = lazyWithRetry(() => import("../pages/Services"));
+const ContactPage = lazyWithRetry(() => import("../pages/ContactPage"));
+const VehicleGallery = lazyWithRetry(() => import("../pages/VehicleGallery"));
+const VehiclePreviewPage = lazyWithRetry(() => import("../pages/VehiclePreviewPage"));
+const VehicleInformationPage = lazyWithRetry(() => import("../pages/VehicleInformationPage"));
+const VehicleDetailPage = lazyWithRetry(() => import("../pages/VehicleDetailPage"));
+const VehicleDetailsPage = lazyWithRetry(() => import("../pages/VehicleDetailsPage"));
+const VehicleEquipmentPage = lazyWithRetry(() => import("../pages/VehicleEquipmentPage"));
+const VehicleFilesPage = lazyWithRetry(() => import("../pages/VehicleFilesPage"));
+const VehicleDamagesPage = lazyWithRetry(() => import("../pages/VehicleDamagesPage"));
+const VehicleAdditionalInfoPage = lazyWithRetry(() => import("../pages/VehicleAdditionalInfoPage"));
+const LiveAuctionsPage = lazyWithRetry(() => import("../pages/auctions/LiveAuctionsPage"));
+const AuctionDetailPage = lazyWithRetry(() => import("../pages/auctions/AuctionDetailPage"));
+const PublishAuctionPage = lazyWithRetry(() => import("../pages/auctions/PublishAuctionPage"));
+const Exchanges = lazyWithRetry(() => import("../pages/Exchanges"));
+const BulletinBoard = lazyWithRetry(() => import("../pages/BulletinBoard"));
+const BulletinDetailPage = lazyWithRetry(() => import("../pages/BulletinDetailPage"));
+const Transport = lazyWithRetry(() => import("../pages/Transport"));
+const TransportExpressPage = lazyWithRetry(() => import("../pages/TransportExpressPage"));
+const CommissionCalculatorPage = lazyWithRetry(() => import("../pages/CommissionCalculatorPage"));
+const ImportCalculator = lazyWithRetry(() => import("../pages/ImportCalculator"));
+const VehicleReports = lazyWithRetry(() => import("../pages/VehicleReports"));
+const RequestReport = lazyWithRetry(() => import("../pages/RequestReport"));
+const VehicleReportsInfoPage = lazyWithRetry(() => import("../pages/VehicleReportsInfoPage"));
+const VehicleGalleryInfoPage = lazyWithRetry(() => import("../pages/VehicleGalleryInfoPage"));
+const MessagingInfoPage = lazyWithRetry(() => import("../pages/MessagingInfoPage"));
 
-const BulletinInfoPage = lazy(() => import("../pages/BulletinInfoPage").catch(() => ({ default: () => <div>Error loading BulletinInfoPage page</div> })));
-const AuctionsInfoPage = lazy(() => import("../pages/AuctionsInfoPage").catch(() => ({ default: () => <div>Error loading AuctionsInfoPage page</div> })));
-const ExchangesInfoPage = lazy(() => import("../pages/ExchangesInfoPage").catch(() => ({ default: () => <div>Error loading ExchangesInfoPage page</div> })));
-const BlogList = lazy(() => import("../pages/blog/BlogList").catch(() => ({ default: () => <div>Error loading BlogList page</div> })));
-const BlogPostView = lazy(() => import("../pages/blog/BlogPostView").catch(() => ({ default: () => <div>Error loading BlogPostView page</div> })));
-const BlogMainPage = lazy(() => import("../pages/BlogMainPage").catch(() => ({ default: () => <div>Error loading BlogMainPage page</div> })));
-const UsersDirectory = lazy(() => import("../pages/UsersDirectory").catch(() => ({ default: () => <div>Error loading UsersDirectory page</div> })));
-const CommunityPage = lazy(() => import("../pages/CommunityPage").catch(() => ({ default: () => <div>Error loading CommunityPage page</div> })));
-const TermsAndConditionsPage = lazy(() => import("../pages/TermsAndConditionsPage").catch(() => ({ default: () => <div>Error loading TermsAndConditionsPage page</div> })));
-const PrivacyPolicyPage = lazy(() => import("../pages/PrivacyPolicyPage").catch(() => ({ default: () => <div>Error loading PrivacyPolicyPage page</div> })));
-const CookiesPage = lazy(() => import("../pages/CookiesPage").catch(() => ({ default: () => <div>Error loading CookiesPage page</div> })));
-const AuctionPoliciesPage = lazy(() => import("../pages/AuctionPoliciesPage").catch(() => ({ default: () => <div>Error loading AuctionPoliciesPage page</div> })));
+const BulletinInfoPage = lazyWithRetry(() => import("../pages/BulletinInfoPage"));
+const AuctionsInfoPage = lazyWithRetry(() => import("../pages/AuctionsInfoPage"));
+const ExchangesInfoPage = lazyWithRetry(() => import("../pages/ExchangesInfoPage"));
+const BlogList = lazyWithRetry(() => import("../pages/blog/BlogList"));
+const BlogPostView = lazyWithRetry(() => import("../pages/blog/BlogPostView"));
+const BlogMainPage = lazyWithRetry(() => import("../pages/BlogMainPage"));
+const UsersDirectory = lazyWithRetry(() => import("../pages/UsersDirectory"));
+const CommunityPage = lazyWithRetry(() => import("../pages/CommunityPage"));
+const TermsAndConditionsPage = lazyWithRetry(() => import("../pages/TermsAndConditionsPage"));
+const PrivacyPolicyPage = lazyWithRetry(() => import("../pages/PrivacyPolicyPage"));
+const CookiesPage = lazyWithRetry(() => import("../pages/CookiesPage"));
+const AuctionPoliciesPage = lazyWithRetry(() => import("../pages/AuctionPoliciesPage"));
 
 // Páginas protegidas
-const Dashboard = lazy(() => import("../pages/DashboardMainPage").catch(() => ({ default: () => <div>Error loading Dashboard page</div> })));
-const VehicleEditPage = lazy(() => import("../pages/VehicleEditPage").catch(() => ({ default: () => <div>Error loading VehicleEditPage page</div> })));
-const VehicleManagement = lazy(() => import("../pages/VehicleManagement").catch(() => ({ default: () => <div>Error loading VehicleManagement page</div> })));
-const MyVehicles = lazy(() => import("../pages/MyVehicles").catch(() => ({ default: () => <div>Error loading MyVehicles page</div> })));
+const Dashboard = lazyWithRetry(() => import("../pages/DashboardMainPage"));
+const VehicleEditPage = lazyWithRetry(() => import("../pages/VehicleEditPage"));
+const VehicleManagement = lazyWithRetry(() => import("../pages/VehicleManagement"));
+const MyVehicles = lazyWithRetry(() => import("../pages/MyVehicles"));
 // Removed MyAuctions page (auctions feature disabled)
-const ExchangeForm = lazy(() => import("../pages/ExchangeForm").catch(() => ({ default: () => <div>Error loading ExchangeForm page</div> })));
-const ExchangeProposal = lazy(() => import("../pages/ExchangeProposal").catch(() => ({ default: () => <div>Error loading ExchangeProposal page</div> })));
-const PublishAnnouncementPage = lazy(() => import("../pages/PublishAnnouncementPage").catch(() => ({ default: () => <div>Error loading PublishAnnouncementPage page</div> })));
-const TransportQuoteManagement = lazy(() => import("../pages/TransportQuoteManagement").catch(() => ({ default: () => <div>Error loading TransportQuoteManagement page</div> })));
-const Messages = lazy(() => import("../pages/Messages").catch(() => ({ default: () => <div>Error loading Messages page</div> })));
+const ExchangeForm = lazyWithRetry(() => import("../pages/ExchangeForm"));
+const ExchangeProposal = lazyWithRetry(() => import("../pages/ExchangeProposal"));
+const PublishAnnouncementPage = lazyWithRetry(() => import("../pages/PublishAnnouncementPage"));
+const TransportQuoteManagement = lazyWithRetry(() => import("../pages/TransportQuoteManagement"));
+const Messages = lazyWithRetry(() => import("../pages/Messages"));
 // Removed Disputes page (mediation system disabled)
 
 // CORREGIDO: Importar MyProfile para /profile
-const MyProfile = lazy(() => import("../pages/MyProfile").catch(() => ({ default: () => <div>Error loading MyProfile page</div> })));
+const MyProfile = lazyWithRetry(() => import("../pages/MyProfile"));
 // CORREGIDO: Usar ProfilePage para /user/:id (en lugar de UserProfile)
-const ProfilePage = lazy(() => import("../pages/ProfilePage").catch(() => ({ default: () => <div>Error loading ProfilePage page</div> })));
-const NotificationsPage = lazy(() => import("../pages/NotificationsPage").catch(() => ({ default: () => <div>Error loading NotificationsPage page</div> })));
+const ProfilePage = lazyWithRetry(() => import("../pages/ProfilePage"));
+const NotificationsPage = lazyWithRetry(() => import("../pages/NotificationsPage"));
 
 // Lazy loading of admin pages
-const AdminControlPanel = lazy(() => import("../pages/admin/ControlPanel").catch(() => ({ default: () => <div>Error loading ControlPanel page</div> })));
-const AdminDashboard = lazy(() => import("../pages/admin/Dashboard").catch(() => ({ default: () => <div>Error loading AdminDashboard page</div> })));
-const AdminUsers = lazy(() => import("../pages/admin/Users").catch(() => ({ default: () => <div>Error loading AdminUsers page</div> })));
-const AdminUserView = lazy(() => import("../pages/admin/UserView").catch(() => ({ default: () => <div>Error loading AdminUserView page</div> })));
-const AdminUserEdit = lazy(() => import("../pages/admin/UserEdit").catch(() => ({ default: () => <div>Error loading AdminUserEdit page</div> })));
-const AdminVehicles = lazy(() => import("../pages/admin/Vehicles").catch(() => ({ default: () => <div>Error loading AdminVehicles page</div> })));
+const AdminControlPanel = lazyWithRetry(() => import("../pages/admin/ControlPanel"));
+const AdminDashboard = lazyWithRetry(() => import("../pages/admin/Dashboard"));
+const AdminUsers = lazyWithRetry(() => import("../pages/admin/Users"));
+const AdminUserView = lazyWithRetry(() => import("../pages/admin/UserView"));
+const AdminUserEdit = lazyWithRetry(() => import("../pages/admin/UserEdit"));
+const AdminVehicles = lazyWithRetry(() => import("../pages/admin/Vehicles"));
 // Removed AdminAuctions page (auctions feature disabled)
-const AdminConversations = lazy(() => import("../pages/admin/Conversations").catch(() => ({ default: () => <div>Error loading AdminConversations page</div> })));
-const AdminConversationDetail = lazy(() => import("../pages/admin/ConversationDetail").catch(() => ({ default: () => <div>Error loading AdminConversationDetail page</div> })));
-const AdminCommunicationsDashboard = lazy(() => import("../pages/admin/AdminCommunicationsDashboard").catch(() => ({ default: () => <div>Error loading AdminCommunicationsDashboard page</div> })));
-const AdminDirectoryChat = lazy(() => import("../pages/admin/DirectoryChat").catch(() => ({ default: () => <div>Error loading AdminDirectoryChat page</div> })));
-const AdminExchanges = lazy(() => import("../pages/admin/Exchanges").catch(() => ({ default: () => <div>Error loading AdminExchanges page</div> })));
-const AdminRegistrationRequests = lazy(() => import("../pages/admin/RegistrationRequests").catch(() => ({ default: () => <div>Error loading AdminRegistrationRequests page</div> })));
-const AdminActivityLogs = lazy(() => import("../pages/admin/ActivityLogs").catch(() => ({ default: () => <div>Error loading AdminActivityLogs page</div> })));
-const AdminRolesAndPermissions = lazy(() => import("../pages/admin/RolesAndPermissions").catch(() => ({ default: () => <div>Error loading AdminRolesAndPermissions page</div> })));
-const AdminAnalytics = lazy(() => import("../pages/admin/Analytics").catch(() => ({ default: () => <div>Error loading AdminAnalytics page</div> })));
-const AdminNotifications = lazy(() => import("../pages/admin/Notifications").catch(() => ({ default: () => <div>Error loading AdminNotifications page</div> })));
-const AdminTransportQuotes = lazy(() => import("../pages/admin/TransportQuotes").catch(() => ({ default: () => <div>Error loading AdminTransportQuotes page</div> })));
-const AdminPerformanceMonitoring = lazy(() => import("../pages/admin/PerformanceMonitoring").catch(() => ({ default: () => <div>Error loading PerformanceMonitoring page</div> })));
-const AdminVehicleReports = lazy(() => import("../pages/admin/VehicleReportsAdmin").catch(() => ({ default: () => <div>Error loading VehicleReportsAdmin page</div> })));
-const BlogManagement = lazy(() => import("../pages/blog/BlogManagement").catch(() => ({ default: () => <div>Error loading BlogManagement page</div> })));
-const BlogPostCreate = lazy(() => import("../pages/blog/BlogPostCreate").catch(() => ({ default: () => <div>Error loading BlogPostCreate page</div> })));
-const BlogPostEdit = lazy(() => import("../pages/blog/BlogPostEdit").catch(() => ({ default: () => <div>Error loading BlogPostEdit page</div> })));
-const TranslationManagement = lazy(() => import("../pages/TranslationManagement").catch(() => ({ default: () => <div>Error loading TranslationManagement page</div> })));
-const AdminReportPayments = lazy(() => import("../pages/admin/ReportPayments").catch(() => ({ default: () => <div>Error loading ReportPayments page</div> })));
-const AdminReportProcessing = lazy(() => import("../pages/admin/ReportProcessing").catch(() => ({ default: () => <div>Error loading ReportProcessing page</div> })));
-const AdminAPIManagement = lazy(() => import("../pages/admin/APIManagement").catch(() => ({ default: () => <div>Error loading APIManagement page</div> })));
-const APIManagement = lazy(() => import("../pages/APIManagement").catch(() => ({ default: () => <div>Error loading APIManagement page</div> })));
-const AdminAuditReport = lazy(() => import("../pages/admin/AuditReport").catch(() => ({ default: () => <div>Error loading AuditReport page</div> })));
-const AdminStaticImageManager = lazy(() => import("../pages/admin/StaticImageManager").catch(() => ({ default: () => <div>Error loading StaticImageManager page</div> })));
-const ImageControlCenter = lazy(() => import("../pages/admin/ImageControlCenter").catch(() => ({ default: () => <div>Error loading ImageControlCenter page</div> })));
+const AdminConversations = lazyWithRetry(() => import("../pages/admin/Conversations"));
+const AdminConversationDetail = lazyWithRetry(() => import("../pages/admin/ConversationDetail"));
+const AdminCommunicationsDashboard = lazyWithRetry(() => import("../pages/admin/AdminCommunicationsDashboard"));
+const AdminDirectoryChat = lazyWithRetry(() => import("../pages/admin/DirectoryChat"));
+const AdminExchanges = lazyWithRetry(() => import("../pages/admin/Exchanges"));
+const AdminRegistrationRequests = lazyWithRetry(() => import("../pages/admin/RegistrationRequests"));
+const AdminActivityLogs = lazyWithRetry(() => import("../pages/admin/ActivityLogs"));
+const AdminRolesAndPermissions = lazyWithRetry(() => import("../pages/admin/RolesAndPermissions"));
+const AdminAnalytics = lazyWithRetry(() => import("../pages/admin/Analytics"));
+const AdminNotifications = lazyWithRetry(() => import("../pages/admin/Notifications"));
+const AdminTransportQuotes = lazyWithRetry(() => import("../pages/admin/TransportQuotes"));
+const AdminPerformanceMonitoring = lazyWithRetry(() => import("../pages/admin/PerformanceMonitoring"));
+const AdminVehicleReports = lazyWithRetry(() => import("../pages/admin/VehicleReportsAdmin"));
+const BlogManagement = lazyWithRetry(() => import("../pages/blog/BlogManagement"));
+const BlogPostCreate = lazyWithRetry(() => import("../pages/blog/BlogPostCreate"));
+const BlogPostEdit = lazyWithRetry(() => import("../pages/blog/BlogPostEdit"));
+const TranslationManagement = lazyWithRetry(() => import("../pages/TranslationManagement"));
+const AdminReportPayments = lazyWithRetry(() => import("../pages/admin/ReportPayments"));
+const AdminReportProcessing = lazyWithRetry(() => import("../pages/admin/ReportProcessing"));
+const AdminAPIManagement = lazyWithRetry(() => import("../pages/admin/APIManagement"));
+const APIManagement = lazyWithRetry(() => import("../pages/APIManagement"));
+const AdminAuditReport = lazyWithRetry(() => import("../pages/admin/AuditReport"));
+const AdminStaticImageManager = lazyWithRetry(() => import("../pages/admin/StaticImageManager"));
+const ImageControlCenter = lazyWithRetry(() => import("../pages/admin/ImageControlCenter"));
 // Removed AdminDisputes page (mediation system disabled)
 
 const AppRoutes = () => {
