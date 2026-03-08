@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { VehicleFormData } from '@/types/vehicle';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -8,7 +8,9 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Euro, FileText } from 'lucide-react';
+import { Euro, FileText, HelpCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import ImageHelpDrawer from './ImageHelpDrawer';
 
 interface Step3MediaPriceProps {
   form: UseFormReturn<VehicleFormData>;
@@ -25,6 +27,7 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
 }) => {
   const { t } = useLanguage();
   const formData = form.getValues();
+  const [helpOpen, setHelpOpen] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -100,7 +103,24 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
 
       {/* Media Upload - reuse existing FileUpload */}
       <Card>
-        <CardContent className="pt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span className="flex items-center gap-2 text-lg font-bold">
+              {t('vehicles.images')}
+            </span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded-full text-muted-foreground hover:text-primary"
+              onClick={() => setHelpOpen(true)}
+              aria-label={t('vehicles.imageHelp.title')}
+            >
+              <HelpCircle className="h-5 w-5" />
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           <FileUpload
             form={form}
             onImageChange={onImageChange}
@@ -108,6 +128,8 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
           />
         </CardContent>
       </Card>
+
+      <ImageHelpDrawer open={helpOpen} onOpenChange={setHelpOpen} />
     </div>
   );
 };
