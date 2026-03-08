@@ -70,7 +70,7 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
 
           <div className="space-y-2">
             <Label htmlFor="reason">
-              {t('api.request.reason') || 'Reason (Optional)'}
+              {t('api.request.reason') || 'Motivo (opcional)'}
             </Label>
             <Textarea
               id="reason"
