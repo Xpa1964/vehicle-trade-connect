@@ -118,10 +118,9 @@ const handler = async (req: Request): Promise<Response> => {
       .order('start_date', { ascending: true });
 
     if (scheduledError) {
-      console.error('❌ Error fetching scheduled auctions:', scheduledError);
+      console.error('Error fetching scheduled auctions:', scheduledError);
       response.errors.push(`scheduled_fetch: ${scheduledError.message}`);
     } else if (scheduledAuctions && scheduledAuctions.length > 0) {
-      console.log(`📅 Found ${scheduledAuctions.length} auctions to activate`);
       
       for (const auction of scheduledAuctions) {
         const { error: updateError } = await supabase
