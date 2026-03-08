@@ -57,7 +57,7 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="keyName">
-              {t('api.request.keyName') || 'Key Name'} <span className="text-red-500">*</span>
+              {t('api.request.keyName') || 'Nombre de la key'} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="keyName"
