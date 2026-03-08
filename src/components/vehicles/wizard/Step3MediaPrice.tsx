@@ -128,6 +128,8 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
           />
         </CardContent>
       </Card>
+
+      <ImageHelpDrawer open={helpOpen} onOpenChange={setHelpOpen} />
     </div>
   );
 };
