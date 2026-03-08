@@ -1,5 +1,5 @@
 
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, ComponentType } from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
@@ -8,6 +8,36 @@ import { PageSkeleton } from "@/components/ui/skeletons/PageSkeleton";
 
 // Enhanced fallback component with skeleton for better UX
 const LoadingFallback = () => <PageSkeleton />;
+
+// Lazy import with retry logic to handle intermittent network failures
+function lazyWithRetry(importFn: () => Promise<{ default: ComponentType<any> }>, retries = 3, delay = 1000) {
+  return lazy(() => {
+    const attempt = (remainingRetries: number): Promise<{ default: ComponentType<any> }> =>
+      importFn().catch((error) => {
+        if (remainingRetries <= 0) {
+          console.error('Failed to load module after retries:', error);
+          // Return a component that allows manual retry
+          return {
+            default: () => {
+              const handleRetry = () => window.location.reload();
+              return (
+                <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+                  <p className="text-muted-foreground">Error al cargar la página. Comprueba tu conexión.</p>
+                  <button onClick={handleRetry} className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:opacity-90">
+                    Reintentar
+                  </button>
+                </div>
+              );
+            }
+          } as { default: ComponentType<any> };
+        }
+        return new Promise<{ default: ComponentType<any> }>((resolve) =>
+          setTimeout(() => resolve(attempt(remainingRetries - 1)), delay)
+        );
+      });
+    return attempt(retries);
+  });
+}
 
 // Lazy loading de todas las páginas con manejo de errores mejorado
 const NotFound = lazy(() => import("../pages/NotFound").catch(() => ({ default: () => <div>Error loading page</div> })));
