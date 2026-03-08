@@ -201,7 +201,7 @@ const handler = async (req: Request): Promise<Response> => {
           .eq('status', 'active');
 
         if (updateError) {
-          console.error(`❌ Error ending auction ${auction.id}:`, updateError);
+          console.error(`Error ending auction ${auction.id}:`, updateError);
           response.errors.push(`end_${auction.id}: ${updateError.message}`);
           continue;
         }
