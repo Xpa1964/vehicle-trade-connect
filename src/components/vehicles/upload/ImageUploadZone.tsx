@@ -24,9 +24,9 @@ interface ImageUploadZoneProps {
 
 export const ImageUploadZone: React.FC<ImageUploadZoneProps> = ({
   onImagesSelected,
-  maxImages = 100,
-  maxSizePerImage = 5,
-  acceptedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+  maxImages = 25,
+  maxSizePerImage = 10,
+  acceptedFormats = ['image/jpeg', 'image/png', 'image/webp'],
 }) => {
   const { t } = useLanguage();
   const [isDragging, setIsDragging] = useState(false);
