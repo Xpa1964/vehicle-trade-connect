@@ -6,6 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import APIDocumentation from '@/components/dashboard/APIDocumentation';
 import APIIntegrationSection from '@/components/dashboard/APIIntegrationSection';
+import APISyncStatusBanner from '@/components/dashboard/APISyncStatusBanner';
 import apiKeysImage from '@/assets/api-keys-image.png';
 
 const APIManagement: React.FC = () => {
