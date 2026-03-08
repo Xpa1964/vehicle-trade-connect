@@ -155,6 +155,7 @@ const ProfilePage: React.FC = () => {
   }
 
   const displayName = profile.company_name || profile.full_name || 'Usuario';
+  const publicProfileData = { ...profile, id: profileOwnerId };
 
   const handleContact = () => {
     if (!user) {
@@ -162,7 +163,7 @@ const ProfilePage: React.FC = () => {
       return;
     }
     // Aquí iría la lógica para contactar (abrir chat, etc.)
-    console.log('Contactar usuario:', id);
+    console.log('Contactar usuario:', profileOwnerId);
   };
 
   const handleRatingSubmitted = () => {
