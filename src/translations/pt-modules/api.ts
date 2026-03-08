@@ -123,7 +123,7 @@ export default {
   'api.docs.format.vinDesc': 'Número VIN. Identificação única do veículo',
   'api.docs.format.licensePlateDesc': 'Placa de licença',
   'api.docs.format.descriptionDesc': 'Descrição detalhada do veículo (máx. 5000 caracteres)',
-  'api.docs.format.imagesDesc': 'Array de URLs de imagens (máx. 20 imagens)',
+  'api.docs.format.imagesDesc': 'Array de URLs de imagens (máx. 25 imagens)',
   'api.docs.format.videosDesc': 'Array de URLs de vídeos (opcional)',
   
   // Field Descriptions - Normalized
