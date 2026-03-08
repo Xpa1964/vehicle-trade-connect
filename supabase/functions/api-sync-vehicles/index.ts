@@ -83,6 +83,36 @@ serve(async (req) => {
     }
   } catch (error: unknown) {
     console.error('Error in api-sync-vehicles:', error);
+    
+    // Try to notify user of complete failure (best-effort)
+    try {
+      const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+      const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+      const apiKey = req.headers.get('x-api-key');
+      if (apiKey) {
+        const failSupabase = createClient(supabaseUrl, supabaseKey);
+        const { data: keyData } = await failSupabase
+          .from('partner_api_keys')
+          .select('user_id')
+          .eq('api_key', apiKey)
+          .eq('is_active', true)
+          .maybeSingle();
+        
+        if (keyData?.user_id) {
+          await failSupabase.rpc('create_system_notification', {
+            p_user_id: keyData.user_id,
+            p_title: 'La sincronización API falló',
+            p_message: 'La sincronización API falló. Comprueba tu conexión y los datos enviados, o contacta con soporte si el problema persiste.',
+            p_type: 'error',
+            p_link: '/api-management',
+            p_subject: 'Error en sincronización API'
+          });
+        }
+      }
+    } catch (notifErr: unknown) {
+      console.error('Failed to send failure notification:', notifErr instanceof Error ? notifErr.message : String(notifErr));
+    }
+
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : String(error) }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -254,6 +284,23 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
       sync_timestamp: syncTimestamp
     }
   });
+
+  // Send notification to API key owner if there were errors
+  if (results.errors.length > 0) {
+    try {
+      await supabase.rpc('create_system_notification', {
+        p_user_id: userId,
+        p_title: 'Sincronización API completada con errores',
+        p_message: `Sincronización API completada con errores: ${results.errors.length} vehículo(s) no pudieron procesarse. Revisa el historial de sincronización para más detalles.`,
+        p_type: 'warning',
+        p_link: '/api-management',
+        p_subject: 'Sincronización API con errores'
+      });
+      console.log(`🔔 Error notification sent to user ${userId}`);
+    } catch (notifError: unknown) {
+      console.error('Failed to send error notification:', notifError instanceof Error ? notifError.message : String(notifError));
+    }
+  }
 
   console.log(`📊 Sync complete: created=${results.created}, updated=${results.updated}, deactivated=${results.deactivated}, errors=${results.errors.length}`);
 
