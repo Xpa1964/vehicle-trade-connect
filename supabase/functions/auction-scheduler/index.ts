@@ -133,7 +133,7 @@ const handler = async (req: Request): Promise<Response> => {
           .eq('status', 'scheduled'); // Doble verificación para evitar race conditions
 
         if (updateError) {
-          console.error(`❌ Error activating auction ${auction.id}:`, updateError);
+          console.error(`Error activating auction ${auction.id}:`, updateError);
           response.errors.push(`activate_${auction.id}: ${updateError.message}`);
           continue;
         }
