@@ -191,6 +191,7 @@ export default {
   'api.docs.format.warrantyDesc': 'Indica si tiene garantía vigente',
   'api.docs.format.equipmentDesc': 'Array de equipamiento adicional',
   'api.docs.format.interiorColorDesc': 'Color del interior',
+  'api.docs.format.commissionSaleDesc': 'Indica si es una venta comisionada',
   
   // Field descriptions - Normalized optional
   'api.docs.format.normalizedFieldsDesc': 'Estos campos requieren normalización multiidioma (ver pestaña "Normalización"):',

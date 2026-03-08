@@ -156,6 +156,7 @@ export default {
   'api.docs.format.warrantyDesc': 'Indicates if warranty is active',
   'api.docs.format.equipmentDesc': 'Array of additional equipment',
   'api.docs.format.interiorColorDesc': 'Interior color',
+  'api.docs.format.commissionSaleDesc': 'Indicates if it is a commission sale',
   'api.docs.format.normalizedFieldsDesc': 'These fields require multi-language normalization (see "Normalization" tab):',
   'api.docs.format.statusDesc': 'Vehicle status (available, reserved, sold, auction)',
   'api.docs.format.iva_statusDesc': 'VAT status (included, not_included, deductible)',
