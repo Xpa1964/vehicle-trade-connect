@@ -144,10 +144,15 @@ export const useVehicleSubmit = () => {
         }
       }
       
-      // Handle additional files if available
+      // Handle additional document files if available
       if (data.additionalFiles && data.additionalFiles.length > 0) {
-        console.log('📎 [useVehicleSubmit] Processing additional files:', data.additionalFiles.length, 'files');
-        // Implementation for additional files upload would go here
+        const filesArray = data.additionalFiles instanceof FileList 
+          ? Array.from(data.additionalFiles) 
+          : Array.isArray(data.additionalFiles) ? data.additionalFiles : [];
+        if (filesArray.length > 0) {
+          console.log('📎 [useVehicleSubmit] Processing additional files:', filesArray.length, 'files');
+          await handleDocumentUploads(filesArray, vehicleId, user.id);
+        }
       }
       
       // Verify vehicle was saved by querying it back
@@ -362,6 +367,70 @@ export const useVehicleSubmit = () => {
       console.log('🎉 [handleImageUploads] All images processed successfully');
     } catch (err) {
       console.error('❌ [handleImageUploads] Error uploading images:', err);
+    }
+  };
+
+  const handleDocumentUploads = async (files: File[], vehicleId: string, userId: string) => {
+    const ALLOWED_DOC_TYPES = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ];
+    const MAX_DOC_SIZE = 20 * 1024 * 1024; // 20MB
+
+    for (const file of files) {
+      try {
+        // Client-side pre-validation
+        if (!ALLOWED_DOC_TYPES.includes(file.type)) {
+          console.warn(`⚠️ [handleDocumentUploads] Skipping ${file.name}: unsupported type ${file.type}`);
+          toast.warning(t('vehicles.documentTypeNotAllowed', { fallback: `Document "${file.name}" skipped: only PDF and Word files are accepted.` }));
+          continue;
+        }
+        if (file.size > MAX_DOC_SIZE) {
+          console.warn(`⚠️ [handleDocumentUploads] Skipping ${file.name}: exceeds 20MB`);
+          toast.warning(t('vehicles.documentTooLarge', { fallback: `Document "${file.name}" skipped: exceeds 20MB limit.` }));
+          continue;
+        }
+
+        console.log(`📎 [handleDocumentUploads] Uploading ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+
+        const { publicUrl, error: uploadError } = await uploadFileSecurely(
+          file,
+          'vehicles',
+          `documents/${vehicleId}`
+        );
+
+        if (uploadError || !publicUrl) {
+          console.error(`❌ [handleDocumentUploads] Failed to upload ${file.name}:`, uploadError);
+          toast.warning(t('vehicles.documentUploadFailed', { fallback: `Could not upload document "${file.name}". The vehicle was saved.` }));
+          continue;
+        }
+
+        // Determine file extension for document_type
+        const ext = file.name.split('.').pop()?.toLowerCase() || 'unknown';
+
+        const { error: insertError } = await (supabase as any)
+          .from('vehicle_documents')
+          .insert({
+            vehicle_id: vehicleId,
+            document_type: ext,
+            document_url: publicUrl,
+            file_url: publicUrl,
+            file_name: file.name,
+            file_size: file.size,
+          });
+
+        if (insertError) {
+          console.error(`❌ [handleDocumentUploads] Error saving document record for ${file.name}:`, insertError);
+          toast.warning(t('vehicles.documentRecordFailed', { fallback: `Document "${file.name}" was uploaded but its record could not be saved.` }));
+          continue;
+        }
+
+        console.log(`✅ [handleDocumentUploads] Document "${file.name}" uploaded and registered successfully`);
+      } catch (err) {
+        console.error(`❌ [handleDocumentUploads] Error processing ${file.name}:`, err);
+        toast.warning(t('vehicles.documentUploadFailed', { fallback: `Could not upload document "${file.name}". The vehicle was saved.` }));
+      }
     }
   };
 
