@@ -238,6 +238,11 @@ const APIDocumentation: React.FC = () => {
                             <Badge variant="outline" className="text-xs ml-2">string</Badge>
                             <p className="text-xs text-muted-foreground mt-1">{t('api.docs.format.interiorColorDesc')}</p>
                           </div>
+                          <div className="border rounded-lg p-3">
+                            <code className="font-semibold text-sm">commission_sale</code>
+                            <Badge variant="outline" className="text-xs ml-2">boolean</Badge>
+                            <p className="text-xs text-muted-foreground mt-1">{t('api.docs.format.commissionSaleDesc')}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -354,6 +359,7 @@ const APIDocumentation: React.FC = () => {
   "warranty": true,
   "equipment": ["GPS", "Leather seats", "Parking sensors"],
   "interior_color": "Negro",
+  "commission_sale": false,
   
   // Campos Opcionales - Normalizados (ver pestaña Normalización)
   "status": "available",
@@ -507,6 +513,24 @@ response = requests.post(
                     {t('api.docs.integration.rateLimitDesc')}
                   </p>
                 </div>
+
+                {/* Common Errors Section */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-foreground flex items-center gap-2">
+                    <AlertCircle className="h-5 w-5" />
+                    {t('api.docs.integration.commonErrors')}
+                  </h4>
+                  <div className="space-y-3">
+                    {['401', '429', '400', '500'].map((code) => (
+                      <div key={code} className="border-l-4 border-destructive/50 pl-4 py-2">
+                        <code className="font-semibold text-sm">{t(`api.docs.integration.error${code}`)}</code>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {t(`api.docs.integration.error${code}.desc`)}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </TabsContent>
@@ -564,6 +588,9 @@ response = requests.post(
                       { field: 'description', type: 'string', required: false, normalized: false, example: 'BMW en...', critical: true },
                       { field: 'images', type: 'string[]', required: false, normalized: false, example: '["https://..."]', critical: true },
                       { field: 'status', type: 'string', required: false, normalized: true, example: 'available' },
+                      { field: 'euro_standard', type: 'string', required: false, normalized: true, example: 'euro6d' },
+                      { field: 'co2_emissions', type: 'number', required: false, normalized: false, example: '120' },
+                      { field: 'commission_sale', type: 'boolean', required: false, normalized: false, example: 'false' },
                       { field: 'color', type: 'string', required: false, normalized: true, example: 'azul' },
                       { field: 'condition', type: 'string', required: false, normalized: true, example: 'usado' },
                     ].map((item, idx) => (
