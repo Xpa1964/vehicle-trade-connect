@@ -27,6 +27,7 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
 }) => {
   const { t } = useLanguage();
   const formData = form.getValues();
+  const [helpOpen, setHelpOpen] = useState(false);
 
   return (
     <div className="space-y-6">
