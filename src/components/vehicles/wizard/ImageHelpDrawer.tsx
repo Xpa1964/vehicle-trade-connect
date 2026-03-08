@@ -102,7 +102,7 @@ const ImageHelpDrawer: React.FC<ImageHelpDrawerProps> = ({ open, onOpenChange })
             </div>
 
             <div className="space-y-3">
-              <div className="border rounded-lg p-3 bg-green-50/50 dark:bg-green-950/20">
+              <div className="border rounded-lg p-3 bg-accent/50">
                 <h5 className="font-medium text-sm text-foreground mb-1">
                   ✅ {t('vehicles.imageHelp.bulk.option1.title')}
                 </h5>
