@@ -113,6 +113,8 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
     ...formHook,
     previewUrl,
     availableModels,
+    isLoadingModels,
+    modelsError,
     handleImageChange,
     handleBrandChange,
     handleFormChange,
