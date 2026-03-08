@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Loader2, Search, Plus, ArrowLeft, Filter, Car } from 'lucide-react';
+import { Loader2, Search, Plus, ArrowLeft, Filter, Car, Upload } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import VehicleCard from '@/components/vehicles/VehicleCard';
 import VehicleEmpty from '@/components/vehicles/VehicleEmpty';
