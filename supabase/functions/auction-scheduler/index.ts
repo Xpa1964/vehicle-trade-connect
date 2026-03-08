@@ -71,7 +71,7 @@ async function logStateTransition(
     });
 
   if (error) {
-    console.error(`❌ Error logging transition for auction ${auctionId}:`, error);
+    console.error(`Error logging transition for auction ${auctionId}:`, error);
   }
 }
 
