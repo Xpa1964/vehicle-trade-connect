@@ -529,7 +529,7 @@ async function processImages(supabase: any, vehicleId: string, imageUrls: string
   if (deleteError) {
     console.error('Error deleting previous API images:', deleteError);
   } else {
-    console.log(`🗑️ Cleaned previous API images for vehicle ${vehicleId}`);
+    // Cleaned previous API images
   }
 
   for (let i = 0; i < imageUrls.length; i++) {
