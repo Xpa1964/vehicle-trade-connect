@@ -142,7 +142,7 @@ export default {
   'api.docs.format.priceValidation': 'Deve ser > 0',
   'api.docs.format.mileageValidation': 'Deve ser >= 0',
   'api.docs.format.vinValidation': '17 caracteres alfanuméricos',
-  'api.docs.format.imagesValidation': 'Máximo de 20 imagens',
+  'api.docs.format.imagesValidation': 'Máximo de 25 imagens',
   'api.docs.format.descriptionValidation': 'Máximo de 5000 caracteres',
   
   // Technical Integration
