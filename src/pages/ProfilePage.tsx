@@ -73,6 +73,54 @@ const ProfilePage: React.FC = () => {
         data = result.data;
         error = result.error;
       }
+
+      // If still no profile, try to build a basic one from vehicles table
+      // (handles users imported/referenced from other projects)
+      if (!data && !error) {
+        const { data: vehicleData } = await supabase
+          .from('vehicles')
+          .select('seller_id, seller_city, seller_country')
+          .eq('seller_id', id)
+          .limit(1)
+          .maybeSingle();
+        
+        if (vehicleData) {
+          // Return a synthetic profile so the page renders
+          data = {
+            id: id,
+            user_id: id,
+            company_name: null,
+            full_name: null,
+            email: null,
+            phone: null,
+            country: vehicleData.seller_country || null,
+            city: vehicleData.seller_city || null,
+            business_type: null,
+            trader_type: null,
+            bio: null,
+            avatar_url: null,
+            company_logo: null,
+            contact_name: null,
+            contact_phone: null,
+            address: null,
+            postal_code: null,
+            province: null,
+            tax_id: null,
+            website: null,
+            rating: null,
+            verified: false,
+            total_operations: 0,
+            operations_breakdown: null,
+            show_business_stats: false,
+            show_contact_details: false,
+            show_location_details: false,
+            registration_date: null,
+            created_at: null,
+            updated_at: null,
+          } as any;
+          console.log('🔍 Built synthetic profile from vehicles data for:', id);
+        }
+      }
         
       if (error) {
         console.error('Error fetching profile:', error);
@@ -84,8 +132,8 @@ const ProfilePage: React.FC = () => {
     },
     enabled: !!id,
     retry: 1,
-    staleTime: 30000, // Cache por 30 segundos
-    gcTime: 5 * 60 * 1000 // Keep in cache for 5 minutes
+    staleTime: 30000,
+    gcTime: 5 * 60 * 1000
   });
 
   // Obtener ratings del usuario
@@ -130,7 +178,8 @@ const ProfilePage: React.FC = () => {
         <Alert className="max-w-md mx-auto bg-card border-border">
           <Info className="h-4 w-4" />
           <AlertDescription className="text-foreground">
-            Perfil no encontrado para el ID: {id}. <Button variant="link" onClick={() => navigate('/users')} className="p-0 h-auto text-primary">Ver directorio de usuarios</Button>
+            Este usuario aún no tiene un perfil creado en la plataforma. Es posible que el enlace provenga de otra fuente.{' '}
+            <Button variant="link" onClick={() => navigate('/users')} className="p-0 h-auto text-primary">Ver directorio de usuarios</Button>
           </AlertDescription>
         </Alert>
       </div>
