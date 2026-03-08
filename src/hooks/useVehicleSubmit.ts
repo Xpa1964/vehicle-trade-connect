@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { VehicleFormData } from '@/types/vehicle';
+import { uploadFileSecurely } from '@/utils/secureUpload';
 
 export const useVehicleSubmit = () => {
   const [loading, setLoading] = useState(false);
