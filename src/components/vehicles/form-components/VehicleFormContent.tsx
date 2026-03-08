@@ -72,7 +72,6 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
       console.error('❌ [VehicleForm] Draft save error:', error);
     }
   };
-  };
 
   const onValidationError = (errors: any) => {
     console.error('❌ [VehicleForm] Validation errors:', JSON.stringify(errors, null, 2));
