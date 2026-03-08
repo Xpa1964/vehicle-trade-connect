@@ -79,7 +79,7 @@ export const useBulkVehicleUpload = () => {
           // cocStatus similarly handled
         }
 
-        const { data: insertedVehicle, error: insertError } = await supabase
+        const { data: insertedVehicle, error: insertError } = await (supabase as any)
           .from('vehicles')
           .insert([vehicleData])
           .select()
