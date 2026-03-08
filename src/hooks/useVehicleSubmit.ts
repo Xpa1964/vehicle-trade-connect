@@ -144,10 +144,15 @@ export const useVehicleSubmit = () => {
         }
       }
       
-      // Handle additional files if available
+      // Handle additional document files if available
       if (data.additionalFiles && data.additionalFiles.length > 0) {
-        console.log('📎 [useVehicleSubmit] Processing additional files:', data.additionalFiles.length, 'files');
-        // Implementation for additional files upload would go here
+        const filesArray = data.additionalFiles instanceof FileList 
+          ? Array.from(data.additionalFiles) 
+          : Array.isArray(data.additionalFiles) ? data.additionalFiles : [];
+        if (filesArray.length > 0) {
+          console.log('📎 [useVehicleSubmit] Processing additional files:', filesArray.length, 'files');
+          await handleDocumentUploads(filesArray, vehicleId, user.id);
+        }
       }
       
       // Verify vehicle was saved by querying it back
