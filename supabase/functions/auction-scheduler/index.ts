@@ -103,7 +103,7 @@ const handler = async (req: Request): Promise<Response> => {
   };
 
   try {
-    console.log('🕐 Auction scheduler starting at:', response.timestamp);
+    // Scheduler run starts
     const now = new Date().toISOString();
 
     // ============================================
