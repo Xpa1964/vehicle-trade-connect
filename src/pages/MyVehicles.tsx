@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Loader2, Search, Plus, ArrowLeft, Filter, Car } from 'lucide-react';
+import { Loader2, Search, Plus, ArrowLeft, Filter, Car, Upload } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import VehicleCard from '@/components/vehicles/VehicleCard';
 import VehicleEmpty from '@/components/vehicles/VehicleEmpty';
@@ -172,6 +172,7 @@ const MyVehicles: React.FC = () => {
                     <SelectItem value="available">{t('vehicles.statusAvailable')}</SelectItem>
                     <SelectItem value="reserved">{t('vehicles.statusReserved')}</SelectItem>
                     <SelectItem value="sold">{t('vehicles.statusSold')}</SelectItem>
+                    <SelectItem value="draft">{t('vehicles.statusDraft', { fallback: 'Borrador' })}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -212,6 +213,27 @@ const MyVehicles: React.FC = () => {
                   onStatusChange={(status) => markVehicleStatus.mutate({ vehicleId: vehicle.id, status })}
                   isPending={markVehicleStatus.isPending}
                 />
+              )}
+              {vehicle.status === 'draft' && (
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => navigate(`/vehicle/${vehicle.id}/edit`)}
+                    className="flex-1"
+                  >
+                    {t('common.edit', { fallback: 'Editar' })}
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => markVehicleStatus.mutate({ vehicleId: vehicle.id, status: 'available' })}
+                    disabled={markVehicleStatus.isPending}
+                    className="flex-1"
+                  >
+                    <Upload className="h-4 w-4 mr-1" />
+                    {t('vehicles.publishVehicle', { fallback: 'Publicar' })}
+                  </Button>
+                </div>
               )}
             </div>
           ))}

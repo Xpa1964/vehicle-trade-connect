@@ -94,7 +94,7 @@ export interface VehicleFormData {
   countryCode: string;
   ivaStatus: 'included' | 'notIncluded' | 'deductible' | 'rebu';
   cocStatus: boolean;
-  status: 'available' | 'reserved' | 'sold';
+  status: 'available' | 'reserved' | 'sold' | 'draft';
   images?: FileList | File[];
   additionalFiles?: FileList | File[];
   equipment?: string[];

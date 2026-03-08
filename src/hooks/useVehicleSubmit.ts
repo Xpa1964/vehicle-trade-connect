@@ -168,8 +168,11 @@ export const useVehicleSubmit = () => {
         console.log('✅ [useVehicleSubmit] Vehicle verification - saved successfully:', savedVehicle);
       }
       
-      toast.success(t('vehicles.createSuccess', { fallback: 'Vehicle created successfully' }));
-      console.log('🎉 [useVehicleSubmit] Vehicle submission completed successfully');
+      if (data.status === 'draft') {
+        toast.success(t('vehicles.draftSaved', { fallback: 'Vehículo guardado como borrador. Puedes publicarlo cuando esté listo.' }));
+      } else {
+        toast.success(t('vehicles.createSuccess', { fallback: 'Vehicle created successfully' }));
+      }
       return { id: vehicleId };
     } catch (error: any) {
       console.error('❌ [useVehicleSubmit] Error submitting vehicle:', error);

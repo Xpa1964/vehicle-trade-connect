@@ -205,7 +205,7 @@ const VehicleInformationCard: React.FC<VehicleInformationCardProps> = ({
               t('vehicles.additionalInfo'),
               <FileText className="h-4 w-4 text-purple-500" />,
               [
-                { label: t('vehicles.vehicleStatusLabel'), value: vehicle.status === 'available' ? t('vehicles.statusAvailable') : vehicle.status === 'reserved' ? t('vehicles.statusReserved') : vehicle.status === 'sold' ? t('vehicles.statusSold') : vehicle.status },
+                { label: t('vehicles.vehicleStatusLabel'), value: vehicle.status === 'available' ? t('vehicles.statusAvailable') : vehicle.status === 'reserved' ? t('vehicles.statusReserved') : vehicle.status === 'sold' ? t('vehicles.statusSold') : vehicle.status === 'draft' ? t('vehicles.statusDraft', { fallback: 'Borrador' }) : vehicle.status },
                 { label: t('vehicles.ivaStatusLabel'), value: vehicle.ivaStatus === 'included' ? t('vehicles.ivaIncluded') : vehicle.ivaStatus === 'notIncluded' ? t('vehicles.ivaNotIncluded') : vehicle.ivaStatus === 'deductible' ? t('vehicles.ivaDeductible') : vehicle.ivaStatus === 'rebu' ? t('vehicles.ivaRebu') : vehicle.ivaStatus },
                 { label: t('vehicles.descriptionLabel'), value: vehicle.description }
               ]

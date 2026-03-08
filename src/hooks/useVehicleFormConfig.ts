@@ -37,7 +37,7 @@ export const defaultFormValues = {
   countryCode: 'es',
   ivaStatus: 'included' as 'included' | 'notIncluded' | 'deductible' | 'rebu',
   cocStatus: true,
-  status: 'available' as 'available' | 'reserved' | 'sold',
+  status: 'available' as 'available' | 'reserved' | 'sold' | 'draft',
   equipment: [] as string[],
   description: '',
   

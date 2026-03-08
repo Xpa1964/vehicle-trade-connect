@@ -59,13 +59,20 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
             showLoadingState={true}
           />
           
-          {/* Status overlay for sold/reserved vehicles */}
+          {/* Status overlay for sold/reserved/draft vehicles */}
           {(vehicle.status === 'sold' || vehicle.status === 'reserved') && (
             <StatusOverlay 
               status={vehicle.status as 'sold' | 'reserved'} 
               position="top-right" 
               size="md" 
             />
+          )}
+          {vehicle.status === 'draft' && (
+            <div className="absolute top-2 right-2 z-20">
+              <Badge className="bg-yellow-500/90 text-yellow-950 border-yellow-600/50 font-semibold text-xs">
+                {t('vehicles.statusDraft', { fallback: 'Borrador' })}
+              </Badge>
+            </div>
           )}
           
           {/* Badges overlay */}
