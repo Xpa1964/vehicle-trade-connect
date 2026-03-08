@@ -18,6 +18,8 @@ interface VehicleFormContentProps {
   onChange: (field: string, value: string | number) => void;
   onBrandChange: (brand: string) => void;
   availableModels: string[];
+  isLoadingModels?: boolean;
+  modelsError?: boolean;
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   previewUrl: string | null;
 }
