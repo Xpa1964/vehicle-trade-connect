@@ -99,7 +99,7 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
               className="flex-1"
               disabled={requestMutation.isPending}
             >
-              {t('common.cancel') || 'Cancel'}
+              {t('common.cancel') || 'Cancelar'}
             </Button>
             <Button 
               onClick={handleSubmit}
