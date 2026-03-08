@@ -53,11 +53,25 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
   const handleFormSubmit = async () => {
     const allFormValues = form.getValues();
     try {
+      // Ensure status is 'available' when publishing
+      allFormValues.status = 'available';
       await onSubmit(allFormValues);
       markStepCompleted(3);
     } catch (error) {
       console.error('❌ [VehicleForm] Submit error:', error);
     }
+  };
+
+  const handleSaveDraft = async () => {
+    const allFormValues = form.getValues();
+    try {
+      allFormValues.status = 'draft';
+      await onSubmit(allFormValues);
+      markStepCompleted(3);
+    } catch (error) {
+      console.error('❌ [VehicleForm] Draft save error:', error);
+    }
+  };
   };
 
   const onValidationError = (errors: any) => {
