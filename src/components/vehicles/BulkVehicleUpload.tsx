@@ -284,7 +284,7 @@ const BulkVehicleUpload: React.FC = () => {
           
           <ImageUploadZone
             onImagesSelected={handleImagesSelected}
-            maxImages={1000}
+            maxImages={25}
           />
           
           {isValidating && (

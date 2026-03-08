@@ -37,7 +37,7 @@ export const FileInputs = ({ onFileChange, onImageUpload, isUploading, showImage
     }
     
     // Check file types
-    const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'];
+    const allowedFormats = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
     const invalidFiles = Array.from(e.target.files).filter(file => !allowedFormats.includes(file.type));
     
     if (invalidFiles.length > 0) {

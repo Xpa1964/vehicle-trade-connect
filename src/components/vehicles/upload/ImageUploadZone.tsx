@@ -24,9 +24,9 @@ interface ImageUploadZoneProps {
 
 export const ImageUploadZone: React.FC<ImageUploadZoneProps> = ({
   onImagesSelected,
-  maxImages = 100,
-  maxSizePerImage = 5,
-  acceptedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+  maxImages = 25,
+  maxSizePerImage = 10,
+  acceptedFormats = ['image/jpeg', 'image/png', 'image/webp'],
 }) => {
   const { t } = useLanguage();
   const [isDragging, setIsDragging] = useState(false);
@@ -200,7 +200,7 @@ export const ImageUploadZone: React.FC<ImageUploadZoneProps> = ({
           </p>
           <p className="text-sm text-muted-foreground">
             {t('vehicles.imageFormats', {
-              fallback: `Formatos: JPG, PNG, GIF, WEBP | Máx: ${maxSizePerImage}MB por imagen`,
+              fallback: `Formatos: JPG, PNG, WEBP | Máx: ${maxSizePerImage}MB por imagen`,
             })}
           </p>
         </div>

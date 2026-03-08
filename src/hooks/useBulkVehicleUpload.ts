@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { VehicleFormData } from '@/types/vehicle';
 import { toast } from 'sonner';
 import { CSVVehicleData, downloadImageFromUrl } from '@/utils/csvParser';
+import { uploadFileSecurely } from '@/utils/secureUpload';
 
 export const useBulkVehicleUpload = () => {
   const { user } = useAuth();
@@ -21,27 +22,6 @@ export const useBulkVehicleUpload = () => {
     setProgress(0);
     
     try {
-      const bucketName = 'vehicles';
-      
-      // First check if bucket exists
-      const { data: bucketData, error: bucketError } = await supabase.storage.getBucket(bucketName);
-      
-      if (bucketError && bucketError.message.includes('not found')) {
-        console.log('Vehicles bucket not found, attempting to create it');
-        const { error: createBucketError } = await supabase.storage.createBucket(bucketName, {
-          public: true,
-          fileSizeLimit: 10485760, // 10MB in bytes
-        });
-        
-        if (createBucketError) {
-          console.error('Error creating bucket:', createBucketError);
-          toast.error("Couldn't create storage bucket. Please contact support.");
-          setIsUploading(false);
-          return;
-        }
-        console.log('Successfully created vehicles bucket');
-      }
-      
       let successCount = 0;
       
       for (let i = 0; i < vehicles.length; i++) {
@@ -109,29 +89,24 @@ export const useBulkVehicleUpload = () => {
             const image = imagesToProcess[j];
             if (!image) continue;
             
-            if (image.size > 5 * 1024 * 1024) {
+            if (image.size > 10 * 1024 * 1024) {
               console.error(`Image too large: ${(image.size/1024/1024).toFixed(2)}MB`);
-              toast.error(`Image ${j+1} is too large (max 5MB)`);
+              toast.error(`Image ${j+1} is too large (max 10MB)`);
               continue;
             }
             
             try {
-              const fileExt = image.name.split('.').pop();
-              const fileName = `${Date.now()}-${j}.${fileExt}`;
-              const filePath = `${insertedVehicle.id}/${fileName}`;
-              
-              const { error: uploadError } = await supabase.storage
-                .from(bucketName)
-                .upload(filePath, image);
+              // Upload through secure-file-upload edge function
+              const { publicUrl, error: uploadError } = await uploadFileSecurely(
+                image,
+                'vehicles',
+                insertedVehicle.id
+              );
                 
-              if (uploadError) {
+              if (uploadError || !publicUrl) {
                 console.error(`Error uploading image ${j}:`, uploadError);
                 continue;
               }
-              
-              const { data: { publicUrl } } = supabase.storage
-                .from(bucketName)
-                .getPublicUrl(filePath);
 
               const { error: imageError } = await supabase
                 .from('vehicle_images')

@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { VehicleFormData } from '@/types/vehicle';
+import { uploadFileSecurely } from '@/utils/secureUpload';
 
 export const useVehicleSubmit = () => {
   const [loading, setLoading] = useState(false);
@@ -241,22 +242,17 @@ export const useVehicleSubmit = () => {
         const file = images[index];
         try {
           console.log(`🖼️ [handleDamageImagesUpload] Processing image ${index + 1}/${images.length}:`, file.name);
-          const fileExt = file.name.split('.').pop();
-          const fileName = `damage-${Date.now()}-${index}.${fileExt}`;
-          const filePath = `${vehicleId}/damages/${fileName}`;
-          
-          const { error: uploadError } = await supabase.storage
-            .from('vehicles')
-            .upload(filePath, file);
+
+          const { publicUrl, error: uploadError } = await uploadFileSecurely(
+            file,
+            'vehicles',
+            `damages`
+          );
             
-          if (uploadError) {
+          if (uploadError || !publicUrl) {
             console.error(`❌ [handleDamageImagesUpload] Error uploading image ${index}:`, uploadError);
             continue;
           }
-          
-          const { data: { publicUrl } } = supabase.storage
-            .from('vehicles')
-            .getPublicUrl(filePath);
           
           console.log(`✅ [handleDamageImagesUpload] Image ${index} uploaded:`, publicUrl);
           
@@ -296,24 +292,18 @@ export const useVehicleSubmit = () => {
       const imagePromises = filesArray.map(async (file, index) => {
         try {
           console.log(`🖼️ [handleImageUploads] Processing image ${index + 1}/${images.length}:`, file.name);
-          const fileExt = file.name.split('.').pop();
-          const fileName = `${Date.now()}-${index}.${fileExt}`;
-          const filePath = `${vehicleId}/${fileName}`;
-          
-          // Upload the file to storage
-          const { error: uploadError } = await supabase.storage
-            .from('vehicles')
-            .upload(filePath, file);
+
+          // Upload through secure-file-upload edge function
+          const { publicUrl, error: uploadError } = await uploadFileSecurely(
+            file,
+            'vehicles',
+            vehicleId
+          );
             
-          if (uploadError) {
+          if (uploadError || !publicUrl) {
             console.error(`❌ [handleImageUploads] Error uploading image ${index}:`, uploadError);
             return null;
           }
-          
-          // Get the public URL
-          const { data: { publicUrl } } = supabase.storage
-            .from('vehicles')
-            .getPublicUrl(filePath);
           
           console.log(`✅ [handleImageUploads] Image ${index} uploaded successfully:`, publicUrl);
           
