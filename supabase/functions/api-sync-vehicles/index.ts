@@ -136,7 +136,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
     );
   }
 
-  console.log(`📦 Inventory sync: ${vehicles.length} vehicles from partner ${userId}`);
+  // Inventory sync started
 
   // 1) Generate sync timestamp
   const syncTimestamp = new Date().toISOString();
