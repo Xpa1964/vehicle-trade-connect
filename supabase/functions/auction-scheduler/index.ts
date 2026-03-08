@@ -71,7 +71,7 @@ async function logStateTransition(
     });
 
   if (error) {
-    console.error(`❌ Error logging transition for auction ${auctionId}:`, error);
+    console.error(`Error logging transition for auction ${auctionId}:`, error);
   }
 }
 
@@ -103,7 +103,7 @@ const handler = async (req: Request): Promise<Response> => {
   };
 
   try {
-    console.log('🕐 Auction scheduler starting at:', response.timestamp);
+    // Scheduler run starts
     const now = new Date().toISOString();
 
     // ============================================
@@ -118,10 +118,9 @@ const handler = async (req: Request): Promise<Response> => {
       .order('start_date', { ascending: true });
 
     if (scheduledError) {
-      console.error('❌ Error fetching scheduled auctions:', scheduledError);
+      console.error('Error fetching scheduled auctions:', scheduledError);
       response.errors.push(`scheduled_fetch: ${scheduledError.message}`);
     } else if (scheduledAuctions && scheduledAuctions.length > 0) {
-      console.log(`📅 Found ${scheduledAuctions.length} auctions to activate`);
       
       for (const auction of scheduledAuctions) {
         const { error: updateError } = await supabase
@@ -134,7 +133,7 @@ const handler = async (req: Request): Promise<Response> => {
           .eq('status', 'scheduled'); // Doble verificación para evitar race conditions
 
         if (updateError) {
-          console.error(`❌ Error activating auction ${auction.id}:`, updateError);
+          console.error(`Error activating auction ${auction.id}:`, updateError);
           response.errors.push(`activate_${auction.id}: ${updateError.message}`);
           continue;
         }
@@ -158,7 +157,7 @@ const handler = async (req: Request): Promise<Response> => {
         );
 
         response.activated++;
-        console.log(`✅ Activated auction ${auction.id}`);
+        response.activated++;
       }
     }
 
@@ -174,10 +173,9 @@ const handler = async (req: Request): Promise<Response> => {
       .order('end_date', { ascending: true });
 
     if (expiredError) {
-      console.error('❌ Error fetching expired auctions:', expiredError);
+      console.error('Error fetching expired auctions:', expiredError);
       response.errors.push(`expired_fetch: ${expiredError.message}`);
     } else if (expiredAuctions && expiredAuctions.length > 0) {
-      console.log(`⏰ Found ${expiredAuctions.length} auctions to end`);
       
       for (const auction of expiredAuctions) {
         // Obtener la puja más alta
@@ -203,7 +201,7 @@ const handler = async (req: Request): Promise<Response> => {
           .eq('status', 'active');
 
         if (updateError) {
-          console.error(`❌ Error ending auction ${auction.id}:`, updateError);
+          console.error(`Error ending auction ${auction.id}:`, updateError);
           response.errors.push(`end_${auction.id}: ${updateError.message}`);
           continue;
         }
@@ -257,10 +255,9 @@ const handler = async (req: Request): Promise<Response> => {
       .not('winner_id', 'is', null);
 
     if (acceptedError) {
-      console.error('❌ Error fetching accepted auctions:', acceptedError);
+      console.error('Error fetching accepted auctions:', acceptedError);
       response.errors.push(`accepted_fetch: ${acceptedError.message}`);
     } else if (acceptedAuctions && acceptedAuctions.length > 0) {
-      console.log(`📧 Found ${acceptedAuctions.length} auctions to share contacts`);
       
       for (const auction of acceptedAuctions) {
         // Marcar que el contacto ha sido compartido
@@ -275,7 +272,7 @@ const handler = async (req: Request): Promise<Response> => {
           .eq('status', 'accepted');
 
         if (updateError) {
-          console.error(`❌ Error sharing contact for auction ${auction.id}:`, updateError);
+          console.error(`Error sharing contact for auction ${auction.id}:`, updateError);
           response.errors.push(`contact_${auction.id}: ${updateError.message}`);
           continue;
         }
@@ -313,17 +310,14 @@ const handler = async (req: Request): Promise<Response> => {
           
           if (!emailResponse.ok) {
             const errorData = await emailResponse.json();
-            console.error(`❌ Error sending contact emails for auction ${auction.id}:`, errorData);
-          } else {
-            console.log(`📧 Contact emails sent for auction ${auction.id}`);
+            console.error(`Error sending contact emails for auction ${auction.id}:`, errorData);
           }
         } catch (emailError) {
-          console.error(`❌ Failed to call contact email function for auction ${auction.id}:`, emailError);
+          console.error(`Failed to call contact email function for auction ${auction.id}:`, emailError);
           // No bloqueamos la transición por error de email
         }
 
         response.contact_shared++;
-        console.log(`✅ Contact shared for auction ${auction.id}`);
       }
     }
 
@@ -339,10 +333,9 @@ const handler = async (req: Request): Promise<Response> => {
       .is('closed_at', null);
 
     if (sharedError) {
-      console.error('❌ Error fetching contact_shared auctions:', sharedError);
+      console.error('Error fetching contact_shared auctions:', sharedError);
       response.errors.push(`shared_fetch: ${sharedError.message}`);
     } else if (sharedAuctions && sharedAuctions.length > 0) {
-      console.log(`🔒 Found ${sharedAuctions.length} auctions to close`);
       
       for (const auction of sharedAuctions) {
         const { error: updateError } = await supabase
@@ -356,7 +349,7 @@ const handler = async (req: Request): Promise<Response> => {
           .eq('status', 'contact_shared');
 
         if (updateError) {
-          console.error(`❌ Error closing auction ${auction.id}:`, updateError);
+          console.error(`Error closing auction ${auction.id}:`, updateError);
           response.errors.push(`close_${auction.id}: ${updateError.message}`);
           continue;
         }
@@ -375,7 +368,6 @@ const handler = async (req: Request): Promise<Response> => {
         );
 
         response.closed++;
-        console.log(`✅ Closed auction ${auction.id}`);
       }
     }
 
@@ -390,7 +382,7 @@ const handler = async (req: Request): Promise<Response> => {
       .is('closed_at', null);
 
     if (!rejectedError && rejectedAuctions && rejectedAuctions.length > 0) {
-      console.log(`❌ Found ${rejectedAuctions.length} rejected auctions to close`);
+      if (!rejectedError && rejectedAuctions && rejectedAuctions.length > 0) {
       
       for (const auction of rejectedAuctions) {
         const { error: updateError } = await supabase
@@ -426,11 +418,11 @@ const handler = async (req: Request): Promise<Response> => {
         );
 
         response.closed++;
-        console.log(`✅ Closed rejected auction ${auction.id}`);
+        response.closed++;
       }
     }
 
-    console.log(`🎯 Scheduler completed: ${response.activated} activated, ${response.ended} ended, ${response.contact_shared} contact shared, ${response.closed} closed`);
+    // Response JSON carries all metrics
 
     return new Response(JSON.stringify(response), {
       status: 200,
@@ -439,7 +431,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('❌ Error in auction scheduler:', errorMessage);
+    console.error('Fatal error in auction scheduler:', errorMessage);
     
     return new Response(
       JSON.stringify({ 
