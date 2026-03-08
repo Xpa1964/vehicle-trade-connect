@@ -68,7 +68,7 @@ serve(async (req) => {
 
     const userId = validationResult.user_id;
     const apiKeyId = validationResult.key_id;
-    console.log(`✅ API key validated for user: ${userId}, Requests remaining: ${validationResult.requests_remaining}`);
+    // API key validated successfully
 
     // Handle different methods
     if (req.method === 'POST') {
