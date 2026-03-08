@@ -23,8 +23,10 @@ export const getExchangesChangeRate = async (): Promise<number> => {
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
     
     const { count, error } = await supabase
-      .from('exchanges')
+      .from('vehicles')
       .select('*', { count: 'exact', head: true })
+      .eq('accepts_exchange', true)
+      .eq('status', 'available')
       .gte('created_at', oneMonthAgo.toISOString());
       
     if (error) throw error;
