@@ -125,6 +125,9 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
                   form={form}
                   onChange={onChange}
                   onBrandChange={onBrandChange}
+                  availableModels={availableModels}
+                  isLoadingModels={isLoadingModels}
+                  modelsError={modelsError}
                 />
               )}
 
