@@ -68,7 +68,7 @@ serve(async (req) => {
 
     const userId = validationResult.user_id;
     const apiKeyId = validationResult.key_id;
-    console.log(`✅ API key validated for user: ${userId}, Requests remaining: ${validationResult.requests_remaining}`);
+    // API key validated successfully
 
     // Handle different methods
     if (req.method === 'POST') {
@@ -136,7 +136,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
     );
   }
 
-  console.log(`📦 Inventory sync: ${vehicles.length} vehicles from partner ${userId}`);
+  // Inventory sync started
 
   // 1) Generate sync timestamp
   const syncTimestamp = new Date().toISOString();
@@ -211,7 +211,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
         if (updateError) throw updateError;
         vehicleId = existingVehicle.id;
         results.updated++;
-        console.log(`✅ Updated vehicle ${external_id}`);
+        // Vehicle updated
       } else {
         // Insert new vehicle
         const { data: newVehicle, error: insertError } = await supabase
@@ -223,7 +223,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
         if (insertError) throw insertError;
         vehicleId = newVehicle.id;
         results.created++;
-        console.log(`✅ Created vehicle ${external_id}`);
+        // Vehicle created
       }
 
       // Handle images if provided (limit 25)
@@ -232,7 +232,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
         const imagesToProcess = images.slice(0, MAX_IMAGES);
         
         if (images.length > MAX_IMAGES) {
-          console.warn(`Vehicle ${external_id}: Limited to ${MAX_IMAGES} images (received ${images.length})`);
+          // Images limited to MAX_IMAGES
         }
         
         await processImages(supabase, vehicleId, imagesToProcess);
@@ -262,7 +262,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
     } else {
       results.deactivated = deactivated?.length || 0;
       if (results.deactivated > 0) {
-        console.log(`🔻 Deactivated ${results.deactivated} vehicles no longer in partner inventory`);
+        // Vehicles deactivated
       }
     }
   } catch (error: unknown) {
@@ -296,13 +296,13 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
         p_link: '/api-management',
         p_subject: 'Sincronización API con errores'
       });
-      console.log(`🔔 Error notification sent to user ${userId}`);
+      // Error notification sent
     } catch (notifError: unknown) {
       console.error('Failed to send error notification:', notifError instanceof Error ? notifError.message : String(notifError));
     }
   }
 
-  console.log(`📊 Sync complete: created=${results.created}, updated=${results.updated}, deactivated=${results.deactivated}, errors=${results.errors.length}`);
+  // Sync complete
 
   return new Response(
     JSON.stringify({
@@ -343,7 +343,7 @@ async function handleDelete(req: Request, supabase: any, userId: string) {
     );
   }
 
-  console.log(`🔻 Deactivated vehicle ${externalId}`);
+  // Vehicle deactivated
 
   return new Response(
     JSON.stringify({ success: true, message: 'Vehicle deactivated successfully' }),
@@ -517,7 +517,7 @@ function normalizeStatus(status: string | undefined): string {
 }
 
 async function processImages(supabase: any, vehicleId: string, imageUrls: string[]) {
-  console.log(`🖼️ Processing ${imageUrls.length} images for vehicle ${vehicleId}`);
+  // Processing images for vehicle
 
   // Delete previous API-sourced images (DB records only, not storage files)
   const { error: deleteError } = await supabase
@@ -529,7 +529,7 @@ async function processImages(supabase: any, vehicleId: string, imageUrls: string
   if (deleteError) {
     console.error('Error deleting previous API images:', deleteError);
   } else {
-    console.log(`🗑️ Cleaned previous API images for vehicle ${vehicleId}`);
+    // Cleaned previous API images
   }
 
   for (let i = 0; i < imageUrls.length; i++) {
@@ -582,7 +582,7 @@ async function processImages(supabase: any, vehicleId: string, imageUrls: string
           .eq('id', vehicleId);
       }
 
-      console.log(`✅ Processed image ${i + 1}/${imageUrls.length}`);
+      // Image processed
     } catch (error) {
       console.error(`Error processing image ${i}:`, error);
     }

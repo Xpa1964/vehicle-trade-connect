@@ -28,7 +28,7 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
 
   const handleSubmit = async () => {
     if (!keyName.trim()) {
-      toast.error(t('api.request.nameRequired') || 'Please enter a key name');
+      toast.error(t('api.request.nameRequired') || 'Introduce un nombre para la key');
       return;
     }
 
@@ -48,35 +48,35 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t('api.request.title') || 'Request New API Key'}</DialogTitle>
+          <DialogTitle>{t('api.request.title') || 'Solicitar nueva API key'}</DialogTitle>
           <DialogDescription>
-            {t('api.request.description') || 'Submit a request to get a new API key. An administrator will review your request.'}
+            {t('api.request.description') || 'Envía una solicitud para obtener una nueva API key. Un administrador revisará tu solicitud.'}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="keyName">
-              {t('api.request.keyName') || 'Key Name'} <span className="text-red-500">*</span>
+              {t('api.request.keyName') || 'Nombre de la key'} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="keyName"
               value={keyName}
               onChange={(e) => setKeyName(e.target.value)}
-              placeholder={t('api.request.keyNamePlaceholder') || 'e.g., Production API'}
+              placeholder={t('api.request.keyNamePlaceholder') || 'Ej: API Producción'}
               maxLength={50}
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="reason">
-              {t('api.request.reason') || 'Reason (Optional)'}
+              {t('api.request.reason') || 'Motivo (opcional)'}
             </Label>
             <Textarea
               id="reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder={t('api.request.reasonPlaceholder') || 'Tell us why you need this API key...'}
+              placeholder={t('api.request.reasonPlaceholder') || 'Cuéntanos para qué necesitas esta API key...'}
               rows={4}
               maxLength={500}
             />
@@ -87,8 +87,8 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
 
           <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
             <p className="text-sm text-blue-800 dark:text-blue-200">
-              <strong>{t('api.request.infoTitle') || 'Important'}:</strong>{' '}
-              {t('api.request.infoMessage') || 'Your request will be reviewed by an administrator. You will be notified once approved.'}
+              <strong>{t('api.request.infoTitle') || 'Importante'}:</strong>{' '}
+              {t('api.request.infoMessage') || 'Tu solicitud será revisada por un administrador antes de activarse. Recibirás una notificación por email.'}
             </p>
           </div>
 
@@ -99,7 +99,7 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
               className="flex-1"
               disabled={requestMutation.isPending}
             >
-              {t('common.cancel') || 'Cancel'}
+              {t('common.cancel') || 'Cancelar'}
             </Button>
             <Button 
               onClick={handleSubmit}
@@ -107,8 +107,8 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
               className="flex-1"
             >
               {requestMutation.isPending 
-                ? (t('api.request.submitting') || 'Submitting...') 
-                : (t('api.request.submit') || 'Submit Request')}
+                ? (t('api.request.submitting') || 'Enviando...') 
+                : (t('api.request.submit') || 'Enviar solicitud')}
             </Button>
           </div>
         </div>

@@ -31,9 +31,9 @@ const APIManagement: React.FC = () => {
       <div className="container mx-auto px-4 py-8">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Acceso Denegado</AlertTitle>
+          <AlertTitle>{t('admin.accessDenied')}</AlertTitle>
           <AlertDescription>
-            No tienes permiso para acceder a la gestión de APIs.
+            {t('admin.apiAccessDenied')}
           </AlertDescription>
         </Alert>
       </div>
@@ -49,7 +49,7 @@ const APIManagement: React.FC = () => {
         className="mb-4"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Volver al Panel de Control
+        {t('navigation.backToDashboard')}
       </Button>
 
       <div className="mb-8">
