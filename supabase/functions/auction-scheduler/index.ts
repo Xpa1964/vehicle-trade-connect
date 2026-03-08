@@ -318,7 +318,6 @@ const handler = async (req: Request): Promise<Response> => {
         }
 
         response.contact_shared++;
-        console.log(`✅ Contact shared for auction ${auction.id}`);
       }
     }
 
