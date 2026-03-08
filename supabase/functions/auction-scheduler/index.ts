@@ -333,10 +333,9 @@ const handler = async (req: Request): Promise<Response> => {
       .is('closed_at', null);
 
     if (sharedError) {
-      console.error('❌ Error fetching contact_shared auctions:', sharedError);
+      console.error('Error fetching contact_shared auctions:', sharedError);
       response.errors.push(`shared_fetch: ${sharedError.message}`);
     } else if (sharedAuctions && sharedAuctions.length > 0) {
-      console.log(`🔒 Found ${sharedAuctions.length} auctions to close`);
       
       for (const auction of sharedAuctions) {
         const { error: updateError } = await supabase
