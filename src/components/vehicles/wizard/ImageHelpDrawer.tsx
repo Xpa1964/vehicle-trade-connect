@@ -119,8 +119,8 @@ const ImageHelpDrawer: React.FC<ImageHelpDrawerProps> = ({ open, onOpenChange })
               </div>
             </div>
 
-            <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
-              <p className="text-xs text-amber-800 dark:text-amber-200">
+            <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-3">
+              <p className="text-xs text-destructive">
                 <AlertTriangle className="inline h-3.5 w-3.5 mr-1" />
                 {t('vehicles.imageHelp.bulk.noPatternWarning')}
               </p>
