@@ -9,7 +9,7 @@ import { WizardStepIndicator } from '../wizard/WizardStepIndicator';
 import { Step1VinIdentification } from '../wizard/Step1VinIdentification';
 import { Step2TechnicalDetails } from '../wizard/Step2TechnicalDetails';
 import { Step3MediaPrice } from '../wizard/Step3MediaPrice';
-import { ChevronLeft, ChevronRight, Upload, Save } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Upload, Save, FileEdit } from 'lucide-react';
 
 interface VehicleFormContentProps {
   form: UseFormReturn<VehicleFormData>;
