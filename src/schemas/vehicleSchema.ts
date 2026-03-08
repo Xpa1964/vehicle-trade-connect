@@ -60,7 +60,7 @@ export const vehicleSchema = z.object({
   
   // Arrays
   images: z.array(z.string().url({ message: 'validation.invalidImageUrl' }))
-    .max(20, { message: 'validation.tooManyImages' })
+    .max(25, { message: 'validation.tooManyImages' })
     .optional(),
   
   videos: z.array(z.string().url({ message: 'validation.invalidVideoUrl' }))
