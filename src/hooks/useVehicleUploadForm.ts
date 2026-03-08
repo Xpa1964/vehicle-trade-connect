@@ -1,7 +1,8 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useVehicleForm } from './useVehicleForm';
 import { useVehicleEdit } from './useVehicleEdit';
+import { useVehicleFilterData } from './useVehicleFilterData';
 import { VehicleFormData } from '@/types/vehicle';
 
 interface UseVehicleUploadFormProps {
@@ -11,10 +12,13 @@ interface UseVehicleUploadFormProps {
 export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [isLoadingModels, setIsLoadingModels] = useState(false);
+  const [modelsError, setModelsError] = useState(false);
   
   // Always call both hooks (React rules of hooks - no conditional calls)
   const createForm = useVehicleForm();
   const editForm = useVehicleEdit(vehicleId);
+  const { getModelsForBrand } = useVehicleFilterData();
   
   // Select the appropriate form based on vehicleId
   const formHook = vehicleId ? editForm : createForm;
@@ -32,9 +36,21 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
     }
   };
 
-  const handleBrandChange = (brand: string) => {
+  const handleBrandChange = useCallback((brand: string) => {
     setAvailableModels([]);
-  };
+    setModelsError(false);
+    setIsLoadingModels(true);
+    
+    try {
+      const models = getModelsForBrand(brand);
+      setAvailableModels(models);
+    } catch (error) {
+      console.error('[VehicleUploadForm] Error loading models:', error);
+      setModelsError(true);
+    } finally {
+      setIsLoadingModels(false);
+    }
+  }, [getModelsForBrand]);
 
   const handleFormChange = (field: string, value: string | number) => {
     
