@@ -63,6 +63,14 @@ export const useVehicleSubmit = () => {
         engine_power: data.enginePower,
         color: data.color,
         doors: data.doors,
+
+        // Emissions & commission fields
+        euro_standard: data.euroStandard || null,
+        co2_emissions: data.co2Emissions || null,
+        commission_sale: data.commissionSale || false,
+        public_sale_price: data.publicSalePrice || null,
+        commission_amount: data.commissionAmount || null,
+        commission_query: data.commissionQuery || null,
       };
 
       console.log('📝 [useVehicleSubmit] Vehicle data to insert:', vehicleData);
