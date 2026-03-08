@@ -49,7 +49,7 @@ const APIManagement: React.FC = () => {
         className="mb-4"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Volver al Panel de Control
+        {t('navigation.backToDashboard')}
       </Button>
 
       <div className="mb-8">

@@ -100,4 +100,6 @@ export default {
   'common.user': 'Usuario',
   'common.owner': 'Propietario',
   'common.goBack': 'Volver',
+  'admin.accessDenied': 'Acceso Denegado',
+  'admin.apiAccessDenied': 'No tienes permiso para acceder a la gestión de APIs.',
 };

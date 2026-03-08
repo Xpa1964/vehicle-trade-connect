@@ -78,4 +78,6 @@ export default {
   'common.brandSuffix': 'AUTOMOTIVE',
   'common.user': 'User',
   'common.owner': 'Owner',
+  'admin.accessDenied': 'Access Denied',
+  'admin.apiAccessDenied': 'You do not have permission to access API management.',
 };
