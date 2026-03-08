@@ -255,6 +255,23 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
     }
   });
 
+  // Send notification to API key owner if there were errors
+  if (results.errors.length > 0) {
+    try {
+      await supabase.rpc('create_system_notification', {
+        p_user_id: userId,
+        p_title: 'Sincronización API completada con errores',
+        p_message: `Sincronización API completada con errores: ${results.errors.length} vehículo(s) no pudieron procesarse. Revisa el historial de sincronización para más detalles.`,
+        p_type: 'warning',
+        p_link: '/api-management',
+        p_subject: 'Sincronización API con errores'
+      });
+      console.log(`🔔 Error notification sent to user ${userId}`);
+    } catch (notifError: unknown) {
+      console.error('Failed to send error notification:', notifError instanceof Error ? notifError.message : String(notifError));
+    }
+  }
+
   console.log(`📊 Sync complete: created=${results.created}, updated=${results.updated}, deactivated=${results.deactivated}, errors=${results.errors.length}`);
 
   return new Response(
