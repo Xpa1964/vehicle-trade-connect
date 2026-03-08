@@ -255,10 +255,9 @@ const handler = async (req: Request): Promise<Response> => {
       .not('winner_id', 'is', null);
 
     if (acceptedError) {
-      console.error('❌ Error fetching accepted auctions:', acceptedError);
+      console.error('Error fetching accepted auctions:', acceptedError);
       response.errors.push(`accepted_fetch: ${acceptedError.message}`);
     } else if (acceptedAuctions && acceptedAuctions.length > 0) {
-      console.log(`📧 Found ${acceptedAuctions.length} auctions to share contacts`);
       
       for (const auction of acceptedAuctions) {
         // Marcar que el contacto ha sido compartido
