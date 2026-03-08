@@ -74,6 +74,7 @@ const APIManagement: React.FC = () => {
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 md:py-8">
         <div className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-6">
           <div className="space-y-8">
+            <APISyncStatusBanner />
             <APIDocumentation />
             <APIIntegrationSection />
           </div>

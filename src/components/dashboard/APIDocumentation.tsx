@@ -354,6 +354,7 @@ const APIDocumentation: React.FC = () => {
   "warranty": true,
   "equipment": ["GPS", "Leather seats", "Parking sensors"],
   "interior_color": "Negro",
+  "commission_sale": false,
   
   // Campos Opcionales - Normalizados (ver pestaña Normalización)
   "status": "available",
