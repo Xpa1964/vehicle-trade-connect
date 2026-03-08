@@ -107,8 +107,8 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
               className="flex-1"
             >
               {requestMutation.isPending 
-                ? (t('api.request.submitting') || 'Submitting...') 
-                : (t('api.request.submit') || 'Submit Request')}
+                ? (t('api.request.submitting') || 'Enviando...') 
+                : (t('api.request.submit') || 'Enviar solicitud')}
             </Button>
           </div>
         </div>
