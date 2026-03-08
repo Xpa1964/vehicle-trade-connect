@@ -85,7 +85,7 @@ const ProfilePage: React.FC = () => {
       }
 
       // For external profiles (including imported IDs), use secure backend function
-      const { data: publicProfile, error: publicError } = await supabase
+      const { data: publicProfile, error: publicError } = await (supabase as any)
         .rpc('get_public_profile_by_identifier', { p_identifier: id });
 
       if (publicError) {
