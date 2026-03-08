@@ -517,7 +517,7 @@ function normalizeStatus(status: string | undefined): string {
 }
 
 async function processImages(supabase: any, vehicleId: string, imageUrls: string[]) {
-  console.log(`🖼️ Processing ${imageUrls.length} images for vehicle ${vehicleId}`);
+  // Processing images for vehicle
 
   // Delete previous API-sourced images (DB records only, not storage files)
   const { error: deleteError } = await supabase
