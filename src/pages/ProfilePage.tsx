@@ -178,7 +178,8 @@ const ProfilePage: React.FC = () => {
         <Alert className="max-w-md mx-auto bg-card border-border">
           <Info className="h-4 w-4" />
           <AlertDescription className="text-foreground">
-            Perfil no encontrado para el ID: {id}. <Button variant="link" onClick={() => navigate('/users')} className="p-0 h-auto text-primary">Ver directorio de usuarios</Button>
+            Este usuario aún no tiene un perfil creado en la plataforma. Es posible que el enlace provenga de otra fuente.{' '}
+            <Button variant="link" onClick={() => navigate('/users')} className="p-0 h-auto text-primary">Ver directorio de usuarios</Button>
           </AlertDescription>
         </Alert>
       </div>
