@@ -214,6 +214,27 @@ const MyVehicles: React.FC = () => {
                   isPending={markVehicleStatus.isPending}
                 />
               )}
+              {vehicle.status === 'draft' && (
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => navigate(`/vehicle/${vehicle.id}/edit`)}
+                    className="flex-1"
+                  >
+                    {t('common.edit', { fallback: 'Editar' })}
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => markVehicleStatus.mutate({ vehicleId: vehicle.id, status: 'available' })}
+                    disabled={markVehicleStatus.isPending}
+                    className="flex-1"
+                  >
+                    <Upload className="h-4 w-4 mr-1" />
+                    {t('vehicles.publishVehicle', { fallback: 'Publicar' })}
+                  </Button>
+                </div>
+              )}
             </div>
           ))}
         </div>
