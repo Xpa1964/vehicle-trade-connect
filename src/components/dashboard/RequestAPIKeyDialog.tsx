@@ -76,7 +76,7 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
               id="reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder={t('api.request.reasonPlaceholder') || 'Tell us why you need this API key...'}
+              placeholder={t('api.request.reasonPlaceholder') || 'Cuéntanos para qué necesitas esta API key...'}
               rows={4}
               maxLength={500}
             />
