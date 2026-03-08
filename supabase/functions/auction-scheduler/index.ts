@@ -157,7 +157,7 @@ const handler = async (req: Request): Promise<Response> => {
         );
 
         response.activated++;
-        console.log(`✅ Activated auction ${auction.id}`);
+        response.activated++;
       }
     }
 
