@@ -42,93 +42,59 @@ const ProfilePage: React.FC = () => {
     );
   }
 
-  const isOwnProfile = user?.id === id;
+  const isOwnProfileByRoute = user?.id === id;
   
   console.log('🔍 ProfilePage Ownership Check:', {
     currentUserId: user?.id,
     profileUserId: id,
-    isOwnProfile,
+    isOwnProfileByRoute,
     route: `/user/${id}`
   });
 
   // Query optimizada para obtener el perfil
   const { data: profile, isLoading, error, refetch } = useQuery({
-    queryKey: ['profile', id],
+    queryKey: ['profile', id, user?.id],
     queryFn: async () => {
       console.log('🔍 Fetching profile for ID:', id);
-      
-      // Try by primary id first, then by user_id
-      let { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle();
-      
-      if (!data && !error) {
-        const result = await supabase
+
+      // If this is own profile route, fetch full profile through standard RLS path
+      if (user?.id === id) {
+        let { data, error } = await supabase
           .from('profiles')
           .select('*')
           .eq('user_id', id)
           .maybeSingle();
-        data = result.data;
-        error = result.error;
+
+        if (!data && !error) {
+          const byProfileId = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', id)
+            .maybeSingle();
+          data = byProfileId.data;
+          error = byProfileId.error;
+        }
+
+        if (error) {
+          console.error('Error fetching own profile:', error);
+          throw error;
+        }
+
+        console.log('🔍 Own profile data received:', data);
+        return data;
       }
 
-      // If still no profile, try to build a basic one from vehicles table
-      // (handles users imported/referenced from other projects)
-      if (!data && !error) {
-        const { data: vehicleData } = await supabase
-          .from('vehicles')
-          .select('seller_id, seller_city, seller_country')
-          .eq('seller_id', id)
-          .limit(1)
-          .maybeSingle();
-        
-        if (vehicleData) {
-          // Return a synthetic profile so the page renders
-          data = {
-            id: id,
-            user_id: id,
-            company_name: null,
-            full_name: null,
-            email: null,
-            phone: null,
-            country: vehicleData.seller_country || null,
-            city: vehicleData.seller_city || null,
-            business_type: null,
-            trader_type: null,
-            bio: null,
-            avatar_url: null,
-            company_logo: null,
-            contact_name: null,
-            contact_phone: null,
-            address: null,
-            postal_code: null,
-            province: null,
-            tax_id: null,
-            website: null,
-            rating: null,
-            verified: false,
-            total_operations: 0,
-            operations_breakdown: null,
-            show_business_stats: false,
-            show_contact_details: false,
-            show_location_details: false,
-            registration_date: null,
-            created_at: null,
-            updated_at: null,
-          } as any;
-          console.log('🔍 Built synthetic profile from vehicles data for:', id);
-        }
+      // For external profiles (including imported IDs), use secure backend function
+      const { data: publicProfile, error: publicError } = await supabase
+        .rpc('get_public_profile_by_identifier', { p_identifier: id });
+
+      if (publicError) {
+        console.error('Error fetching public profile:', publicError);
+        throw publicError;
       }
-        
-      if (error) {
-        console.error('Error fetching profile:', error);
-        throw error;
-      }
-      
-      console.log('🔍 Profile data received:', data);
-      return data;
+
+      console.log('🔍 Public profile data received:', publicProfile);
+      return publicProfile as any;
     },
     enabled: !!id,
     retry: 1,
@@ -136,9 +102,12 @@ const ProfilePage: React.FC = () => {
     gcTime: 5 * 60 * 1000
   });
 
-  // Obtener ratings del usuario
-  const { ratings, ratingSummary, ratingsLoading } = useRatings(id);
-  const userRating = getUserRating(id);
+  const profileOwnerId = profile?.user_id || profile?.id || id;
+  const isOwnProfile = !!user?.id && !!profileOwnerId && user.id === profileOwnerId;
+
+  // Obtener ratings del usuario (siempre contra user_id real)
+  const { ratings, ratingSummary, ratingsLoading } = useRatings(profileOwnerId);
+  const userRating = getUserRating(profileOwnerId);
 
   console.log('⭐ ProfilePage - ratingSummary:', ratingSummary);
   console.log('🔍 ProfilePage - profile data:', profile);
