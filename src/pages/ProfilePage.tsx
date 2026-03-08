@@ -238,7 +238,7 @@ const ProfilePage: React.FC = () => {
           {/* Profile Summary */}
           <div className="lg:col-span-1">
             <ProfileSummary
-              profileData={profile}
+              profileData={publicProfileData}
               userRating={userRating}
               isCurrentUser={isOwnProfile}
               onContact={handleContact}
@@ -252,7 +252,7 @@ const ProfilePage: React.FC = () => {
             <ProfileTabs
               user={user}
               isCurrentUser={isOwnProfile}
-              profileData={profile}
+              profileData={publicProfileData}
               userRating={{ ratings }}
               onRatingSubmit={handleRatingSubmitted}
               onProfileUpdate={refetch}
