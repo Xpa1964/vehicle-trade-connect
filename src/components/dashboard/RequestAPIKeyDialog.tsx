@@ -28,7 +28,7 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
 
   const handleSubmit = async () => {
     if (!keyName.trim()) {
-      toast.error(t('api.request.nameRequired') || 'Please enter a key name');
+      toast.error(t('api.request.nameRequired') || 'Introduce un nombre para la key');
       return;
     }
 

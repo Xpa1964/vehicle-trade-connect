@@ -582,7 +582,7 @@ async function processImages(supabase: any, vehicleId: string, imageUrls: string
           .eq('id', vehicleId);
       }
 
-      console.log(`✅ Processed image ${i + 1}/${imageUrls.length}`);
+      // Image processed
     } catch (error) {
       console.error(`Error processing image ${i}:`, error);
     }
