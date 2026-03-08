@@ -37,6 +37,9 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
   form,
   onChange,
   onBrandChange,
+  availableModels = [],
+  isLoadingModels = false,
+  modelsError = false,
 }) => {
   const { t } = useLanguage();
   const [vinStatus, setVinStatus] = useState<'idle' | 'decoded' | 'not-found'>('idle');
