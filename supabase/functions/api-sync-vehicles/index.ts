@@ -83,6 +83,36 @@ serve(async (req) => {
     }
   } catch (error: unknown) {
     console.error('Error in api-sync-vehicles:', error);
+    
+    // Try to notify user of complete failure (best-effort)
+    try {
+      const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+      const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+      const apiKey = req.headers.get('x-api-key');
+      if (apiKey) {
+        const failSupabase = createClient(supabaseUrl, supabaseKey);
+        const { data: keyData } = await failSupabase
+          .from('partner_api_keys')
+          .select('user_id')
+          .eq('api_key', apiKey)
+          .eq('is_active', true)
+          .maybeSingle();
+        
+        if (keyData?.user_id) {
+          await failSupabase.rpc('create_system_notification', {
+            p_user_id: keyData.user_id,
+            p_title: 'La sincronización API falló',
+            p_message: 'La sincronización API falló. Comprueba tu conexión y los datos enviados, o contacta con soporte si el problema persiste.',
+            p_type: 'error',
+            p_link: '/api-management',
+            p_subject: 'Error en sincronización API'
+          });
+        }
+      }
+    } catch (notifErr: unknown) {
+      console.error('Failed to send failure notification:', notifErr instanceof Error ? notifErr.message : String(notifErr));
+    }
+
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : String(error) }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
