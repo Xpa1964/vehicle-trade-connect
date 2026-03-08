@@ -4,8 +4,10 @@ import { supabase } from '@/integrations/supabase/client';
 export const getExchangesCount = async (): Promise<number> => {
   try {
     const { count, error } = await supabase
-      .from('exchanges')
-      .select('*', { count: 'exact', head: true });
+      .from('vehicles')
+      .select('*', { count: 'exact', head: true })
+      .eq('accepts_exchange', true)
+      .eq('status', 'available');
       
     if (error) throw error;
     return count || 0;
@@ -21,8 +23,10 @@ export const getExchangesChangeRate = async (): Promise<number> => {
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
     
     const { count, error } = await supabase
-      .from('exchanges')
+      .from('vehicles')
       .select('*', { count: 'exact', head: true })
+      .eq('accepts_exchange', true)
+      .eq('status', 'available')
       .gte('created_at', oneMonthAgo.toISOString());
       
     if (error) throw error;

@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
       description: 'Revisar y aprobar solicitudes de registro',
       icon: <FileText className="h-5 w-5" />,
       href: '/admin/registration-requests',
-      permission: 'registrations.manage' as Permission,
+      permission: 'users.view' as Permission,
       badge: pendingRequestsCount ? pendingRequestsCount : undefined,
       color: 'bg-[#22C55E]/10 border-[#22C55E]/30',
     },
