@@ -502,7 +502,7 @@ async function processImages(supabase: any, vehicleId: string, imageUrls: string
 
       // Upload to Supabase Storage
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('Vehicles Images')
+        .from('vehicles')
         .upload(fileName, imageBlob, {
           contentType: imageBlob.type || 'image/jpeg',
           upsert: false
