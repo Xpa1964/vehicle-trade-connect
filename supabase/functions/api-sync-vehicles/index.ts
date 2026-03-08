@@ -302,7 +302,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
     }
   }
 
-  console.log(`📊 Sync complete: created=${results.created}, updated=${results.updated}, deactivated=${results.deactivated}, errors=${results.errors.length}`);
+  // Sync complete
 
   return new Response(
     JSON.stringify({
