@@ -173,10 +173,9 @@ const handler = async (req: Request): Promise<Response> => {
       .order('end_date', { ascending: true });
 
     if (expiredError) {
-      console.error('❌ Error fetching expired auctions:', expiredError);
+      console.error('Error fetching expired auctions:', expiredError);
       response.errors.push(`expired_fetch: ${expiredError.message}`);
     } else if (expiredAuctions && expiredAuctions.length > 0) {
-      console.log(`⏰ Found ${expiredAuctions.length} auctions to end`);
       
       for (const auction of expiredAuctions) {
         // Obtener la puja más alta
