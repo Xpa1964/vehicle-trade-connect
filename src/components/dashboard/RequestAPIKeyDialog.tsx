@@ -87,8 +87,8 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
 
           <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
             <p className="text-sm text-blue-800 dark:text-blue-200">
-              <strong>{t('api.request.infoTitle') || 'Important'}:</strong>{' '}
-              {t('api.request.infoMessage') || 'Your request will be reviewed by an administrator. You will be notified once approved.'}
+              <strong>{t('api.request.infoTitle') || 'Importante'}:</strong>{' '}
+              {t('api.request.infoMessage') || 'Tu solicitud será revisada por un administrador antes de activarse. Recibirás una notificación por email.'}
             </p>
           </div>
 
