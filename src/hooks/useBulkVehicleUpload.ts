@@ -22,27 +22,6 @@ export const useBulkVehicleUpload = () => {
     setProgress(0);
     
     try {
-      const bucketName = 'vehicles';
-      
-      // First check if bucket exists
-      const { data: bucketData, error: bucketError } = await supabase.storage.getBucket(bucketName);
-      
-      if (bucketError && bucketError.message.includes('not found')) {
-        console.log('Vehicles bucket not found, attempting to create it');
-        const { error: createBucketError } = await supabase.storage.createBucket(bucketName, {
-          public: true,
-          fileSizeLimit: 10485760, // 10MB in bytes
-        });
-        
-        if (createBucketError) {
-          console.error('Error creating bucket:', createBucketError);
-          toast.error("Couldn't create storage bucket. Please contact support.");
-          setIsUploading(false);
-          return;
-        }
-        console.log('Successfully created vehicles bucket');
-      }
-      
       let successCount = 0;
       
       for (let i = 0; i < vehicles.length; i++) {
