@@ -32,4 +32,19 @@ export const vehicleValidationSchema = {
   additionalFiles: z.any().optional(),
   equipment: z.array(z.string()).default([]),
   description: z.string().max(2000, 'Description must be less than 2000 characters').optional(),
+  vin: z.string()
+    .regex(/^[A-HJ-NPR-Z0-9]{17}$/, {
+      message: 'El VIN debe tener exactamente 17 caracteres y no puede contener las letras I, O ni Q.'
+    })
+    .optional()
+    .or(z.literal('')),
+  licensePlate: z.string().max(20).optional().or(z.literal('')),
+  registrationDate: z.string().optional().or(z.literal('')),
+  vehicleType: z.string().optional().or(z.literal('')),
+  transactionType: z.string().optional().or(z.literal('')),
+  acceptsExchange: z.boolean().optional(),
+  engineSize: z.coerce.number().optional(),
+  enginePower: z.coerce.number().optional(),
+  color: z.string().optional().or(z.literal('')),
+  doors: z.coerce.number().optional(),
 };
