@@ -223,7 +223,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
         if (insertError) throw insertError;
         vehicleId = newVehicle.id;
         results.created++;
-        console.log(`✅ Created vehicle ${external_id}`);
+        // Vehicle created
       }
 
       // Handle images if provided (limit 25)
