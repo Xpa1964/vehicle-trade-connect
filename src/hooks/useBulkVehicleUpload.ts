@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { VehicleFormData } from '@/types/vehicle';
 import { toast } from 'sonner';
 import { CSVVehicleData, downloadImageFromUrl } from '@/utils/csvParser';
+import { uploadFileSecurely } from '@/utils/secureUpload';
 
 export const useBulkVehicleUpload = () => {
   const { user } = useAuth();
