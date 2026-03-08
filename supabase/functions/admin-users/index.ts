@@ -67,26 +67,26 @@ serve(async (req) => {
 
     const supabaseAuth = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { auth: { autoRefreshToken: false, persistSession: false } }
     );
 
     // Get authentication info
     const authHeader = req.headers.get('Authorization');
-    let user = null;
+    let user: { id: string; email?: string } | null = null;
 
-    if (authHeader) {
-      const { data: { user: authUser }, error: authError } = await supabaseAuth.auth.getUser(
-        authHeader.replace('Bearer ', '')
-      );
+    if (authHeader?.startsWith('Bearer ')) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data, error: authError } = await supabaseAuth.auth.getClaims(token);
       
-      if (authError) {
+      if (authError || !data?.claims) {
         console.error('Auth error:', authError);
       } else {
-        user = authUser;
-        console.log(`User authenticated: {
-  id: "${user?.id}",
-  email: "${user?.email}"
-}`);
+        user = {
+          id: data.claims.sub,
+          email: data.claims.email as string | undefined
+        };
+        console.log(`User authenticated: id="${user.id}", email="${user.email}"`);
       }
     }
 
