@@ -368,7 +368,6 @@ const handler = async (req: Request): Promise<Response> => {
         );
 
         response.closed++;
-        console.log(`✅ Closed auction ${auction.id}`);
       }
     }
 
