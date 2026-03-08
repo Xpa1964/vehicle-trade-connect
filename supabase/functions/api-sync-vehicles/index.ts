@@ -343,7 +343,7 @@ async function handleDelete(req: Request, supabase: any, userId: string) {
     );
   }
 
-  console.log(`🔻 Deactivated vehicle ${externalId}`);
+  // Vehicle deactivated
 
   return new Response(
     JSON.stringify({ success: true, message: 'Vehicle deactivated successfully' }),
