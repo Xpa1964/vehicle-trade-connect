@@ -60,7 +60,7 @@ export const vehicleSchema = z.object({
   
   // Arrays
   images: z.array(z.string().url({ message: 'validation.invalidImageUrl' }))
-    .max(20, { message: 'validation.tooManyImages' })
+    .max(25, { message: 'validation.tooManyImages' })
     .optional(),
   
   videos: z.array(z.string().url({ message: 'validation.invalidVideoUrl' }))
@@ -120,7 +120,7 @@ const vehicleBaseSchema = z.object({
   interior_color: z.string().optional().or(z.literal('')),
   doors: z.string().optional().or(z.literal('')),
   seats: z.string().optional().or(z.literal('')),
-  images: z.array(z.string().url()).max(20).optional(),
+  images: z.array(z.string().url()).max(25).optional(),
   videos: z.array(z.string().url()).max(5).optional(),
   engine_size: z.number().positive().max(20).optional(),
   power: z.number().int().positive().max(2000).optional(),

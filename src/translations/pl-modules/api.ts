@@ -123,7 +123,7 @@ export default {
   'api.docs.format.vinDesc': 'Numer VIN. Unikalna identyfikacja pojazdu',
   'api.docs.format.licensePlateDesc': 'Numer rejestracyjny',
   'api.docs.format.descriptionDesc': 'Szczegółowy opis pojazdu (maks. 5000 znaków)',
-  'api.docs.format.imagesDesc': 'Tablica URL-i zdjęć (maks. 20 zdjęć)',
+  'api.docs.format.imagesDesc': 'Tablica URL-i zdjęć (maks. 25 zdjęć)',
   'api.docs.format.videosDesc': 'Tablica URL-i filmów (opcjonalnie)',
   
   // Field Descriptions - Normalized
@@ -142,7 +142,7 @@ export default {
   'api.docs.format.priceValidation': 'Musi być > 0',
   'api.docs.format.mileageValidation': 'Musi być >= 0',
   'api.docs.format.vinValidation': '17 znaków alfanumerycznych',
-  'api.docs.format.imagesValidation': 'Maksymalnie 20 zdjęć',
+  'api.docs.format.imagesValidation': 'Maksymalnie 25 zdjęć',
   'api.docs.format.descriptionValidation': 'Maksymalnie 5000 znaków',
   
   // Technical Integration

@@ -150,7 +150,7 @@ export default {
   'api.docs.format.priceValidation': 'Must be a positive number greater than 0',
   'api.docs.format.mileageValidation': 'Must be a non-negative number (0 or greater)',
   'api.docs.format.vinValidation': 'Standard 17-character alphanumeric format (optional but highly recommended)',
-  'api.docs.format.imagesValidation': 'Array of valid URLs, preferably HTTPS. Recommended maximum: 20 images',
+  'api.docs.format.imagesValidation': 'Array of valid URLs, preferably HTTPS. Maximum: 25 images',
   'api.docs.format.descriptionValidation': 'Free text with maximum 2000 characters',
   'api.docs.reference': 'Quick Reference',
   'api.docs.reference.title': 'Quick Reference Table',
