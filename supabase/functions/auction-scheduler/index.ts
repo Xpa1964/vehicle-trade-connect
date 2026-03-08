@@ -422,7 +422,7 @@ const handler = async (req: Request): Promise<Response> => {
       }
     }
 
-    console.log(`🎯 Scheduler completed: ${response.activated} activated, ${response.ended} ended, ${response.contact_shared} contact shared, ${response.closed} closed`);
+    // Response JSON carries all metrics
 
     return new Response(JSON.stringify(response), {
       status: 200,
