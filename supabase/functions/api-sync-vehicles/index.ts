@@ -296,7 +296,7 @@ async function handleInventorySync(req: Request, supabase: any, userId: string, 
         p_link: '/api-management',
         p_subject: 'Sincronización API con errores'
       });
-      console.log(`🔔 Error notification sent to user ${userId}`);
+      // Error notification sent
     } catch (notifError: unknown) {
       console.error('Failed to send error notification:', notifError instanceof Error ? notifError.message : String(notifError));
     }
