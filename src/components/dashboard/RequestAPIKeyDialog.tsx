@@ -63,7 +63,7 @@ const RequestAPIKeyDialog: React.FC<RequestAPIKeyDialogProps> = ({ open, onOpenC
               id="keyName"
               value={keyName}
               onChange={(e) => setKeyName(e.target.value)}
-              placeholder={t('api.request.keyNamePlaceholder') || 'e.g., Production API'}
+              placeholder={t('api.request.keyNamePlaceholder') || 'Ej: API Producción'}
               maxLength={50}
             />
           </div>
