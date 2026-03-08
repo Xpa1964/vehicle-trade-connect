@@ -431,7 +431,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('❌ Error in auction scheduler:', errorMessage);
+    console.error('Fatal error in auction scheduler:', errorMessage);
     
     return new Response(
       JSON.stringify({ 
