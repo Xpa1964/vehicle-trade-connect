@@ -232,6 +232,7 @@ export const useRatings = (userId?: string) => {
     ratingSummary,
     ratingsLoading,
     createRating: createRating.mutate,
+    createRatingAsync: createRating.mutateAsync,
     isCreatingRating: createRating.isPending
   };
 };
