@@ -34,7 +34,7 @@ interface BudgetReviewDialogProps {
   onBudgetResponse: () => void;
 }
 
-const localeMap: Record<string, Locale> = { es, en: enUS, fr, de, it, nl, pt, pl, dk: da };
+const localeMap: Record<string, DateFnsLocale> = { es, en: enUS, fr, de, it, nl, pt, pl, dk: da };
 
 const BudgetReviewDialog: React.FC<BudgetReviewDialogProps> = ({
   open,
