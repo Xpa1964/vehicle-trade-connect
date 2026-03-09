@@ -193,6 +193,8 @@ export const useRatings = (userId?: string) => {
         .insert({
           rater_id: user.id,
           rated_id: toUserId,
+          from_user_id: user.id,
+          to_user_id: toUserId,
           rating: ratingData.rating,
           comment: ratingData.comment,
           transaction_type: ratingData.transactionType,
