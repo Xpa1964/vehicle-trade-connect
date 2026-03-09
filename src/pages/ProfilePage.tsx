@@ -239,7 +239,11 @@ const ProfilePage: React.FC = () => {
           <div className="lg:col-span-1">
             <ProfileSummary
               profileData={publicProfileData}
-              userRating={userRating}
+              userRating={{
+                averageRating: ratingSummary.average_rating,
+                totalRatings: ratingSummary.total_ratings,
+                verifiedRatings: ratingSummary.verified_ratings,
+              }}
               isCurrentUser={isOwnProfile}
               onContact={handleContact}
               onRate={handleRatingSubmitted}

@@ -163,8 +163,8 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
           <div className="space-y-3">
             {/* Persona de Contacto */}
             {profileData?.full_name && (
-              <div className="flex items-center text-sm">
-                <User className="h-4 w-4 mr-2 text-gray-500" />
+              <div className="flex items-center text-sm text-foreground">
+                <User className="h-4 w-4 mr-2 text-muted-foreground" />
                 <div>
                   <span className="font-medium">{t('profile.contactPerson', { fallback: 'Persona de Contacto' })}: </span>
                   <span>{profileData.full_name}</span>
@@ -173,14 +173,14 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
             )}
             
             {/* País con bandera */}
-            <div className="flex items-center text-sm">
-              <MapPin className="h-4 w-4 mr-2 text-gray-500" />
+            <div className="flex items-center text-sm text-foreground">
+              <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
               {getCountryWithFlag(profileData?.country)}
             </div>
             
             {/* Miembro desde */}
-            <div className="flex items-center text-sm">
-              <Calendar className="h-4 w-4 mr-2 text-gray-500" />
+            <div className="flex items-center text-sm text-foreground">
+              <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
               <span>
                 {t('profile.memberSince', { fallback: 'Miembro desde' })} {' '}
                 {formatMemberSince(memberSinceDate)}
