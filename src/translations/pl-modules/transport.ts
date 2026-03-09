@@ -17,4 +17,6 @@ export default {
   'transport.express.highlight4.desc': 'Transportujemy TYLKO pojazdy z POCHODZENIEM LUB MIEJSCEM DOCELOWYM W HISZPANII. Nie transportujemy między innymi krajami europejskimi.',
   'transport.express.highlight4.examples': '✅ Prawidłowe: Madryt → Mediolan | Lyon → Walencja  ❌ NIE prawidłowe: Paryż → Berlin',
   'transport.express.cta': 'Zamów Swój Transport Ekspresowy',
+  'transport.estimatedDateHint': 'Szacowana data transportu',
+  'transport.formDescription': 'Poproś o wycenę transportu swojego pojazdu',
 };

@@ -46,4 +46,6 @@ export default {
   'transport.express.highlight4.desc': 'Vi transporterer KUN køretøjer med OPRINDELSE ELLER DESTINATION I SPANIEN. Vi transporterer ikke mellem andre europæiske lande.',
   'transport.express.highlight4.examples': '✅ Gyldigt: Madrid → Milano | Lyon → Valencia  ❌ IKKE gyldigt: Paris → Berlin',
   'transport.express.cta': 'Anmod om Din Ekspress Transport',
+  'transport.estimatedDateHint': 'Estimeret dato for transport',
+  'transport.formDescription': 'Anmod om et tilbud på transport af dit køretøj',
 };

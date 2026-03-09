@@ -50,4 +50,6 @@ export default {
   'transport.express.highlight4.desc': 'Wij vervoeren ALLEEN voertuigen met OORSPRONG OF BESTEMMING IN SPANJE. Wij vervoeren niet tussen andere Europese landen.',
   'transport.express.highlight4.examples': '✅ Geldig: Madrid → Milaan | Lyon → Valencia  ❌ NIET geldig: Parijs → Berlijn',
   'transport.express.cta': 'Vraag Uw Express Transport Aan',
+  'transport.estimatedDateHint': 'Geschatte datum voor transport',
+  'transport.formDescription': 'Vraag een offerte aan voor het transport van uw voertuig',
 };

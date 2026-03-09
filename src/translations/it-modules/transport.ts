@@ -51,4 +51,6 @@ export default {
   'transport.express.highlight4.desc': 'Trasportiamo SOLO veicoli con ORIGINE O DESTINAZIONE IN SPAGNA. Non trasportiamo tra altri paesi europei.',
   'transport.express.highlight4.examples': '✅ Validi: Madrid → Milano | Lione → Valencia  ❌ NON valido: Parigi → Berlino',
   'transport.express.cta': 'Richiedi il Tuo Trasporto Express',
+  'transport.estimatedDateHint': 'Data stimata per il trasporto',
+  'transport.formDescription': 'Richiedi un preventivo per il trasporto del tuo veicolo',
 };
