@@ -47,11 +47,13 @@ const AdminUsers = () => {
     queryFn: async () => {
       console.log('[AdminUsers] Fetching users via direct query');
       
-      // Usar consulta directa a las tablas con join
+      // Fetch all profiles (admin RLS policy allows this)
       const { data, error } = await supabase
         .from('profiles')
         .select(`
           id,
+          user_id,
+          email,
           full_name,
           company_name,
           contact_phone,
@@ -65,34 +67,29 @@ const AdminUsers = () => {
           created_at,
           updated_at,
           registration_date
-        `);
+        `)
+        .order('created_at', { ascending: false });
         
       if (error) {
         console.error('[AdminUsers] Error fetching users:', error);
         throw error;
       }
       
-      // Obtener emails y roles para cada usuario
-      const usersWithDetails = await Promise.all(
-        (data || []).map(async (profile: any) => {
-          // Obtener email del usuario
-          const { data: authUser } = await supabase.auth.admin.getUserById(profile.user_id || profile.id);
-          
-          // Obtener rol del usuario
-          const { data: userRole } = await supabase
-            .from('user_roles')
-            .select('role')
-            .eq('user_id', profile.user_id || profile.id)
-            .single();
-          
-          return {
-            ...profile,
-            id: profile.user_id || profile.id,
-            email: authUser?.user?.email || profile.email || 'No disponible',
-            role: userRole?.role || 'user'
-          } as AdminUser;
-        })
-      );
+      // Fetch all user roles in one query
+      const userIds = (data || []).map((p: any) => p.user_id);
+      const { data: rolesData } = await supabase
+        .from('user_roles')
+        .select('user_id, role')
+        .in('user_id', userIds);
+      
+      const rolesMap = new Map((rolesData || []).map((r: any) => [r.user_id, r.role]));
+      
+      const usersWithDetails = (data || []).map((profile: any) => ({
+        ...profile,
+        id: profile.user_id || profile.id,
+        email: profile.email || 'No disponible',
+        role: rolesMap.get(profile.user_id) || 'user'
+      } as AdminUser));
       
       console.log('[AdminUsers] Users fetched successfully:', usersWithDetails.length, 'users');
       return usersWithDetails;
