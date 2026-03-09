@@ -69,26 +69,29 @@ const QuickRatingDialog: React.FC<QuickRatingDialogProps> = ({
       return;
     }
 
-    createRating({
-      toUserId: userId,
-      ratingData: {
-        rating,
-        comment,
-        transactionType: 'general'
-      }
-    });
+    try {
+      await createRatingAsync({
+        toUserId: userId,
+        ratingData: {
+          rating,
+          comment,
+          transactionType: 'general'
+        }
+      });
 
-    // Mostrar mensaje de éxito personalizado
-    toast({
-      title: t('rating.successTitle'),
-      description: t('rating.successDescription'),
-      variant: "default"
-    });
+      toast({
+        title: t('rating.successTitle'),
+        description: t('rating.successDescription'),
+        variant: "default"
+      });
 
-    setOpen(false);
-    setRating(0);
-    setComment('');
-    onRatingSubmitted?.();
+      setOpen(false);
+      setRating(0);
+      setComment('');
+      onRatingSubmitted?.();
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+    }
   };
 
   const getRatingText = (stars: number) => {
