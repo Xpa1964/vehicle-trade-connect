@@ -71,8 +71,8 @@ export const useRatings = (userId?: string) => {
       // Get profiles for those users
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
-        .select('id, full_name, company_name')
-        .in('id', userIds);
+        .select('user_id, full_name, company_name')
+        .in('user_id', userIds);
         
       if (profilesError) {
         console.error('Error fetching profiles:', profilesError);
@@ -82,7 +82,7 @@ export const useRatings = (userId?: string) => {
       // Combine ratings with profile data
       const ratingsWithProfiles: RatingWithProfile[] = ratingsData.map(rating => ({
         ...rating,
-        from_user_profile: profilesData?.find(profile => profile.id === rating.from_user_id) || null
+        from_user_profile: profilesData?.find(profile => profile.user_id === rating.from_user_id) || null
       }));
 
       console.log('🔍 useRatings - Final ratings with profiles:', ratingsWithProfiles);
