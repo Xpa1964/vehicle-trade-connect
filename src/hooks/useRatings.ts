@@ -71,8 +71,8 @@ export const useRatings = (userId?: string) => {
       // Get profiles for those users
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
-        .select('id, full_name, company_name')
-        .in('id', userIds);
+        .select('user_id, full_name, company_name')
+        .in('user_id', userIds);
         
       if (profilesError) {
         console.error('Error fetching profiles:', profilesError);
