@@ -45,5 +45,6 @@ export default {
   'rating.reputationExpert': 'Esperto',
   'rating.reputationTrusted': 'Affidabile',
   'rating.reputationGood': 'Buono',
-  'rating.reputationRegular': 'Regolare'
+  'rating.reputationRegular': 'Regolare',
+  'rating.translating': 'Traduzione in corso...'
 };
