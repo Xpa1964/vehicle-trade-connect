@@ -17,7 +17,7 @@ const RatingCard: React.FC<RatingCardProps> = ({ rating, userName }) => {
   const formattedDate = formatDistanceToNow(parseISO(rating.date), { addSuffix: true, locale: es });
   
   return (
-    <Card className="w-full mb-4 border-gray-200">
+    <Card className="w-full mb-4 border-border">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <div className="flex items-center space-x-3">
           <Avatar>
@@ -27,8 +27,8 @@ const RatingCard: React.FC<RatingCardProps> = ({ rating, userName }) => {
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-medium">{userName}</p>
-            <div className="flex items-center text-xs text-gray-500">
+            <p className="font-medium text-foreground">{userName}</p>
+            <div className="flex items-center text-xs text-muted-foreground">
               <Calendar className="h-3 w-3 mr-1" /> 
               {formattedDate}
             </div>
@@ -37,17 +37,17 @@ const RatingCard: React.FC<RatingCardProps> = ({ rating, userName }) => {
         <div className="flex items-center">
           <StarRating rating={rating.rating} showValue={true} />
           {rating.verified && (
-            <span className="ml-2 flex items-center text-xs text-green-600">
+            <span className="ml-2 flex items-center text-xs text-green-400">
               <CheckCircle2 className="h-3 w-3 mr-1" /> Verificada
             </span>
           )}
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-gray-700">{rating.comment}</p>
+        <p className="text-sm text-foreground">{rating.comment}</p>
       </CardContent>
       {rating.transactionType && (
-        <CardFooter className="pt-0 text-xs text-gray-500">
+        <CardFooter className="pt-0 text-xs text-muted-foreground">
           Tipo de transacción: {rating.transactionType === 'purchase' ? 'Compra' : 
             rating.transactionType === 'exchange' ? 'Intercambio' : 
             rating.transactionType === 'service' ? 'Servicio' : 'Otra'}
