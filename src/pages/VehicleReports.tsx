@@ -63,7 +63,6 @@ const VehicleReports: React.FC = () => {
       if (error) throw error;
       setReports(data || []);
 
-      // Fetch deliveries for delivered reports
       const deliveredIds = (data || [])
         .filter(r => r.status === 'delivered')
         .map(r => r.id);
@@ -89,8 +88,8 @@ const VehicleReports: React.FC = () => {
       console.error('Error fetching reports:', error);
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'No se pudieron cargar los informes'
+        title: t('common.error'),
+        description: t('reports.loadError')
       });
     } finally {
       setLoading(false);
@@ -99,13 +98,13 @@ const VehicleReports: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, { label: string; variant: any; className?: string }> = {
-      pending: { label: 'Pendiente de Procesamiento', variant: 'secondary' },
-      budgeted: { label: 'Presupuesto Disponible', variant: 'outline', className: 'border-warning text-warning' },
-      budget_accepted: { label: 'Presupuesto Aceptado', variant: 'outline', className: 'border-success text-success' },
-      budget_rejected: { label: 'Presupuesto Rechazado', variant: 'outline', className: 'border-destructive text-destructive' },
-      in_process: { label: 'En Proceso', variant: 'default', className: 'bg-warning/10 text-warning' },
-      delivered: { label: 'Entregado', variant: 'default', className: 'bg-success/10 text-success' },
-      rejected: { label: 'Rechazado', variant: 'destructive' }
+      pending: { label: t('reports.status.pending'), variant: 'secondary' },
+      budgeted: { label: t('reports.status.budgeted'), variant: 'outline', className: 'border-warning text-warning' },
+      budget_accepted: { label: t('reports.status.budgetAccepted'), variant: 'outline', className: 'border-success text-success' },
+      budget_rejected: { label: t('reports.status.budgetRejected'), variant: 'outline', className: 'border-destructive text-destructive' },
+      in_process: { label: t('reports.status.inProcess'), variant: 'default', className: 'bg-warning/10 text-warning' },
+      delivered: { label: t('reports.status.delivered'), variant: 'default', className: 'bg-success/10 text-success' },
+      rejected: { label: t('reports.status.rejected'), variant: 'destructive' }
     };
 
     const statusInfo = statusMap[status] || statusMap.pending;
@@ -118,9 +117,9 @@ const VehicleReports: React.FC = () => {
 
   const getReportTypeName = (type: string) => {
     const types: Record<string, string> = {
-      basic: 'Básico (DGT)',
-      technical: 'Técnico (Carfax)',
-      premium: 'Premium (Carfax + Inspección)'
+      basic: t('reports.types.basic'),
+      technical: t('reports.reportType.technical'),
+      premium: t('reports.types.premium')
     };
     return types[type] || type;
   };
@@ -138,8 +137,8 @@ const VehicleReports: React.FC = () => {
       console.error('Error downloading file:', error);
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'No se pudo descargar el archivo'
+        title: t('common.error'),
+        description: t('reports.downloadError')
       });
     }
   };
@@ -147,7 +146,7 @@ const VehicleReports: React.FC = () => {
   return (
     <div className="min-h-screen w-full">
       <div className="container mx-auto px-4 py-8 max-w-full">
-        {/* Header con imagen de fondo */}
+        {/* Header */}
         <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
           <div className="absolute inset-0">
             <SafeImage 
@@ -160,7 +159,6 @@ const VehicleReports: React.FC = () => {
           
           <div className="relative z-10 p-8" style={{ minHeight: '320px' }}>
             <div className="flex flex-col justify-between h-full">
-              {/* Back button */}
               <div className="mb-4">
                 <Button 
                   variant="outline" 
@@ -175,10 +173,10 @@ const VehicleReports: React.FC = () => {
               
               <div className="flex flex-col justify-end flex-1">
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
-                  {t('reports.title', { fallback: 'Entrega de Informes' })}
+                  {t('reports.title')}
                 </h1>
                 <p className="text-lg text-white font-bold drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_80%)]">
-                  {t('reports.subtitle', { fallback: 'Descarga tus informes técnicos solicitados' })}
+                  {t('reports.subtitle')}
                 </p>
               </div>
             </div>
@@ -191,14 +189,14 @@ const VehicleReports: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-success" />
-              Informes Entregados
+              {t('reports.deliveredReports')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-success">
               {reports.filter(r => r.status === 'delivered').length}
             </div>
-            <p className="text-muted-foreground">Listos para descarga</p>
+            <p className="text-muted-foreground">{t('reports.readyForDownload')}</p>
           </CardContent>
         </Card>
 
@@ -206,26 +204,26 @@ const VehicleReports: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-warning" />
-              En Proceso
+              {t('reports.status.inProcess')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-warning">
               {reports.filter(r => r.status === 'in_process').length}
             </div>
-            <p className="text-muted-foreground">Siendo procesados</p>
+            <p className="text-muted-foreground">{t('reports.beingProcessed')}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Nuevo Informe</CardTitle>
+            <CardTitle>{t('reports.newReport')}</CardTitle>
           </CardHeader>
           <CardContent>
             <Button asChild className="w-full">
               <Link to="/request-report">
                 <Plus className="h-4 w-4 mr-2" />
-                Solicitar Informe
+                {t('reports.requestReport')}
               </Link>
             </Button>
           </CardContent>
@@ -235,16 +233,16 @@ const VehicleReports: React.FC = () => {
         {/* Reports List */}
         <Card>
         <CardHeader>
-          <CardTitle>Mis Informes</CardTitle>
+          <CardTitle>{t('reports.myReports')}</CardTitle>
           <CardDescription>
-            Informes técnicos solicitados y su estado actual
+            {t('reports.myReportsDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <div className="text-center py-8 text-muted-foreground">
               <FileText className="h-16 w-16 mx-auto mb-4 text-muted-foreground animate-pulse" />
-              <p>Cargando informes...</p>
+              <p>{t('common.loading')}</p>
             </div>
           ) : reports.length > 0 ? (
             <div className="space-y-4">
@@ -256,7 +254,7 @@ const VehicleReports: React.FC = () => {
                     </h3>
                     <p className="text-muted-foreground">{getReportTypeName(report.report_type)}</p>
                     <p className="text-sm text-muted-foreground">
-                      Solicitado el: {new Date(report.created_at).toLocaleDateString('es-ES')}
+                      {t('reports.requestedOn')}: {new Date(report.created_at).toLocaleDateString()}
                     </p>
                   </div>
                   
@@ -272,7 +270,7 @@ const VehicleReports: React.FC = () => {
                         }}
                       >
                         <Eye className="h-4 w-4 mr-2" />
-                        Ver Presupuesto
+                        {t('reports.viewBudget')}
                       </Button>
                     )}
                     
@@ -282,14 +280,14 @@ const VehicleReports: React.FC = () => {
                           .sort((a, b) => (a.is_primary ? -1 : 1))
                           .map((delivery) => {
                             const categoryLabels: Record<string, string> = {
-                              main_report: 'PDF Principal',
-                              audio: 'Audio',
-                              photo: 'Foto',
-                              supplementary: 'Suplementario'
+                              main_report: t('reports.category.mainReport'),
+                              audio: t('reports.category.audio'),
+                              photo: t('reports.category.photo'),
+                              supplementary: t('reports.category.supplementary')
                             };
                             const label = categoryLabels[delivery.file_category] || 
                                          (delivery.file_type === 'application/pdf' ? 'PDF' : 
-                                          delivery.file_type.startsWith('audio/') ? 'Audio' : 'Archivo');
+                                          delivery.file_type.startsWith('audio/') ? t('reports.category.audio') : t('reports.category.file'));
                             
                             return (
                               <Button
@@ -312,11 +310,11 @@ const VehicleReports: React.FC = () => {
           ) : (
             <div className="text-center py-8 text-muted-foreground">
               <FileText className="h-16 w-16 mx-auto mb-4 text-muted" />
-              <p>No tienes informes solicitados aún</p>
+              <p>{t('reports.noReports')}</p>
               <Button asChild className="mt-4">
                 <Link to="/request-report">
                   <Plus className="h-4 w-4 mr-2" />
-                  Solicitar tu primer informe
+                  {t('reports.requestFirstReport')}
                 </Link>
               </Button>
             </div>
