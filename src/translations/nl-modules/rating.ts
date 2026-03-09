@@ -31,5 +31,19 @@ export default {
   'rating.shareExperience': 'Deel uw ervaring met deze gebruiker',
   'rating.giveStars': 'GEBRUIKER BEOORDELEN - STERREN GEVEN',
   'rating.clickToRate': 'Klik hier om sterren (1-5) en opmerkingen te geven',
-  'rating.currentReputation': 'Huidige Reputatie'
+  'rating.currentReputation': 'Huidige Reputatie',
+  'rating.noRatings': 'Geen beoordelingen',
+  'rating.ratings': 'beoordelingen',
+  'rating.verified': 'Geverifieerd',
+  'rating.verifiedCount': 'geverifieerd',
+  'rating.transactionType': 'Transactietype',
+  'rating.transactionPurchase': 'Aankoop',
+  'rating.transactionExchange': 'Ruil',
+  'rating.transactionService': 'Dienst',
+  'rating.transactionOther': 'Overig',
+  'rating.reputationNew': 'Nieuw',
+  'rating.reputationExpert': 'Expert',
+  'rating.reputationTrusted': 'Betrouwbaar',
+  'rating.reputationGood': 'Goed',
+  'rating.reputationRegular': 'Gemiddeld'
 };

@@ -31,5 +31,19 @@ export default {
   'rating.shareExperience': 'Share your experience with this user',
   'rating.giveStars': 'RATE USER - GIVE STARS',
   'rating.clickToRate': 'Click here to give stars (1-5) and comments',
-  'rating.currentReputation': 'Current Reputation'
+  'rating.currentReputation': 'Current Reputation',
+  'rating.noRatings': 'No ratings',
+  'rating.ratings': 'ratings',
+  'rating.verified': 'Verified',
+  'rating.verifiedCount': 'verified',
+  'rating.transactionType': 'Transaction type',
+  'rating.transactionPurchase': 'Purchase',
+  'rating.transactionExchange': 'Exchange',
+  'rating.transactionService': 'Service',
+  'rating.transactionOther': 'Other',
+  'rating.reputationNew': 'New',
+  'rating.reputationExpert': 'Expert',
+  'rating.reputationTrusted': 'Trusted',
+  'rating.reputationGood': 'Good',
+  'rating.reputationRegular': 'Regular'
 };
