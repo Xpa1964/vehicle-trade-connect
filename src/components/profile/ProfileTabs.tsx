@@ -120,7 +120,7 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({
               
               <div>
                 <p className="text-sm font-medium text-gray-500">{t('profile.businessType')}</p>
-                <p className="text-base">{displayUser.profile?.business_type || t('profile.notSpecified')}</p>
+                <p className="text-base">{displayUser.profile?.business_type ? t(`businessType.${displayUser.profile.business_type}`) : t('profile.notSpecified')}</p>
               </div>
               
               {/* Show contact details only if privacy setting allows it or it's own profile */}
