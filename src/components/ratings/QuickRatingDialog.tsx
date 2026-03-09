@@ -37,7 +37,7 @@ const QuickRatingDialog: React.FC<QuickRatingDialogProps> = ({
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState('');
   const { user } = useAuth();
-  const { createRating, isCreatingRating } = useRatings(userId);
+  const { createRatingAsync, isCreatingRating } = useRatings(userId);
   const { toast } = useToast();
   const { t } = useLanguage();
 
