@@ -1,8 +1,9 @@
 
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Users, Loader2, Edit, Eye } from 'lucide-react';
+import AddUserDialog from '@/components/admin/AddUserDialog';
 import PageHeader from '@/components/layout/PageHeader';
 import {
   Table,
