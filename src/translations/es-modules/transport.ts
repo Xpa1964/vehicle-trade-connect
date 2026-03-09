@@ -81,4 +81,6 @@ export default {
   'transport.calculator.breakdown.insurance': 'Seguro',
   'transport.calculator.breakdown.surcharges': 'Recargos',
   'transport.calculator.breakdown.total': 'Total',
+  'transport.estimatedDateHint': 'Fecha estimada para el traslado',
+  'transport.formDescription': 'Solicita un presupuesto para el traslado de tu vehículo',
 };
