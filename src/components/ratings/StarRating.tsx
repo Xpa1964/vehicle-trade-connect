@@ -66,7 +66,7 @@ const StarRating: React.FC<StarRatingProps> = ({
         {renderStars()}
       </div>
       {showValue && (
-        <span className="ml-2 text-sm font-bold text-gray-700">
+        <span className="ml-2 text-sm font-bold text-foreground">
           {rating.toFixed(1)}
         </span>
       )}
