@@ -102,4 +102,6 @@ export default {
   'common.goBack': 'Volver',
   'admin.accessDenied': 'Acceso Denegado',
   'admin.apiAccessDenied': 'No tienes permiso para acceder a la gestión de APIs.',
+  'common.pickDate': 'Seleccionar fecha',
+  'common.lastActivity': 'Última Actividad',
 };

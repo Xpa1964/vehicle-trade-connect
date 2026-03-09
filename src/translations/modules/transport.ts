@@ -65,4 +65,6 @@ export default {
   'transport.calculator.breakdown.insurance': 'Insurance',
   'transport.calculator.breakdown.surcharges': 'Surcharges',
   'transport.calculator.breakdown.total': 'Total',
+  'transport.estimatedDateHint': 'Estimated date for transport',
+  'transport.formDescription': 'Request a quote for your vehicle transport',
 };
