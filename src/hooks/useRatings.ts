@@ -82,7 +82,7 @@ export const useRatings = (userId?: string) => {
       // Combine ratings with profile data
       const ratingsWithProfiles: RatingWithProfile[] = ratingsData.map(rating => ({
         ...rating,
-        from_user_profile: profilesData?.find(profile => profile.id === rating.from_user_id) || null
+        from_user_profile: profilesData?.find(profile => profile.user_id === rating.from_user_id) || null
       }));
 
       console.log('🔍 useRatings - Final ratings with profiles:', ratingsWithProfiles);
