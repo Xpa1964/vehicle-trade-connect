@@ -6,16 +6,30 @@ import { User, CheckCircle2, Calendar } from 'lucide-react';
 import { Rating } from '@/types/rating';
 import StarRating from './StarRating';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { es, fr, de, it, nl, pt, pl } from 'date-fns/locale';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface RatingCardProps {
   rating: Rating;
   userName: string;
 }
 
+const localeMap: Record<string, Locale> = { es, fr, de, it, nl, pt, pl };
+
 const RatingCard: React.FC<RatingCardProps> = ({ rating, userName }) => {
-  const formattedDate = formatDistanceToNow(parseISO(rating.date), { addSuffix: true, locale: es });
-  
+  const { t, currentLanguage } = useLanguage();
+  const locale = localeMap[currentLanguage] || undefined;
+  const formattedDate = formatDistanceToNow(parseISO(rating.date), { addSuffix: true, locale });
+
+  const getTransactionLabel = (type: string) => {
+    switch (type) {
+      case 'purchase': return t('rating.transactionPurchase');
+      case 'exchange': return t('rating.transactionExchange');
+      case 'service': return t('rating.transactionService');
+      default: return t('rating.transactionOther');
+    }
+  };
+
   return (
     <Card className="w-full mb-4 border-border">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -38,7 +52,7 @@ const RatingCard: React.FC<RatingCardProps> = ({ rating, userName }) => {
           <StarRating rating={rating.rating} showValue={true} />
           {rating.verified && (
             <span className="ml-2 flex items-center text-xs text-green-400">
-              <CheckCircle2 className="h-3 w-3 mr-1" /> Verificada
+              <CheckCircle2 className="h-3 w-3 mr-1" /> {t('rating.verified')}
             </span>
           )}
         </div>
@@ -48,9 +62,7 @@ const RatingCard: React.FC<RatingCardProps> = ({ rating, userName }) => {
       </CardContent>
       {rating.transactionType && (
         <CardFooter className="pt-0 text-xs text-muted-foreground">
-          Tipo de transacción: {rating.transactionType === 'purchase' ? 'Compra' : 
-            rating.transactionType === 'exchange' ? 'Intercambio' : 
-            rating.transactionType === 'service' ? 'Servicio' : 'Otra'}
+          {t('rating.transactionType')}: {getTransactionLabel(rating.transactionType)}
         </CardFooter>
       )}
     </Card>
