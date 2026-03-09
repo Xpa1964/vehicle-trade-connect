@@ -97,7 +97,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         {/* Location */}
         <div className="flex items-center gap-1 text-sm text-muted-foreground">
           <MapPin className="w-4 h-4" />
-          <span>{vehicle.location}, {vehicle.country}</span>
+          <span>{vehicle.location && vehicle.country && vehicle.location.toLowerCase() !== vehicle.country?.toLowerCase() ? `${vehicle.location}, ${vehicle.country}` : vehicle.location || vehicle.country || ''}</span>
         </div>
         
         {/* MEJORADO: Seller Section - Solo si NO es el propietario */}

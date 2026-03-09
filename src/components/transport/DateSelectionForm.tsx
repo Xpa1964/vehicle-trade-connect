@@ -57,7 +57,7 @@ const DateSelectionForm: React.FC<DateSelectionFormProps> = ({ form }) => {
             </PopoverContent>
           </Popover>
           <FormDescription>
-            Estimated date for transport
+            {t('transport.estimatedDateHint')}
           </FormDescription>
           <FormMessage />
         </FormItem>

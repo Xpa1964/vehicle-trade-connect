@@ -155,7 +155,7 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({
               
               <div>
                 <p className="text-sm font-medium text-gray-500">{t('profile.traderType')}</p>
-                <Badge variant="outline">{displayUser.profile?.trader_type || 'buyer_seller'}</Badge>
+                <Badge variant="outline">{t(`traderType.${displayUser.profile?.trader_type || 'buyer_seller'}`)}</Badge>
               </div>
               
               <div>

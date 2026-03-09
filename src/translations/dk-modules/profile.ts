@@ -62,4 +62,25 @@ export default {
   'profile.saveChanges': 'Gem Ændringer',
   'profile.saving': 'Gemmer...',
   'profile.cancel': 'Annuller',
+  
+  // Business types
+  'businessType.dealer': 'Forhandler',
+  'businessType.multibrand_used': 'Multimærke Brugt',
+  'businessType.buy_sell': 'Køb/Salg',
+  'businessType.rent_a_car': 'Biludlejning',
+  'businessType.renting': 'Leasing',
+  'businessType.workshop': 'Værksted',
+  'businessType.importer': 'Importør',
+  'businessType.exporter': 'Eksportør',
+  'businessType.trader': 'Handler',
+  'businessType.other': 'Andet',
+  
+  // Trader types
+  'traderType.buyer': 'Køber',
+  'traderType.seller': 'Sælger',
+  'traderType.buyer_seller': 'Køber/Sælger',
+  'traderType.importer': 'Importør',
+  'traderType.exporter': 'Eksportør',
+  'traderType.dealer': 'Forhandler',
+  'traderType.broker': 'Mægler'
 };
