@@ -87,7 +87,14 @@ const RatingCard: React.FC<RatingCardProps> = ({ rating, userName }) => {
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-foreground">{rating.comment}</p>
+        <p className="text-sm text-foreground">
+          {translatedComment || rating.comment}
+        </p>
+        {isTranslating && (
+          <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+            <Languages className="h-3 w-3 animate-pulse" /> {t('rating.translating') || 'Translating...'}
+          </p>
+        )}
       </CardContent>
       {rating.transactionType && (
         <CardFooter className="pt-0 text-xs text-muted-foreground">
