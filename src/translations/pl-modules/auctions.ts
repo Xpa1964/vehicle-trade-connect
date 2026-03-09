@@ -174,4 +174,14 @@ export default {
   'auctions.totalBids': 'Łącznie Ofert',
   'auctions.status': 'Status',
   'auctions.upcoming': 'Nadchodzące',
+
+  // Publish Auction Wizard - additional keys
+  'auctions.step1': 'Pojazd',
+  'auctions.step2': 'Konfiguracja',
+  'auctions.step3': 'Potwierdź',
+  'auctions.acceptTerms': 'Musisz zaakceptować warunki',
+  'auctions.startDate': 'Data Rozpoczęcia',
+  'auctions.endDate': 'Data Zakończenia',
+  'auctions.incrementMinimum': 'Minimalna Podwyżka',
+  'auctions.reservePrice': 'Cena Minimalna',
 };

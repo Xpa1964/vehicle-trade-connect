@@ -476,4 +476,27 @@ export default {
   'vehicles.imageHelp.troubleshoot.notShowing.solution': 'Espera unos segundos y recarga la galería. Si persiste, comprueba tu conexión a internet.',
   'vehicles.imageHelp.troubleshoot.limitReached.title': 'Límite de imágenes alcanzado',
   'vehicles.imageHelp.troubleshoot.limitReached.solution': 'El máximo es 25 imágenes por vehículo. Elimina alguna imagen existente para añadir nuevas.',
+
+  // Vehicle Wizard Steps
+  'vehicles.wizardStep1': 'Identificación',
+  'vehicles.wizardStep2': 'Datos Técnicos',
+  'vehicles.wizardStep3': 'Multimedia y Precio',
+  'vehicles.vinAutoFill': 'Autocompletado por VIN',
+  'vehicles.vinAutoFillDesc': 'Introduce el VIN de 17 caracteres para rellenar automáticamente los datos del vehículo',
+  'vehicles.completeVehicleDetails': 'Completa todos los datos del vehículo para publicarlo',
+  'vehicles.vinDecoded': '¡VIN reconocido!',
+  'vehicles.autoFilled': 'autocompletados',
+  'vehicles.vinNotRecognized': 'VIN no reconocido automáticamente. Puedes rellenar los campos manualmente.',
+
+  // Document categories (Registration)
+  'auth.register.docCategorySociedades': 'Sociedades',
+  'auth.register.docCategoryAutonomos': 'Profesionales Autónomos',
+  'auth.register.docMercantil': 'Certificado de Registro Mercantil (Company Register Extract)',
+  'auth.register.docVAT': 'Número de IVA Intracomunitario (VAT Number)',
+  'auth.register.docDeclaracion': 'Declaración oficial del administrador',
+  'auth.register.docIdRepresentante': 'Documento de Identidad del Representante Legal',
+  'auth.register.docIdentidad': 'Documento de Identidad (ID Card / Passport)',
+  'auth.register.docActividad': 'Registro de Actividad Económica y Estatus Fiscal',
+  'auth.register.generatedUsername': 'Tu nombre de usuario',
+  'auth.register.usernameExplanation': 'Se genera automáticamente a partir del nombre de empresa y apellido del responsable',
 };

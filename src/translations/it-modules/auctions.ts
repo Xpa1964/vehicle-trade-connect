@@ -195,4 +195,14 @@ export default {
   'auctions.totalBids': 'Totale Offerte',
   'auctions.status': 'Stato',
   'auctions.upcoming': 'Prossima',
+
+  // Publish Auction Wizard - additional keys
+  'auctions.step1': 'Veicolo',
+  'auctions.step2': 'Configurazione',
+  'auctions.step3': 'Conferma',
+  'auctions.acceptTerms': 'Devi accettare i termini e le condizioni',
+  'auctions.startDate': 'Data di Inizio',
+  'auctions.endDate': 'Data di Fine',
+  'auctions.incrementMinimum': 'Incremento Minimo',
+  'auctions.reservePrice': 'Prezzo di Riserva',
 };

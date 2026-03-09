@@ -390,4 +390,25 @@ export default {
   'vehicles.imageHelp.troubleshoot.notShowing.solution': 'Wait a few seconds and reload the gallery. If it persists, check your internet connection.',
   'vehicles.imageHelp.troubleshoot.limitReached.title': 'Image limit reached',
   'vehicles.imageHelp.troubleshoot.limitReached.solution': 'The maximum is 25 images per vehicle. Delete an existing image to add new ones.',
+
+  // Vehicle Wizard Steps
+  'vehicles.wizardStep1': 'Identification',
+  'vehicles.wizardStep2': 'Technical Details',
+  'vehicles.wizardStep3': 'Multimedia & Price',
+  'vehicles.vinAutoFill': 'VIN Auto-Fill',
+  'vehicles.vinAutoFillDesc': 'Enter the 17-character VIN to automatically fill in vehicle data',
+  'vehicles.completeVehicleDetails': 'Complete all vehicle details to publish it',
+  'vehicles.vinDecoded': 'VIN recognized!',
+  'vehicles.autoFilled': 'auto-filled',
+  'vehicles.vinNotRecognized': 'VIN not automatically recognized. You can fill in the fields manually.',
+
+  // Document categories (Registration)
+  'auth.register.docCategorySociedades': 'Companies',
+  'auth.register.docCategoryAutonomos': 'Self-Employed Professionals',
+  'auth.register.docMercantil': 'Company Register Extract',
+  'auth.register.docVAT': 'Intra-Community VAT Number',
+  'auth.register.docDeclaracion': 'Official administrator declaration',
+  'auth.register.docIdRepresentante': 'Legal Representative Identity Document',
+  'auth.register.docIdentidad': 'Identity Document (ID Card / Passport)',
+  'auth.register.docActividad': 'Business Activity Registration and Tax Status',
 };

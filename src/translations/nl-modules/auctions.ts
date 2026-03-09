@@ -186,4 +186,14 @@ export default {
   'auctions.totalBids': 'Totaal Biedingen',
   'auctions.status': 'Status',
   'auctions.upcoming': 'Aankomend',
+
+  // Publish Auction Wizard - additional keys
+  'auctions.step1': 'Voertuig',
+  'auctions.step2': 'Configuratie',
+  'auctions.step3': 'Bevestigen',
+  'auctions.acceptTerms': 'U moet de voorwaarden accepteren',
+  'auctions.startDate': 'Startdatum',
+  'auctions.endDate': 'Einddatum',
+  'auctions.incrementMinimum': 'Minimale Verhoging',
+  'auctions.reservePrice': 'Minimumprijs',
 };

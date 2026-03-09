@@ -195,4 +195,14 @@ export default {
   'auctions.totalBids': 'Gesamte Gebote',
   'auctions.status': 'Status',
   'auctions.upcoming': 'Anstehend',
+
+  // Publish Auction Wizard - additional keys
+  'auctions.step1': 'Fahrzeug',
+  'auctions.step2': 'Konfiguration',
+  'auctions.step3': 'Bestätigen',
+  'auctions.acceptTerms': 'Sie müssen die Geschäftsbedingungen akzeptieren',
+  'auctions.startDate': 'Startdatum',
+  'auctions.endDate': 'Enddatum',
+  'auctions.incrementMinimum': 'Mindestinkrement',
+  'auctions.reservePrice': 'Mindestpreis',
 };

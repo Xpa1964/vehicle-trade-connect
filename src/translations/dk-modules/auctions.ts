@@ -174,4 +174,14 @@ export default {
   'auctions.totalBids': 'Totale Bud',
   'auctions.status': 'Status',
   'auctions.upcoming': 'Kommende',
+
+  // Publish Auction Wizard - additional keys
+  'auctions.step1': 'Køretøj',
+  'auctions.step2': 'Konfiguration',
+  'auctions.step3': 'Bekræft',
+  'auctions.acceptTerms': 'Du skal acceptere betingelserne',
+  'auctions.startDate': 'Startdato',
+  'auctions.endDate': 'Slutdato',
+  'auctions.incrementMinimum': 'Minimumsforhøjelse',
+  'auctions.reservePrice': 'Mindstepris',
 };
