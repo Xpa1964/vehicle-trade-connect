@@ -104,4 +104,6 @@ export default {
   'common.brandSuffix': 'AUTOMOTIVE',
   'common.user': 'Gebruiker',
   'common.owner': 'Eigenaar',
+  'common.pickDate': 'Kies een datum',
+  'common.lastActivity': 'Laatste Activiteit',
 };

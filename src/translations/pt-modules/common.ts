@@ -99,4 +99,6 @@ export default {
   'common.noData': 'Nenhum dado disponível',
   'common.user': 'Utilizador',
   'common.owner': 'Proprietário',
+  'common.pickDate': 'Selecionar data',
+  'common.lastActivity': 'Última Atividade',
 };

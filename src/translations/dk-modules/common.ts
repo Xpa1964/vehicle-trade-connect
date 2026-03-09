@@ -77,4 +77,6 @@ export default {
   'common.brandSuffix': 'AUTOMOTIVE',
   'common.user': 'Bruger',
   'common.owner': 'Ejer',
+  'common.pickDate': 'Vælg en dato',
+  'common.lastActivity': 'Sidste Aktivitet',
 };
