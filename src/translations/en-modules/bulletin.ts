@@ -1,5 +1,6 @@
 export default {
   'bulletin.title': 'Bulletin Board',
+  'bulletin.subtitle': 'Find business opportunities in our professional community',
   'bulletin.description': 'Latest announcements and news',
   'bulletin.publish': 'Publish Announcement',
   'bulletin.category': 'Category',

@@ -487,6 +487,7 @@ export default {
   'vehicles.vinDecoded': '¡VIN reconocido!',
   'vehicles.autoFilled': 'autocompletados',
   'vehicles.vinNotRecognized': 'VIN no reconocido automáticamente. Puedes rellenar los campos manualmente.',
+  'vehicles.myVehiclesDescription': 'Gestiona todos tus vehículos publicados',
 
   // Document categories (Registration)
   'auth.register.docCategorySociedades': 'Sociedades',

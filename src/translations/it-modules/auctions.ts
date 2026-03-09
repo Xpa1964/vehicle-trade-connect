@@ -205,4 +205,25 @@ export default {
   'auctions.endDate': 'Data di Fine',
   'auctions.incrementMinimum': 'Incremento Minimo',
   'auctions.reservePrice': 'Prezzo di Riserva',
+
+  // Status badges
+  'auctions.statusDraft': 'Bozza',
+  'auctions.statusPendingAcceptance': 'Decisione in Attesa',
+  'auctions.statusEnded_pending_acceptance': 'Terminata - Decisione in Attesa',
+  'auctions.statusAccepted': 'Accettata',
+  'auctions.statusRejected': 'Rifiutata',
+  'auctions.statusContactShared': 'Contatto Condiviso',
+  'auctions.statusClosed': 'Chiusa',
+  'auctions.hasReserve': 'Con Riserva',
+  'auctions.bidsCount': 'offerte',
+
+  // Detail page
+  'auctions.auctionDetails': 'Dettagli dell\'Asta',
+  'auctions.viewFullVehicle': 'Vedi Scheda Completa del Veicolo',
+  'auctions.viewFullVehicleHint': 'Accedi a tutte le foto e le specifiche tecniche',
+  'auctions.noBidsYet': 'Nessuna offerta ancora',
+  'auctions.cannotBidOwnAuction': 'Non puoi fare offerte sulla tua asta',
+  'auctions.notFound': 'Asta non trovata',
+  'auctions.seller': 'Venditore',
+  'auctions.viewSellerProfile': 'Vedi profilo del venditore',
 };

@@ -159,4 +159,19 @@ export default {
   'auctions.startDate': 'Start Date',
   'auctions.endDate': 'End Date',
   'auctions.incrementMinimum': 'Minimum Increment',
+
+  // Status badge keys
+  'auctions.statusEnded_pending_acceptance': 'Ended - Pending Decision',
+  'auctions.hasReserve': 'With Reserve',
+  'auctions.bidsCount': 'bids',
+
+  // AuctionDetailPage
+  'auctions.auctionDetails': 'Auction Details',
+  'auctions.viewFullVehicle': 'View Full Vehicle Details',
+  'auctions.viewFullVehicleHint': 'Access all photos and technical specifications',
+  'auctions.noBidsYet': 'No bids yet',
+  'auctions.cannotBidOwnAuction': 'You cannot bid on your own auction',
+  'auctions.notFound': 'Auction not found',
+  'auctions.seller': 'Seller',
+  'auctions.viewSellerProfile': 'View seller profile',
 };
