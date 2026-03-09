@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Loader2, Info, Wrench, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const VehicleInformationPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const { data: vehicle, isLoading: vehicleLoading } = useQuery({
     queryKey: ['vehicle', id],
@@ -26,7 +28,6 @@ const VehicleInformationPage: React.FC = () => {
         
       if (error) throw error;
       
-      // Map the database fields to match the Vehicle type
       const mappedVehicle: Vehicle = {
         ...data,
         countryCode: data.country_code || 'es',
@@ -65,7 +66,7 @@ const VehicleInformationPage: React.FC = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
           <Loader2 className="h-8 w-8 animate-spin" />
-          <span className="ml-2">Cargando información...</span>
+          <span className="ml-2">{t('common.loading')}</span>
         </div>
       </div>
     );
@@ -75,10 +76,10 @@ const VehicleInformationPage: React.FC = () => {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Vehículo no encontrado</h1>
+          <h1 className="text-2xl font-bold mb-4">{t('vehicles.notFound')}</h1>
           <Button onClick={() => navigate('/vehicles')}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver a Vehículos
+            {t('vehicles.backToVehicles')}
           </Button>
         </div>
       </div>
@@ -98,26 +99,25 @@ const VehicleInformationPage: React.FC = () => {
           className="mb-6"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Volver al Vehículo
+          {t('vehicleInfo.backToVehicle')}
         </Button>
         
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">
-            Información Adicional
+            {t('vehicleInfo.additionalInfo')}
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-muted-foreground">
             {vehicle.brand} {vehicle.model} ({vehicle.year})
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Especificaciones Técnicas */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Wrench className="h-5 w-5" />
-              Especificaciones Técnicas
+              {t('vehicleInfo.technicalSpecs')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -131,19 +131,18 @@ const VehicleInformationPage: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 italic">
-                No hay especificaciones técnicas disponibles
+              <p className="text-muted-foreground italic">
+                {t('vehicleInfo.noTechnicalSpecs')}
               </p>
             )}
           </CardContent>
         </Card>
 
-        {/* Historial de Mantenimiento */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
-              Historial de Mantenimiento
+              {t('vehicleInfo.maintenanceHistory')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -152,44 +151,42 @@ const VehicleInformationPage: React.FC = () => {
                 {Object.entries(maintenanceHistory).map(([key, value]) => (
                   <div key={key} className="border-b pb-2">
                     <span className="font-medium block">{key}:</span>
-                    <span className="text-gray-600">{String(value)}</span>
+                    <span className="text-muted-foreground">{String(value)}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 italic">
-                No hay historial de mantenimiento disponible
+              <p className="text-muted-foreground italic">
+                {t('vehicleInfo.noMaintenanceHistory')}
               </p>
             )}
           </CardContent>
         </Card>
       </div>
 
-      {/* Notas Adicionales */}
       {additionalNotes && (
         <Card className="mt-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Info className="h-5 w-5" />
-              Notas Adicionales
+              {t('vehicleInfo.additionalNotes')}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+            <p className="text-foreground whitespace-pre-wrap leading-relaxed">
               {additionalNotes}
             </p>
           </CardContent>
         </Card>
       )}
 
-      {/* Mensaje cuando no hay información */}
       {!information && (
         <Card className="mt-8">
           <CardContent className="text-center py-12">
-            <Info className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">No hay información adicional</h3>
-            <p className="text-gray-500">
-              Aún no se ha registrado información adicional para este vehículo.
+            <Info className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium mb-2">{t('vehicleInfo.noAdditionalInfo')}</h3>
+            <p className="text-muted-foreground">
+              {t('vehicleInfo.noAdditionalInfoDesc')}
             </p>
           </CardContent>
         </Card>

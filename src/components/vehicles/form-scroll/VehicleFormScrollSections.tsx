@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { VehicleFormData } from '@/types/vehicle';
@@ -12,6 +11,7 @@ import { TransactionDetails } from '../form-sections/TransactionDetails';
 import { DamagesSection } from '../form-sections/DamagesSection';
 import { CheckCircle, Car, Calendar, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface VehicleFormScrollSectionsProps {
   form: UseFormReturn<VehicleFormData>;
@@ -38,16 +38,18 @@ export const VehicleFormScrollSections: React.FC<VehicleFormScrollSectionsProps>
   activeSection,
   onSectionChange
 }) => {
+  const { t } = useLanguage();
+
   const sections = [
-    { id: 'basic', title: 'Detalles Básicos', component: 'basic' },
-    { id: 'identification', title: 'Identificación', component: 'identification' },
-    { id: 'transaction', title: 'Transacción', component: 'transaction' },
-    { id: 'specs', title: 'Especificaciones', component: 'specs' },
-    { id: 'equipment', title: 'Equipamiento', component: 'equipment' },
-    { id: 'additional', title: 'Información Adicional', component: 'additional' },
-    { id: 'damages', title: 'Daños', component: 'damages' },
-    { id: 'media', title: 'Imágenes', component: 'media' },
-    { id: 'published', title: 'Publicación', component: 'published' }
+    { id: 'basic', title: t('vehicleForm.basicDetails'), component: 'basic' },
+    { id: 'identification', title: t('vehicleForm.identification'), component: 'identification' },
+    { id: 'transaction', title: t('vehicleForm.transaction'), component: 'transaction' },
+    { id: 'specs', title: t('vehicleForm.specifications'), component: 'specs' },
+    { id: 'equipment', title: t('vehicleForm.equipment'), component: 'equipment' },
+    { id: 'additional', title: t('vehicleForm.additionalInfo'), component: 'additional' },
+    { id: 'damages', title: t('vehicleForm.damages'), component: 'damages' },
+    { id: 'media', title: t('vehicleForm.images'), component: 'media' },
+    { id: 'published', title: t('vehicleForm.publication'), component: 'published' }
   ];
 
   // Scroll spy effect - Mejorado para evitar conflictos con navegación manual
@@ -138,8 +140,8 @@ export const VehicleFormScrollSections: React.FC<VehicleFormScrollSectionsProps>
                     <CheckCircle className="h-20 w-20 text-success" />
                   </div>
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-bold text-success">¡Vehículo Publicado Exitosamente!</h2>
-                    <p className="text-muted-foreground">Tu vehículo ya está disponible en la plataforma</p>
+                    <h2 className="text-2xl font-bold text-success">{t('vehicleForm.publishedSuccess')}</h2>
+                    <p className="text-muted-foreground">{t('vehicleForm.publishedDesc')}</p>
                   </div>
                   
                   <div className="bg-success/10 p-6 rounded-lg space-y-4">
@@ -153,15 +155,15 @@ export const VehicleFormScrollSections: React.FC<VehicleFormScrollSectionsProps>
                     </div>
                     <div className="flex items-center gap-3">
                       <Calendar className="h-5 w-5 text-success" />
-                      <span className="text-foreground">Publicado: {new Date().toLocaleDateString('es-ES')}</span>
+                      <span className="text-foreground">{t('vehicleForm.publishedDate')}: {new Date().toLocaleDateString()}</span>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="text-center space-y-6">
                   <div className="space-y-2">
-                    <h2 className="text-xl font-bold text-muted-foreground">Completar Publicación</h2>
-                    <p className="text-muted-foreground">Completa todas las secciones anteriores para publicar tu vehículo</p>
+                    <h2 className="text-xl font-bold text-muted-foreground">{t('vehicleForm.completePublication')}</h2>
+                    <p className="text-muted-foreground">{t('vehicleForm.completePublicationDesc')}</p>
                   </div>
                 </div>
               )}

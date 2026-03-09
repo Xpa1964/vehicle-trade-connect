@@ -1,11 +1,5 @@
 /**
  * SellerDecisionPanel - Componente para decisión del vendedor
- * 
- * Documento Oficial Capa 3:
- * - Solo visible para seller_id cuando status = ENDED_PENDING_ACCEPTANCE
- * - Dos acciones EXCLUSIVAS: Aceptar o Rechazar
- * - Acciones irreversibles
- * - Kontact NO fuerza operaciones
  */
 
 import React, { useState } from 'react';
@@ -51,20 +45,10 @@ export const SellerDecisionPanel: React.FC<SellerDecisionPanelProps> = ({ auctio
   const acceptMutation = useAcceptAuctionResult();
   const rejectMutation = useRejectAuctionResult();
 
-  // ============================================
-  // VALIDACIONES DE VISIBILIDAD (Capa 3)
-  // ============================================
-  
-  // Solo visible si el usuario es el vendedor
   const isSeller = user?.id === auction.created_by;
-  
-  // Solo visible en estado ENDED_PENDING_ACCEPTANCE
   const isPendingDecision = auction.status === 'ended_pending_acceptance';
-  
-  // Debe existir un ganador provisional
   const hasWinner = !!auction.winner_id;
 
-  // Si no cumple condiciones, no renderizar
   if (!isSeller || !isPendingDecision) {
     return null;
   }
@@ -97,7 +81,6 @@ export const SellerDecisionPanel: React.FC<SellerDecisionPanelProps> = ({ auctio
       </CardHeader>
       
       <CardContent className="space-y-6">
-        {/* Resumen del resultado */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-background rounded-lg border">
           <div>
             <p className="text-sm text-muted-foreground">{t('auctions.result.finalPrice')}</p>
@@ -122,7 +105,6 @@ export const SellerDecisionPanel: React.FC<SellerDecisionPanelProps> = ({ auctio
           )}
         </div>
 
-        {/* Información del ganador */}
         {hasWinner && auction.winner && (
           <div className="p-4 bg-accent/50 rounded-lg border border-accent">
             <div className="flex items-center gap-2 mb-2">
@@ -134,7 +116,7 @@ export const SellerDecisionPanel: React.FC<SellerDecisionPanelProps> = ({ auctio
             <div className="flex items-center gap-2">
               <User className="h-4 w-4 text-muted-foreground" />
               <span className="font-medium">
-                {auction.winner.company_name || auction.winner.full_name || 'Usuario'}
+                {auction.winner.company_name || auction.winner.full_name || t('common.unknown')}
               </span>
             </div>
           </div>
@@ -151,9 +133,7 @@ export const SellerDecisionPanel: React.FC<SellerDecisionPanelProps> = ({ auctio
           </div>
         )}
 
-        {/* Botones de acción */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
-          {/* ACEPTAR */}
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button 
@@ -188,23 +168,22 @@ export const SellerDecisionPanel: React.FC<SellerDecisionPanelProps> = ({ auctio
                     )}
                   </ul>
                   <p className="text-amber-600 font-medium mt-4">
-                    ⚠️ Esta acción es irreversible.
+                    ⚠️ {t('auctions.result.irreversibleAction')}
                   </p>
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
                 <AlertDialogAction 
                   onClick={handleAccept}
                   disabled={isLoading}
                 >
-                  {acceptMutation.isPending ? 'Procesando...' : 'Confirmar Aceptación'}
+                  {acceptMutation.isPending ? t('common.loading') : t('auctions.result.confirmAccept')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
 
-          {/* RECHAZAR */}
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button 
@@ -236,11 +215,11 @@ export const SellerDecisionPanel: React.FC<SellerDecisionPanelProps> = ({ auctio
               
               <div className="py-4">
                 <Label htmlFor="reject-reason" className="text-sm font-medium">
-                  Motivo del rechazo (opcional)
+                  {t('auctions.result.rejectReasonLabel')}
                 </Label>
                 <Textarea
                   id="reject-reason"
-                  placeholder="Indica brevemente por qué rechazas el resultado..."
+                  placeholder={t('auctions.result.rejectReasonPlaceholder')}
                   value={rejectReason}
                   onChange={(e) => setRejectReason(e.target.value)}
                   className="mt-2"
@@ -249,22 +228,21 @@ export const SellerDecisionPanel: React.FC<SellerDecisionPanelProps> = ({ auctio
               </div>
               
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
                 <AlertDialogAction 
                   onClick={handleReject}
                   className="bg-destructive hover:bg-destructive/90"
                   disabled={isLoading}
                 >
-                  {rejectMutation.isPending ? 'Procesando...' : 'Confirmar Rechazo'}
+                  {rejectMutation.isPending ? t('common.loading') : t('auctions.result.confirmReject')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
         </div>
 
-        {/* Disclaimer legal */}
         <p className="text-xs text-muted-foreground text-center pt-2 border-t">
-          Kontact VO no fuerza operaciones. La decisión final corresponde exclusivamente al vendedor.
+          {t('auctions.result.disclaimer')}
         </p>
       </CardContent>
     </Card>
