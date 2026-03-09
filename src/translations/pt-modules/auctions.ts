@@ -190,7 +190,7 @@ export default {
   'auctions.acceptTerms': 'Deve aceitar os termos e condições',
   'auctions.optional': 'opcional',
   'auctions.descriptionPlaceholder': 'Adicione informações adicionais sobre o leilão...',
-  'auctions.loading': 'Carregando veículos...',
+  
   'auctions.startDate': 'Data de Início',
   'auctions.endDate': 'Data de Término',
   'auctions.incrementMinimum': 'Incremento Mínimo',
