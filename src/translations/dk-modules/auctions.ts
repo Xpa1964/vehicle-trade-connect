@@ -184,4 +184,25 @@ export default {
   'auctions.endDate': 'Slutdato',
   'auctions.incrementMinimum': 'Minimumsforhøjelse',
   'auctions.reservePrice': 'Mindstepris',
+
+  // Status badges
+  'auctions.statusDraft': 'Kladde',
+  'auctions.statusPendingAcceptance': 'Afventer Beslutning',
+  'auctions.statusEnded_pending_acceptance': 'Afsluttet - Afventer Beslutning',
+  'auctions.statusAccepted': 'Accepteret',
+  'auctions.statusRejected': 'Afvist',
+  'auctions.statusContactShared': 'Kontakt Delt',
+  'auctions.statusClosed': 'Lukket',
+  'auctions.hasReserve': 'Med Mindstepris',
+  'auctions.bidsCount': 'bud',
+
+  // Detail page
+  'auctions.auctionDetails': 'Auktionsdetaljer',
+  'auctions.viewFullVehicle': 'Se Komplet Køretøjsoversigt',
+  'auctions.viewFullVehicleHint': 'Adgang til alle fotos og tekniske specifikationer',
+  'auctions.noBidsYet': 'Ingen bud endnu',
+  'auctions.cannotBidOwnAuction': 'Du kan ikke byde på din egen auktion',
+  'auctions.notFound': 'Auktion ikke fundet',
+  'auctions.seller': 'Sælger',
+  'auctions.viewSellerProfile': 'Se sælgerprofil',
 };

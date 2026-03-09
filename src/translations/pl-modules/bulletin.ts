@@ -1,5 +1,6 @@
 export default {
   'bulletin.title': 'Tablica Ogłoszeń',
+  'bulletin.subtitle': 'Znajdź możliwości biznesowe w naszej profesjonalnej społeczności',
   'bulletin.description': 'Publikuj i przeglądaj ogłoszenia biznesowe',
   'bulletin.readMore': 'Czytaj Więcej',
   'bulletin.noAnnouncements': 'Brak dostępnych ogłoszeń',

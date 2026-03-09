@@ -196,4 +196,24 @@ export default {
   'auctions.endDate': 'Einddatum',
   'auctions.incrementMinimum': 'Minimale Verhoging',
   'auctions.reservePrice': 'Minimumprijs',
+
+  // Status badges
+  'auctions.statusDraft': 'Concept',
+  'auctions.statusPendingAcceptance': 'Beslissing in Afwachting',
+  'auctions.statusEnded_pending_acceptance': 'Beëindigd - Beslissing in Afwachting',
+  'auctions.statusAccepted': 'Geaccepteerd',
+  'auctions.statusRejected': 'Afgewezen',
+  'auctions.statusContactShared': 'Contact Gedeeld',
+  'auctions.statusClosed': 'Gesloten',
+  'auctions.hasReserve': 'Met Reserve',
+  'auctions.bidsCount': 'biedingen',
+
+  // Detail page
+  'auctions.viewFullVehicle': 'Bekijk Volledige Voertuiggegevens',
+  'auctions.viewFullVehicleHint': 'Toegang tot alle foto\'s en technische specificaties',
+  'auctions.noBidsYet': 'Nog geen biedingen',
+  'auctions.cannotBidOwnAuction': 'U kunt niet bieden op uw eigen veiling',
+  'auctions.notFound': 'Veiling niet gevonden',
+  'auctions.seller': 'Verkoper',
+  'auctions.viewSellerProfile': 'Bekijk verkopersprofiel',
 };

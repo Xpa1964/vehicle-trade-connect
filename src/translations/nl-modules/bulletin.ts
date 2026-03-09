@@ -1,5 +1,6 @@
 export default {
   'bulletin.title': 'Prikbord',
+  'bulletin.subtitle': 'Vind zakelijke kansen in onze professionele gemeenschap',
   'bulletin.description': 'Laatste aankondigingen en nieuws',
   'bulletin.readMore': 'Lees Meer',
   'bulletin.noAnnouncements': 'Geen aankondigingen beschikbaar',

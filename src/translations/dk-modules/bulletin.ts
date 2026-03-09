@@ -1,5 +1,6 @@
 export default {
   'bulletin.title': 'Opslagstavle',
+  'bulletin.subtitle': 'Find forretningsmuligheder i vores professionelle fællesskab',
   'bulletin.description': 'Publicer og gennemse business annoncer',
   'bulletin.readMore': 'Læs Mere',
   'bulletin.noAnnouncements': 'Ingen annoncer tilgængelige',

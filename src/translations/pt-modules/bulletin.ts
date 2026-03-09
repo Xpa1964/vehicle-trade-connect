@@ -1,5 +1,6 @@
 export default {
   'bulletin.title': 'Quadro de Avisos',
+  'bulletin.subtitle': 'Encontre oportunidades de negócio na nossa comunidade profissional',
   'bulletin.description': 'Encontre oportunidades de negócio e anúncios da comunidade',
   'bulletin.createPost': 'Criar Anúncio',
   'bulletin.category': 'Categoria',

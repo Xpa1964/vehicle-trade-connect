@@ -184,4 +184,25 @@ export default {
   'auctions.endDate': 'Data Zakończenia',
   'auctions.incrementMinimum': 'Minimalna Podwyżka',
   'auctions.reservePrice': 'Cena Minimalna',
+
+  // Status badges
+  'auctions.statusDraft': 'Szkic',
+  'auctions.statusPendingAcceptance': 'Oczekuje na Decyzję',
+  'auctions.statusEnded_pending_acceptance': 'Zakończona - Oczekuje na Decyzję',
+  'auctions.statusAccepted': 'Zaakceptowana',
+  'auctions.statusRejected': 'Odrzucona',
+  'auctions.statusContactShared': 'Kontakt Udostępniony',
+  'auctions.statusClosed': 'Zamknięta',
+  'auctions.hasReserve': 'Z Rezerwą',
+  'auctions.bidsCount': 'ofert',
+
+  // Detail page
+  'auctions.auctionDetails': 'Szczegóły Aukcji',
+  'auctions.viewFullVehicle': 'Zobacz Pełną Kartę Pojazdu',
+  'auctions.viewFullVehicleHint': 'Dostęp do wszystkich zdjęć i specyfikacji technicznych',
+  'auctions.noBidsYet': 'Brak ofert',
+  'auctions.cannotBidOwnAuction': 'Nie możesz licytować na własnej aukcji',
+  'auctions.notFound': 'Aukcja nie znaleziona',
+  'auctions.seller': 'Sprzedawca',
+  'auctions.viewSellerProfile': 'Zobacz profil sprzedawcy',
 };

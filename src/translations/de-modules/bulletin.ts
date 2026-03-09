@@ -1,6 +1,7 @@
 export default {
   // Bulletin Board
   'bulletin.title': 'Schwarzes Brett',
+  'bulletin.subtitle': 'Finden Sie Geschäftsmöglichkeiten in unserer professionellen Gemeinschaft',
   'bulletin.readMore': 'Mehr lesen',
   'bulletin.noAnnouncements': 'Keine Ankündigungen verfügbar',
   'bulletin.createFirst': 'Erstellen Sie Ihre erste Ankündigung',

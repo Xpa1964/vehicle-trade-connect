@@ -1,6 +1,7 @@
 export default {
   // Bulletin Board
   'bulletin.title': 'Tableau d\'Annonces',
+  'bulletin.subtitle': 'Trouvez des opportunités d\'affaires dans notre communauté professionnelle',
   'bulletin.readMore': 'Lire plus',
   'bulletin.noAnnouncements': 'Aucune annonce disponible',
   'bulletin.createFirst': 'Créez votre première annonce',
