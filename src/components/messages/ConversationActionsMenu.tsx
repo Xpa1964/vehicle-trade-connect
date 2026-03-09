@@ -44,7 +44,6 @@ const ConversationActionsMenu: React.FC<ConversationActionsMenuProps> = ({
   }, [isOpen]);
 
   const handleTogglePin = (e: React.MouseEvent) => {
-    console.log('Toggle pin clicked! Conversation:', conversation.id);
     e.preventDefault();
     e.stopPropagation();
     onTogglePin(conversation.id);
@@ -52,7 +51,6 @@ const ConversationActionsMenu: React.FC<ConversationActionsMenuProps> = ({
   };
 
   const handleDeleteClick = (e: React.MouseEvent) => {
-    console.log('Delete clicked! Conversation:', conversation.id);
     e.preventDefault();
     e.stopPropagation();
     setIsOpen(false);
@@ -60,7 +58,6 @@ const ConversationActionsMenu: React.FC<ConversationActionsMenuProps> = ({
   };
 
   const confirmDelete = () => {
-    console.log('Confirm delete called for conversation:', conversation.id);
     onDelete(conversation.id);
     setShowDeleteDialog(false);
   };
@@ -73,13 +70,12 @@ const ConversationActionsMenu: React.FC<ConversationActionsMenuProps> = ({
         size="sm" 
         className="h-8 w-8 p-0 hover:bg-muted border border-transparent hover:border-border relative z-[1000] bg-white/80 hover:bg-white"
         onClick={(e) => {
-          console.log('Menu button clicked! Current state:', isOpen);
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
       >
         <MoreVertical className="h-4 w-4 text-muted-foreground" />
-        <span className="sr-only">Opciones de conversación</span>
+        <span className="sr-only">{t('messages.conversationOptions')}</span>
       </Button>
 
       {isOpen && (
@@ -122,19 +118,18 @@ const ConversationActionsMenu: React.FC<ConversationActionsMenuProps> = ({
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Eliminar Conversación</AlertDialogTitle>
+            <AlertDialogTitle>{t('messages.deleteConversation')}</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar esta conversación? Esta acción no se puede deshacer.
-              La conversación será removida de tu lista, pero quedará registrada en el sistema para auditoría.
+              {t('messages.deleteConversationConfirm')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction 
               onClick={confirmDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Eliminar
+              {t('common.delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

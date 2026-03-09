@@ -47,4 +47,8 @@ export default {
   'toast.chatError': 'Error starting chat',
   'toast.chatMessageError': 'Error sending message',
   'toast.loading': 'Loading data...',
+  'toast.userNotIdentified': 'Could not identify the current user',
+  'toast.roleLoadError': 'Could not load user role',
+  'toast.roleUpdateContextError': 'Role loaded successfully but context update failed',
+  'toast.roleReloadError': 'Unexpected error reloading role',
 };

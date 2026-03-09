@@ -65,7 +65,6 @@ const TransportQuotesList: React.FC = () => {
         return;
       }
 
-      // Load user's quotes
       const { data: quotesData, error: quotesError } = await supabase
         .from('transport_quotes')
         .select('*')
@@ -80,7 +79,6 @@ const TransportQuotesList: React.FC = () => {
 
       setQuotes(quotesData || []);
 
-      // Load responses for user's quotes
       if (quotesData && quotesData.length > 0) {
         const quoteIds = quotesData.map(quote => quote.id);
         const { data: responsesData, error: responsesError } = await supabase
@@ -128,7 +126,7 @@ const TransportQuotesList: React.FC = () => {
 
       if (error) {
         console.error('Error accepting quote:', error);
-        toast.error('Error al aceptar la cotización');
+        toast.error(t('toast.quoteError'));
         return;
       }
 
@@ -149,7 +147,7 @@ const TransportQuotesList: React.FC = () => {
 
       if (error) {
         console.error('Error rejecting quote:', error);
-        toast.error('Error al rechazar la cotización');
+        toast.error(t('toast.quoteError'));
         return;
       }
 
@@ -166,7 +164,7 @@ const TransportQuotesList: React.FC = () => {
       <div className="flex items-center justify-center py-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Cargando cotizaciones...</p>
+          <p className="mt-4 text-muted-foreground">{t('transportQuotes.loadingQuotes')}</p>
         </div>
       </div>
     );
@@ -192,7 +190,7 @@ const TransportQuotesList: React.FC = () => {
           <CardContent className="p-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">{quotes.length}</div>
-              <div className="text-sm text-muted-foreground">Total Solicitudes</div>
+              <div className="text-sm text-muted-foreground">{t('transportQuotes.totalRequests')}</div>
             </div>
           </CardContent>
         </Card>
@@ -202,7 +200,7 @@ const TransportQuotesList: React.FC = () => {
               <div className="text-2xl font-bold text-yellow-600">
                 {quotes.filter(q => q.status === 'pending').length}
               </div>
-              <div className="text-sm text-muted-foreground">Pendientes</div>
+              <div className="text-sm text-muted-foreground">{t('transportQuotes.pendingLabel')}</div>
             </div>
           </CardContent>
         </Card>
@@ -212,7 +210,7 @@ const TransportQuotesList: React.FC = () => {
               <div className="text-2xl font-bold text-blue-600">
                 {quotes.filter(q => q.status === 'quoted').length}
               </div>
-              <div className="text-sm text-muted-foreground">Cotizadas</div>
+              <div className="text-sm text-muted-foreground">{t('transportQuotes.quotedLabel')}</div>
             </div>
           </CardContent>
         </Card>
@@ -222,7 +220,7 @@ const TransportQuotesList: React.FC = () => {
               <div className="text-2xl font-bold text-green-600">
                 {quotes.filter(q => q.status === 'accepted').length}
               </div>
-              <div className="text-sm text-muted-foreground">Aceptadas</div>
+              <div className="text-sm text-muted-foreground">{t('transportQuotes.acceptedLabel')}</div>
             </div>
           </CardContent>
         </Card>
@@ -231,9 +229,9 @@ const TransportQuotesList: React.FC = () => {
       {/* Quotes Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Mis Solicitudes de Transporte</CardTitle>
+          <CardTitle>{t('transportQuotes.myRequests')}</CardTitle>
           <CardDescription>
-            Gestiona tus solicitudes de transporte y revisa las cotizaciones recibidas
+            {t('transportQuotes.myRequestsDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -241,13 +239,13 @@ const TransportQuotesList: React.FC = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Número</TableHead>
-                  <TableHead>Vehículo</TableHead>
-                  <TableHead>Ruta</TableHead>
-                  <TableHead>Fecha Solicitud</TableHead>
-                  <TableHead>Estado</TableHead>
-                  <TableHead>Precio</TableHead>
-                  <TableHead>Acciones</TableHead>
+                  <TableHead>{t('transportQuotes.tableNumber')}</TableHead>
+                  <TableHead>{t('transportQuotes.tableVehicle')}</TableHead>
+                  <TableHead>{t('transportQuotes.tableRoute')}</TableHead>
+                  <TableHead>{t('transportQuotes.tableRequestDate')}</TableHead>
+                  <TableHead>{t('transportQuotes.status')}</TableHead>
+                  <TableHead>{t('transportQuotes.tablePrice')}</TableHead>
+                  <TableHead>{t('transportQuotes.tableActions')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -276,10 +274,10 @@ const TransportQuotesList: React.FC = () => {
                         {response ? (
                           <div className="text-sm">
                             <div className="font-medium">€{response.quoted_price}</div>
-                            <div className="text-muted-foreground">Cotizado</div>
+                            <div className="text-muted-foreground">{t('transportQuotes.quoted')}</div>
                           </div>
                         ) : (
-                          <div className="text-sm text-muted-foreground">Pendiente</div>
+                          <div className="text-sm text-muted-foreground">{t('transportQuotes.pending')}</div>
                         )}
                       </TableCell>
                       <TableCell>
@@ -292,56 +290,53 @@ const TransportQuotesList: React.FC = () => {
                                 onClick={() => setSelectedQuote(quote)}
                               >
                                 <Eye className="h-4 w-4 mr-1" />
-                                Ver
+                                {t('transportQuotes.view')}
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                               <DialogHeader>
-                                <DialogTitle>Detalle de Solicitud - {quote.quote_number}</DialogTitle>
+                                <DialogTitle>{t('transportQuotes.detailTitle')} - {quote.quote_number}</DialogTitle>
                                 <DialogDescription>
-                                  Información completa de tu solicitud de transporte
+                                  {t('transportQuotes.detailDesc')}
                                 </DialogDescription>
                               </DialogHeader>
                               
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {/* Vehicle Information */}
                                 <Card>
                                   <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                       <Truck className="h-5 w-5" />
-                                      Información del Vehículo
+                                      {t('transportQuotes.vehicleInfo')}
                                     </CardTitle>
                                   </CardHeader>
                                   <CardContent className="space-y-2">
-                                    <div><strong>Marca:</strong> {quote.brand}</div>
-                                    <div><strong>Modelo:</strong> {quote.model}</div>
-                                    <div><strong>Color:</strong> {quote.color}</div>
-                                    <div><strong>Placa:</strong> {quote.license_plate}</div>
+                                    <div><strong>{t('transportQuotes.brand')}:</strong> {quote.brand}</div>
+                                    <div><strong>{t('transportQuotes.model')}:</strong> {quote.model}</div>
+                                    <div><strong>{t('transportQuotes.color')}:</strong> {quote.color}</div>
+                                    <div><strong>{t('transportQuotes.plate')}:</strong> {quote.license_plate}</div>
                                   </CardContent>
                                 </Card>
 
-                                {/* Transport Details */}
                                 <Card>
                                   <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                       <MapPin className="h-5 w-5" />
-                                      Detalles del Transporte
+                                      {t('transportQuotes.transportDetails')}
                                     </CardTitle>
                                   </CardHeader>
                                   <CardContent className="space-y-2">
-                                    <div><strong>Origen:</strong> {quote.origin_city}, {quote.origin_country}</div>
-                                    <div><strong>Destino:</strong> {quote.destination_city}, {quote.destination_country}</div>
-                                    <div><strong>Fecha:</strong> {new Date(quote.transport_date).toLocaleDateString()}</div>
-                                    <div><strong>Estado:</strong> {getStatusBadge(quote.status)}</div>
+                                    <div><strong>{t('transportQuotes.origin')}:</strong> {quote.origin_city}, {quote.origin_country}</div>
+                                    <div><strong>{t('transportQuotes.destination')}:</strong> {quote.destination_city}, {quote.destination_country}</div>
+                                    <div><strong>{t('transportQuotes.date')}:</strong> {new Date(quote.transport_date).toLocaleDateString()}</div>
+                                    <div><strong>{t('transportQuotes.statusLabel')}:</strong> {getStatusBadge(quote.status)}</div>
                                   </CardContent>
                                 </Card>
 
-                                {/* Origin Contact */}
                                 <Card>
                                   <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                       <User className="h-5 w-5" />
-                                      Contacto Origen
+                                      {t('transportQuotes.originContact')}
                                     </CardTitle>
                                   </CardHeader>
                                   <CardContent className="space-y-2">
@@ -360,12 +355,11 @@ const TransportQuotesList: React.FC = () => {
                                   </CardContent>
                                 </Card>
 
-                                {/* Destination Contact */}
                                 <Card>
                                   <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                       <User className="h-5 w-5" />
-                                      Contacto Destino
+                                      {t('transportQuotes.destinationContact')}
                                     </CardTitle>
                                   </CardHeader>
                                   <CardContent className="space-y-2">
@@ -385,34 +379,33 @@ const TransportQuotesList: React.FC = () => {
                                 </Card>
                               </div>
 
-                              {/* Quote Response */}
                               {response && (
                                 <Card className="mt-6">
                                   <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                       <Calendar className="h-5 w-5" />
-                                      Cotización Recibida
+                                      {t('transportQuotes.quoteReceived')}
                                     </CardTitle>
                                   </CardHeader>
                                   <CardContent className="space-y-4">
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                       <div>
-                                        <strong>Precio Cotizado:</strong>
+                                        <strong>{t('transportQuotes.quotedPrice')}:</strong>
                                         <div className="text-2xl font-bold text-primary">€{response.quoted_price}</div>
                                       </div>
                                       <div>
-                                        <strong>Fecha Recogida:</strong>
+                                        <strong>{t('transportQuotes.pickupDate')}:</strong>
                                         <div>{new Date(response.estimated_pickup_date).toLocaleDateString()}</div>
                                       </div>
                                       <div>
-                                        <strong>Fecha Entrega:</strong>
+                                        <strong>{t('transportQuotes.deliveryDate')}:</strong>
                                         <div>{new Date(response.estimated_delivery_date).toLocaleDateString()}</div>
                                       </div>
                                     </div>
                                     
                                     {response.terms_and_conditions && (
                                       <div>
-                                        <strong>Términos y Condiciones:</strong>
+                                        <strong>{t('transportQuotes.termsConditions')}:</strong>
                                         <p className="text-sm mt-1 p-3 bg-muted rounded">{response.terms_and_conditions}</p>
                                       </div>
                                     )}
@@ -424,7 +417,7 @@ const TransportQuotesList: React.FC = () => {
                                           className="flex items-center gap-2"
                                         >
                                           <CheckCircle className="h-4 w-4" />
-                                          Aceptar Cotización
+                                          {t('transportQuotes.acceptQuote')}
                                         </Button>
                                         <Button
                                           variant="outline"
@@ -432,7 +425,7 @@ const TransportQuotesList: React.FC = () => {
                                           className="flex items-center gap-2"
                                         >
                                           <XCircle className="h-4 w-4" />
-                                          Rechazar
+                                          {t('transportQuotes.rejectQuote')}
                                         </Button>
                                       </div>
                                     )}
@@ -450,7 +443,7 @@ const TransportQuotesList: React.FC = () => {
                                 className="flex items-center gap-1"
                               >
                                 <CheckCircle className="h-4 w-4" />
-                                Aceptar
+                                {t('transportQuotes.accept')}
                               </Button>
                               <Button
                                 variant="outline"
@@ -459,7 +452,7 @@ const TransportQuotesList: React.FC = () => {
                                 className="flex items-center gap-1"
                               >
                                 <XCircle className="h-4 w-4" />
-                                Rechazar
+                                {t('transportQuotes.reject')}
                               </Button>
                             </>
                           )}

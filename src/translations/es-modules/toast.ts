@@ -47,4 +47,8 @@ export default {
   'toast.chatError': 'Error al iniciar el chat',
   'toast.chatMessageError': 'Error al enviar el mensaje',
   'toast.loading': 'Cargando datos...',
+  'toast.userNotIdentified': 'No se pudo identificar el usuario actual',
+  'toast.roleLoadError': 'No se pudo obtener el rol del usuario',
+  'toast.roleUpdateContextError': 'El rol se obtuvo correctamente pero no se pudo actualizar el contexto',
+  'toast.roleReloadError': 'Error inesperado al recargar el rol',
 };

@@ -109,6 +109,12 @@ export default {
   'auctions.result.rejectFinal': '• Esta acción no se puede deshacer',
   'auctions.result.acceptedSuccess': '¡Resultado aceptado! Los datos de contacto serán compartidos.',
   'auctions.result.rejectedSuccess': 'Resultado rechazado. El vehículo está disponible nuevamente.',
+  'auctions.result.irreversibleAction': 'Esta acción es irreversible.',
+  'auctions.result.confirmAccept': 'Confirmar Aceptación',
+  'auctions.result.confirmReject': 'Confirmar Rechazo',
+  'auctions.result.rejectReasonLabel': 'Motivo del rechazo (opcional)',
+  'auctions.result.rejectReasonPlaceholder': 'Indica brevemente por qué rechazas el resultado...',
+  'auctions.result.disclaimer': 'Kontact VO no fuerza operaciones. La decisión final corresponde exclusivamente al vendedor.',
 
   // Nuevas traducciones faltantes
   'auctions.ended.withWinner': 'Subasta finalizada con ganador',
