@@ -1,8 +1,9 @@
 
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Users, Loader2, Edit, Eye } from 'lucide-react';
+import AddUserDialog from '@/components/admin/AddUserDialog';
 import PageHeader from '@/components/layout/PageHeader';
 import {
   Table,
@@ -38,6 +39,8 @@ interface AdminUser {
 
 const AdminUsers = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
 
   const { data: users, isLoading } = useQuery({
     queryKey: ['admin-users'],
@@ -128,11 +131,17 @@ const AdminUsers = () => {
       />
       
       <div className="flex justify-end mb-4">
-        <Button variant="default" className="flex items-center gap-2">
+        <Button variant="default" className="flex items-center gap-2" onClick={() => setAddDialogOpen(true)}>
           <Users className="h-4 w-4" />
           Añadir Usuario
         </Button>
       </div>
+
+      <AddUserDialog
+        open={addDialogOpen}
+        onOpenChange={setAddDialogOpen}
+        onUserCreated={() => queryClient.invalidateQueries({ queryKey: ['admin-users'] })}
+      />
 
       <div className="rounded-md border mt-6">
         <Table>
