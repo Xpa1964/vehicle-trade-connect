@@ -147,13 +147,14 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
           )}
 
           {/* Rating Section - Reputación actual */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+          <div className="bg-card p-4 rounded-lg border border-border">
             <div className="text-center">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">{t('rating.currentReputation')}</h3>
+              <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('rating.currentReputation')}</h3>
               <UserRatingBadge
                 averageRating={userRating.averageRating}
                 totalRatings={userRating.totalRatings}
                 verifiedRatings={userRating.verifiedRatings}
+                starSize={22}
               />
             </div>
           </div>
