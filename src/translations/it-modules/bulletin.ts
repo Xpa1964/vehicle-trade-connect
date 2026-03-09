@@ -1,6 +1,7 @@
 export default {
   // Bulletin Board
   'bulletin.title': 'Bacheca',
+  'bulletin.subtitle': 'Trova opportunità di business nella nostra comunità professionale',
   'bulletin.readMore': 'Leggi di più',
   'bulletin.noAnnouncements': 'Nessun annuncio disponibile',
   'bulletin.createFirst': 'Crea il tuo primo annuncio',
