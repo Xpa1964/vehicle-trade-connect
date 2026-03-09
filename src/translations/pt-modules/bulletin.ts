@@ -70,4 +70,10 @@ export default {
   'bulletin.showAll': 'Todos',
   'bulletin.showFeaturedOnly': 'Apenas destacados',
   'bulletin.downloadFile': 'Baixar',
+  'bulletin.featuredAnnouncement': 'Anúncio Destacado',
+  'bulletin.featuredDescription': 'Anúncios destacados aparecem no topo da lista com maior visibilidade por 30 dias.',
+  'bulletin.attachments': 'Ficheiros anexos',
+  'bulletin.attachmentsDescription': 'Pode selecionar até 5 ficheiros. Serão carregados após a criação do anúncio.',
+  'bulletin.share': 'Partilhar',
+  'bulletin.publishedIn': 'Artigo publicado no Kontact Automotive',
 };

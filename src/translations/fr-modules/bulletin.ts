@@ -83,4 +83,10 @@ export default {
   'bulletin.showFeaturedOnly': 'En vedette uniquement',
   'bulletin.views': 'vues',
   'bulletin.downloadFile': 'Télécharger',
+  'bulletin.featuredAnnouncement': 'Annonce en Vedette',
+  'bulletin.featuredDescription': 'Les annonces en vedette apparaissent en haut de la liste avec une plus grande visibilité pendant 30 jours.',
+  'bulletin.attachments': 'Pièces jointes',
+  'bulletin.attachmentsDescription': 'Vous pouvez sélectionner jusqu\'à 5 fichiers. Ils seront téléchargés après la création de l\'annonce.',
+  'bulletin.share': 'Partager',
+  'bulletin.publishedIn': 'Article publié sur Kontact Automotive',
 };

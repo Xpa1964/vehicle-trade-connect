@@ -82,4 +82,10 @@ export default {
   'bulletin.showFeaturedOnly': 'Tylko wyróżnione',
   'bulletin.views': 'wyświetlenia',
   'bulletin.downloadFile': 'Pobierz',
+  'bulletin.featuredAnnouncement': 'Wyróżnione Ogłoszenie',
+  'bulletin.featuredDescription': 'Wyróżnione ogłoszenia pojawiają się na górze listy z większą widocznością przez 30 dni.',
+  'bulletin.attachments': 'Załączniki',
+  'bulletin.attachmentsDescription': 'Możesz wybrać do 5 plików. Zostaną przesłane po utworzeniu ogłoszenia.',
+  'bulletin.share': 'Udostępnij',
+  'bulletin.publishedIn': 'Artykuł opublikowany na Kontact Automotive',
 };

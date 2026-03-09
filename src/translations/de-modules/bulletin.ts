@@ -83,4 +83,10 @@ export default {
   'bulletin.showFeaturedOnly': 'Nur Hervorgehobene',
   'bulletin.views': 'Aufrufe',
   'bulletin.downloadFile': 'Herunterladen',
+  'bulletin.featuredAnnouncement': 'Hervorgehobene Ankündigung',
+  'bulletin.featuredDescription': 'Hervorgehobene Ankündigungen erscheinen oben in der Liste mit größerer Sichtbarkeit für 30 Tage.',
+  'bulletin.attachments': 'Dateianhänge',
+  'bulletin.attachmentsDescription': 'Sie können bis zu 5 Dateien auswählen. Diese werden nach dem Erstellen der Ankündigung hochgeladen.',
+  'bulletin.share': 'Teilen',
+  'bulletin.publishedIn': 'Artikel veröffentlicht auf Kontact Automotive',
 };

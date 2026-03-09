@@ -82,4 +82,10 @@ export default {
   'bulletin.showFeaturedOnly': 'Alleen uitgelicht',
   'bulletin.views': 'weergaven',
   'bulletin.downloadFile': 'Downloaden',
+  'bulletin.featuredAnnouncement': 'Uitgelichte Aankondiging',
+  'bulletin.featuredDescription': 'Uitgelichte aankondigingen verschijnen bovenaan de lijst met meer zichtbaarheid gedurende 30 dagen.',
+  'bulletin.attachments': 'Bijlagen',
+  'bulletin.attachmentsDescription': 'U kunt maximaal 5 bestanden selecteren. Ze worden geüpload na het aanmaken van de aankondiging.',
+  'bulletin.share': 'Delen',
+  'bulletin.publishedIn': 'Artikel gepubliceerd op Kontact Automotive',
 };
