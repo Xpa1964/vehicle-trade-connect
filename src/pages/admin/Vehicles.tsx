@@ -30,8 +30,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const AdminVehicles = () => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
@@ -263,21 +265,21 @@ const AdminVehicles = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Imagen</TableHead>
-              <TableHead>Vehículo</TableHead>
-              <TableHead>Precio</TableHead>
-              <TableHead>Estado</TableHead>
-              <TableHead>Ubicación</TableHead>
-              <TableHead>Propietario</TableHead>
-              <TableHead>Fecha</TableHead>
-              <TableHead>Acciones</TableHead>
+              <TableHead>{t('common.image', { fallback: 'Imagen' })}</TableHead>
+              <TableHead>{t('vehicles.vehicle', { fallback: 'Vehículo' })}</TableHead>
+              <TableHead>{t('vehicles.price', { fallback: 'Precio' })}</TableHead>
+              <TableHead>{t('vehicles.status', { fallback: 'Estado' })}</TableHead>
+              <TableHead>{t('vehicles.location', { fallback: 'Ubicación' })}</TableHead>
+              <TableHead>{t('common.owner', { fallback: 'Propietario' })}</TableHead>
+              <TableHead>{t('vehicles.date', { fallback: 'Fecha' })}</TableHead>
+              <TableHead>{t('vehicles.actions', { fallback: 'Acciones' })}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {vehicles.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} className="text-center py-8">
-                  No hay vehículos disponibles
+                  {t('vehicles.noVehicles', { fallback: 'No hay vehículos disponibles' })}
                 </TableCell>
               </TableRow>
             ) : (
@@ -297,23 +299,23 @@ const AdminVehicles = () => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {vehicle.price ? `€${vehicle.price.toLocaleString()}` : 'Consultar'}
+                    {vehicle.price ? `€${vehicle.price.toLocaleString()}` : t('vehicles.priceOnRequest', { fallback: 'Consultar' })}
                   </TableCell>
                   <TableCell>{getStatusBadge(vehicle.status)}</TableCell>
                   <TableCell>
                     <div>
-                      <div>{vehicle.location || 'N/A'}</div>
+                      <div>{vehicle.location || t('common.notAvailable')}</div>
                       <div className="text-sm text-gray-500">{vehicle.country}</div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="text-sm">
-                      <div>{vehicle.profile?.full_name || vehicle.profile?.company_name || 'N/A'}</div>
+                      <div>{vehicle.profile?.full_name || vehicle.profile?.company_name || t('common.notAvailable')}</div>
                       <div className="text-gray-500 font-mono">{vehicle.user_id?.substring(0, 8)}...</div>
                     </div>
                   </TableCell>
                   <TableCell>
-                    {vehicle.created_at ? format(new Date(vehicle.created_at), 'dd/MM/yyyy') : 'N/A'}
+                    {vehicle.created_at ? format(new Date(vehicle.created_at), 'dd/MM/yyyy') : t('common.notAvailable')}
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-2">

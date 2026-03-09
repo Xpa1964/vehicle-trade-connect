@@ -82,4 +82,10 @@ export default {
   'bulletin.showFeaturedOnly': 'Kun fremhævede',
   'bulletin.views': 'visninger',
   'bulletin.downloadFile': 'Download',
+  'bulletin.featuredAnnouncement': 'Fremhævet Annonce',
+  'bulletin.featuredDescription': 'Fremhævede annoncer vises øverst på listen med større synlighed i 30 dage.',
+  'bulletin.attachments': 'Vedhæftede filer',
+  'bulletin.attachmentsDescription': 'Du kan vælge op til 5 filer. De uploades efter oprettelsen af annoncen.',
+  'bulletin.share': 'Del',
+  'bulletin.publishedIn': 'Artikel offentliggjort på Kontact Automotive',
 };

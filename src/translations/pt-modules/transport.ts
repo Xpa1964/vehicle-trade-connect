@@ -50,4 +50,6 @@ export default {
   'transport.express.highlight4.desc': 'Apenas realizamos trajetos com ORIGEM OU DESTINO EM ESPANHA. Não transportamos entre outros países europeus.',
   'transport.express.highlight4.examples': '✅ Válidos: Madrid → Milão | Lyon → Valência  ❌ NÃO válido: Paris → Berlim',
   'transport.express.cta': 'Solicite Seu Transporte Expresso',
+  'transport.estimatedDateHint': 'Data estimada para o transporte',
+  'transport.formDescription': 'Solicite um orçamento para o transporte do seu veículo',
 };

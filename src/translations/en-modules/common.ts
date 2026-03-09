@@ -80,4 +80,6 @@ export default {
   'common.owner': 'Owner',
   'admin.accessDenied': 'Access Denied',
   'admin.apiAccessDenied': 'You do not have permission to access API management.',
+  'common.pickDate': 'Pick a date',
+  'common.lastActivity': 'Last Activity',
 };

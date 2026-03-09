@@ -50,4 +50,6 @@ export default {
   'transport.express.highlight4.desc': 'Wir transportieren NUR Fahrzeuge mit URSPRUNG ODER ZIEL IN SPANIEN. Wir transportieren nicht zwischen anderen europäischen Ländern.',
   'transport.express.highlight4.examples': '✅ Gültig: Madrid → Mailand | Lyon → Valencia  ❌ NICHT gültig: Paris → Berlin',
   'transport.express.cta': 'Fordern Sie Ihren Express-Transport an',
+  'transport.estimatedDateHint': 'Geschätztes Datum für den Transport',
+  'transport.formDescription': 'Fordern Sie ein Angebot für Ihren Fahrzeugtransport an',
 };

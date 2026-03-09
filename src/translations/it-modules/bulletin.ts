@@ -83,4 +83,10 @@ export default {
   'bulletin.showFeaturedOnly': 'Solo in evidenza',
   'bulletin.views': 'visualizzazioni',
   'bulletin.downloadFile': 'Scarica',
+  'bulletin.featuredAnnouncement': 'Annuncio in Evidenza',
+  'bulletin.featuredDescription': 'Gli annunci in evidenza appaiono in cima alla lista con maggiore visibilità per 30 giorni.',
+  'bulletin.attachments': 'Allegati',
+  'bulletin.attachmentsDescription': 'Puoi selezionare fino a 5 file. Verranno caricati dopo la creazione dell\'annuncio.',
+  'bulletin.share': 'Condividi',
+  'bulletin.publishedIn': 'Articolo pubblicato su Kontact Automotive',
 };

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, TrendingUp, Calendar } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface OperationsBreakdown {
   buys: number;
@@ -23,22 +24,14 @@ const UserStats: React.FC<UserStatsProps> = ({
   registrationDate,
   traderType,
 }) => {
+  const { t } = useLanguage();
+
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
+    return new Date(dateString).toLocaleDateString(undefined, {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     });
-  };
-
-  const getTraderTypeText = (type: string) => {
-    const types: Record<string, string> = {
-      buyer: 'Comprador',
-      seller: 'Vendedor',
-      trader: 'Trader',
-      buyer_seller: 'Comprador/Vendedor'
-    };
-    return types[type] || type;
   };
 
   return (
@@ -46,26 +39,26 @@ const UserStats: React.FC<UserStatsProps> = ({
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Tipo de Comerciante
+            {t('profile.traderType')}
           </CardTitle>
           <User className="h-4 w-4 text-auto-blue" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{getTraderTypeText(traderType)}</div>
+          <div className="text-2xl font-bold">{t(`traderType.${traderType}`)}</div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Operaciones Totales
+            {t('profile.totalOperations')}
           </CardTitle>
           <TrendingUp className="h-4 w-4 text-auto-blue" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{totalOperations}</div>
           <div className="text-xs text-muted-foreground mt-1">
-            Compras: {operationsBreakdown.buys} | Ventas: {operationsBreakdown.sells}
+            {t('profile.purchases')}: {operationsBreakdown.buys} | {t('profile.sales')}: {operationsBreakdown.sells}
           </div>
         </CardContent>
       </Card>
@@ -73,7 +66,7 @@ const UserStats: React.FC<UserStatsProps> = ({
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Miembro desde
+            {t('profile.memberSince')}
           </CardTitle>
           <Calendar className="h-4 w-4 text-auto-blue" />
         </CardHeader>

@@ -38,7 +38,7 @@ const DateSelectionForm: React.FC<DateSelectionFormProps> = ({ form }) => {
                   {field.value ? (
                     format(field.value, "PPP")
                   ) : (
-                    <span>Pick a date</span>
+                    <span>{t('common.pickDate')}</span>
                   )}
                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                 </Button>
@@ -57,7 +57,7 @@ const DateSelectionForm: React.FC<DateSelectionFormProps> = ({ form }) => {
             </PopoverContent>
           </Popover>
           <FormDescription>
-            Estimated date for transport
+            {t('transport.estimatedDateHint')}
           </FormDescription>
           <FormMessage />
         </FormItem>
