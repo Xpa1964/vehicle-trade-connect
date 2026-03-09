@@ -118,10 +118,10 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
         <div className="space-y-4">
           {/* BOTÓN DE VALORACIÓN PROMINENTE - MOVIDO AL INICIO */}
           {!isCurrentUser && user && (
-            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-lg border border-yellow-200">
+            <div className="bg-card p-4 rounded-lg border border-border">
               <div className="text-center mb-3">
-                <h3 className="text-lg font-bold text-gray-800 mb-1">🌟 {t('rating.rateUser')}</h3>
-                <p className="text-sm text-gray-600">{t('rating.shareExperience')}</p>
+                <h3 className="text-lg font-bold text-foreground mb-1">🌟 {t('rating.rateUser')}</h3>
+                <p className="text-sm text-muted-foreground">{t('rating.shareExperience')}</p>
               </div>
               
               <QuickRatingDialog
@@ -139,7 +139,7 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
               />
               
               <div className="text-center mt-3">
-                <p className="text-xs text-yellow-700 font-medium">
+                <p className="text-xs text-muted-foreground font-medium">
                   👆 {t('rating.clickToRate')}
                 </p>
               </div>
