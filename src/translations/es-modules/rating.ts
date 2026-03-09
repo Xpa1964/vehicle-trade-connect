@@ -31,5 +31,19 @@ export default {
   'rating.shareExperience': 'Comparte tu experiencia con este usuario',
   'rating.giveStars': 'VALORAR USUARIO - DAR ESTRELLAS',
   'rating.clickToRate': 'Haz clic aquí para dar estrellas (1-5) y comentarios',
-  'rating.currentReputation': 'Reputación Actual'
+  'rating.currentReputation': 'Reputación Actual',
+  'rating.noRatings': 'Sin valoraciones',
+  'rating.ratings': 'valoraciones',
+  'rating.verified': 'Verificada',
+  'rating.verifiedCount': 'verificadas',
+  'rating.transactionType': 'Tipo de transacción',
+  'rating.transactionPurchase': 'Compra',
+  'rating.transactionExchange': 'Intercambio',
+  'rating.transactionService': 'Servicio',
+  'rating.transactionOther': 'Otra',
+  'rating.reputationNew': 'Nuevo',
+  'rating.reputationExpert': 'Experto',
+  'rating.reputationTrusted': 'Confiable',
+  'rating.reputationGood': 'Bueno',
+  'rating.reputationRegular': 'Regular'
 };
