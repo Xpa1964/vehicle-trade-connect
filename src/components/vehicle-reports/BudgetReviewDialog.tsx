@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { CheckCircle2, XCircle, Calendar, FileText } from 'lucide-react';
 import { format } from 'date-fns';
+import type { Locale as DateFnsLocale } from 'date-fns';
 import { es, enUS, fr, de, it, nl, pt, pl, da } from 'date-fns/locale';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
