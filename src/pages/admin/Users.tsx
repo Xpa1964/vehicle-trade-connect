@@ -131,11 +131,17 @@ const AdminUsers = () => {
       />
       
       <div className="flex justify-end mb-4">
-        <Button variant="default" className="flex items-center gap-2">
+        <Button variant="default" className="flex items-center gap-2" onClick={() => setAddDialogOpen(true)}>
           <Users className="h-4 w-4" />
           Añadir Usuario
         </Button>
       </div>
+
+      <AddUserDialog
+        open={addDialogOpen}
+        onOpenChange={setAddDialogOpen}
+        onUserCreated={() => queryClient.invalidateQueries({ queryKey: ['admin-users'] })}
+      />
 
       <div className="rounded-md border mt-6">
         <Table>
