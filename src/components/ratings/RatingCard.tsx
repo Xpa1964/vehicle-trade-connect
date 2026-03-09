@@ -14,7 +14,7 @@ interface RatingCardProps {
   userName: string;
 }
 
-const localeMap: Record<string, Locale> = { es, fr, de, it, nl, pt, pl };
+const localeMap: Record<string, typeof es> = { es, fr, de, it, nl, pt, pl };
 
 const RatingCard: React.FC<RatingCardProps> = ({ rating, userName }) => {
   const { t, currentLanguage } = useLanguage();
