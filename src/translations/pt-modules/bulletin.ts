@@ -35,7 +35,7 @@ export default {
   'bulletin.addTag': 'Adicionar tag',
   'bulletin.images': 'Imagens',
   'bulletin.addImages': 'Adicionar imagens',
-  'bulletin.attachments': 'Anexos',
+  'bulletin.addAttachmentsLabel': 'Anexos',
   'bulletin.addAttachments': 'Adicionar anexos',
   'bulletin.visibility': 'Visibilidade',
   'bulletin.public': 'Público',
