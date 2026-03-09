@@ -134,7 +134,7 @@ export default {
   'auctions.errors.belowMinimum': 'Bid is below minimum increment',
   'auctions.errors.internal': 'Internal server error',
 
-  // Publish Auction Wizard
+  // Publish Auction Wizard - additional keys
   'auctions.publishAuction': 'Publish Auction',
   'auctions.selectVehicle': 'Select Vehicle',
   'auctions.confirmAuction': 'Confirm Auction',
@@ -159,5 +159,4 @@ export default {
   'auctions.startDate': 'Start Date',
   'auctions.endDate': 'End Date',
   'auctions.incrementMinimum': 'Minimum Increment',
-  'auctions.reservePrice': 'Reserve Price',
 };
