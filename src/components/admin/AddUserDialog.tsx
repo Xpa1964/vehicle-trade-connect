@@ -95,6 +95,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({ open, onOpenChange, onUse
           password: form.password,
           userData: { full_name: form.full_name },
           profileData: {
+            email: form.email,
             full_name: form.full_name,
             company_name: form.company_name,
             contact_phone: form.contact_phone,
