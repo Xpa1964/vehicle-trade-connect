@@ -78,4 +78,7 @@ export default {
   'messages.accessDirectory': 'Acceder a Directorio',
   'messages.contactKontact': 'Contactar KONTACT VO',
   'messages.accessKontact': 'Acceder a KONTACT VO',
+  'messages.conversationOptions': 'Opciones de conversación',
+  'messages.deleteConversation': 'Eliminar Conversación',
+  'messages.deleteConversationConfirm': '¿Estás seguro de que quieres eliminar esta conversación? Esta acción no se puede deshacer. La conversación será removida de tu lista, pero quedará registrada en el sistema para auditoría.',
 };

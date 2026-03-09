@@ -412,4 +412,41 @@ export default {
   'auth.register.docIdRepresentante': 'Legal Representative Identity Document',
   'auth.register.docIdentidad': 'Identity Document (ID Card / Passport)',
   'auth.register.docActividad': 'Business Activity Registration and Tax Status',
+  'auth.register.generatedUsername': 'Your username',
+  'auth.register.usernameExplanation': 'Automatically generated from company name and manager surname',
+
+  // Vehicle Information Page
+  'vehicleInfo.backToVehicle': 'Back to Vehicle',
+  'vehicleInfo.additionalInfo': 'Additional Information',
+  'vehicleInfo.technicalSpecs': 'Technical Specifications',
+  'vehicleInfo.noTechnicalSpecs': 'No technical specifications available',
+  'vehicleInfo.maintenanceHistory': 'Maintenance History',
+  'vehicleInfo.noMaintenanceHistory': 'No maintenance history available',
+  'vehicleInfo.additionalNotes': 'Additional Notes',
+  'vehicleInfo.noAdditionalInfo': 'No additional information',
+  'vehicleInfo.noAdditionalInfoDesc': 'No additional information has been recorded for this vehicle yet.',
+
+  // Vehicle Form Sections
+  'vehicleForm.basicDetails': 'Basic Details',
+  'vehicleForm.identification': 'Identification',
+  'vehicleForm.transaction': 'Transaction',
+  'vehicleForm.specifications': 'Specifications',
+  'vehicleForm.equipment': 'Equipment',
+  'vehicleForm.additionalInfo': 'Additional Information',
+  'vehicleForm.damages': 'Damages',
+  'vehicleForm.images': 'Images',
+  'vehicleForm.publication': 'Publication',
+  'vehicleForm.publishedSuccess': 'Vehicle Published Successfully!',
+  'vehicleForm.publishedDesc': 'Your vehicle is now available on the platform',
+  'vehicleForm.publishedDate': 'Published',
+  'vehicleForm.completePublication': 'Complete Publication',
+  'vehicleForm.completePublicationDesc': 'Complete all previous sections to publish your vehicle',
+
+  // Special Filters
+  'vehicles.filters.ivaIncluded': 'VAT Included',
+  'vehicles.filters.ivaNotIncluded': 'VAT Not Included',
+  'vehicles.filters.acceptsExchange': 'Accepts Exchange',
+  'vehicles.filters.noExchange': 'No Exchange',
+  'vehicles.filters.nearlyNew': 'Nearly New',
+  'vehicles.filters.commissionSale': 'Commission Sale',
 };

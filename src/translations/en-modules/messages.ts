@@ -64,5 +64,11 @@ export default {
   'messages.contactKontactModal.title': 'Contact KONTACT VO',
   'messages.contactKontactModal.placeholder': 'Write your message or inquiry...',
   'messages.contactKontactModal.send': 'Send Message',
-  'messages.contactKontactModal.success': 'Message sent successfully'
+  'messages.contactKontactModal.success': 'Message sent successfully',
+  'messages.conversationOptions': 'Conversation options',
+  'messages.deleteConversation': 'Delete Conversation',
+  'messages.deleteConversationConfirm': 'Are you sure you want to delete this conversation? This action cannot be undone. The conversation will be removed from your list but will remain recorded in the system for auditing.',
+  'messages.conversation': 'Conversation',
+  'messages.pin': 'Pin',
+  'messages.unpin': 'Unpin',
 };

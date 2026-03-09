@@ -500,4 +500,39 @@ export default {
   'auth.register.docActividad': 'Registro de Actividad Económica y Estatus Fiscal',
   'auth.register.generatedUsername': 'Tu nombre de usuario',
   'auth.register.usernameExplanation': 'Se genera automáticamente a partir del nombre de empresa y apellido del responsable',
+
+  // Vehicle Information Page
+  'vehicleInfo.backToVehicle': 'Volver al Vehículo',
+  'vehicleInfo.additionalInfo': 'Información Adicional',
+  'vehicleInfo.technicalSpecs': 'Especificaciones Técnicas',
+  'vehicleInfo.noTechnicalSpecs': 'No hay especificaciones técnicas disponibles',
+  'vehicleInfo.maintenanceHistory': 'Historial de Mantenimiento',
+  'vehicleInfo.noMaintenanceHistory': 'No hay historial de mantenimiento disponible',
+  'vehicleInfo.additionalNotes': 'Notas Adicionales',
+  'vehicleInfo.noAdditionalInfo': 'No hay información adicional',
+  'vehicleInfo.noAdditionalInfoDesc': 'Aún no se ha registrado información adicional para este vehículo.',
+
+  // Vehicle Form Sections
+  'vehicleForm.basicDetails': 'Detalles Básicos',
+  'vehicleForm.identification': 'Identificación',
+  'vehicleForm.transaction': 'Transacción',
+  'vehicleForm.specifications': 'Especificaciones',
+  'vehicleForm.equipment': 'Equipamiento',
+  'vehicleForm.additionalInfo': 'Información Adicional',
+  'vehicleForm.damages': 'Daños',
+  'vehicleForm.images': 'Imágenes',
+  'vehicleForm.publication': 'Publicación',
+  'vehicleForm.publishedSuccess': '¡Vehículo Publicado Exitosamente!',
+  'vehicleForm.publishedDesc': 'Tu vehículo ya está disponible en la plataforma',
+  'vehicleForm.publishedDate': 'Publicado',
+  'vehicleForm.completePublication': 'Completar Publicación',
+  'vehicleForm.completePublicationDesc': 'Completa todas las secciones anteriores para publicar tu vehículo',
+
+  // Special Filters
+  'vehicles.filters.ivaIncluded': 'IVA Incluido',
+  'vehicles.filters.ivaNotIncluded': 'IVA No Incluido',
+  'vehicles.filters.acceptsExchange': 'Acepta Intercambio',
+  'vehicles.filters.noExchange': 'No Acepta Intercambio',
+  'vehicles.filters.nearlyNew': 'Casi Nuevo',
+  'vehicles.filters.commissionSale': 'Venta Comisionada',
 };
