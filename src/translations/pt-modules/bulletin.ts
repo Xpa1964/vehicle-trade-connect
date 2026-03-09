@@ -48,7 +48,7 @@ export default {
   'bulletin.contactAuthor': 'Contatar autor',
   'bulletin.moreFromAuthor': 'Mais anúncios deste autor',
   'bulletin.relatedPosts': 'Anúncios relacionados',
-  'bulletin.share': 'Compartilhar',
+  'bulletin.share': 'Partilhar',
   'bulletin.report': 'Reportar',
   'bulletin.favorite': 'Favoritar',
   'bulletin.unfavorite': 'Desfavoritar',
@@ -74,6 +74,5 @@ export default {
   'bulletin.featuredDescription': 'Anúncios destacados aparecem no topo da lista com maior visibilidade por 30 dias.',
   'bulletin.attachments': 'Ficheiros anexos',
   'bulletin.attachmentsDescription': 'Pode selecionar até 5 ficheiros. Serão carregados após a criação do anúncio.',
-  'bulletin.share': 'Partilhar',
   'bulletin.publishedIn': 'Artigo publicado no Kontact Automotive',
 };
