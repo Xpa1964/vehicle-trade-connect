@@ -190,7 +190,7 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
         </div>
 
         {/* Action Buttons - siempre al final */}
-        <div className="space-y-3 pt-4 border-t border-gray-100 mt-auto">
+        <div className="space-y-3 pt-4 border-t border-border mt-auto">
           {!isCurrentUser && (
             <Button onClick={onContact} className="w-full" size="lg">
               <MessageSquare className="h-4 w-4 mr-2" />
