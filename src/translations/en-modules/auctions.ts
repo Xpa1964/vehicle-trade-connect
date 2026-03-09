@@ -58,6 +58,12 @@ export default {
   'auctions.result.rejectFinal': '• This action cannot be undone',
   'auctions.result.acceptedSuccess': 'Result accepted! Contact details will be shared.',
   'auctions.result.rejectedSuccess': 'Result rejected. The vehicle is available again.',
+  'auctions.result.irreversibleAction': 'This action is irreversible.',
+  'auctions.result.confirmAccept': 'Confirm Acceptance',
+  'auctions.result.confirmReject': 'Confirm Rejection',
+  'auctions.result.rejectReasonLabel': 'Reason for rejection (optional)',
+  'auctions.result.rejectReasonPlaceholder': 'Briefly explain why you reject the result...',
+  'auctions.result.disclaimer': 'Kontact VO does not force transactions. The final decision is exclusively the seller\'s.',
 
   // Time states
   'auctions.time.calculating': 'Calculating...',
