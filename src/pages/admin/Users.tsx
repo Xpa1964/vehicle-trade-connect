@@ -39,8 +39,8 @@ interface AdminUser {
 
 const AdminUsers = () => {
   const navigate = useNavigate();
-
-  const { data: users, isLoading } = useQuery({
+  const queryClient = useQueryClient();
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
     queryKey: ['admin-users'],
     queryFn: async () => {
       console.log('[AdminUsers] Fetching users via direct query');
