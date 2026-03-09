@@ -118,10 +118,10 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
         <div className="space-y-4">
           {/* BOTÓN DE VALORACIÓN PROMINENTE - MOVIDO AL INICIO */}
           {!isCurrentUser && user && (
-            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 rounded-lg border border-yellow-200">
+            <div className="bg-card p-4 rounded-lg border border-border">
               <div className="text-center mb-3">
-                <h3 className="text-lg font-bold text-gray-800 mb-1">🌟 {t('rating.rateUser')}</h3>
-                <p className="text-sm text-gray-600">{t('rating.shareExperience')}</p>
+                <h3 className="text-lg font-bold text-foreground mb-1">🌟 {t('rating.rateUser')}</h3>
+                <p className="text-sm text-muted-foreground">{t('rating.shareExperience')}</p>
               </div>
               
               <QuickRatingDialog
@@ -139,7 +139,7 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
               />
               
               <div className="text-center mt-3">
-                <p className="text-xs text-yellow-700 font-medium">
+                <p className="text-xs text-muted-foreground font-medium">
                   👆 {t('rating.clickToRate')}
                 </p>
               </div>
@@ -147,13 +147,14 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
           )}
 
           {/* Rating Section - Reputación actual */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+          <div className="bg-card p-4 rounded-lg border border-border">
             <div className="text-center">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">{t('rating.currentReputation')}</h3>
+              <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('rating.currentReputation')}</h3>
               <UserRatingBadge
                 averageRating={userRating.averageRating}
                 totalRatings={userRating.totalRatings}
                 verifiedRatings={userRating.verifiedRatings}
+                starSize={22}
               />
             </div>
           </div>
@@ -162,8 +163,8 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
           <div className="space-y-3">
             {/* Persona de Contacto */}
             {profileData?.full_name && (
-              <div className="flex items-center text-sm">
-                <User className="h-4 w-4 mr-2 text-gray-500" />
+              <div className="flex items-center text-sm text-foreground">
+                <User className="h-4 w-4 mr-2 text-muted-foreground" />
                 <div>
                   <span className="font-medium">{t('profile.contactPerson', { fallback: 'Persona de Contacto' })}: </span>
                   <span>{profileData.full_name}</span>
@@ -172,14 +173,14 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
             )}
             
             {/* País con bandera */}
-            <div className="flex items-center text-sm">
-              <MapPin className="h-4 w-4 mr-2 text-gray-500" />
+            <div className="flex items-center text-sm text-foreground">
+              <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
               {getCountryWithFlag(profileData?.country)}
             </div>
             
             {/* Miembro desde */}
-            <div className="flex items-center text-sm">
-              <Calendar className="h-4 w-4 mr-2 text-gray-500" />
+            <div className="flex items-center text-sm text-foreground">
+              <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
               <span>
                 {t('profile.memberSince', { fallback: 'Miembro desde' })} {' '}
                 {formatMemberSince(memberSinceDate)}
@@ -189,7 +190,7 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
         </div>
 
         {/* Action Buttons - siempre al final */}
-        <div className="space-y-3 pt-4 border-t border-gray-100 mt-auto">
+        <div className="space-y-3 pt-4 border-t border-border mt-auto">
           {!isCurrentUser && (
             <Button onClick={onContact} className="w-full" size="lg">
               <MessageSquare className="h-4 w-4 mr-2" />
