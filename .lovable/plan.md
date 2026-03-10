@@ -1,48 +1,58 @@
 
 
-## Plan: Sidebar lateral izquierdo para Step 2 (Datos Técnicos)
+# Plan: Gestion de imagenes API con reemplazo limpio
 
-### Problema
-Las 4 sub-pestañas horizontales en el Paso 2 del wizard (Especificaciones, Transacción, Equipamiento, Daños) son prácticamente invisibles. El usuario no las detecta y pierde información importante.
+## Resumen
 
-### Solución
-Reemplazar las `Tabs` horizontales en `Step2TechnicalDetails.tsx` por un layout de **dos columnas**: sidebar fijo a la izquierda + contenido a la derecha.
+Dos cambios precisos sobre el plan original aprobado, sin modificar nada mas.
 
-### Diseño
+## Cambio 1: Migracion de base de datos
+
+Anadir columna `source` a `vehicle_images` **sin valor por defecto**:
 
 ```text
-┌──────────────────────────────────────────────────┐
-│  Paso 2: Datos Técnicos (wizard header)          │
-├────────────────┬─────────────────────────────────┤
-│                │                                 │
-│  ⚙ Espec.  ◀──│   [Contenido de la sección      │
-│  💳 Transac.   │    seleccionada]                │
-│  📦 Equip.     │                                 │
-│  ⚠ Daños       │                                 │
-│                │                                 │
-├────────────────┴─────────────────────────────────┤
+ALTER TABLE vehicle_images ADD COLUMN source text;
 ```
 
-- **Desktop (md+)**: Sidebar fijo ~220px a la izquierda con botones verticales (icono + texto). Cada botón con estado activo (borde izquierdo naranja + fondo highlight). Contenido ocupa el resto.
-- **Mobile**: El sidebar se convierte en una barra horizontal scrollable o se apila encima del contenido para mantener la usabilidad.
+Las imagenes existentes quedaran con `source = NULL`. Solo las imagenes insertadas desde la sincronizacion API recibiran `source = 'api'`.
 
-### Cambios técnicos
+## Cambio 2: Modificar `processImages` en la edge function
 
-**Archivo a modificar**: `src/components/vehicles/wizard/Step2TechnicalDetails.tsx`
+En `supabase/functions/api-sync-vehicles/index.ts`, funcion `processImages` (linea 472):
 
-1. Reemplazar el componente `Tabs` horizontal por un layout flex con estado local `useState` para la sección activa.
-2. Crear un sidebar con 4 botones verticales estilizados:
-   - Icono grande visible (Settings, CreditCard, Package, AlertTriangle)
-   - Texto descriptivo debajo o al lado
-   - Estado activo con `border-l-2 border-primary bg-primary/10`
-   - Estado hover sutil
-3. Renderizado condicional del contenido según la sección seleccionada.
-4. En mobile (`< md`): los botones del sidebar se muestran como una fila horizontal con scroll, o como acordeón.
+**Paso nuevo antes de insertar** (sin tocar storage):
 
-### Estilo visual
-- Fondo del sidebar: `bg-card/50` con `border-r border-border`
-- Botón activo: `border-l-3 border-primary bg-primary/10 text-primary`
-- Botón inactivo: `text-muted-foreground hover:bg-muted/50`
-- Iconos siempre visibles, tamaño `h-5 w-5`
-- Tipografía: `text-sm font-medium`
+```text
+DELETE FROM vehicle_images
+WHERE vehicle_id = vehicleId AND source = 'api'
+```
+
+**Al insertar cada imagen**, anadir `source: 'api'` al objeto:
+
+```text
+await supabase.from('vehicle_images').insert({
+  vehicle_id: vehicleId,
+  image_url: publicUrl,
+  display_order: i,
+  is_primary: i === 0,
+  source: 'api'        // <-- nuevo campo
+});
+```
+
+**No se eliminan archivos del bucket de storage.** Solo registros en base de datos.
+
+## Archivos modificados
+
+| Archivo | Cambio |
+|---------|--------|
+| Nueva migracion SQL | `ALTER TABLE vehicle_images ADD COLUMN source text;` |
+| `supabase/functions/api-sync-vehicles/index.ts` | Agregar DELETE previo y campo `source: 'api'` en insert |
+
+## Lo que NO se toca
+
+- Subida manual de imagenes
+- Componentes de UI
+- Bucket de storage (sin eliminar archivos fisicos)
+- RLS policies de `vehicle_images`
+- Ningun otro endpoint ni servicio
 
