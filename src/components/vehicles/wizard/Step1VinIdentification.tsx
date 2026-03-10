@@ -62,6 +62,14 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         onChange('year', decoded.year);
         filled.push('year');
       }
+      if (decoded.country) {
+        const selectedCountry = countries.find(c => c.name === decoded.country);
+        if (selectedCountry) {
+          onChange('country', decoded.country);
+          onChange('countryCode', selectedCountry.code);
+          filled.push('country');
+        }
+      }
 
       if (filled.length > 0) {
         setVinStatus('decoded');
