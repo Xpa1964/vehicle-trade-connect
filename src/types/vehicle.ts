@@ -99,6 +99,7 @@ export interface VehicleFormData {
   additionalFiles?: FileList | File[];
   equipment?: string[];
   description?: string;
+  version?: string;
   
   // New fields
   vin?: string;

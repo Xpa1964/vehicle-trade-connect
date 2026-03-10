@@ -257,6 +257,16 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         </div>
       </div>
 
+      {/* Version (optional) */}
+      <div className="space-y-2">
+        <Label>{t('vehicles.version')}</Label>
+        <Input
+          value={formData.version || ''}
+          onChange={(e) => onChange('version', e.target.value)}
+          placeholder={t('vehicles.versionPlaceholder')}
+        />
+      </div>
+
       {/* Year, Fuel, Transmission */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">

@@ -41,6 +41,9 @@ export const defaultFormValues = {
   equipment: [] as string[],
   description: '',
   
+  // Version field
+  version: '',
+  
   // New fields with default values
   vin: '',
   licensePlate: '',
