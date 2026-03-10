@@ -78,9 +78,10 @@ const VehicleDamagesPage: React.FC = () => {
             damageType: damage.damage_type || 'exterior',
           });
         }
-      } else if (damage.image_url) {
+      } else {
+        // Include damages without images too
         items.push({
-          url: damage.image_url,
+          url: damage.image_url || '',
           description: damage.description || damage.damage_type || t('vehicles.damage') || 'Daño',
           severity: damage.severity || 'minor',
           location: damage.location,
@@ -181,17 +182,23 @@ const VehicleDamagesPage: React.FC = () => {
                     <Card className="overflow-hidden h-full">
                       <CardContent className="p-0 flex flex-col h-full">
                         {/* Imagen */}
-                        <div
-                          className="aspect-[4/3] relative cursor-pointer overflow-hidden"
-                          onClick={() => openLightbox(index)}
-                        >
-                          <img
-                            src={item.url}
-                            alt={item.description}
-                            className="w-full h-full object-cover transition-transform hover:scale-105"
-                            loading="lazy"
-                          />
-                        </div>
+                        {item.url ? (
+                          <div
+                            className="aspect-[4/3] relative cursor-pointer overflow-hidden"
+                            onClick={() => openLightbox(index)}
+                          >
+                            <img
+                              src={item.url}
+                              alt={item.description}
+                              className="w-full h-full object-cover transition-transform hover:scale-105"
+                              loading="lazy"
+                            />
+                          </div>
+                        ) : (
+                          <div className="aspect-[4/3] bg-muted flex items-center justify-center">
+                            <span className="text-muted-foreground text-sm">{t('vehicles.noImage') || 'Sin imagen'}</span>
+                          </div>
+                        )}
 
                         {/* Info debajo */}
                         <div className="p-3 space-y-2 flex-1">
