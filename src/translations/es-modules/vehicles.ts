@@ -352,6 +352,7 @@ export default {
   'vehicles.selectYear': 'Seleccionar año',
   'vehicles.selectFuel': 'Seleccionar combustible',
   'vehicles.selectCountry': 'Seleccionar país',
+  'vehicles.country': 'País',
   'vehicles.city': 'Ciudad',
   'vehicles.cityExample': 'Ej: Madrid',
   'vehicles.additionalDescriptionPlaceholder': 'Información adicional sobre el vehículo...',

@@ -80,4 +80,6 @@ export default {
   'common.version': 'Version',
   'common.copyright': 'Copyright',
   'common.rights': 'All rights reserved',
+  'common.next': 'Next',
+  'common.previous': 'Previous',
 };

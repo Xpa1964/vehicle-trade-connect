@@ -104,4 +104,6 @@ export default {
   'admin.apiAccessDenied': 'No tienes permiso para acceder a la gestión de APIs.',
   'common.pickDate': 'Seleccionar fecha',
   'common.lastActivity': 'Última Actividad',
+  'common.next': 'Siguiente',
+  'common.previous': 'Anterior',
 };
