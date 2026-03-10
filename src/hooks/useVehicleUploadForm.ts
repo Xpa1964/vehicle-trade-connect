@@ -43,11 +43,22 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
     setIsLoadingModels(true);
     
     try {
-      const models = getModelsForBrand(brand);
-      setAvailableModels(models);
+      // Get models from existing vehicles in DB
+      const dbModels = getModelsForBrand(brand);
+      // Get static models as fallback
+      const staticModels = getStaticModelsForBrand(brand);
+      // Merge both, deduplicate, and sort
+      const merged = [...new Set([...staticModels, ...dbModels])].sort();
+      setAvailableModels(merged);
     } catch (error) {
       console.error('[VehicleUploadForm] Error loading models:', error);
-      setModelsError(true);
+      // Still try static models on error
+      const staticModels = getStaticModelsForBrand(brand);
+      if (staticModels.length > 0) {
+        setAvailableModels(staticModels);
+      } else {
+        setModelsError(true);
+      }
     } finally {
       setIsLoadingModels(false);
     }
