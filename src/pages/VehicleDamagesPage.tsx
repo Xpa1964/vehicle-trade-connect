@@ -78,9 +78,10 @@ const VehicleDamagesPage: React.FC = () => {
             damageType: damage.damage_type || 'exterior',
           });
         }
-      } else if (damage.image_url) {
+      } else {
+        // Include damages without images too
         items.push({
-          url: damage.image_url,
+          url: damage.image_url || '',
           description: damage.description || damage.damage_type || t('vehicles.damage') || 'Daño',
           severity: damage.severity || 'minor',
           location: damage.location,
