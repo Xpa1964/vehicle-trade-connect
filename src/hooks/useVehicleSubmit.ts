@@ -71,6 +71,7 @@ export const useVehicleSubmit = () => {
         public_sale_price: data.publicSalePrice || null,
         commission_amount: data.commissionAmount || null,
         commission_query: data.commissionQuery || null,
+        version: data.version || null,
       };
 
       console.log('📝 [useVehicleSubmit] Vehicle data to insert:', vehicleData);
