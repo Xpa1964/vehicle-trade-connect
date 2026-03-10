@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 import { useVehicleForm } from './useVehicleForm';
 import { useVehicleEdit } from './useVehicleEdit';
 import { useVehicleFilterData } from './useVehicleFilterData';
+import { getStaticModelsForBrand } from '@/utils/vehicleBrandModels';
 import { VehicleFormData } from '@/types/vehicle';
 
 interface UseVehicleUploadFormProps {
