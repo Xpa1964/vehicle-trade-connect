@@ -110,7 +110,8 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
         doors: allFormValues.doors || data.doors,
         images: allFormValues.images || data.images,
         additionalFiles: allFormValues.additionalFiles || data.additionalFiles,
-        equipment: allFormValues.equipment || data.equipment || []
+        equipment: allFormValues.equipment || data.equipment || [],
+        version: allFormValues.version || data.version || ''
       };
       
       const result = await formHook.onSubmit(completeFormData);
