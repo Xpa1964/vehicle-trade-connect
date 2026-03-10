@@ -14,6 +14,8 @@ export default {
   'vehicles.mileage': 'Kilometraje',
   'vehicles.brand': 'Marca',
   'vehicles.model': 'Modelo',
+  'vehicles.version': 'Versión',
+  'vehicles.versionPlaceholder': 'Ej: 1.5 dCi 115cv Comfort',
   'vehicles.fuel': 'Combustible',
   'vehicles.transmission': 'Transmisión',
   'vehicles.condition': 'Condición',
