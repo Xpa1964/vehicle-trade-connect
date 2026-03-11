@@ -236,7 +236,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.functions.invoke('send-video-interest-email', {
+      const { data, error } = await supabase.functions.invoke('send-video-interest-email', {
         body: {
           language,
           title,
@@ -248,8 +248,8 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
         },
       });
 
-      if (error) {
-        throw error;
+      if (error || !data?.success) {
+        throw error ?? new Error('Email delivery failed');
       }
 
       onClose();

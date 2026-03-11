@@ -98,8 +98,18 @@ serve(async (req) => {
       html: htmlMessage,
     });
 
+    const sendError = (emailResult as { error?: { message?: string } })?.error;
+    const emailId =
+      (emailResult as { data?: { id?: string } })?.data?.id ??
+      (emailResult as { id?: string })?.id ??
+      null;
+
+    if (sendError) {
+      throw new Error(sendError.message || 'Email delivery failed');
+    }
+
     return new Response(
-      JSON.stringify({ success: true, emailId: emailResult.data?.id ?? null }),
+      JSON.stringify({ success: true, emailId }),
       {
         status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
