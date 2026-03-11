@@ -291,6 +291,17 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
                 ))}
               </div>
 
+              {/* Company name input */}
+              <div className="w-full max-w-md">
+                <Input
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  placeholder={translations.companyPlaceholder}
+                  className="w-full"
+                />
+              </div>
+
               <Button
                 onClick={handleContactClick}
                 size="lg"
