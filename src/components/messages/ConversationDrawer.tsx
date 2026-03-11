@@ -60,7 +60,7 @@ const ConversationDrawer: React.FC<ConversationDrawerProps> = ({
         style={{ touchAction: 'none' }}
       />
       
-      <div className="fixed inset-y-0 right-0 w-full bg-white shadow-xl flex flex-col">
+      <div className="fixed top-0 right-0 w-full bg-card shadow-xl flex flex-col" style={{ height: '100dvh' }}>
         <div className="flex items-center justify-between p-3 sm:p-4 border-b bg-white sticky top-0 z-10 shadow-sm">
           <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
             <Button 
