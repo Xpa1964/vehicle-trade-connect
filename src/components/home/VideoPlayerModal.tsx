@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import kontactLogo from '@/assets/kontact-vo-logo-orange.png';
 
 interface VideoPlayerModalProps {
@@ -11,16 +12,86 @@ interface VideoPlayerModalProps {
   language?: string;
 }
 
-const postVideoMessages: Record<string, { message: string; button: string; emailSubject: string }> = {
-  es: { message: '¿Te interesa? ¡Contáctanos!', button: 'OK, me interesa', emailSubject: 'Me interesa KONTACT VO' },
-  en: { message: 'Interested? Contact us!', button: 'OK, I\'m interested', emailSubject: 'I\'m interested in KONTACT VO' },
-  fr: { message: 'Intéressé ? Contactez-nous !', button: 'OK, ça m\'intéresse', emailSubject: 'Je suis intéressé par KONTACT VO' },
-  it: { message: 'Interessato? Contattaci!', button: 'OK, mi interessa', emailSubject: 'Sono interessato a KONTACT VO' },
-  pt: { message: 'Interessado? Entre em contato!', button: 'OK, estou interessado', emailSubject: 'Estou interessado no KONTACT VO' },
-  de: { message: 'Interessiert? Kontaktieren Sie uns!', button: 'OK, ich bin interessiert', emailSubject: 'Ich interessiere mich für KONTACT VO' },
-  nl: { message: 'Geïnteresseerd? Neem contact op!', button: 'OK, ik ben geïnteresseerd', emailSubject: 'Ik ben geïnteresseerd in KONTACT VO' },
-  pl: { message: 'Zainteresowany? Skontaktuj się z nami!', button: 'OK, jestem zainteresowany', emailSubject: 'Jestem zainteresowany KONTACT VO' },
-  dk: { message: 'Interesseret? Kontakt os!', button: 'OK, jeg er interesseret', emailSubject: 'Jeg er interesseret i KONTACT VO' },
+const postVideoMessages: Record<string, {
+  message: string;
+  button: string;
+  emailSubject: string;
+  emailBody: string;
+  interestLabel: string;
+  options: string[];
+}> = {
+  es: {
+    message: '¿Te interesa? ¡Contáctanos!',
+    button: 'OK, me interesa',
+    emailSubject: 'Me interesa KONTACT VO',
+    emailBody: 'OK, estoy interesado en que se contacte conmigo cuando se inicie la actividad de KONTACT VO.',
+    interestLabel: 'Me interesa:',
+    options: ['Comprar vehículos', 'Vender vehículos', 'Comprar/Vender vehículos'],
+  },
+  en: {
+    message: 'Interested? Contact us!',
+    button: "OK, I'm interested",
+    emailSubject: "I'm interested in KONTACT VO",
+    emailBody: "OK, I'm interested in being contacted when KONTACT VO starts its activity.",
+    interestLabel: "I'm interested in:",
+    options: ['Buying vehicles', 'Selling vehicles', 'Buying/Selling vehicles'],
+  },
+  fr: {
+    message: 'Intéressé ? Contactez-nous !',
+    button: "OK, ça m'intéresse",
+    emailSubject: 'Je suis intéressé par KONTACT VO',
+    emailBody: "OK, je suis intéressé pour être contacté lorsque KONTACT VO démarrera son activité.",
+    interestLabel: "Ça m'intéresse :",
+    options: ['Acheter des véhicules', 'Vendre des véhicules', 'Acheter/Vendre des véhicules'],
+  },
+  it: {
+    message: 'Interessato? Contattaci!',
+    button: 'OK, mi interessa',
+    emailSubject: 'Sono interessato a KONTACT VO',
+    emailBody: "OK, sono interessato a essere contattato quando KONTACT VO avvierà la sua attività.",
+    interestLabel: 'Mi interessa:',
+    options: ['Comprare veicoli', 'Vendere veicoli', 'Comprare/Vendere veicoli'],
+  },
+  pt: {
+    message: 'Interessado? Entre em contato!',
+    button: 'OK, estou interessado',
+    emailSubject: 'Estou interessado no KONTACT VO',
+    emailBody: 'OK, estou interessado em ser contactado quando o KONTACT VO iniciar a sua atividade.',
+    interestLabel: 'Estou interessado em:',
+    options: ['Comprar veículos', 'Vender veículos', 'Comprar/Vender veículos'],
+  },
+  de: {
+    message: 'Interessiert? Kontaktieren Sie uns!',
+    button: 'OK, ich bin interessiert',
+    emailSubject: 'Ich interessiere mich für KONTACT VO',
+    emailBody: 'OK, ich bin daran interessiert, kontaktiert zu werden, wenn KONTACT VO seine Tätigkeit aufnimmt.',
+    interestLabel: 'Ich interessiere mich für:',
+    options: ['Fahrzeuge kaufen', 'Fahrzeuge verkaufen', 'Fahrzeuge kaufen/verkaufen'],
+  },
+  nl: {
+    message: 'Geïnteresseerd? Neem contact op!',
+    button: 'OK, ik ben geïnteresseerd',
+    emailSubject: 'Ik ben geïnteresseerd in KONTACT VO',
+    emailBody: 'OK, ik ben geïnteresseerd om gecontacteerd te worden wanneer KONTACT VO zijn activiteit start.',
+    interestLabel: 'Ik ben geïnteresseerd in:',
+    options: ['Voertuigen kopen', 'Voertuigen verkopen', 'Voertuigen kopen/verkopen'],
+  },
+  pl: {
+    message: 'Zainteresowany? Skontaktuj się z nami!',
+    button: 'OK, jestem zainteresowany',
+    emailSubject: 'Jestem zainteresowany KONTACT VO',
+    emailBody: 'OK, jestem zainteresowany kontaktem, gdy KONTACT VO rozpocznie swoją działalność.',
+    interestLabel: 'Interesuje mnie:',
+    options: ['Kupno pojazdów', 'Sprzedaż pojazdów', 'Kupno/Sprzedaż pojazdów'],
+  },
+  dk: {
+    message: 'Interesseret? Kontakt os!',
+    button: 'OK, jeg er interesseret',
+    emailSubject: 'Jeg er interesseret i KONTACT VO',
+    emailBody: 'OK, jeg er interesseret i at blive kontaktet, når KONTACT VO starter sin aktivitet.',
+    interestLabel: 'Jeg er interesseret i:',
+    options: ['Køb af køretøjer', 'Salg af køretøjer', 'Køb/Salg af køretøjer'],
+  },
 };
 
 const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
@@ -31,6 +102,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   language = 'es'
 }) => {
   const [showOverlay, setShowOverlay] = useState(false);
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const playerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeId = useRef(`yt-player-${Date.now()}`);
@@ -59,6 +131,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     if (!isOpen || !videoUrl.includes('youtube.com/embed')) return;
 
     setShowOverlay(false);
+    setSelectedInterests([]);
 
     const videoIdMatch = videoUrl.match(/embed\/([^?]+)/);
     if (!videoIdMatch) return;
@@ -84,7 +157,6 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     };
 
     if ((window as any).YT?.Player) {
-      // Small delay to ensure DOM element exists
       setTimeout(createPlayer, 100);
     } else {
       (window as any).onYouTubeIframeAPIReady = createPlayer;
@@ -101,6 +173,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     } else {
       document.body.style.overflow = '';
       setShowOverlay(false);
+      setSelectedInterests([]);
     }
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
@@ -117,8 +190,18 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
 
+  const toggleInterest = (option: string) => {
+    setSelectedInterests(prev =>
+      prev.includes(option) ? prev.filter(i => i !== option) : [...prev, option]
+    );
+  };
+
   const handleContactClick = () => {
-    window.location.href = `mailto:info@kontactvo.com?subject=${encodeURIComponent(translations.emailSubject)}`;
+    const selected = selectedInterests.length > 0
+      ? `\n\n${translations.interestLabel}\n${selectedInterests.map(i => `- ${i}`).join('\n')}`
+      : '';
+    const body = `${translations.emailBody}${selected}`;
+    window.location.href = `mailto:info@kontactvo.com?subject=${encodeURIComponent(translations.emailSubject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
@@ -157,15 +240,35 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
           {/* Post-video overlay */}
           {showOverlay && (
-            <div className="absolute inset-0 bg-background flex flex-col items-center justify-center gap-6 animate-in fade-in duration-500 z-10">
+            <div className="absolute inset-0 bg-background flex flex-col items-center justify-center gap-4 sm:gap-6 animate-in fade-in duration-500 z-10 px-6">
               <img
                 src={kontactLogo}
                 alt="KONTACT VO"
-                className="w-32 h-32 sm:w-40 sm:h-40 object-contain"
+                className="w-28 h-28 sm:w-36 sm:h-36 object-contain"
               />
-              <p className="text-foreground text-xl sm:text-2xl md:text-3xl font-bold text-center px-6">
+              <p className="text-foreground text-xl sm:text-2xl md:text-3xl font-bold text-center">
                 {translations.message}
               </p>
+
+              {/* Interest checkboxes */}
+              <div className="flex flex-col gap-3 w-full max-w-md">
+                <p className="text-muted-foreground text-sm font-semibold">{translations.interestLabel}</p>
+                {translations.options.map((option) => (
+                  <label
+                    key={option}
+                    className="flex items-center gap-3 cursor-pointer rounded-lg border border-border px-4 py-3 hover:bg-muted/50 transition-colors"
+                    onClick={() => toggleInterest(option)}
+                  >
+                    <Checkbox
+                      checked={selectedInterests.includes(option)}
+                      onCheckedChange={() => toggleInterest(option)}
+                      className="h-5 w-5"
+                    />
+                    <span className="text-foreground text-sm sm:text-base font-medium">{option}</span>
+                  </label>
+                ))}
+              </div>
+
               <Button
                 onClick={handleContactClick}
                 size="lg"
