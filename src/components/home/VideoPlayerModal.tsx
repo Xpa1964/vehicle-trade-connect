@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
 import kontactLogo from '@/assets/kontact-vo-logo-orange.png';
 
 interface VideoPlayerModalProps {
@@ -19,6 +20,7 @@ const postVideoMessages: Record<string, {
   emailBody: string;
   interestLabel: string;
   options: string[];
+  companyPlaceholder: string;
 }> = {
   es: {
     message: '¿Te interesa? ¡Contáctanos!',
@@ -27,6 +29,7 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, estoy interesado en que se contacte conmigo cuando se inicie la actividad de KONTACT VO.',
     interestLabel: 'Me interesa:',
     options: ['Comprar vehículos', 'Vender vehículos', 'Comprar/Vender vehículos'],
+    companyPlaceholder: 'Tu empresa (opcional)',
   },
   en: {
     message: 'Interested? Contact us!',
@@ -35,6 +38,7 @@ const postVideoMessages: Record<string, {
     emailBody: "OK, I'm interested in being contacted when KONTACT VO starts its activity.",
     interestLabel: "I'm interested in:",
     options: ['Buying vehicles', 'Selling vehicles', 'Buying/Selling vehicles'],
+    companyPlaceholder: 'Your company (optional)',
   },
   fr: {
     message: 'Intéressé ? Contactez-nous !',
@@ -43,6 +47,7 @@ const postVideoMessages: Record<string, {
     emailBody: "OK, je suis intéressé pour être contacté lorsque KONTACT VO démarrera son activité.",
     interestLabel: "Ça m'intéresse :",
     options: ['Acheter des véhicules', 'Vendre des véhicules', 'Acheter/Vendre des véhicules'],
+    companyPlaceholder: 'Votre entreprise (facultatif)',
   },
   it: {
     message: 'Interessato? Contattaci!',
@@ -51,6 +56,7 @@ const postVideoMessages: Record<string, {
     emailBody: "OK, sono interessato a essere contattato quando KONTACT VO avvierà la sua attività.",
     interestLabel: 'Mi interessa:',
     options: ['Comprare veicoli', 'Vendere veicoli', 'Comprare/Vendere veicoli'],
+    companyPlaceholder: 'La tua azienda (facoltativo)',
   },
   pt: {
     message: 'Interessado? Entre em contato!',
@@ -59,6 +65,7 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, estou interessado em ser contactado quando o KONTACT VO iniciar a sua atividade.',
     interestLabel: 'Estou interessado em:',
     options: ['Comprar veículos', 'Vender veículos', 'Comprar/Vender veículos'],
+    companyPlaceholder: 'Sua empresa (opcional)',
   },
   de: {
     message: 'Interessiert? Kontaktieren Sie uns!',
@@ -67,6 +74,7 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, ich bin daran interessiert, kontaktiert zu werden, wenn KONTACT VO seine Tätigkeit aufnimmt.',
     interestLabel: 'Ich interessiere mich für:',
     options: ['Fahrzeuge kaufen', 'Fahrzeuge verkaufen', 'Fahrzeuge kaufen/verkaufen'],
+    companyPlaceholder: 'Ihr Unternehmen (optional)',
   },
   nl: {
     message: 'Geïnteresseerd? Neem contact op!',
@@ -75,6 +83,7 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, ik ben geïnteresseerd om gecontacteerd te worden wanneer KONTACT VO zijn activiteit start.',
     interestLabel: 'Ik ben geïnteresseerd in:',
     options: ['Voertuigen kopen', 'Voertuigen verkopen', 'Voertuigen kopen/verkopen'],
+    companyPlaceholder: 'Uw bedrijf (optioneel)',
   },
   pl: {
     message: 'Zainteresowany? Skontaktuj się z nami!',
@@ -83,6 +92,7 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, jestem zainteresowany kontaktem, gdy KONTACT VO rozpocznie swoją działalność.',
     interestLabel: 'Interesuje mnie:',
     options: ['Kupno pojazdów', 'Sprzedaż pojazdów', 'Kupno/Sprzedaż pojazdów'],
+    companyPlaceholder: 'Twoja firma (opcjonalnie)',
   },
   dk: {
     message: 'Interesseret? Kontakt os!',
@@ -91,9 +101,9 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, jeg er interesseret i at blive kontaktet, når KONTACT VO starter sin aktivitet.',
     interestLabel: 'Jeg er interesseret i:',
     options: ['Køb af køretøjer', 'Salg af køretøjer', 'Køb/Salg af køretøjer'],
+    companyPlaceholder: 'Dit firma (valgfrit)',
   },
 };
-
 const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   isOpen,
   onClose,
@@ -103,6 +113,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 }) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [companyName, setCompanyName] = useState('');
   const playerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeId = useRef(`yt-player-${Date.now()}`);
@@ -132,6 +143,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
     setShowOverlay(false);
     setSelectedInterests([]);
+    setCompanyName('');
 
     const videoIdMatch = videoUrl.match(/embed\/([^?]+)/);
     if (!videoIdMatch) return;
@@ -174,6 +186,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       document.body.style.overflow = '';
       setShowOverlay(false);
       setSelectedInterests([]);
+      setCompanyName('');
     }
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
@@ -197,11 +210,21 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   };
 
   const handleContactClick = () => {
+    const companyInfo = companyName.trim() ? `\n\nEmpresa / Company: ${companyName.trim()}` : '';
     const selected = selectedInterests.length > 0
       ? `\n\n${translations.interestLabel}\n${selectedInterests.map(i => `- ${i}`).join('\n')}`
       : '';
-    const body = `${translations.emailBody}${selected}`;
-    window.location.href = `mailto:info@kontactvo.com?subject=${encodeURIComponent(translations.emailSubject)}&body=${encodeURIComponent(body)}`;
+    const body = `${translations.emailBody}${companyInfo}${selected}`;
+    const mailtoUrl = `mailto:info@kontactvo.com?subject=${encodeURIComponent(translations.emailSubject)}&body=${encodeURIComponent(body)}`;
+    
+    // Use programmatic link click for better cross-browser compatibility
+    const link = document.createElement('a');
+    link.href = mailtoUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -266,6 +289,17 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
                     <span className="text-foreground text-sm sm:text-base font-medium">{option}</span>
                   </div>
                 ))}
+              </div>
+
+              {/* Company name input */}
+              <div className="w-full max-w-md">
+                <Input
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  placeholder={translations.companyPlaceholder}
+                  className="w-full"
+                />
               </div>
 
               <Button
