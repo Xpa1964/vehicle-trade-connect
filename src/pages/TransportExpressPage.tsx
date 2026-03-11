@@ -1,11 +1,13 @@
 
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Calculator } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { TransportHighlights } from '@/components/transport';
 import SafeImage from '@/components/shared/SafeImage';
+
+const CALCULATOR_URL = 'https://mover-pro-flow.lovable.app';
 
 const TransportExpressPage: React.FC = () => {
   const navigate = useNavigate();
@@ -70,6 +72,52 @@ const TransportExpressPage: React.FC = () => {
               {t('transport.express.idealFor')}
             </p>
           </div>
+        </div>
+
+        {/* Calculadora de Transporte - Preview embebida */}
+        <div className="mt-8 bg-card rounded-lg shadow-lg border border-border overflow-hidden">
+          <div className="p-6 border-b border-border flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Calculator className="h-6 w-6 text-primary" />
+              <div>
+                <h2 className="text-xl font-bold text-foreground">
+                  {t('transport.express.cta')}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  {t('transport.formDescription')}
+                </p>
+              </div>
+            </div>
+            <Button
+              onClick={() => window.open(CALCULATOR_URL, '_blank')}
+              className="gap-2"
+            >
+              <ExternalLink className="h-4 w-4" />
+              {t('transport.express.cta')}
+            </Button>
+          </div>
+          
+          {/* Iframe preview - clickable */}
+          <a
+            href={CALCULATOR_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block relative group cursor-pointer"
+          >
+            <iframe
+              src={CALCULATOR_URL}
+              title="Transport Calculator"
+              className="w-full h-[500px] border-0 pointer-events-none"
+              loading="lazy"
+            />
+            {/* Overlay on hover */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold flex items-center gap-2 shadow-lg">
+                <ExternalLink className="h-5 w-5" />
+                {t('transport.express.cta')}
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </div>
