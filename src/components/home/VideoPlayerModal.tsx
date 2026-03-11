@@ -46,10 +46,11 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
           {isYouTube ? (
             <iframe
               src={videoUrl}
-              allow="autoplay; encrypted-media; fullscreen"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
-              className="w-full h-full"
-              frameBorder="0"
+              className="w-full h-full border-0"
+              referrerPolicy="strict-origin-when-cross-origin"
+              title="YouTube video player"
             />
           ) : (
             <video
