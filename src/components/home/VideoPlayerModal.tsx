@@ -186,6 +186,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       document.body.style.overflow = '';
       setShowOverlay(false);
       setSelectedInterests([]);
+      setCompanyName('');
     }
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
