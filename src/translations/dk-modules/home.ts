@@ -10,7 +10,7 @@ export default {
   'home.features': 'Funktioner',
   'home.services': 'Tjenester',
   'home.welcomeBack': 'Velkommen tilbage',
-  'home.promoSlogan': 'Opdag KONTACT VO på få minutter',
+  'home.promoSlogan': 'Opdag KONTACT VO på 2 minutter',
   'home.promoDescription': 'Hør vores fulde præsentation af markedspladsen, der revolutionerer import og eksport af køretøjer',
   'home.chooseLanguage': 'Vælg dit foretrukne sprog:',
   'home.ecosystemDescription': 'At skabe et eksklusivt økosystem for professionelle i brugtbilsbranchen er i dine hænder. Vi behøver kun at nå den kritiske masse af brugere, der styrker dette rum og muliggør udvikling af talrige forretningsmuligheder: køb og salg af køretøjer, oprettelse eller deltagelse i auktioner, udveksling mellem professionelle og offentliggørelse af samarbejdsforslag.',

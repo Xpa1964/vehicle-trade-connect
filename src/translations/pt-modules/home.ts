@@ -5,7 +5,7 @@ export default {
   'home.subtitle': 'VEÍCULOS USADOS, NOVOS E SEMI-NOVOS',
   'home.marketplace': 'AUTOMOTIVE MARKETPLACE',
   'home.welcomeBack': 'Bem-vindo de volta',
-  'home.promoSlogan': 'Descubra KONTACT VO em poucos minutos',
+  'home.promoSlogan': 'Descubra KONTACT VO em 2 minutos',
   'home.promoDescription': 'Assista nossa apresentação completa do marketplace que está revolucionando a importação e exportação de veículos',
   'home.videoComingSoon': 'Vídeo em breve disponível neste idioma',
   'home.chooseLanguage': 'Escolha seu idioma preferido:',

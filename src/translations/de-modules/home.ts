@@ -5,7 +5,7 @@ export default {
   'home.subtitle': 'GEBRAUCHTE, NEUE UND HALBNEUE FAHRZEUGE',
   'home.marketplace': 'AUTOMOTIVE MARKETPLACE',
   'home.welcomeBack': 'Willkommen zurück',
-  'home.promoSlogan': 'Entdecken Sie KONTACT VO in wenigen Minuten',
+  'home.promoSlogan': 'Entdecken Sie KONTACT VO in 2 Minuten',
   'home.promoDescription': 'Sehen Sie unsere vollständige Präsentation des Marktplatzes, der den Import und Export von Fahrzeugen revolutioniert',
   'home.videoComingSoon': 'Video demnächst in dieser Sprache verfügbar',
   'home.chooseLanguage': 'Wählen Sie Ihre bevorzugte Sprache:',
