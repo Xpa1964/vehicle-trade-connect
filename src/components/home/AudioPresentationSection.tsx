@@ -14,6 +14,7 @@ const AudioPresentationSection: React.FC = () => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState('');
   const [currentVideoTitle, setCurrentVideoTitle] = useState('');
+  const [currentVideoLanguage, setCurrentVideoLanguage] = useState('es');
 
   const headphonesImg = useStaticImage('home.headphones');
 
