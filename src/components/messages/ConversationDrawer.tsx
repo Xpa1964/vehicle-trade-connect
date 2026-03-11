@@ -79,7 +79,7 @@ const ConversationDrawer: React.FC<ConversationDrawerProps> = ({
             variant="ghost" 
             size="sm" 
             onClick={onClose} 
-            className="touch-manipulation min-h-[44px] min-w-[44px] p-2 ml-2 rounded-xl hover:bg-gray-100 active:bg-gray-200"
+            className="touch-manipulation min-h-[44px] min-w-[44px] p-2 ml-2 rounded-xl hover:bg-secondary active:bg-muted"
           >
             <X className="h-5 w-5" />
           </Button>
