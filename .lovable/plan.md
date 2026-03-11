@@ -1,45 +1,58 @@
 
 
-## Plan: Reemplazar botones de audio por videos YouTube embebidos
+# Plan: Gestion de imagenes API con reemplazo limpio
 
-### Resumen
-Eliminar los botones de audio circular y reemplazarlos por botones de **video** (icono Play) que abren un modal con el video de YouTube embebido directamente en la página. Solo 4 idiomas tendrán video activo ahora; el resto mostrará un mensaje "Próximamente".
+## Resumen
 
-### YouTube IDs extraídos
-- ES: `OEF7aAISxF8`
-- EN: `4MW9r-kb_Lw`
-- FR: `Yjjo4qjHQrY`
-- IT: `BIbIpsJCmHg`
-- Resto (PT, DE, NL, PL, DK): `null` (próximamente)
+Dos cambios precisos sobre el plan original aprobado, sin modificar nada mas.
 
-### Cambios
+## Cambio 1: Migracion de base de datos
 
-**1. `VideoPlayerModal.tsx`** — Soporte YouTube iframe
-- Detectar si la URL es de YouTube (contiene `youtube.com/embed`)
-- Si es YouTube: renderizar `<iframe>` con `autoplay=1`, `allowFullScreen`
-- Si no: mantener el `<video>` tag actual como fallback
-- Eliminar botón "Pantalla Completa" (el iframe de YouTube ya lo incluye)
+Anadir columna `source` a `vehicle_images` **sin valor por defecto**:
 
-**2. `AudioPresentationSection.tsx`** — Reemplazar audio por video
-- Eliminar `audioLinks`, `audioLabels`, `useAudioSession`, import de `Headphones`
-- Crear mapa `videoIds` con los YouTube IDs por idioma
-- Cambiar icono de `Headphones` a `Play` (lucide-react) en los botones circulares
-- Al hacer click: si tiene videoId → abrir modal con URL `https://www.youtube.com/embed/{ID}?autoplay=1`; si no → toast "Próximamente"
-- Título dinámico del modal según idioma (ej: "Presentación en Español")
-- Actualizar textos/traducciones del slogan si es necesario (cambiar "Listen" por "Watch")
+```text
+ALTER TABLE vehicle_images ADD COLUMN source text;
+```
 
-**3. Traducciones** — Actualizar claves
-- `home.promoDescription`: cambiar referencia de "escuchar" a "ver" en es/en/fr/it
-- Añadir `home.videoComingSoon` para el mensaje de próximamente
+Las imagenes existentes quedaran con `source = NULL`. Solo las imagenes insertadas desde la sincronizacion API recibiran `source = 'api'`.
 
-### Archivos a modificar
-| Archivo | Acción |
+## Cambio 2: Modificar `processImages` en la edge function
+
+En `supabase/functions/api-sync-vehicles/index.ts`, funcion `processImages` (linea 472):
+
+**Paso nuevo antes de insertar** (sin tocar storage):
+
+```text
+DELETE FROM vehicle_images
+WHERE vehicle_id = vehicleId AND source = 'api'
+```
+
+**Al insertar cada imagen**, anadir `source: 'api'` al objeto:
+
+```text
+await supabase.from('vehicle_images').insert({
+  vehicle_id: vehicleId,
+  image_url: publicUrl,
+  display_order: i,
+  is_primary: i === 0,
+  source: 'api'        // <-- nuevo campo
+});
+```
+
+**No se eliminan archivos del bucket de storage.** Solo registros en base de datos.
+
+## Archivos modificados
+
+| Archivo | Cambio |
 |---------|--------|
-| `src/components/home/VideoPlayerModal.tsx` | Añadir soporte iframe YouTube |
-| `src/components/home/AudioPresentationSection.tsx` | Reemplazar audio por video |
-| `src/translations/es-modules/home.ts` | Actualizar textos |
-| `src/translations/en-modules/home.ts` | Actualizar textos |
-| `src/translations/modules/home.ts` | Actualizar fallback EN |
-| `src/translations/it-modules/home.ts` | Actualizar textos |
-| `src/translations/fr-modules/home.ts` | Actualizar textos |
+| Nueva migracion SQL | `ALTER TABLE vehicle_images ADD COLUMN source text;` |
+| `supabase/functions/api-sync-vehicles/index.ts` | Agregar DELETE previo y campo `source: 'api'` en insert |
+
+## Lo que NO se toca
+
+- Subida manual de imagenes
+- Componentes de UI
+- Bucket de storage (sin eliminar archivos fisicos)
+- RLS policies de `vehicle_images`
+- Ningun otro endpoint ni servicio
 

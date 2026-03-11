@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { X, Maximize } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface VideoPlayerModalProps {
@@ -21,22 +21,14 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   videoUrl,
   title = 'Video Presentación'
 }) => {
-  const videoContainerRef = useRef<HTMLDivElement>(null);
-
-  const handleFullscreen = () => {
-    if (videoContainerRef.current) {
-      if (videoContainerRef.current.requestFullscreen) {
-        videoContainerRef.current.requestFullscreen();
-      }
-    }
-  };
+  const isYouTube = videoUrl.includes('youtube.com/embed');
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl w-[95vw] p-0 overflow-hidden">
         <DialogHeader className="px-6 pt-6 pb-4">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl font-bold text-auto-blue">
+            <DialogTitle className="text-2xl font-bold text-primary">
               {title}
             </DialogTitle>
             <Button
@@ -50,18 +42,16 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
           </div>
         </DialogHeader>
         
-        <div className="relative w-full">
-          <Button
-            onClick={handleFullscreen}
-            variant="secondary"
-            size="sm"
-            className="absolute top-2 right-2 z-10 flex items-center gap-2"
-          >
-            <Maximize className="h-4 w-4" />
-            <span>Pantalla Completa</span>
-          </Button>
-          
-          <div ref={videoContainerRef} className="w-full aspect-video bg-black">
+        <div className="w-full aspect-video bg-black">
+          {isYouTube ? (
+            <iframe
+              src={videoUrl}
+              allow="autoplay; encrypted-media; fullscreen"
+              allowFullScreen
+              className="w-full h-full"
+              frameBorder="0"
+            />
+          ) : (
             <video
               className="w-full h-full"
               controls
@@ -70,9 +60,8 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
               autoPlay
             >
               <source src={videoUrl} type="video/mp4" />
-              Tu navegador no soporta la reproducción de video.
             </video>
-          </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
