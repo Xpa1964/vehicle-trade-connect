@@ -14,6 +14,7 @@ const AudioPresentationSection: React.FC = () => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState('');
   const [currentVideoTitle, setCurrentVideoTitle] = useState('');
+  const [currentVideoLanguage, setCurrentVideoLanguage] = useState('es');
 
   const headphonesImg = useStaticImage('home.headphones');
 
@@ -48,8 +49,9 @@ const AudioPresentationSection: React.FC = () => {
       return;
     }
     const languageName = languageNames[language];
-    setCurrentVideoUrl(`https://www.youtube.com/embed/${videoId}?autoplay=1`);
+    setCurrentVideoUrl(`https://www.youtube.com/embed/${videoId}`);
     setCurrentVideoTitle(`Presentación en ${languageName}`);
+    setCurrentVideoLanguage(language);
     setIsVideoModalOpen(true);
   };
 
@@ -159,6 +161,7 @@ const AudioPresentationSection: React.FC = () => {
         onClose={handleCloseVideoModal}
         videoUrl={currentVideoUrl}
         title={currentVideoTitle}
+        language={currentVideoLanguage}
       />
     </>
   );

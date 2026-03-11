@@ -1,42 +1,58 @@
 
 
-## Plan: Pantalla post-video con CTA "OK, me interesa" + envío de email
+# Plan: Gestion de imagenes API con reemplazo limpio
 
-### Problema
-Cuando el video de YouTube termina, aparece la interfaz nativa de YouTube (videos recomendados, etc.) — poco profesional.
+## Resumen
 
-### Solución
-Usar el parámetro `rel=0` de YouTube para minimizar sugerencias, y **detectar el fin del video** mediante la YouTube IFrame API. Al terminar, **ocultar el iframe** y mostrar una pantalla de overlay dentro del mismo modal con:
-- Fondo oscuro semi-transparente sobre el último frame
-- Mensaje traducido en el idioma del video (ej: "¿Te interesa? ¡Contáctanos!")
-- Botón grande "OK, me interesa"
-- Al hacer click → abrir `mailto:info@kontactvo.com` con asunto pre-rellenado en el idioma del video
+Dos cambios precisos sobre el plan original aprobado, sin modificar nada mas.
 
-### Cambios técnicos
+## Cambio 1: Migracion de base de datos
 
-**1. `VideoPlayerModal.tsx`** — Añadir estado post-video
-- Añadir parámetro `language` a las props del modal
-- Cargar la YouTube IFrame API (`YT.Player`) para detectar el evento `onStateChange` → `YT.PlayerState.ENDED`
-- Cuando el video termina: mostrar overlay con mensaje + botón CTA
-- El iframe se mantiene (último frame visible) pero se superpone el overlay
-- Añadir `rel=0&modestbranding=1` a la URL del embed para reducir branding YouTube
-- Botón "OK, me interesa" → `window.location.href = 'mailto:info@kontactvo.com?subject=...'`
-- Mensajes traducidos por idioma directamente en el componente (mapa estático, sin necesidad de claves i18n complejas)
+Anadir columna `source` a `vehicle_images` **sin valor por defecto**:
 
-**2. `AudioPresentationSection.tsx`** — Pasar idioma al modal
-- Pasar la prop `language` al `VideoPlayerModal` para que sepa en qué idioma mostrar el mensaje post-video
+```text
+ALTER TABLE vehicle_images ADD COLUMN source text;
+```
 
-**3. Traducciones** — Añadir claves para el CTA post-video
-- `home.videoEndedMessage`: "¿Te interesa? ¡Contáctanos!" (en cada idioma)
-- `home.videoInterestedButton`: "OK, me interesa" (en cada idioma)
+Las imagenes existentes quedaran con `source = NULL`. Solo las imagenes insertadas desde la sincronizacion API recibiran `source = 'api'`.
 
-### Archivos a modificar
+## Cambio 2: Modificar `processImages` en la edge function
+
+En `supabase/functions/api-sync-vehicles/index.ts`, funcion `processImages` (linea 472):
+
+**Paso nuevo antes de insertar** (sin tocar storage):
+
+```text
+DELETE FROM vehicle_images
+WHERE vehicle_id = vehicleId AND source = 'api'
+```
+
+**Al insertar cada imagen**, anadir `source: 'api'` al objeto:
+
+```text
+await supabase.from('vehicle_images').insert({
+  vehicle_id: vehicleId,
+  image_url: publicUrl,
+  display_order: i,
+  is_primary: i === 0,
+  source: 'api'        // <-- nuevo campo
+});
+```
+
+**No se eliminan archivos del bucket de storage.** Solo registros en base de datos.
+
+## Archivos modificados
+
 | Archivo | Cambio |
 |---------|--------|
-| `VideoPlayerModal.tsx` | YouTube IFrame API + overlay post-video + mailto CTA |
-| `AudioPresentationSection.tsx` | Pasar prop `language` al modal |
-| Traducciones (es/en/fr/it/pt/de/nl/pl) | Añadir 2 claves nuevas |
+| Nueva migracion SQL | `ALTER TABLE vehicle_images ADD COLUMN source text;` |
+| `supabase/functions/api-sync-vehicles/index.ts` | Agregar DELETE previo y campo `source: 'api'` en insert |
 
-### Nota sobre `mailto:`
-Se usa `mailto:` porque es la forma más directa y no requiere infraestructura de email backend. El usuario hace click y se abre su cliente de email con el destinatario y asunto pre-rellenados.
+## Lo que NO se toca
+
+- Subida manual de imagenes
+- Componentes de UI
+- Bucket de storage (sin eliminar archivos fisicos)
+- RLS policies de `vehicle_images`
+- Ningun otro endpoint ni servicio
 
