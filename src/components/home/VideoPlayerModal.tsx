@@ -254,18 +254,17 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
               <div className="flex flex-col gap-3 w-full max-w-md">
                 <p className="text-muted-foreground text-sm font-semibold">{translations.interestLabel}</p>
                 {translations.options.map((option) => (
-                  <label
+                  <div
                     key={option}
                     className="flex items-center gap-3 cursor-pointer rounded-lg border border-border px-4 py-3 hover:bg-muted/50 transition-colors"
                     onClick={() => toggleInterest(option)}
                   >
                     <Checkbox
                       checked={selectedInterests.includes(option)}
-                      onCheckedChange={() => toggleInterest(option)}
-                      className="h-5 w-5"
+                      className="h-5 w-5 pointer-events-none"
                     />
                     <span className="text-foreground text-sm sm:text-base font-medium">{option}</span>
-                  </label>
+                  </div>
                 ))}
               </div>
 
