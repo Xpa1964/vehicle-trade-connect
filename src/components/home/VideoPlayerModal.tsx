@@ -157,8 +157,13 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
           {/* Post-video overlay */}
           {showOverlay && (
-            <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-6 animate-in fade-in duration-500 z-10">
-              <p className="text-white text-xl sm:text-2xl md:text-3xl font-bold text-center px-6">
+            <div className="absolute inset-0 bg-background flex flex-col items-center justify-center gap-6 animate-in fade-in duration-500 z-10">
+              <img
+                src={kontactLogo}
+                alt="KONTACT VO"
+                className="w-32 h-32 sm:w-40 sm:h-40 object-contain"
+              />
+              <p className="text-foreground text-xl sm:text-2xl md:text-3xl font-bold text-center px-6">
                 {translations.message}
               </p>
               <Button
