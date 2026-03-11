@@ -161,6 +161,7 @@ const AudioPresentationSection: React.FC = () => {
         onClose={handleCloseVideoModal}
         videoUrl={currentVideoUrl}
         title={currentVideoTitle}
+        language={currentVideoLanguage}
       />
     </>
   );
