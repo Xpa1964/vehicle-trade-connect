@@ -61,11 +61,19 @@ const DashboardServiceCard: React.FC<DashboardServiceCardProps> = ({
             </Link>
           )}
           {secondaryAction && (
-            <Link to={secondaryAction.href} onClick={(e) => e.stopPropagation()}>
-              <Button size="sm" variant="outline" className="border-border text-muted-foreground hover:bg-secondary hover:text-foreground">
-                {secondaryAction.label}
-              </Button>
-            </Link>
+            secondaryAction.href.startsWith('http') ? (
+              <a href={secondaryAction.href} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                <Button size="sm" variant="outline" className="border-border text-muted-foreground hover:bg-secondary hover:text-foreground">
+                  {secondaryAction.label}
+                </Button>
+              </a>
+            ) : (
+              <Link to={secondaryAction.href} onClick={(e) => e.stopPropagation()}>
+                <Button size="sm" variant="outline" className="border-border text-muted-foreground hover:bg-secondary hover:text-foreground">
+                  {secondaryAction.label}
+                </Button>
+              </Link>
+            )
           )}
         </div>
       </div>
