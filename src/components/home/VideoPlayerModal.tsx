@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import kontactLogo from '@/assets/kontact-vo-logo-circle.png';
 
 interface VideoPlayerModalProps {
   isOpen: boolean;
