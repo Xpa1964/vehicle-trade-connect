@@ -113,6 +113,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 }) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [companyName, setCompanyName] = useState('');
   const playerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeId = useRef(`yt-player-${Date.now()}`);
