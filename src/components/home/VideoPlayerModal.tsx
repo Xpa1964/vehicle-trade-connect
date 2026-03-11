@@ -143,6 +143,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
     setShowOverlay(false);
     setSelectedInterests([]);
+    setCompanyName('');
 
     const videoIdMatch = videoUrl.match(/embed\/([^?]+)/);
     if (!videoIdMatch) return;
