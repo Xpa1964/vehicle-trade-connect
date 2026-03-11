@@ -71,7 +71,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, t }) => {
   };
 
   return (
-    <div className="border-t border-border p-3 sm:p-4 bg-card sticky bottom-0 safe-area-padding-bottom">
+    <div className="border-t border-border p-3 sm:p-4 bg-card flex-shrink-0" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
       <form onSubmit={handleSubmit} className="flex gap-2 sm:gap-3 items-end">
         <div className="flex-1 relative">
           <Textarea
