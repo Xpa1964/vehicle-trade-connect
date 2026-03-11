@@ -24,9 +24,9 @@ const AudioPresentationSection: React.FC = () => {
     fr: 'Yjjo4qjHQrY',
     it: 'BIbIpsJCmHg',
     pt: null,
-    de: null,
+    de: '6XMAzJvhSXI',
     nl: 'P5ytnUafM0g',
-    pl: null,
+    pl: 'xL-PbQJniAk',
     dk: 'Ncdm_Hf3xA8',
   };
 
