@@ -3,6 +3,7 @@ import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { supabase } from '@/integrations/supabase/client';
 import kontactLogo from '@/assets/kontact-vo-logo-orange.png';
 
 interface VideoPlayerModalProps {
@@ -104,6 +105,7 @@ const postVideoMessages: Record<string, {
     companyPlaceholder: 'Dit firma (valgfrit)',
   },
 };
+
 const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   isOpen,
   onClose,
@@ -114,18 +116,21 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [companyName, setCompanyName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const playerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeId = useRef(`yt-player-${Date.now()}`);
 
-  const translations = postVideoMessages[language] || postVideoMessages['es'];
+  const translations = postVideoMessages[language] || postVideoMessages.es;
 
   const destroyPlayer = useCallback(() => {
     try {
       if (playerRef.current?.destroy) {
         playerRef.current.destroy();
       }
-    } catch (e) { /* ignore */ }
+    } catch (e) {
+      // ignore
+    }
     playerRef.current = null;
   }, []);
 
@@ -144,6 +149,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     setShowOverlay(false);
     setSelectedInterests([]);
     setCompanyName('');
+    setIsSubmitting(false);
 
     const videoIdMatch = videoUrl.match(/embed\/([^?]+)/);
     if (!videoIdMatch) return;
@@ -187,8 +193,11 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       setShowOverlay(false);
       setSelectedInterests([]);
       setCompanyName('');
+      setIsSubmitting(false);
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -204,27 +213,52 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const isYouTube = videoUrl.includes('youtube.com/embed');
 
   const toggleInterest = (option: string) => {
-    setSelectedInterests(prev =>
-      prev.includes(option) ? prev.filter(i => i !== option) : [...prev, option]
+    setSelectedInterests((prev) =>
+      prev.includes(option) ? prev.filter((i) => i !== option) : [...prev, option]
     );
   };
 
-  const handleContactClick = () => {
-    const companyInfo = companyName.trim() ? `\n\nEmpresa / Company: ${companyName.trim()}` : '';
-    const selected = selectedInterests.length > 0
-      ? `\n\n${translations.interestLabel}\n${selectedInterests.map(i => `- ${i}`).join('\n')}`
-      : '';
+  const buildMailtoUrl = (body: string) =>
+    `mailto:info@kontactvo.com?subject=${encodeURIComponent(translations.emailSubject)}&body=${encodeURIComponent(body)}`;
+
+  const handleContactClick = async () => {
+    if (isSubmitting) return;
+
+    const cleanCompany = companyName.trim();
+    const companyInfo = cleanCompany ? `\n\nEmpresa / Company: ${cleanCompany}` : '';
+    const selected =
+      selectedInterests.length > 0
+        ? `\n\n${translations.interestLabel}\n${selectedInterests.map((i) => `- ${i}`).join('\n')}`
+        : '';
+
     const body = `${translations.emailBody}${companyInfo}${selected}`;
-    const mailtoUrl = `mailto:info@kontactvo.com?subject=${encodeURIComponent(translations.emailSubject)}&body=${encodeURIComponent(body)}`;
-    
-    // Use programmatic link click for better cross-browser compatibility
-    const link = document.createElement('a');
-    link.href = mailtoUrl;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('send-video-interest-email', {
+        body: {
+          language,
+          title,
+          videoUrl,
+          emailSubject: translations.emailSubject,
+          emailBody: translations.emailBody,
+          companyName: cleanCompany,
+          selectedInterests,
+        },
+      });
+
+      if (error || !data?.success) {
+        throw error ?? new Error('Email delivery failed');
+      }
+
+      onClose();
+    } catch (error) {
+      console.error('[VideoPlayerModal] Backend email failed, using mailto fallback:', error);
+      window.location.href = buildMailtoUrl(body);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -305,6 +339,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
               <Button
                 onClick={handleContactClick}
                 size="lg"
+                disabled={isSubmitting}
                 className="text-lg sm:text-xl px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2"
               >
                 <Mail className="w-5 h-5" />
