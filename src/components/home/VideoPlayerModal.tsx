@@ -20,6 +20,7 @@ const postVideoMessages: Record<string, {
   emailBody: string;
   interestLabel: string;
   options: string[];
+  companyPlaceholder: string;
 }> = {
   es: {
     message: '¿Te interesa? ¡Contáctanos!',
@@ -28,6 +29,7 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, estoy interesado en que se contacte conmigo cuando se inicie la actividad de KONTACT VO.',
     interestLabel: 'Me interesa:',
     options: ['Comprar vehículos', 'Vender vehículos', 'Comprar/Vender vehículos'],
+    companyPlaceholder: 'Tu empresa (opcional)',
   },
   en: {
     message: 'Interested? Contact us!',
@@ -36,6 +38,7 @@ const postVideoMessages: Record<string, {
     emailBody: "OK, I'm interested in being contacted when KONTACT VO starts its activity.",
     interestLabel: "I'm interested in:",
     options: ['Buying vehicles', 'Selling vehicles', 'Buying/Selling vehicles'],
+    companyPlaceholder: 'Your company (optional)',
   },
   fr: {
     message: 'Intéressé ? Contactez-nous !',
@@ -44,6 +47,7 @@ const postVideoMessages: Record<string, {
     emailBody: "OK, je suis intéressé pour être contacté lorsque KONTACT VO démarrera son activité.",
     interestLabel: "Ça m'intéresse :",
     options: ['Acheter des véhicules', 'Vendre des véhicules', 'Acheter/Vendre des véhicules'],
+    companyPlaceholder: 'Votre entreprise (facultatif)',
   },
   it: {
     message: 'Interessato? Contattaci!',
@@ -52,6 +56,7 @@ const postVideoMessages: Record<string, {
     emailBody: "OK, sono interessato a essere contattato quando KONTACT VO avvierà la sua attività.",
     interestLabel: 'Mi interessa:',
     options: ['Comprare veicoli', 'Vendere veicoli', 'Comprare/Vendere veicoli'],
+    companyPlaceholder: 'La tua azienda (facoltativo)',
   },
   pt: {
     message: 'Interessado? Entre em contato!',
@@ -60,6 +65,7 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, estou interessado em ser contactado quando o KONTACT VO iniciar a sua atividade.',
     interestLabel: 'Estou interessado em:',
     options: ['Comprar veículos', 'Vender veículos', 'Comprar/Vender veículos'],
+    companyPlaceholder: 'Sua empresa (opcional)',
   },
   de: {
     message: 'Interessiert? Kontaktieren Sie uns!',
@@ -68,6 +74,7 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, ich bin daran interessiert, kontaktiert zu werden, wenn KONTACT VO seine Tätigkeit aufnimmt.',
     interestLabel: 'Ich interessiere mich für:',
     options: ['Fahrzeuge kaufen', 'Fahrzeuge verkaufen', 'Fahrzeuge kaufen/verkaufen'],
+    companyPlaceholder: 'Ihr Unternehmen (optional)',
   },
   nl: {
     message: 'Geïnteresseerd? Neem contact op!',
@@ -76,6 +83,7 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, ik ben geïnteresseerd om gecontacteerd te worden wanneer KONTACT VO zijn activiteit start.',
     interestLabel: 'Ik ben geïnteresseerd in:',
     options: ['Voertuigen kopen', 'Voertuigen verkopen', 'Voertuigen kopen/verkopen'],
+    companyPlaceholder: 'Uw bedrijf (optioneel)',
   },
   pl: {
     message: 'Zainteresowany? Skontaktuj się z nami!',
@@ -84,6 +92,7 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, jestem zainteresowany kontaktem, gdy KONTACT VO rozpocznie swoją działalność.',
     interestLabel: 'Interesuje mnie:',
     options: ['Kupno pojazdów', 'Sprzedaż pojazdów', 'Kupno/Sprzedaż pojazdów'],
+    companyPlaceholder: 'Twoja firma (opcjonalnie)',
   },
   dk: {
     message: 'Interesseret? Kontakt os!',
@@ -92,9 +101,9 @@ const postVideoMessages: Record<string, {
     emailBody: 'OK, jeg er interesseret i at blive kontaktet, når KONTACT VO starter sin aktivitet.',
     interestLabel: 'Jeg er interesseret i:',
     options: ['Køb af køretøjer', 'Salg af køretøjer', 'Køb/Salg af køretøjer'],
+    companyPlaceholder: 'Dit firma (valgfrit)',
   },
 };
-
 const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   isOpen,
   onClose,
