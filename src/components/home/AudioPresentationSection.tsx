@@ -49,8 +49,9 @@ const AudioPresentationSection: React.FC = () => {
       return;
     }
     const languageName = languageNames[language];
-    setCurrentVideoUrl(`https://www.youtube.com/embed/${videoId}?autoplay=1`);
+    setCurrentVideoUrl(`https://www.youtube.com/embed/${videoId}`);
     setCurrentVideoTitle(`Presentación en ${languageName}`);
+    setCurrentVideoLanguage(language);
     setIsVideoModalOpen(true);
   };
 
