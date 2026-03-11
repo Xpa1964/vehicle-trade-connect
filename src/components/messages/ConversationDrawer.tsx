@@ -60,14 +60,14 @@ const ConversationDrawer: React.FC<ConversationDrawerProps> = ({
         style={{ touchAction: 'none' }}
       />
       
-      <div className="fixed inset-y-0 right-0 w-full bg-white shadow-xl flex flex-col">
-        <div className="flex items-center justify-between p-3 sm:p-4 border-b bg-white sticky top-0 z-10 shadow-sm">
+      <div className="fixed top-0 right-0 w-full bg-card shadow-xl flex flex-col" style={{ height: '100dvh' }}>
+        <div className="flex items-center justify-between p-3 sm:p-4 border-b bg-card sticky top-0 z-10 shadow-sm flex-shrink-0">
           <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={onClose} 
-              className="touch-manipulation min-h-[44px] min-w-[44px] p-2 rounded-xl hover:bg-gray-100 active:bg-gray-200"
+              className="touch-manipulation min-h-[44px] min-w-[44px] p-2 rounded-xl hover:bg-secondary active:bg-muted"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
@@ -79,13 +79,13 @@ const ConversationDrawer: React.FC<ConversationDrawerProps> = ({
             variant="ghost" 
             size="sm" 
             onClick={onClose} 
-            className="touch-manipulation min-h-[44px] min-w-[44px] p-2 ml-2 rounded-xl hover:bg-gray-100 active:bg-gray-200"
+            className="touch-manipulation min-h-[44px] min-w-[44px] p-2 ml-2 rounded-xl hover:bg-secondary active:bg-muted"
           >
             <X className="h-5 w-5" />
           </Button>
         </div>
         
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
           <ChatArea
             selectedConversation={selectedConversation}
             activeConversation={activeConversation}
