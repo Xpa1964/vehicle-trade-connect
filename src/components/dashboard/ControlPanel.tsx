@@ -78,7 +78,7 @@ const ControlPanel: React.FC = () => {
       imageId: 'services.transport',
       title: t('services.transport', { fallback: 'Transporte Exprés' }),
       primaryAction: { label: t('common.view', { fallback: 'Ver' }), href: '/transport-quotes' },
-      secondaryAction: { label: t('common.request', { fallback: 'Solicitar' }), href: '/transport' }
+      secondaryAction: { label: t('common.request', { fallback: 'Solicitar' }), href: 'https://mover-pro-flow.lovable.app' }
     },
     {
       imageId: 'services.inspection',
