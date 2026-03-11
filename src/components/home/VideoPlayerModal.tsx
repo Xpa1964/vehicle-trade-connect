@@ -1,12 +1,5 @@
-import React from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface VideoPlayerModalProps {
   isOpen: boolean;
@@ -21,27 +14,48 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   videoUrl,
   title = 'Video Presentación'
 }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
   const isYouTube = videoUrl.includes('youtube.com/embed');
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl w-[95vw] p-0 overflow-hidden">
-        <DialogHeader className="px-6 pt-6 pb-4">
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl font-bold text-primary">
-              {title}
-            </DialogTitle>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="h-8 w-8 p-0"
-            >
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
-        </DialogHeader>
-        
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-[95vw] max-w-5xl bg-card rounded-xl overflow-hidden shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-primary">{title}</h2>
+          <button
+            onClick={onClose}
+            className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+          >
+            <X className="h-5 w-5 text-foreground" />
+          </button>
+        </div>
+
         <div className="w-full aspect-video bg-black">
           {isYouTube ? (
             <iframe
@@ -64,8 +78,8 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
             </video>
           )}
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 
