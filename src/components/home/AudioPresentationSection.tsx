@@ -25,9 +25,9 @@ const AudioPresentationSection: React.FC = () => {
     it: 'BIbIpsJCmHg',
     pt: null,
     de: null,
-    nl: null,
+    nl: 'P5ytnUafM0g',
     pl: null,
-    dk: null,
+    dk: 'Ncdm_Hf3xA8',
   };
 
   const languageNames: Record<string, string> = {
