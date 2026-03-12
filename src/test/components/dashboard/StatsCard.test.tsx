@@ -88,7 +88,7 @@ describe('StatsCard Component', () => {
     );
     
     const card = container.firstChild;
-    expect(card?.className).toContain('custom-class');
+    expect((card as HTMLElement)?.className).toContain('custom-class');
   });
 
   it('renders with primary variant', () => {
