@@ -24,7 +24,7 @@ const TransportExpressPage: React.FC = () => {
               imageId="hero.transport.express"
               alt="Transport Express Background"
               className="w-full h-full object-cover"
-              style={{ minHeight: '380px', objectPosition: '50% 5%' }}
+              style={{ minHeight: '380px', objectPosition: '50% 25%' }}
             />
           </div>
           
