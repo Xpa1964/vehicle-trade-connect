@@ -20,11 +20,11 @@ const TransportExpressPage: React.FC = () => {
         {/* Header con imagen de fondo */}
         <div className="relative overflow-hidden rounded-xl shadow-lg mb-6">
           <div className="absolute inset-0">
-            <SafeImage 
-              imageId="hero.transport.express"
+            <img 
+              src="/assets/transport-express-hero.jpg"
               alt="Transport Express Background"
-              className="w-full h-full object-cover"
-              style={{ minHeight: '380px', objectPosition: '50% 82%' }}
+              className="w-full h-full object-cover object-center"
+              style={{ minHeight: '380px' }}
             />
           </div>
           
