@@ -6,8 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { TransportHighlights } from '@/components/transport';
 import SafeImage from '@/components/shared/SafeImage';
+import kontactDrivePreview from '@/assets/kontact-drive-preview.png';
 
-const CALCULATOR_URL = 'https://preview--mover-pro-flow.lovable.app';
+const CALCULATOR_URL = 'https://mover-pro-flow.lovable.app';
 
 const TransportExpressPage: React.FC = () => {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ const TransportExpressPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Calculadora de Transporte - Preview embebida */}
+        {/* Kontact Drive Preview */}
         <div className="mt-8 bg-card rounded-lg shadow-lg border border-border overflow-hidden">
           <div className="p-6 border-b border-border flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -97,18 +98,17 @@ const TransportExpressPage: React.FC = () => {
             </Button>
           </div>
           
-          {/* Iframe preview - clickable */}
+          {/* Clickable image preview */}
           <a
             href={CALCULATOR_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="block relative group cursor-pointer"
           >
-            <iframe
-              src={CALCULATOR_URL}
-              title="Transport Calculator"
-              className="w-full h-[500px] border-0 pointer-events-none"
-              loading="lazy"
+            <img
+              src={kontactDrivePreview}
+              alt="Kontact Drive - Vehicle Transport Calculator"
+              className="w-full h-auto object-cover"
             />
             {/* Overlay on hover */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
@@ -125,3 +125,4 @@ const TransportExpressPage: React.FC = () => {
 };
 
 export default TransportExpressPage;
+
