@@ -7,7 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { TransportHighlights } from '@/components/transport';
 import SafeImage from '@/components/shared/SafeImage';
 
-const CALCULATOR_URL = 'https://mover-pro-flow.lovable.app';
+const CALCULATOR_URL = 'https://preview--mover-pro-flow.lovable.app';
 
 const TransportExpressPage: React.FC = () => {
   const navigate = useNavigate();
