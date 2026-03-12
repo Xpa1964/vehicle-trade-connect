@@ -119,6 +119,16 @@ const TransportExpressPage: React.FC = () => {
             </div>
           </a>
         </div>
+        {/* Floating back button */}
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+          <Button
+            onClick={() => navigate('/dashboard')}
+            className="shadow-lg gap-2 px-6 py-3 rounded-full"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {t('navigation.backToControlPanel')}
+          </Button>
+        </div>
       </div>
     </div>
   );
