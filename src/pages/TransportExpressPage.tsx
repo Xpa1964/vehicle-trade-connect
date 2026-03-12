@@ -24,11 +24,11 @@ const TransportExpressPage: React.FC = () => {
               imageId="hero.transport.express"
               alt="Transport Express Background"
               className="w-full h-full object-cover"
-              style={{ minHeight: '320px', objectPosition: '50% 30%' }}
+              style={{ minHeight: '380px', objectPosition: '50% 82%' }}
             />
           </div>
           
-          <div className="relative z-10 p-8" style={{ minHeight: '320px' }}>
+          <div className="relative z-10 p-8" style={{ minHeight: '380px' }}>
             <div className="flex flex-col md:flex-row justify-between items-start gap-6 h-full">
               <div className="flex flex-col justify-end flex-1 h-full">
                 <div className="mb-4">
