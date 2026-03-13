@@ -74,9 +74,20 @@ const HeroSection: React.FC = () => {
       {/* Hero Image Layer - Direct local image for full scene visibility */}
       <div className="absolute inset-0 w-full h-full" aria-hidden="true">
         <picture>
-          <source type="image/webp" srcSet="/images/home-hero.webp" />
+          <source
+            media="(max-width: 767px)"
+            srcSet="/images/home-hero.png 800w"
+            sizes="100vw"
+          />
+          <source
+            media="(min-width: 768px)"
+            srcSet="/images/home-hero.png 1600w"
+            sizes="100vw"
+          />
           <img
             src="/images/home-hero.png"
+            srcSet="/images/home-hero.png 800w, /images/home-hero.png 1600w"
+            sizes="100vw"
             alt="Fondo de vehículos de lujo profesionales"
             className="w-full h-full object-cover object-center"
             width="1600"
