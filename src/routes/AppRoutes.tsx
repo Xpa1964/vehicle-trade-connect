@@ -318,6 +318,7 @@ const AppRoutes = () => {
           <Route path="audit-report" element={<AdminAuditReport />} />
           <Route path="static-images" element={<AdminStaticImageManager />} />
           <Route path="image-control" element={<ImageControlCenter />} />
+          <Route path="campaigns" element={<AdminCampaigns />} />
           
           {/* Admin disputes route removed - mediation system disabled */}
         </Route>

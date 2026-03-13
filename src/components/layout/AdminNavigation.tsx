@@ -27,7 +27,20 @@ const AdminNavigation = () => {
         </Link>
       </div>
       
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
+        <Link to="/admin/campaigns">
+          <Button
+            variant={isActive('/admin/campaigns') ? "default" : "ghost"}
+            size="sm"
+            className={cn(
+              "flex items-center",
+              isActive('/admin/campaigns') ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+            )}
+          >
+            <BarChart3 className="h-4 w-4 mr-2" />
+            <span>Campañas</span>
+          </Button>
+        </Link>
         <Link to="/admin/control-panel">
           <Button
             variant={isActive('/admin/control-panel') ? "default" : "ghost"}
