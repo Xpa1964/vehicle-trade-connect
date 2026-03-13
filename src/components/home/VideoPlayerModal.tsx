@@ -215,17 +215,13 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
         <div className="relative w-full aspect-video bg-black">
           {isYouTube ? (
-            useFallback ? (
               <iframe
-                src={fallbackSrc}
+                src={embedSrc}
                 className="w-full h-full"
                 allow="autoplay; encrypted-media"
                 allowFullScreen
                 title="Video Player"
               />
-            ) : (
-              <div id={iframeId} key={iframeId} className="w-full h-full" />
-            )
           ) : (
             <video
               className="w-full h-full"
