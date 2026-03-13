@@ -144,7 +144,7 @@ const Exchanges: React.FC = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex gap-4 items-end">
+              <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-end">
                 <div className="flex-1">
                   <Label htmlFor="search">{t('exchanges.search', { fallback: 'Buscar vehículos' })}</Label>
                   <Input
@@ -217,7 +217,7 @@ const Exchanges: React.FC = () => {
 
                       return (
                         <Card key={request.id} className="p-4">
-                          <div className="flex gap-4 items-start">
+                          <div className="flex flex-col sm:flex-row gap-4 items-start">
                             {/* Vehicle Image */}
                             <div className="flex-shrink-0">
                               <img 
@@ -346,7 +346,7 @@ const Exchanges: React.FC = () => {
                     {filteredVehicles.length > 0 ? (
                       filteredVehicles.map((vehicle) => (
                         <Card key={vehicle.id} className="p-4">
-                          <div className="flex justify-between items-start">
+                          <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
                             <div className="flex items-start space-x-4">
                               <div className="flex-shrink-0">
                                 <img 

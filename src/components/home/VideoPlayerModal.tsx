@@ -233,7 +233,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative w-[95vw] max-w-5xl bg-card rounded-xl overflow-hidden shadow-2xl"
+        className="relative w-[95vw] max-w-5xl max-h-[90vh] bg-card rounded-xl overflow-hidden shadow-2xl flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 py-4">
@@ -263,13 +263,13 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
           {/* Post-video overlay */}
           {showOverlay && (
-            <div className="absolute inset-0 bg-background flex flex-col items-center justify-center gap-4 sm:gap-6 animate-in fade-in duration-500 z-10 px-6">
+            <div className="absolute inset-0 bg-background flex flex-col items-center justify-start gap-3 sm:gap-5 animate-in fade-in duration-500 z-10 px-4 sm:px-6 py-4 sm:py-6 overflow-y-auto">
               <img
                 src={kontactLogo}
                 alt="KONTACT VO"
-                className="w-28 h-28 sm:w-36 sm:h-36 object-contain"
+                className="w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 object-contain flex-shrink-0"
               />
-              <p className="text-foreground text-xl sm:text-2xl md:text-3xl font-bold text-center">
+              <p className="text-foreground text-lg sm:text-xl md:text-2xl font-bold text-center">
                 {translations.message}
               </p>
 
