@@ -217,7 +217,7 @@ const Exchanges: React.FC = () => {
 
                       return (
                         <Card key={request.id} className="p-4">
-                          <div className="flex gap-4 items-start">
+                          <div className="flex flex-col sm:flex-row gap-4 items-start">
                             {/* Vehicle Image */}
                             <div className="flex-shrink-0">
                               <img 
