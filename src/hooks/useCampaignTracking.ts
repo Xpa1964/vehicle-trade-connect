@@ -29,6 +29,7 @@ export const useCampaignTracking = () => {
       video_language: params.video_language,
       campaign: params.campaign,
       dealer: params.dealer || null,
+      contact: params.contact || null,
       visitor_country: visitorCountry,
       user_agent: navigator.userAgent,
       referrer: document.referrer || null,
