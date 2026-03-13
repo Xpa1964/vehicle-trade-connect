@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -111,6 +110,23 @@ const postVideoMessages: Record<string, {
   },
 };
 
+/** Wait for YT.Player to be available, with a timeout */
+function waitForYTApi(timeoutMs = 3000): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if ((window as any).YT?.Player) {
+      resolve();
+      return;
+    }
+    const timer = setTimeout(() => reject(new Error('YT API timeout')), timeoutMs);
+    const prev = (window as any).onYouTubeIframeAPIReady;
+    (window as any).onYouTubeIframeAPIReady = () => {
+      clearTimeout(timer);
+      prev?.();
+      resolve();
+    };
+  });
+}
+
 const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   isOpen,
   onClose,
@@ -126,14 +142,16 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [companyName, setCompanyName] = useState('');
+  const [openCount, setOpenCount] = useState(0);
+  const [useFallback, setUseFallback] = useState(false);
   const playerRef = useRef<any>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const iframeId = useRef(`yt-player-${Date.now()}`);
   const videoStartedFired = useRef(false);
   const videoCompletedFired = useRef(false);
   const popupShownFired = useRef(false);
 
   const translations = postVideoMessages[language] || postVideoMessages['es'];
+
+  const iframeId = `yt-player-${openCount}`;
 
   const destroyPlayer = useCallback(() => {
     try {
@@ -144,67 +162,107 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     playerRef.current = null;
   }, []);
 
-  // Load YT IFrame API once
+  // Increment openCount each time modal opens → fresh DOM target
   useEffect(() => {
-    if ((window as any).YT) return;
+    if (isOpen) {
+      setOpenCount(c => c + 1);
+      setUseFallback(false);
+      setShowOverlay(false);
+      setSelectedInterests([]);
+      setCompanyName('');
+      videoStartedFired.current = false;
+      videoCompletedFired.current = false;
+      popupShownFired.current = false;
+    } else {
+      destroyPlayer();
+    }
+  }, [isOpen, destroyPlayer]);
+
+  // Load YT IFrame API script once
+  useEffect(() => {
+    if ((window as any).YT || document.querySelector('script[src*="youtube.com/iframe_api"]')) return;
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     document.head.appendChild(tag);
   }, []);
 
-  // Create player when modal opens with a YouTube URL
+  // Create player when modal is open and openCount has settled
   useEffect(() => {
-    if (!isOpen || !videoUrl.includes('youtube.com/embed')) return;
+    if (!isOpen || openCount === 0) return;
+    if (!videoUrl.includes('youtube.com/embed')) return;
 
-    setShowOverlay(false);
-    setSelectedInterests([]);
-    setCompanyName('');
-    videoStartedFired.current = false;
-    videoCompletedFired.current = false;
-    popupShownFired.current = false;
-
-    const videoIdMatch = videoUrl.match(/embed\/([^?]+)/);
+    const videoIdMatch = videoUrl.match(/embed\/([^?&/]+)/);
     if (!videoIdMatch) return;
     const videoId = videoIdMatch[1];
 
-    const createPlayer = () => {
+    let cancelled = false;
+
+    const initPlayer = async () => {
+      try {
+        await waitForYTApi(3000);
+      } catch {
+        if (!cancelled) setUseFallback(true);
+        return;
+      }
+
+      if (cancelled) return;
+
+      // Small delay to ensure React has rendered the fresh div
+      await new Promise(r => setTimeout(r, 150));
+      if (cancelled) return;
+
+      const target = document.getElementById(`yt-player-${openCount}`);
+      if (!target) {
+        setUseFallback(true);
+        return;
+      }
+
       destroyPlayer();
-      playerRef.current = new (window as any).YT.Player(iframeId.current, {
-        videoId,
-        playerVars: {
-          autoplay: autoplay ? 1 : 0,
-          rel: 0,
-          modestbranding: 1,
-        },
-        events: {
-          onStateChange: (event: any) => {
-            const YT = (window as any).YT;
-            if (event.data === YT.PlayerState.PLAYING && !videoStartedFired.current) {
-              videoStartedFired.current = true;
-              onVideoStarted?.();
-            }
-            if (event.data === YT.PlayerState.ENDED) {
-              if (!videoCompletedFired.current) {
-                videoCompletedFired.current = true;
-                onVideoCompleted?.();
-              }
-              setShowOverlay(true);
-            }
+
+      try {
+        playerRef.current = new (window as any).YT.Player(`yt-player-${openCount}`, {
+          videoId,
+          playerVars: {
+            autoplay: autoplay ? 1 : 0,
+            rel: 0,
+            modestbranding: 1,
+            mute: autoplay ? 1 : 0,
           },
-        },
-      });
+          events: {
+            onReady: () => {
+              // Player ready — if autoplay, it will start via playerVars
+            },
+            onError: () => {
+              if (!cancelled) setUseFallback(true);
+            },
+            onStateChange: (event: any) => {
+              const YT = (window as any).YT;
+              if (event.data === YT.PlayerState.PLAYING && !videoStartedFired.current) {
+                videoStartedFired.current = true;
+                onVideoStarted?.();
+              }
+              if (event.data === YT.PlayerState.ENDED) {
+                if (!videoCompletedFired.current) {
+                  videoCompletedFired.current = true;
+                  onVideoCompleted?.();
+                }
+                setShowOverlay(true);
+              }
+            },
+          },
+        });
+      } catch {
+        if (!cancelled) setUseFallback(true);
+      }
     };
 
-    if ((window as any).YT?.Player) {
-      setTimeout(createPlayer, 100);
-    } else {
-      (window as any).onYouTubeIframeAPIReady = createPlayer;
-    }
+    initPlayer();
 
     return () => {
+      cancelled = true;
       destroyPlayer();
     };
-  }, [isOpen, videoUrl, destroyPlayer, autoplay, onVideoStarted, onVideoCompleted]);
+  }, [isOpen, openCount, videoUrl, destroyPlayer, autoplay, onVideoStarted, onVideoCompleted]);
 
   // Fire popup shown callback
   useEffect(() => {
@@ -219,9 +277,6 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
-      setShowOverlay(false);
-      setSelectedInterests([]);
-      setCompanyName('');
     }
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
@@ -237,6 +292,10 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   if (!isOpen) return null;
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
+
+  // Extract video ID for fallback iframe
+  const videoIdForFallback = videoUrl.match(/embed\/([^?&/]+)/)?.[1] || '';
+  const fallbackSrc = `https://www.youtube.com/embed/${videoIdForFallback}?autoplay=1&mute=1&rel=0`;
 
   const toggleInterest = (option: string) => {
     setSelectedInterests(prev =>
@@ -281,9 +340,19 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
           </button>
         </div>
 
-        <div className="relative w-full aspect-video bg-black" ref={containerRef}>
+        <div className="relative w-full aspect-video bg-black">
           {isYouTube ? (
-            <div id={iframeId.current} className="w-full h-full" />
+            useFallback ? (
+              <iframe
+                src={fallbackSrc}
+                className="w-full h-full"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                title="Video Player"
+              />
+            ) : (
+              <div id={iframeId} key={iframeId} className="w-full h-full" />
+            )
           ) : (
             <video
               className="w-full h-full"
