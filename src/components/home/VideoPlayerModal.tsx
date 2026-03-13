@@ -211,8 +211,6 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   }, [isOpen, isYouTube, onVideoCompleted]);
 
   if (!isOpen) return null;
-    };
-  }, [isOpen, isYouTube, onVideoCompleted]);
 
   const toggleInterest = (option: string) => {
     setSelectedInterests(prev =>
