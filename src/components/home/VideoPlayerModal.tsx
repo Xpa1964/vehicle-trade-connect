@@ -164,11 +164,56 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
   if (!isOpen) return null;
 
+  const iframeRef = React.useRef<HTMLIFrameElement>(null);
   const isYouTube = videoUrl.includes('youtube.com/embed');
   const videoIdForEmbed = videoUrl.match(/embed\/([^?&/]+)/)?.[1] || '';
-  const embedSrc = autoplay
-    ? `https://www.youtube.com/embed/${videoIdForEmbed}?autoplay=1`
-    : `https://www.youtube.com/embed/${videoIdForEmbed}`;
+  const embedParams = new URLSearchParams();
+  if (autoplay) embedParams.set('autoplay', '1');
+  embedParams.set('enablejsapi', '1');
+  const embedSrc = `https://www.youtube.com/embed/${videoIdForEmbed}?${embedParams.toString()}`;
+
+  // Listen for YouTube player state changes via postMessage
+  useEffect(() => {
+    if (!isOpen || !isYouTube) return;
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== 'https://www.youtube.com') return;
+      try {
+        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+        // YouTube sends info with event "onStateChange" and info code 0 = ENDED
+        if (data?.event === 'onStateChange' && data?.info === 0) {
+          onVideoCompleted?.();
+          setShowOverlay(true);
+        }
+      } catch {
+        // ignore non-JSON messages
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    // Tell YouTube iframe to send us state change events
+    const sendListening = () => {
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'listening', id: 1 }),
+          'https://www.youtube.com'
+        );
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'] }),
+          'https://www.youtube.com'
+        );
+      }
+    };
+
+    // Delay to ensure iframe is loaded
+    const timer = setTimeout(sendListening, 1500);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      clearTimeout(timer);
+    };
+  }, [isOpen, isYouTube, onVideoCompleted]);
 
   const toggleInterest = (option: string) => {
     setSelectedInterests(prev =>
