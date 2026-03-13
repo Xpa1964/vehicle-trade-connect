@@ -1,14 +1,13 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { Calendar, Filter, BarChart3, TrendingUp } from 'lucide-react';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Filter, BarChart3, TrendingUp, Users } from 'lucide-react';
 
 interface CampaignEvent {
   id: string;
@@ -16,6 +15,7 @@ interface CampaignEvent {
   video_language: string | null;
   campaign: string | null;
   dealer: string | null;
+  contact: string | null;
   visitor_country: string | null;
   video_started: boolean;
   video_completed: boolean;
@@ -27,18 +27,16 @@ interface CampaignEvent {
 const LANGUAGES = ['es', 'en', 'fr', 'it', 'pt', 'de', 'nl', 'pl', 'dk'];
 
 const AdminCampaigns: React.FC = () => {
-  const { t } = useLanguage();
   const [events, setEvents] = useState<CampaignEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterCampaign, setFilterCampaign] = useState('');
   const [filterLanguage, setFilterLanguage] = useState('all');
   const [filterDealer, setFilterDealer] = useState('');
+  const [filterContact, setFilterContact] = useState('');
   const [filterDateFrom, setFilterDateFrom] = useState('');
   const [filterDateTo, setFilterDateTo] = useState('');
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+  useEffect(() => { fetchEvents(); }, []);
 
   const fetchEvents = async () => {
     setLoading(true);
@@ -46,10 +44,7 @@ const AdminCampaigns: React.FC = () => {
       .from('campaign_events' as any)
       .select('*')
       .order('created_at', { ascending: false });
-
-    if (!error && data) {
-      setEvents(data as unknown as CampaignEvent[]);
-    }
+    if (!error && data) setEvents(data as unknown as CampaignEvent[]);
     setLoading(false);
   };
 
@@ -58,26 +53,27 @@ const AdminCampaigns: React.FC = () => {
       if (filterCampaign && !e.campaign?.toLowerCase().includes(filterCampaign.toLowerCase())) return false;
       if (filterLanguage !== 'all' && e.video_language !== filterLanguage) return false;
       if (filterDealer && !e.dealer?.toLowerCase().includes(filterDealer.toLowerCase())) return false;
+      if (filterContact && !e.contact?.toLowerCase().includes(filterContact.toLowerCase())) return false;
       if (filterDateFrom && e.created_at < filterDateFrom) return false;
       if (filterDateTo && e.created_at > filterDateTo + 'T23:59:59') return false;
       return true;
     });
-  }, [events, filterCampaign, filterLanguage, filterDealer, filterDateFrom, filterDateTo]);
+  }, [events, filterCampaign, filterLanguage, filterDealer, filterContact, filterDateFrom, filterDateTo]);
 
-  // Aggregated table data
+  // Aggregated by contact
   const aggregatedData = useMemo(() => {
     const groups: Record<string, {
-      campaign: string; language: string; dealer: string;
+      contact: string; campaign: string; language: string;
       visits: number; plays: number; completions: number; popups: number; clicks: number;
     }> = {};
 
     filteredEvents.forEach(e => {
-      const key = `${e.campaign || 'direct'}|${e.video_language || 'es'}|${e.dealer || '-'}`;
+      const key = `${e.contact || '-'}|${e.campaign || 'direct'}|${e.video_language || 'es'}`;
       if (!groups[key]) {
         groups[key] = {
+          contact: e.contact || '-',
           campaign: e.campaign || 'direct',
           language: e.video_language || 'es',
-          dealer: e.dealer || '-',
           visits: 0, plays: 0, completions: 0, popups: 0, clicks: 0,
         };
       }
@@ -91,46 +87,32 @@ const AdminCampaigns: React.FC = () => {
     return Object.values(groups).sort((a, b) => b.visits - a.visits);
   }, [filteredEvents]);
 
-  // Charts data
   const byLanguage = useMemo(() => {
     const map: Record<string, number> = {};
-    filteredEvents.forEach(e => {
-      const lang = e.video_language || 'es';
-      map[lang] = (map[lang] || 0) + 1;
-    });
-    return Object.entries(map).map(([lang, count]) => ({ language: lang.toUpperCase(), visits: count }));
+    filteredEvents.forEach(e => { const l = e.video_language || 'es'; map[l] = (map[l] || 0) + 1; });
+    return Object.entries(map).map(([language, visits]) => ({ language: language.toUpperCase(), visits }));
   }, [filteredEvents]);
 
   const byCampaign = useMemo(() => {
     const map: Record<string, number> = {};
-    filteredEvents.forEach(e => {
-      const c = e.campaign || 'direct';
-      map[c] = (map[c] || 0) + 1;
-    });
-    return Object.entries(map).map(([campaign, count]) => ({ campaign, visits: count }));
+    filteredEvents.forEach(e => { const c = e.campaign || 'direct'; map[c] = (map[c] || 0) + 1; });
+    return Object.entries(map).map(([campaign, visits]) => ({ campaign, visits }));
   }, [filteredEvents]);
 
   const dailyVisits = useMemo(() => {
     const map: Record<string, number> = {};
-    filteredEvents.forEach(e => {
-      const day = e.created_at?.slice(0, 10) || '';
-      if (day) map[day] = (map[day] || 0) + 1;
-    });
-    return Object.entries(map).sort().map(([date, count]) => ({ date, visits: count }));
+    filteredEvents.forEach(e => { const d = e.created_at?.slice(0, 10) || ''; if (d) map[d] = (map[d] || 0) + 1; });
+    return Object.entries(map).sort().map(([date, visits]) => ({ date, visits }));
   }, [filteredEvents]);
 
   const funnelData = useMemo(() => {
-    const total = filteredEvents.length;
-    const plays = filteredEvents.filter(e => e.video_started).length;
-    const completions = filteredEvents.filter(e => e.video_completed).length;
-    const popups = filteredEvents.filter(e => e.popup_shown).length;
-    const clicks = filteredEvents.filter(e => e.register_clicked).length;
+    const t = filteredEvents.length;
     return [
-      { step: 'Visitas', value: total },
-      { step: 'Reproducciones', value: plays },
-      { step: 'Completas', value: completions },
-      { step: 'Popup', value: popups },
-      { step: 'Registro', value: clicks },
+      { step: 'Visitas', value: t },
+      { step: 'Reproducciones', value: filteredEvents.filter(e => e.video_started).length },
+      { step: 'Completas', value: filteredEvents.filter(e => e.video_completed).length },
+      { step: 'Popup', value: filteredEvents.filter(e => e.popup_shown).length },
+      { step: 'Registro', value: filteredEvents.filter(e => e.register_clicked).length },
     ];
   }, [filteredEvents]);
 
@@ -138,9 +120,7 @@ const AdminCampaigns: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-foreground">Campañas</h1>
-        <Button onClick={fetchEvents} variant="outline" size="sm">
-          Actualizar
-        </Button>
+        <Button onClick={fetchEvents} variant="outline" size="sm">Actualizar</Button>
       </div>
 
       {/* Filters */}
@@ -151,40 +131,19 @@ const AdminCampaigns: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            <Input
-              placeholder="Campaña"
-              value={filterCampaign}
-              onChange={e => setFilterCampaign(e.target.value)}
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+            <Input placeholder="Contacto" value={filterContact} onChange={e => setFilterContact(e.target.value)} />
+            <Input placeholder="Campaña" value={filterCampaign} onChange={e => setFilterCampaign(e.target.value)} />
             <Select value={filterLanguage} onValueChange={setFilterLanguage}>
-              <SelectTrigger>
-                <SelectValue placeholder="Idioma" />
-              </SelectTrigger>
+              <SelectTrigger><SelectValue placeholder="Idioma" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos</SelectItem>
-                {LANGUAGES.map(l => (
-                  <SelectItem key={l} value={l}>{l.toUpperCase()}</SelectItem>
-                ))}
+                {LANGUAGES.map(l => <SelectItem key={l} value={l}>{l.toUpperCase()}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Input
-              placeholder="Dealer"
-              value={filterDealer}
-              onChange={e => setFilterDealer(e.target.value)}
-            />
-            <Input
-              type="date"
-              value={filterDateFrom}
-              onChange={e => setFilterDateFrom(e.target.value)}
-              placeholder="Desde"
-            />
-            <Input
-              type="date"
-              value={filterDateTo}
-              onChange={e => setFilterDateTo(e.target.value)}
-              placeholder="Hasta"
-            />
+            <Input placeholder="Dealer" value={filterDealer} onChange={e => setFilterDealer(e.target.value)} />
+            <Input type="date" value={filterDateFrom} onChange={e => setFilterDateFrom(e.target.value)} />
+            <Input type="date" value={filterDateTo} onChange={e => setFilterDateTo(e.target.value)} />
           </div>
         </CardContent>
       </Card>
@@ -207,11 +166,11 @@ const AdminCampaigns: React.FC = () => {
         ))}
       </div>
 
-      {/* Results table */}
+      {/* Results table - grouped by contact */}
       <Card>
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" /> Resultados por campaña
+            <Users className="h-4 w-4" /> Resultados por contacto
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -222,9 +181,9 @@ const AdminCampaigns: React.FC = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>Contacto</TableHead>
                     <TableHead>Campaña</TableHead>
                     <TableHead>Idioma</TableHead>
-                    <TableHead>Dealer</TableHead>
                     <TableHead className="text-right">Visitas</TableHead>
                     <TableHead className="text-right">Reproducciones</TableHead>
                     <TableHead className="text-right">Completas</TableHead>
@@ -235,16 +194,14 @@ const AdminCampaigns: React.FC = () => {
                 <TableBody>
                   {aggregatedData.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
-                        Sin datos
-                      </TableCell>
+                      <TableCell colSpan={8} className="text-center text-muted-foreground py-8">Sin datos</TableCell>
                     </TableRow>
                   ) : (
                     aggregatedData.map((row, i) => (
                       <TableRow key={i}>
-                        <TableCell className="font-medium">{row.campaign}</TableCell>
+                        <TableCell className="font-medium">{row.contact}</TableCell>
+                        <TableCell>{row.campaign}</TableCell>
                         <TableCell>{row.language.toUpperCase()}</TableCell>
-                        <TableCell>{row.dealer}</TableCell>
                         <TableCell className="text-right">{row.visits}</TableCell>
                         <TableCell className="text-right">{row.plays}</TableCell>
                         <TableCell className="text-right">{row.completions}</TableCell>
@@ -263,9 +220,7 @@ const AdminCampaigns: React.FC = () => {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Visitas por idioma</CardTitle>
-          </CardHeader>
+          <CardHeader><CardTitle className="text-base">Visitas por idioma</CardTitle></CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={byLanguage}>
@@ -280,9 +235,7 @@ const AdminCampaigns: React.FC = () => {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Visitas por campaña</CardTitle>
-          </CardHeader>
+          <CardHeader><CardTitle className="text-base">Visitas por campaña</CardTitle></CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={byCampaign}>
@@ -316,9 +269,7 @@ const AdminCampaigns: React.FC = () => {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Embudo de conversión</CardTitle>
-          </CardHeader>
+          <CardHeader><CardTitle className="text-base">Embudo de conversión</CardTitle></CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={funnelData} layout="vertical">

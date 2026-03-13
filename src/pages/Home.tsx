@@ -24,6 +24,7 @@ const Home: React.FC = () => {
         video_language: videoLang || 'es',
         campaign,
         dealer: dealer || undefined,
+        contact: contact || undefined,
       });
     }
   }, [campaign, videoLang, dealer, logVisit]);
