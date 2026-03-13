@@ -263,7 +263,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
           {/* Post-video overlay */}
           {showOverlay && (
-            <div className="absolute inset-0 bg-background flex flex-col items-center justify-center gap-4 sm:gap-6 animate-in fade-in duration-500 z-10 px-6">
+            <div className="absolute inset-0 bg-background flex flex-col items-center justify-start gap-3 sm:gap-5 animate-in fade-in duration-500 z-10 px-4 sm:px-6 py-4 sm:py-6 overflow-y-auto">
               <img
                 src={kontactLogo}
                 alt="KONTACT VO"
