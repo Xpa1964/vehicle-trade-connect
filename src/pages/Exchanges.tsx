@@ -144,7 +144,7 @@ const Exchanges: React.FC = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex gap-4 items-end">
+              <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-end">
                 <div className="flex-1">
                   <Label htmlFor="search">{t('exchanges.search', { fallback: 'Buscar vehículos' })}</Label>
                   <Input
