@@ -1,0 +1,16 @@
+export default {
+  'cookies.title': 'Cookie-Richtlinie',
+  'cookies.whatAreCookies': 'Was sind Cookies?',
+  'cookies.whatAreCookiesDesc': 'Cookies sind kleine Textdateien, die auf Ihrem Gerät gespeichert werden, wenn Sie unsere Website besuchen. Sie helfen uns, Ihre Benutzererfahrung und die Funktionalität der Website zu verbessern.',
+  'cookies.typesTitle': 'Arten von Cookies, die wir verwenden',
+  'cookies.essential': 'Essentielle Cookies',
+  'cookies.essentialDesc': 'Erforderlich für die grundlegende Funktionalität der Website und die Benutzerauthentifizierung.',
+  'cookies.performance': 'Leistungs-Cookies',
+  'cookies.performanceDesc': 'Helfen uns zu verstehen, wie Benutzer mit unserer Website interagieren.',
+  'cookies.preferences': 'Präferenz-Cookies',
+  'cookies.preferencesDesc': 'Speichern Ihre Einstellungen und Präferenzen, wie die ausgewählte Sprache.',
+  'cookies.controlTitle': 'Cookie-Kontrolle',
+  'cookies.controlDesc': 'Sie können Cookies über die Einstellungen Ihres Browsers kontrollieren und löschen. Bitte beachten Sie jedoch, dass das Deaktivieren bestimmter Cookies die Funktionalität der Website beeinträchtigen kann.',
+  'cookies.updatesTitle': 'Aktualisierungen dieser Richtlinie',
+  'cookies.updatesDesc': 'Wir können diese Cookie-Richtlinie gelegentlich aktualisieren. Wir empfehlen Ihnen, diese Seite regelmäßig zu überprüfen, um über Änderungen informiert zu bleiben.',
+};

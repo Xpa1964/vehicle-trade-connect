@@ -38,6 +38,7 @@ import xlsxTemplate from './es-modules/xlsxTemplate';
 import xlsxValidation from './es-modules/xlsxValidation';
 import toast from './es-modules/toast';
 import inspection from './es-modules/inspection';
+import cookies from './es-modules/cookies';
 
 export default {
   ...navigation,
@@ -78,5 +79,6 @@ export default {
   ...xlsxValidation,
   ...forms,
   ...toast,
-  ...inspection
+  ...inspection,
+  ...cookies
 };

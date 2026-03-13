@@ -1,0 +1,16 @@
+export default {
+  'cookies.title': 'Cookiebeleid',
+  'cookies.whatAreCookies': 'Wat zijn cookies?',
+  'cookies.whatAreCookiesDesc': 'Cookies zijn kleine tekstbestanden die op uw apparaat worden opgeslagen wanneer u onze website bezoekt. Ze helpen ons uw gebruikerservaring en de werking van de site te verbeteren.',
+  'cookies.typesTitle': 'Soorten cookies die we gebruiken',
+  'cookies.essential': 'Essentiële cookies',
+  'cookies.essentialDesc': 'Noodzakelijk voor de basisfunctionaliteit van de website en gebruikersauthenticatie.',
+  'cookies.performance': 'Prestatiecookies',
+  'cookies.performanceDesc': 'Helpen ons te begrijpen hoe gebruikers met onze website omgaan.',
+  'cookies.preferences': 'Voorkeurscookies',
+  'cookies.preferencesDesc': 'Onthouden uw instellingen en voorkeuren, zoals de geselecteerde taal.',
+  'cookies.controlTitle': 'Cookiebeheer',
+  'cookies.controlDesc': 'U kunt cookies beheren en verwijderen via de instellingen van uw browser. Houd er echter rekening mee dat het uitschakelen van bepaalde cookies de functionaliteit van de site kan beïnvloeden.',
+  'cookies.updatesTitle': 'Updates van dit beleid',
+  'cookies.updatesDesc': 'We kunnen dit cookiebeleid af en toe bijwerken. We raden u aan deze pagina regelmatig te bekijken om op de hoogte te blijven van eventuele wijzigingen.',
+};

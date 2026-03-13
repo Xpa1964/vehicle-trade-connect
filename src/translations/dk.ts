@@ -37,6 +37,7 @@ import xlsxTemplate from './dk-modules/xlsxTemplate';
 import xlsxValidation from './dk-modules/xlsxValidation';
 import toast from './dk-modules/toast';
 import inspection from './dk-modules/inspection';
+import cookies from './dk-modules/cookies';
 
 export default {
   ...navigation,
@@ -77,5 +78,6 @@ export default {
   ...xlsxTemplate,
   ...xlsxValidation,
   ...toast,
-  ...inspection
+  ...inspection,
+  ...cookies
 };

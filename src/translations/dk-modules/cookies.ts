@@ -1,0 +1,16 @@
+export default {
+  'cookies.title': 'Cookiepolitik',
+  'cookies.whatAreCookies': 'Hvad er cookies?',
+  'cookies.whatAreCookiesDesc': 'Cookies er små tekstfiler, der gemmes på din enhed, når du besøger vores hjemmeside. De hjælper os med at forbedre din brugeroplevelse og hjemmesidens funktionalitet.',
+  'cookies.typesTitle': 'Typer af cookies vi bruger',
+  'cookies.essential': 'Essentielle cookies',
+  'cookies.essentialDesc': 'Nødvendige for hjemmesidens grundlæggende funktionalitet og brugerautentificering.',
+  'cookies.performance': 'Præstationscookies',
+  'cookies.performanceDesc': 'Hjælper os med at forstå, hvordan brugere interagerer med vores hjemmeside.',
+  'cookies.preferences': 'Præferencecookies',
+  'cookies.preferencesDesc': 'Husker dine indstillinger og præferencer, såsom det valgte sprog.',
+  'cookies.controlTitle': 'Cookiekontrol',
+  'cookies.controlDesc': 'Du kan kontrollere og slette cookies via dine browserindstillinger. Bemærk dog, at deaktivering af visse cookies kan påvirke hjemmesidens funktionalitet.',
+  'cookies.updatesTitle': 'Opdateringer af denne politik',
+  'cookies.updatesDesc': 'Vi kan opdatere denne cookiepolitik lejlighedsvist. Vi anbefaler, at du gennemgår denne side regelmæssigt for at holde dig informeret om eventuelle ændringer.',
+};
