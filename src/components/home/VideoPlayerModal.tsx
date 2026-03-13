@@ -258,6 +258,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
         <div className="relative w-full aspect-video bg-black">
           {isYouTube ? (
               <iframe
+                ref={iframeRef}
                 src={embedSrc}
                 className="w-full h-full"
                 allow="autoplay; encrypted-media"
