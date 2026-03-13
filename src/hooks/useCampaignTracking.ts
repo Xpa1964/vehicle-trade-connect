@@ -6,6 +6,7 @@ interface CampaignParams {
   video_language: string;
   campaign: string;
   dealer?: string;
+  contact?: string;
 }
 
 export const useCampaignTracking = () => {
