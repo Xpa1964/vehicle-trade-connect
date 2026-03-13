@@ -14,6 +14,7 @@ const Home: React.FC = () => {
   const autoplay = searchParams.get('autoplay') === '1';
   const campaign = searchParams.get('campaign');
   const dealer = searchParams.get('dealer');
+  const contact = searchParams.get('contact');
 
   const { logVisit, updateEvent, sessionId } = useCampaignTracking();
 
@@ -23,6 +24,7 @@ const Home: React.FC = () => {
         video_language: videoLang || 'es',
         campaign,
         dealer: dealer || undefined,
+        contact: contact || undefined,
       });
     }
   }, [campaign, videoLang, dealer, logVisit]);

@@ -1,0 +1,1 @@
+ALTER TABLE public.campaign_events ADD COLUMN contact text;
