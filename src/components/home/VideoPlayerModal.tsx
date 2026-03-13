@@ -140,8 +140,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
   // Fire popup shown callback
   useEffect(() => {
-    if (showOverlay && !popupShownFired.current) {
-      popupShownFired.current = true;
+    if (showOverlay) {
       onPopupShown?.();
     }
   }, [showOverlay, onPopupShown]);
