@@ -233,7 +233,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative w-[95vw] max-w-5xl bg-card rounded-xl overflow-hidden shadow-2xl"
+        className="relative w-[95vw] max-w-5xl max-h-[90vh] bg-card rounded-xl overflow-hidden shadow-2xl flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 py-4">
