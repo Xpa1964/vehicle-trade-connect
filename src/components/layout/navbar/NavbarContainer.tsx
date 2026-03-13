@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import DesktopNav from './DesktopNav';
 import MobileMenu from './MobileMenu';
+import LanguageSelector from './LanguageSelector';
 
 const NavbarContainer: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
