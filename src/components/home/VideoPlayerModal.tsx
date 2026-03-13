@@ -267,7 +267,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
               <img
                 src={kontactLogo}
                 alt="KONTACT VO"
-                className="w-28 h-28 sm:w-36 sm:h-36 object-contain"
+                className="w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 object-contain flex-shrink-0"
               />
               <p className="text-foreground text-xl sm:text-2xl md:text-3xl font-bold text-center">
                 {translations.message}
