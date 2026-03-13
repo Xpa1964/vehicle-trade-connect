@@ -60,31 +60,20 @@ const AdminCampaigns: React.FC = () => {
     });
   }, [events, filterCampaign, filterLanguage, filterDealer, filterContact, filterDateFrom, filterDateTo]);
 
-  // Aggregated by contact
-  const aggregatedData = useMemo(() => {
-    const groups: Record<string, {
-      contact: string; campaign: string; language: string;
-      visits: number; plays: number; completions: number; popups: number; clicks: number;
-    }> = {};
-
-    filteredEvents.forEach(e => {
-      const key = `${e.contact || '-'}|${e.campaign || 'direct'}|${e.video_language || 'es'}`;
-      if (!groups[key]) {
-        groups[key] = {
-          contact: e.contact || '-',
-          campaign: e.campaign || 'direct',
-          language: e.video_language || 'es',
-          visits: 0, plays: 0, completions: 0, popups: 0, clicks: 0,
-        };
-      }
-      groups[key].visits++;
-      if (e.video_started) groups[key].plays++;
-      if (e.video_completed) groups[key].completions++;
-      if (e.popup_shown) groups[key].popups++;
-      if (e.register_clicked) groups[key].clicks++;
-    });
-
-    return Object.values(groups).sort((a, b) => b.visits - a.visits);
+  // Individual session rows sorted by date (newest first)
+  const individualRows = useMemo(() => {
+    return filteredEvents.map(e => ({
+      id: e.id,
+      contact: e.contact || '-',
+      campaign: e.campaign || 'direct',
+      language: (e.video_language || 'es').toUpperCase(),
+      date: new Date(e.created_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }),
+      video_started: e.video_started,
+      video_completed: e.video_completed,
+      popup_shown: e.popup_shown,
+      register_clicked: e.register_clicked,
+      country: e.visitor_country || '-',
+    }));
   }, [filteredEvents]);
 
   const byLanguage = useMemo(() => {
