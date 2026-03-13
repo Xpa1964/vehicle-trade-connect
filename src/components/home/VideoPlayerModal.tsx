@@ -125,8 +125,16 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [companyName, setCompanyName] = useState('');
+  const iframeRef = React.useRef<HTMLIFrameElement>(null);
 
   const translations = postVideoMessages[language] || postVideoMessages['es'];
+
+  const isYouTube = videoUrl.includes('youtube.com/embed');
+  const videoIdForEmbed = videoUrl.match(/embed\/([^?&/]+)/)?.[1] || '';
+  const embedParams = new URLSearchParams();
+  if (autoplay) embedParams.set('autoplay', '1');
+  embedParams.set('enablejsapi', '1');
+  const embedSrc = `https://www.youtube.com/embed/${videoIdForEmbed}?${embedParams.toString()}`;
 
   // Reset state when modal opens
   useEffect(() => {
@@ -162,9 +170,47 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  // Listen for YouTube player state changes via postMessage
+  useEffect(() => {
+    if (!isOpen || !isYouTube) return;
 
-  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== 'https://www.youtube.com') return;
+      try {
+        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+        if (data?.event === 'onStateChange' && data?.info === 0) {
+          onVideoCompleted?.();
+          setShowOverlay(true);
+        }
+      } catch {
+        // ignore non-JSON messages
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    const sendListening = () => {
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'listening', id: 1 }),
+          'https://www.youtube.com'
+        );
+        iframeRef.current.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'] }),
+          'https://www.youtube.com'
+        );
+      }
+    };
+
+    const timer = setTimeout(sendListening, 1500);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      clearTimeout(timer);
+    };
+  }, [isOpen, isYouTube, onVideoCompleted]);
+
+  if (!isOpen) return null;
   const isYouTube = videoUrl.includes('youtube.com/embed');
   const videoIdForEmbed = videoUrl.match(/embed\/([^?&/]+)/)?.[1] || '';
   const embedParams = new URLSearchParams();
