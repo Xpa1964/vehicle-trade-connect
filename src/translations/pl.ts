@@ -37,6 +37,7 @@ import xlsxTemplate from './pl-modules/xlsxTemplate';
 import xlsxValidation from './pl-modules/xlsxValidation';
 import toast from './pl-modules/toast';
 import inspection from './pl-modules/inspection';
+import cookies from './pl-modules/cookies';
 
 export default {
   ...navigation,
