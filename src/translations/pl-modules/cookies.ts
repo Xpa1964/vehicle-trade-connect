@@ -1,0 +1,16 @@
+export default {
+  'cookies.title': 'Polityka Plików Cookie',
+  'cookies.whatAreCookies': 'Czym są pliki cookie?',
+  'cookies.whatAreCookiesDesc': 'Pliki cookie to małe pliki tekstowe przechowywane na Twoim urządzeniu podczas odwiedzania naszej strony internetowej. Pomagają nam poprawić Twoje doświadczenie użytkownika i funkcjonalność strony.',
+  'cookies.typesTitle': 'Rodzaje plików cookie, których używamy',
+  'cookies.essential': 'Niezbędne pliki cookie',
+  'cookies.essentialDesc': 'Wymagane do podstawowej funkcjonalności strony internetowej i uwierzytelniania użytkowników.',
+  'cookies.performance': 'Pliki cookie wydajności',
+  'cookies.performanceDesc': 'Pomagają nam zrozumieć, w jaki sposób użytkownicy korzystają z naszej strony internetowej.',
+  'cookies.preferences': 'Pliki cookie preferencji',
+  'cookies.preferencesDesc': 'Zapamiętują Twoje ustawienia i preferencje, takie jak wybrany język.',
+  'cookies.controlTitle': 'Kontrola plików cookie',
+  'cookies.controlDesc': 'Możesz kontrolować i usuwać pliki cookie za pomocą ustawień przeglądarki. Pamiętaj jednak, że wyłączenie niektórych plików cookie może wpłynąć na funkcjonalność strony.',
+  'cookies.updatesTitle': 'Aktualizacje tej polityki',
+  'cookies.updatesDesc': 'Możemy od czasu do czasu aktualizować tę politykę plików cookie. Zalecamy okresowe przeglądanie tej strony, aby być na bieżąco z wszelkimi zmianami.',
+};

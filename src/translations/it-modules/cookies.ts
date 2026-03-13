@@ -1,0 +1,16 @@
+export default {
+  'cookies.title': 'Politica dei Cookie',
+  'cookies.whatAreCookies': 'Cosa sono i cookie?',
+  'cookies.whatAreCookiesDesc': 'I cookie sono piccoli file di testo memorizzati sul tuo dispositivo quando visiti il nostro sito web. Ci aiutano a migliorare la tua esperienza utente e il funzionamento del sito.',
+  'cookies.typesTitle': 'Tipi di cookie che utilizziamo',
+  'cookies.essential': 'Cookie essenziali',
+  'cookies.essentialDesc': 'Necessari per il funzionamento base del sito web e l\'autenticazione degli utenti.',
+  'cookies.performance': 'Cookie di prestazione',
+  'cookies.performanceDesc': 'Ci aiutano a capire come gli utenti interagiscono con il nostro sito web.',
+  'cookies.preferences': 'Cookie di preferenza',
+  'cookies.preferencesDesc': 'Ricordano le tue impostazioni e preferenze, come la lingua selezionata.',
+  'cookies.controlTitle': 'Controllo dei cookie',
+  'cookies.controlDesc': 'Puoi controllare ed eliminare i cookie tramite le impostazioni del tuo browser. Tuttavia, tieni presente che disabilitare determinati cookie può influire sulla funzionalità del sito.',
+  'cookies.updatesTitle': 'Aggiornamenti di questa politica',
+  'cookies.updatesDesc': 'Potremmo aggiornare questa politica dei cookie occasionalmente. Ti consigliamo di consultare questa pagina periodicamente per rimanere informato su eventuali modifiche.',
+};
