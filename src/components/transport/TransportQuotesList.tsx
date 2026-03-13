@@ -175,7 +175,7 @@ const TransportQuotesList: React.FC = () => {
       <div className="text-center py-8">
         <Truck className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
         <p className="text-muted-foreground mb-4">{t('transportQuotes.noQuotes')}</p>
-        <Button onClick={() => navigate('/transport')}>
+        <Button onClick={() => window.open('https://preview--mover-pro-flow.lovable.app', '_blank')}>
           {t('transportQuotes.requestQuote')}
         </Button>
       </div>
