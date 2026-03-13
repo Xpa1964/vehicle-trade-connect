@@ -98,8 +98,6 @@ const HeroSection: React.FC = () => {
           />
         </picture>
       </div>
-        </picture>
-      </div>
 
       {/* Logo independiente - posicionado dinámicamente bajo "Vehículos" en desktop, centrado en móvil */}
       <div 
