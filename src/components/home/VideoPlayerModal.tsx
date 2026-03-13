@@ -165,10 +165,10 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   if (!isOpen) return null;
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
-
-  // Extract video ID for fallback iframe
-  const videoIdForFallback = videoUrl.match(/embed\/([^?&/]+)/)?.[1] || '';
-  const fallbackSrc = `https://www.youtube.com/embed/${videoIdForFallback}?autoplay=1&mute=1&rel=0`;
+  const videoIdForEmbed = videoUrl.match(/embed\/([^?&/]+)/)?.[1] || '';
+  const embedSrc = autoplay
+    ? `https://www.youtube.com/embed/${videoIdForEmbed}?autoplay=1`
+    : `https://www.youtube.com/embed/${videoIdForEmbed}`;
 
   const toggleInterest = (option: string) => {
     setSelectedInterests(prev =>
