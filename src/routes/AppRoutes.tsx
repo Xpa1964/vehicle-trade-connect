@@ -142,6 +142,7 @@ const APIManagement = lazyWithRetry(() => import("../pages/APIManagement"));
 const AdminAuditReport = lazyWithRetry(() => import("../pages/admin/AuditReport"));
 const AdminStaticImageManager = lazyWithRetry(() => import("../pages/admin/StaticImageManager"));
 const ImageControlCenter = lazyWithRetry(() => import("../pages/admin/ImageControlCenter"));
+const AdminCampaigns = lazyWithRetry(() => import("../pages/admin/Campaigns"));
 // Removed AdminDisputes page (mediation system disabled)
 
 const AppRoutes = () => {
