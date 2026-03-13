@@ -85,11 +85,12 @@ const HeroSection: React.FC = () => {
             sizes="100vw"
             alt="Fondo de vehículos de lujo profesionales"
             className="w-full h-full object-cover object-center"
-            width={1600}
-            height={900}
+            width="1600"
+            height="900"
             loading="eager"
             fetchPriority="high"
             decoding="sync"
+            style={{ width: '100%', height: '100%' }}
           />
         </picture>
       </div>
