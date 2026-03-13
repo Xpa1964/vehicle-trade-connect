@@ -39,8 +39,8 @@ const AudioPresentationSection: React.FC<AudioPresentationSectionProps> = ({
   const videoIds: Record<string, string | null> = {
     es: 'OEF7aAISxF8',
     en: 'X8qK3I8-k-M',
-    fr: '6XMAzJvhSXI',
-    it: 'xL-PbQJniAk',
+    fr: 'Yjjo4qjHQrY',
+    it: 'BIbIpsJCmHg',
     pt: '6XMAzJvhSXI',
     de: '6XMAzJvhSXI',
     nl: 'P5ytnUafM0g',
