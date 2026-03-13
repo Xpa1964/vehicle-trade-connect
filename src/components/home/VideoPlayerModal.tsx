@@ -202,11 +202,16 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       }
     };
 
-    const timer = setTimeout(sendListening, 1500);
+    // Retry multiple times to ensure the iframe is ready
+    const timers = [
+      setTimeout(sendListening, 1000),
+      setTimeout(sendListening, 2500),
+      setTimeout(sendListening, 5000),
+    ];
 
     return () => {
       window.removeEventListener('message', handleMessage);
-      clearTimeout(timer);
+      timers.forEach(clearTimeout);
     };
   }, [isOpen, isYouTube, onVideoCompleted]);
 
