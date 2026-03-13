@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Home, Settings } from 'lucide-react';
+import { Home, Settings, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -27,7 +27,20 @@ const AdminNavigation = () => {
         </Link>
       </div>
       
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
+        <Link to="/admin/campaigns">
+          <Button
+            variant={isActive('/admin/campaigns') ? "default" : "ghost"}
+            size="sm"
+            className={cn(
+              "flex items-center",
+              isActive('/admin/campaigns') ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+            )}
+          >
+            <BarChart3 className="h-4 w-4 mr-2" />
+            <span>Campañas</span>
+          </Button>
+        </Link>
         <Link to="/admin/control-panel">
           <Button
             variant={isActive('/admin/control-panel') ? "default" : "ghost"}
