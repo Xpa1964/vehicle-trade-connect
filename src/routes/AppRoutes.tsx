@@ -195,6 +195,7 @@ const AppRoutes = () => {
           <Route path="users" element={<UsersDirectory />} />
           <Route path="community" element={<CommunityPage />} />
           <Route path="terms" element={<TermsAndConditionsPage />} />
+          <Route path="terms-and-conditions" element={<Navigate to="/terms" replace />} />
           <Route path="privacy" element={<PrivacyPolicyPage />} />
           <Route path="cookies" element={<CookiesPage />} />
           <Route path="auction-policies" element={<AuctionPoliciesPage />} />
