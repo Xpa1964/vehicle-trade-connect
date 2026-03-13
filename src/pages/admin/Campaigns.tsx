@@ -60,31 +60,20 @@ const AdminCampaigns: React.FC = () => {
     });
   }, [events, filterCampaign, filterLanguage, filterDealer, filterContact, filterDateFrom, filterDateTo]);
 
-  // Aggregated by contact
-  const aggregatedData = useMemo(() => {
-    const groups: Record<string, {
-      contact: string; campaign: string; language: string;
-      visits: number; plays: number; completions: number; popups: number; clicks: number;
-    }> = {};
-
-    filteredEvents.forEach(e => {
-      const key = `${e.contact || '-'}|${e.campaign || 'direct'}|${e.video_language || 'es'}`;
-      if (!groups[key]) {
-        groups[key] = {
-          contact: e.contact || '-',
-          campaign: e.campaign || 'direct',
-          language: e.video_language || 'es',
-          visits: 0, plays: 0, completions: 0, popups: 0, clicks: 0,
-        };
-      }
-      groups[key].visits++;
-      if (e.video_started) groups[key].plays++;
-      if (e.video_completed) groups[key].completions++;
-      if (e.popup_shown) groups[key].popups++;
-      if (e.register_clicked) groups[key].clicks++;
-    });
-
-    return Object.values(groups).sort((a, b) => b.visits - a.visits);
+  // Individual session rows sorted by date (newest first)
+  const individualRows = useMemo(() => {
+    return filteredEvents.map(e => ({
+      id: e.id,
+      contact: e.contact || '-',
+      campaign: e.campaign || 'direct',
+      language: (e.video_language || 'es').toUpperCase(),
+      date: new Date(e.created_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }),
+      video_started: e.video_started,
+      video_completed: e.video_completed,
+      popup_shown: e.popup_shown,
+      register_clicked: e.register_clicked,
+      country: e.visitor_country || '-',
+    }));
   }, [filteredEvents]);
 
   const byLanguage = useMemo(() => {
@@ -166,11 +155,11 @@ const AdminCampaigns: React.FC = () => {
         ))}
       </div>
 
-      {/* Results table - grouped by contact */}
+      {/* Individual session tracking */}
       <Card>
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <Users className="h-4 w-4" /> Resultados por contacto
+            <Users className="h-4 w-4" /> Seguimiento individual ({individualRows.length} sesiones)
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -184,29 +173,31 @@ const AdminCampaigns: React.FC = () => {
                     <TableHead>Contacto</TableHead>
                     <TableHead>Campaña</TableHead>
                     <TableHead>Idioma</TableHead>
-                    <TableHead className="text-right">Visitas</TableHead>
-                    <TableHead className="text-right">Reproducciones</TableHead>
-                    <TableHead className="text-right">Completas</TableHead>
-                    <TableHead className="text-right">Popup</TableHead>
-                    <TableHead className="text-right">Registro</TableHead>
+                    <TableHead>País</TableHead>
+                    <TableHead>Fecha</TableHead>
+                    <TableHead className="text-center">▶ Abre</TableHead>
+                    <TableHead className="text-center">✅ Completa</TableHead>
+                    <TableHead className="text-center">💬 Popup</TableHead>
+                    <TableHead className="text-center">📧 Click</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {aggregatedData.length === 0 ? (
+                  {individualRows.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={8} className="text-center text-muted-foreground py-8">Sin datos</TableCell>
+                      <TableCell colSpan={9} className="text-center text-muted-foreground py-8">Sin datos</TableCell>
                     </TableRow>
                   ) : (
-                    aggregatedData.map((row, i) => (
-                      <TableRow key={i}>
+                    individualRows.map((row) => (
+                      <TableRow key={row.id}>
                         <TableCell className="font-medium">{row.contact}</TableCell>
                         <TableCell>{row.campaign}</TableCell>
-                        <TableCell>{row.language.toUpperCase()}</TableCell>
-                        <TableCell className="text-right">{row.visits}</TableCell>
-                        <TableCell className="text-right">{row.plays}</TableCell>
-                        <TableCell className="text-right">{row.completions}</TableCell>
-                        <TableCell className="text-right">{row.popups}</TableCell>
-                        <TableCell className="text-right">{row.clicks}</TableCell>
+                        <TableCell>{row.language}</TableCell>
+                        <TableCell>{row.country}</TableCell>
+                        <TableCell className="text-xs whitespace-nowrap">{row.date}</TableCell>
+                        <TableCell className="text-center">{row.video_started ? '✅' : '❌'}</TableCell>
+                        <TableCell className="text-center">{row.video_completed ? '✅' : '❌'}</TableCell>
+                        <TableCell className="text-center">{row.popup_shown ? '✅' : '❌'}</TableCell>
+                        <TableCell className="text-center">{row.register_clicked ? '✅' : '❌'}</TableCell>
                       </TableRow>
                     ))
                   )}
