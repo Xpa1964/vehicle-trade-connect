@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import DesktopNav from './DesktopNav';
 import MobileMenu from './MobileMenu';
+import LanguageSelector from './LanguageSelector';
 
 const NavbarContainer: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -66,8 +67,9 @@ const NavbarContainer: React.FC = () => {
             isAdminRoute={isAdminRoute}
           />
 
-          {/* Mobile Menu Button - Enhanced touch target */}
-          <div className="md:hidden">
+          {/* Mobile: Language Selector + Menu Button */}
+          <div className="md:hidden flex items-center gap-1">
+            <LanguageSelector isHomePage={isHomePage} isScrolled={isScrolled} />
             <Button
               variant="ghost"
               size="sm"
