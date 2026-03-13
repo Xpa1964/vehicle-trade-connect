@@ -1,6 +1,6 @@
 
 import { Suspense, lazy, ComponentType } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
@@ -195,6 +195,7 @@ const AppRoutes = () => {
           <Route path="users" element={<UsersDirectory />} />
           <Route path="community" element={<CommunityPage />} />
           <Route path="terms" element={<TermsAndConditionsPage />} />
+          <Route path="terms-and-conditions" element={<Navigate to="/terms" replace />} />
           <Route path="privacy" element={<PrivacyPolicyPage />} />
           <Route path="cookies" element={<CookiesPage />} />
           <Route path="auction-policies" element={<AuctionPoliciesPage />} />
