@@ -65,14 +65,19 @@ const AudioPresentationSection: React.FC<AudioPresentationSectionProps> = ({
     if (initialVideoLanguage && videoIds[initialVideoLanguage]) {
       const videoId = videoIds[initialVideoLanguage];
       if (videoId) {
-        setCurrentVideoUrl(`https://www.youtube.com/embed/${videoId}`);
-        setCurrentVideoTitle(`Presentación en ${languageNames[initialVideoLanguage] || initialVideoLanguage}`);
-        setCurrentVideoLanguage(initialVideoLanguage);
-        setShouldAutoplay(autoplay);
-        setIsVideoModalOpen(true);
+        // Small delay to ensure DOM is ready for YT player
+        const timer = setTimeout(() => {
+          console.log('[AudioPresentation] Auto-opening video for language:', initialVideoLanguage, 'autoplay:', autoplay);
+          setCurrentVideoUrl(`https://www.youtube.com/embed/${videoId}`);
+          setCurrentVideoTitle(`Presentación en ${languageNames[initialVideoLanguage] || initialVideoLanguage}`);
+          setCurrentVideoLanguage(initialVideoLanguage);
+          setShouldAutoplay(autoplay);
+          setIsVideoModalOpen(true);
+        }, 500);
+        return () => clearTimeout(timer);
       }
     }
-  }, []); // Only on mount
+  }, [initialVideoLanguage, autoplay]); // React to prop changes
 
   const handleVideoClick = (language: string) => {
     const videoId = videoIds[language];
