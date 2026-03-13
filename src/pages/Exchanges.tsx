@@ -346,7 +346,7 @@ const Exchanges: React.FC = () => {
                     {filteredVehicles.length > 0 ? (
                       filteredVehicles.map((vehicle) => (
                         <Card key={vehicle.id} className="p-4">
-                          <div className="flex justify-between items-start">
+                          <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
                             <div className="flex items-start space-x-4">
                               <div className="flex-shrink-0">
                                 <img 
