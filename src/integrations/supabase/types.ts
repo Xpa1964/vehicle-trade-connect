@@ -596,6 +596,7 @@ export type Database = {
       campaign_events: {
         Row: {
           campaign: string | null
+          contact: string | null
           created_at: string | null
           dealer: string | null
           id: string
@@ -611,6 +612,7 @@ export type Database = {
         }
         Insert: {
           campaign?: string | null
+          contact?: string | null
           created_at?: string | null
           dealer?: string | null
           id?: string
@@ -626,6 +628,7 @@ export type Database = {
         }
         Update: {
           campaign?: string | null
+          contact?: string | null
           created_at?: string | null
           dealer?: string | null
           id?: string
