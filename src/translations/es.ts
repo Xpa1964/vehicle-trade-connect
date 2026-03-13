@@ -79,5 +79,6 @@ export default {
   ...xlsxValidation,
   ...forms,
   ...toast,
-  ...inspection
+  ...inspection,
+  ...cookies
 };
