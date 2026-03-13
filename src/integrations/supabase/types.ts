@@ -593,6 +593,54 @@ export type Database = {
         }
         Relationships: []
       }
+      campaign_events: {
+        Row: {
+          campaign: string | null
+          created_at: string | null
+          dealer: string | null
+          id: string
+          popup_shown: boolean | null
+          referrer: string | null
+          register_clicked: boolean | null
+          session_id: string
+          user_agent: string | null
+          video_completed: boolean | null
+          video_language: string | null
+          video_started: boolean | null
+          visitor_country: string | null
+        }
+        Insert: {
+          campaign?: string | null
+          created_at?: string | null
+          dealer?: string | null
+          id?: string
+          popup_shown?: boolean | null
+          referrer?: string | null
+          register_clicked?: boolean | null
+          session_id: string
+          user_agent?: string | null
+          video_completed?: boolean | null
+          video_language?: string | null
+          video_started?: boolean | null
+          visitor_country?: string | null
+        }
+        Update: {
+          campaign?: string | null
+          created_at?: string | null
+          dealer?: string | null
+          id?: string
+          popup_shown?: boolean | null
+          referrer?: string | null
+          register_clicked?: boolean | null
+          session_id?: string
+          user_agent?: string | null
+          video_completed?: boolean | null
+          video_language?: string | null
+          video_started?: boolean | null
+          visitor_country?: string | null
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           content: string

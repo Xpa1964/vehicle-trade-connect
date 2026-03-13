@@ -1,24 +1,49 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import HeroSection from '@/components/home/HeroSection';
 import AudioPresentationSection from '@/components/home/AudioPresentationSection';
 import ServicesSection from '@/components/home/ServicesSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import WelcomeBanner from '@/components/home/WelcomeBanner';
+import { useCampaignTracking } from '@/hooks/useCampaignTracking';
 
 const Home: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const videoLang = searchParams.get('video');
+  const autoplay = searchParams.get('autoplay') === '1';
+  const campaign = searchParams.get('campaign');
+  const dealer = searchParams.get('dealer');
+
+  const { logVisit, updateEvent, sessionId } = useCampaignTracking();
+
+  useEffect(() => {
+    if (campaign) {
+      logVisit({
+        video_language: videoLang || 'es',
+        campaign,
+        dealer: dealer || undefined,
+      });
+    }
+  }, [campaign, videoLang, dealer, logVisit]);
+
   return (
     <div className="min-h-screen">
       <main id="main-content">
-        {/* Hero Section with WelcomeBanner positioned over it */}
         <div className="relative">
           <HeroSection />
           <WelcomeBanner />
         </div>
         
-        {/* Enhanced mobile spacing for audio section */}
         <div className="px-4 md:px-0">
-          <AudioPresentationSection />
+          <AudioPresentationSection
+            initialVideoLanguage={videoLang || undefined}
+            autoplay={autoplay}
+            onVideoStarted={campaign ? () => updateEvent('video_started') : undefined}
+            onVideoCompleted={campaign ? () => updateEvent('video_completed') : undefined}
+            onPopupShown={campaign ? () => updateEvent('popup_shown') : undefined}
+            onRegisterClicked={campaign ? () => updateEvent('register_clicked') : undefined}
+          />
         </div>
         <ServicesSection />
         <FeaturesSection />

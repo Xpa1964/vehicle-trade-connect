@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Play } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -8,22 +9,39 @@ import { useStaticImage } from '@/hooks/useStaticImage';
 import headphonesFallback from '@/assets/headphones-listen.png';
 import { toast } from 'sonner';
 
-const AudioPresentationSection: React.FC = () => {
+interface AudioPresentationSectionProps {
+  initialVideoLanguage?: string;
+  autoplay?: boolean;
+  onVideoStarted?: () => void;
+  onVideoCompleted?: () => void;
+  onPopupShown?: () => void;
+  onRegisterClicked?: () => void;
+}
+
+const AudioPresentationSection: React.FC<AudioPresentationSectionProps> = ({
+  initialVideoLanguage,
+  autoplay = false,
+  onVideoStarted,
+  onVideoCompleted,
+  onPopupShown,
+  onRegisterClicked,
+}) => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState('');
   const [currentVideoTitle, setCurrentVideoTitle] = useState('');
   const [currentVideoLanguage, setCurrentVideoLanguage] = useState('es');
+  const [shouldAutoplay, setShouldAutoplay] = useState(false);
 
   const headphonesImg = useStaticImage('home.headphones');
 
   const videoIds: Record<string, string | null> = {
-    es: 'OEF7aAISxF8',
-    en: '4MW9r-kb_Lw',
-    fr: 'Yjjo4qjHQrY',
-    it: 'BIbIpsJCmHg',
-    pt: null,
+    es: 'X8qK3I8-k-M',
+    en: 'X8qK3I8-k-M',
+    fr: '6XMAzJvhSXI',
+    it: 'xL-PbQJniAk',
+    pt: '6XMAzJvhSXI',
     de: '6XMAzJvhSXI',
     nl: 'P5ytnUafM0g',
     pl: 'xL-PbQJniAk',
@@ -42,6 +60,20 @@ const AudioPresentationSection: React.FC = () => {
     dk: 'Dansk',
   };
 
+  // Auto-open video from URL params
+  useEffect(() => {
+    if (initialVideoLanguage && videoIds[initialVideoLanguage]) {
+      const videoId = videoIds[initialVideoLanguage];
+      if (videoId) {
+        setCurrentVideoUrl(`https://www.youtube.com/embed/${videoId}`);
+        setCurrentVideoTitle(`Presentación en ${languageNames[initialVideoLanguage] || initialVideoLanguage}`);
+        setCurrentVideoLanguage(initialVideoLanguage);
+        setShouldAutoplay(autoplay);
+        setIsVideoModalOpen(true);
+      }
+    }
+  }, []); // Only on mount
+
   const handleVideoClick = (language: string) => {
     const videoId = videoIds[language];
     if (!videoId) {
@@ -52,12 +84,19 @@ const AudioPresentationSection: React.FC = () => {
     setCurrentVideoUrl(`https://www.youtube.com/embed/${videoId}`);
     setCurrentVideoTitle(`Presentación en ${languageName}`);
     setCurrentVideoLanguage(language);
+    setShouldAutoplay(true);
     setIsVideoModalOpen(true);
+
+    // Update URL params without reload
+    const url = new URL(window.location.href);
+    url.searchParams.set('video', language);
+    window.history.replaceState({}, '', url.toString());
   };
 
   const handleCloseVideoModal = () => {
     setIsVideoModalOpen(false);
     setCurrentVideoUrl('');
+    setShouldAutoplay(false);
   };
 
   const handleRegisterClick = () => {
@@ -162,6 +201,11 @@ const AudioPresentationSection: React.FC = () => {
         videoUrl={currentVideoUrl}
         title={currentVideoTitle}
         language={currentVideoLanguage}
+        autoplay={shouldAutoplay}
+        onVideoStarted={onVideoStarted}
+        onVideoCompleted={onVideoCompleted}
+        onPopupShown={onPopupShown}
+        onRegisterClicked={onRegisterClicked}
       />
     </>
   );

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,11 @@ interface VideoPlayerModalProps {
   videoUrl: string;
   title?: string;
   language?: string;
+  autoplay?: boolean;
+  onVideoStarted?: () => void;
+  onVideoCompleted?: () => void;
+  onPopupShown?: () => void;
+  onRegisterClicked?: () => void;
 }
 
 const postVideoMessages: Record<string, {
@@ -104,12 +110,18 @@ const postVideoMessages: Record<string, {
     companyPlaceholder: 'Dit firma (valgfrit)',
   },
 };
+
 const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   isOpen,
   onClose,
   videoUrl,
   title = 'Video Presentación',
-  language = 'es'
+  language = 'es',
+  autoplay = true,
+  onVideoStarted,
+  onVideoCompleted,
+  onPopupShown,
+  onRegisterClicked,
 }) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
@@ -117,6 +129,9 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const playerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeId = useRef(`yt-player-${Date.now()}`);
+  const videoStartedFired = useRef(false);
+  const videoCompletedFired = useRef(false);
+  const popupShownFired = useRef(false);
 
   const translations = postVideoMessages[language] || postVideoMessages['es'];
 
@@ -144,6 +159,9 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     setShowOverlay(false);
     setSelectedInterests([]);
     setCompanyName('');
+    videoStartedFired.current = false;
+    videoCompletedFired.current = false;
+    popupShownFired.current = false;
 
     const videoIdMatch = videoUrl.match(/embed\/([^?]+)/);
     if (!videoIdMatch) return;
@@ -154,13 +172,22 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       playerRef.current = new (window as any).YT.Player(iframeId.current, {
         videoId,
         playerVars: {
-          autoplay: 1,
+          autoplay: autoplay ? 1 : 0,
           rel: 0,
           modestbranding: 1,
         },
         events: {
           onStateChange: (event: any) => {
-            if (event.data === (window as any).YT.PlayerState.ENDED) {
+            const YT = (window as any).YT;
+            if (event.data === YT.PlayerState.PLAYING && !videoStartedFired.current) {
+              videoStartedFired.current = true;
+              onVideoStarted?.();
+            }
+            if (event.data === YT.PlayerState.ENDED) {
+              if (!videoCompletedFired.current) {
+                videoCompletedFired.current = true;
+                onVideoCompleted?.();
+              }
               setShowOverlay(true);
             }
           },
@@ -177,7 +204,15 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     return () => {
       destroyPlayer();
     };
-  }, [isOpen, videoUrl, destroyPlayer]);
+  }, [isOpen, videoUrl, destroyPlayer, autoplay, onVideoStarted, onVideoCompleted]);
+
+  // Fire popup shown callback
+  useEffect(() => {
+    if (showOverlay && !popupShownFired.current) {
+      popupShownFired.current = true;
+      onPopupShown?.();
+    }
+  }, [showOverlay, onPopupShown]);
 
   useEffect(() => {
     if (isOpen) {
@@ -210,6 +245,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   };
 
   const handleContactClick = () => {
+    onRegisterClicked?.();
     const companyInfo = companyName.trim() ? `\n\nEmpresa / Company: ${companyName.trim()}` : '';
     const selected = selectedInterests.length > 0
       ? `\n\n${translations.interestLabel}\n${selectedInterests.map(i => `- ${i}`).join('\n')}`
@@ -217,7 +253,6 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     const body = `${translations.emailBody}${companyInfo}${selected}`;
     const mailtoUrl = `mailto:info@kontactvo.com?subject=${encodeURIComponent(translations.emailSubject)}&body=${encodeURIComponent(body)}`;
     
-    // Use programmatic link click for better cross-browser compatibility
     const link = document.createElement('a');
     link.href = mailtoUrl;
     link.target = '_blank';
@@ -255,13 +290,12 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
               controls
               playsInline
               preload="metadata"
-              autoPlay
+              autoPlay={autoplay}
             >
               <source src={videoUrl} type="video/mp4" />
             </video>
           )}
 
-          {/* Post-video overlay */}
           {showOverlay && (
             <div className="absolute inset-0 bg-background flex flex-col items-center justify-start gap-3 sm:gap-5 animate-in fade-in duration-500 z-10 px-4 sm:px-6 py-4 sm:py-6 overflow-y-auto">
               <img
@@ -273,7 +307,6 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
                 {translations.message}
               </p>
 
-              {/* Interest checkboxes */}
               <div className="flex flex-col gap-3 w-full max-w-md">
                 <p className="text-muted-foreground text-sm font-semibold">{translations.interestLabel}</p>
                 {translations.options.map((option) => (
@@ -291,7 +324,6 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
                 ))}
               </div>
 
-              {/* Company name input */}
               <div className="w-full max-w-md">
                 <Input
                   type="text"
