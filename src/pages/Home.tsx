@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import HeroSection from '@/components/home/HeroSection';
 import AudioPresentationSection from '@/components/home/AudioPresentationSection';
