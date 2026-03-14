@@ -1,55 +1,58 @@
 
 
-## Diagnosis
+# Plan: Gestion de imagenes API con reemplazo limpio
 
-I've identified the root cause by reading the code — no need for console logs.
+## Resumen
 
-**The problem is unstable callback references causing an infinite player destroy/recreate loop.**
+Dos cambios precisos sobre el plan original aprobado, sin modificar nada mas.
 
-Here's the chain:
+## Cambio 1: Migracion de base de datos
 
-1. `Home.tsx` passes **inline arrow functions** as callbacks: `() => updateEvent('video_started')`. These create **new function references on every render**.
+Anadir columna `source` a `vehicle_images` **sin valor por defecto**:
 
-2. In `VideoPlayerModal.tsx`, `handleStateChange` is a `useCallback` with `[onVideoStarted, onVideoCompleted]` as dependencies. Since those references change every render, `handleStateChange` gets recreated every render.
-
-3. The YouTube player `useEffect` (line 238) has `handleStateChange` in its dependency array (line 315). So every render triggers the cleanup → **destroys the player** → creates a new one.
-
-4. The player never stabilizes long enough for YouTube to fire `onStateChange` events. The video may appear to play because the iframe is briefly visible before being destroyed and replaced.
-
-## Plan
-
-### 1. Stabilize callbacks in `VideoPlayerModal.tsx`
-
-Replace the `useCallback`-based `handleStateChange` with a **ref-based pattern**. Store `onVideoStarted` and `onVideoCompleted` in refs so the handler function passed to `YT.Player` never changes:
-
-```typescript
-const onVideoStartedRef = useRef(onVideoStarted);
-const onVideoCompletedRef = useRef(onVideoCompleted);
-useEffect(() => { onVideoStartedRef.current = onVideoStarted; }, [onVideoStarted]);
-useEffect(() => { onVideoCompletedRef.current = onVideoCompleted; }, [onVideoCompleted]);
+```text
+ALTER TABLE vehicle_images ADD COLUMN source text;
 ```
 
-The `handleStateChange` function then reads from refs instead of closing over the props. This means it's created once and never changes.
+Las imagenes existentes quedaran con `source = NULL`. Solo las imagenes insertadas desde la sincronizacion API recibiran `source = 'api'`.
 
-### 2. Remove `handleStateChange` from `useEffect` dependencies
+## Cambio 2: Modificar `processImages` en la edge function
 
-With refs, the YouTube player `useEffect` only depends on `[isOpen, isYouTube, videoIdForEmbed, autoplay]` — all stable values. The player is created once and never destroyed/recreated during playback.
+En `supabase/functions/api-sync-vehicles/index.ts`, funcion `processImages` (linea 472):
 
-### 3. Memoize callbacks in `Home.tsx`
+**Paso nuevo antes de insertar** (sin tocar storage):
 
-Wrap the inline callbacks in `useMemo`/`useCallback` so they don't cause unnecessary re-renders downstream:
-
-```typescript
-const handleVideoStarted = useCallback(() => {
-  if (campaign) updateEvent('video_started');
-}, [campaign, updateEvent]);
+```text
+DELETE FROM vehicle_images
+WHERE vehicle_id = vehicleId AND source = 'api'
 ```
 
-### 4. Add visible diagnostic toast (temporary)
+**Al insertar cada imagen**, anadir `source: 'api'` al objeto:
 
-Since the user tests from a tablet, add a temporary `toast.info()` inside `handleStateChange` when PLAYING and ENDED are detected, so the user can visually confirm events fire without needing console access.
+```text
+await supabase.from('vehicle_images').insert({
+  vehicle_id: vehicleId,
+  image_url: publicUrl,
+  display_order: i,
+  is_primary: i === 0,
+  source: 'api'        // <-- nuevo campo
+});
+```
 
-### Files to modify
-- `src/components/home/VideoPlayerModal.tsx` — ref-based stable callbacks, remove `handleStateChange` from deps
-- `src/pages/Home.tsx` — memoize callback props
+**No se eliminan archivos del bucket de storage.** Solo registros en base de datos.
+
+## Archivos modificados
+
+| Archivo | Cambio |
+|---------|--------|
+| Nueva migracion SQL | `ALTER TABLE vehicle_images ADD COLUMN source text;` |
+| `supabase/functions/api-sync-vehicles/index.ts` | Agregar DELETE previo y campo `source: 'api'` en insert |
+
+## Lo que NO se toca
+
+- Subida manual de imagenes
+- Componentes de UI
+- Bucket de storage (sin eliminar archivos fisicos)
+- RLS policies de `vehicle_images`
+- Ningun otro endpoint ni servicio
 

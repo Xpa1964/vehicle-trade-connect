@@ -166,36 +166,16 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const playerRef = useRef<any>(null);
   const videoStartedRef = useRef(false);
 
+  // Store callbacks in refs to avoid recreating the YT player on every render
+  const onVideoStartedRef = useRef(onVideoStarted);
+  const onVideoCompletedRef = useRef(onVideoCompleted);
+  useEffect(() => { onVideoStartedRef.current = onVideoStarted; }, [onVideoStarted]);
+  useEffect(() => { onVideoCompletedRef.current = onVideoCompleted; }, [onVideoCompleted]);
+
   const translations = postVideoMessages[language] || postVideoMessages.es;
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
   const videoIdForEmbed = videoUrl.match(/(?:embed\/|v=)([^?&/]+)/)?.[1] || '';
-
-  const handleStateChange = useCallback((event: any) => {
-    const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
-    const endedState = window.YT?.PlayerState?.ENDED ?? 0;
-
-    console.log('🔴 [DIAG] handleStateChange CALLED', {
-      eventData: event.data,
-      playingState,
-      endedState,
-      videoStartedRef: videoStartedRef.current,
-      hasOnVideoStarted: typeof onVideoStarted === 'function',
-      hasOnVideoCompleted: typeof onVideoCompleted === 'function',
-    });
-
-    if (event.data === playingState && !videoStartedRef.current) {
-      videoStartedRef.current = true;
-      console.log('🟢 [DIAG] PLAYING detected → calling onVideoStarted');
-      onVideoStarted?.();
-    }
-
-    if (event.data === endedState) {
-      console.log('🟢 [DIAG] ENDED detected → calling onVideoCompleted + setShowOverlay');
-      onVideoCompleted?.();
-      setShowOverlay(true);
-    }
-  }, [onVideoStarted, onVideoCompleted]);
 
   // Reset state when modal opens
   useEffect(() => {
@@ -287,7 +267,24 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
           origin: window.location.origin,
         },
         events: {
-          onStateChange: handleStateChange,
+          onStateChange: (event: any) => {
+            const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
+            const endedState = window.YT?.PlayerState?.ENDED ?? 0;
+
+            console.log('🔴 [DIAG] handleStateChange CALLED', { eventData: event.data, playingState, endedState });
+
+            if (event.data === playingState && !videoStartedRef.current) {
+              videoStartedRef.current = true;
+              console.log('🟢 [DIAG] PLAYING detected → calling onVideoStarted');
+              onVideoStartedRef.current?.();
+            }
+
+            if (event.data === endedState) {
+              console.log('🟢 [DIAG] ENDED detected → calling onVideoCompleted');
+              onVideoCompletedRef.current?.();
+              setShowOverlay(true);
+            }
+          },
           onReady: () => {
             console.log('🟢 [DIAG] YT Player onReady fired', { videoId: videoIdForEmbed });
           },
@@ -312,7 +309,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       }
       playerRef.current = null;
     };
-  }, [isOpen, isYouTube, videoIdForEmbed, autoplay, handleStateChange]);
+  }, [isOpen, isYouTube, videoIdForEmbed, autoplay]);
 
   if (!isOpen) return null;
 

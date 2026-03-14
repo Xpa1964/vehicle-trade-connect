@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import HeroSection from '@/components/home/HeroSection';
 import AudioPresentationSection from '@/components/home/AudioPresentationSection';
@@ -29,6 +29,25 @@ const Home: React.FC = () => {
     }
   }, [campaign, videoLang, dealer, logVisit]);
 
+  const handleVideoStarted = useCallback(() => {
+    if (campaign) updateEvent('video_started');
+  }, [campaign, updateEvent]);
+
+  const handleVideoCompleted = useCallback(() => {
+    if (campaign) updateEvent('video_completed');
+  }, [campaign, updateEvent]);
+
+  const handlePopupShown = useCallback(() => {
+    if (campaign) updateEvent('popup_shown');
+  }, [campaign, updateEvent]);
+
+  const handleRegisterClicked = useCallback((companyName?: string) => {
+    if (campaign) {
+      updateEvent('register_clicked');
+      if (companyName) updateContact(companyName);
+    }
+  }, [campaign, updateEvent, updateContact]);
+
   return (
     <div className="min-h-screen">
       <main id="main-content">
@@ -41,13 +60,10 @@ const Home: React.FC = () => {
           <AudioPresentationSection
             initialVideoLanguage={videoLang || undefined}
             autoplay={autoplay}
-            onVideoStarted={campaign ? () => updateEvent('video_started') : undefined}
-            onVideoCompleted={campaign ? () => updateEvent('video_completed') : undefined}
-            onPopupShown={campaign ? () => updateEvent('popup_shown') : undefined}
-            onRegisterClicked={campaign ? (companyName?: string) => {
-              updateEvent('register_clicked');
-              if (companyName) updateContact(companyName);
-            } : undefined}
+            onVideoStarted={handleVideoStarted}
+            onVideoCompleted={handleVideoCompleted}
+            onPopupShown={handlePopupShown}
+            onRegisterClicked={handleRegisterClicked}
           />
         </div>
         <ServicesSection />
