@@ -382,7 +382,6 @@ const handler = async (req: Request): Promise<Response> => {
       .is('closed_at', null);
 
     if (!rejectedError && rejectedAuctions && rejectedAuctions.length > 0) {
-      if (!rejectedError && rejectedAuctions && rejectedAuctions.length > 0) {
       
       for (const auction of rejectedAuctions) {
         const { error: updateError } = await supabase
