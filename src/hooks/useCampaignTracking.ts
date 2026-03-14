@@ -119,7 +119,9 @@ export const useCampaignTracking = () => {
     if (!sid) return;
 
     try {
-      await trackCall({ action: 'contact', session_id: sid, contact: clean, interests: interests || [] });
+      const payload: Record<string, unknown> = { action: 'contact', session_id: sid, interests: interests || [] };
+      if (clean) payload.contact = clean;
+      await trackCall(payload);
     } catch (err) {
       console.error('[CampaignTracking] updateContact FAILED', err);
     }
