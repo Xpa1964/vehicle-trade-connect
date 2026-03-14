@@ -1,9 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import kontactLogo from '@/assets/kontact-vo-logo-orange.png';
+
+// Load YouTube IFrame API script once
+let ytApiLoaded = false;
+let ytApiPromise: Promise<void> | null = null;
+
+function loadYouTubeApi(): Promise<void> {
+  if (ytApiLoaded && window.YT?.Player) return Promise.resolve();
+  if (ytApiPromise) return ytApiPromise;
+  ytApiPromise = new Promise<void>((resolve) => {
+    if (window.YT?.Player) {
+      ytApiLoaded = true;
+      resolve();
+      return;
+    }
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      ytApiLoaded = true;
+      prev?.();
+      resolve();
+    };
+    if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    }
+  });
+  return ytApiPromise;
+}
+
+declare global {
+  interface Window {
+    YT: any;
+    onYouTubeIframeAPIReady: (() => void) | undefined;
+  }
+}
 
 interface VideoPlayerModalProps {
   isOpen: boolean;
