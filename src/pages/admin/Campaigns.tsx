@@ -103,6 +103,7 @@ const AdminCampaigns: React.FC = () => {
       popup_shown: e.popup_shown,
       register_clicked: e.register_clicked,
       country: e.visitor_country || '-',
+      interests: e.interests && e.interests.length > 0 ? e.interests.join(', ') : '-',
     }));
   }, [filteredEvents]);
 
