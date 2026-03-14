@@ -8,6 +8,7 @@ import ServicesSection from '@/components/home/ServicesSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import WelcomeBanner from '@/components/home/WelcomeBanner';
 import { useCampaignTracking } from '@/hooks/useCampaignTracking';
+import CampaignDebugPanel from '@/components/debug/CampaignDebugPanel';
 
 const Home: React.FC = () => {
   const [searchParams] = useSearchParams();
