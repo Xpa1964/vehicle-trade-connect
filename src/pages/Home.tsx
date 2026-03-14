@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   const dealer = searchParams.get('dealer');
   const contact = searchParams.get('contact');
 
-  const { logVisit, updateEvent, sessionId } = useCampaignTracking();
+  const { logVisit, updateEvent, updateContact, sessionId } = useCampaignTracking();
 
   useEffect(() => {
     if (campaign) {
