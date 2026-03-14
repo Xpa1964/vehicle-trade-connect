@@ -230,6 +230,7 @@ const AdminCampaigns: React.FC = () => {
                         <TableCell className="text-center">{row.video_completed ? '✅' : '❌'}</TableCell>
                         <TableCell className="text-center">{row.popup_shown ? '✅' : '❌'}</TableCell>
                         <TableCell className="text-center">{row.register_clicked ? '✅' : '❌'}</TableCell>
+                        <TableCell className="text-xs max-w-[200px] truncate" title={row.interests}>{row.interests}</TableCell>
                       </TableRow>
                     ))
                   )}

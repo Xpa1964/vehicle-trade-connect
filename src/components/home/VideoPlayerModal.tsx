@@ -300,8 +300,8 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
   const handleContactClick = () => {
     const cleanCompanyName = companyName.trim() || undefined;
-    console.log('[YT Player] register_clicked event fired', { companyName: cleanCompanyName ?? null });
-    onRegisterClicked?.(cleanCompanyName);
+    console.log('[YT Player] register_clicked event fired', { companyName: cleanCompanyName ?? null, interests: selectedInterests });
+    onRegisterClicked?.(cleanCompanyName, selectedInterests.length > 0 ? selectedInterests : undefined);
 
     const companyInfo = cleanCompanyName ? `\n\nEmpresa / Company: ${cleanCompanyName}` : '';
     const selected = selectedInterests.length > 0
