@@ -216,7 +216,7 @@ const AdminCampaigns: React.FC = () => {
                 <TableBody>
                   {individualRows.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={9} className="text-center text-muted-foreground py-8">Sin datos</TableCell>
+                     <TableCell colSpan={10} className="text-center text-muted-foreground py-8">Sin datos</TableCell>
                     </TableRow>
                   ) : (
                     individualRows.map((row) => (
