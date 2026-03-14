@@ -92,19 +92,26 @@ const AdminCampaigns: React.FC = () => {
 
   // Individual session rows sorted by date (newest first)
   const individualRows = useMemo(() => {
-    return filteredEvents.map(e => ({
-      id: e.id,
-      contact: e.contact || '-',
-      campaign: e.campaign || 'direct',
-      language: (e.video_language || 'es').toUpperCase(),
-      date: new Date(e.created_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }),
-      video_started: e.video_started,
-      video_completed: e.video_completed,
-      popup_shown: e.popup_shown,
-      register_clicked: e.register_clicked,
-      country: e.visitor_country || '-',
-      interests: e.interests && e.interests.length > 0 ? e.interests.join(', ') : '-',
-    }));
+    return filteredEvents.map(e => {
+      const interests = e.interests || [];
+      const buyPattern = /comprar|buying|acheter|kaufen|køb|kopen|comprare|kupno|compra/i;
+      const sellPattern = /vender|selling|vendre|verkaufen|salg|verkopen|vendere|sprzedaż|venta/i;
+      return {
+        id: e.id,
+        contact: e.contact || '-',
+        campaign: e.campaign || 'direct',
+        language: (e.video_language || 'es').toUpperCase(),
+        date: new Date(e.created_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }),
+        video_started: e.video_started,
+        video_completed: e.video_completed,
+        popup_shown: e.popup_shown,
+        register_clicked: e.register_clicked,
+        country: e.visitor_country || '-',
+        wantsBuy: interests.some(i => buyPattern.test(i) && !i.includes('/')),
+        wantsSell: interests.some(i => sellPattern.test(i) && !i.includes('/')),
+        wantsBoth: interests.some(i => i.includes('/')),
+      };
+    });
   }, [filteredEvents]);
 
   const byLanguage = useMemo(() => {
