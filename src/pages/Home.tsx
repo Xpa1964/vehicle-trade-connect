@@ -18,8 +18,6 @@ const Home: React.FC = () => {
   const dealer = searchParams.get('dealer');
   const contact = searchParams.get('contact');
   const showDebug = searchParams.get('debug') === 'true';
-  const dealer = searchParams.get('dealer');
-  const contact = searchParams.get('contact');
 
   const { logVisit, updateEvent, updateContact, sessionId } = useCampaignTracking();
 
