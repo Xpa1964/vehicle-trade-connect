@@ -17,6 +17,8 @@ interface CampaignEvent {
   dealer: string | null;
   contact: string | null;
   visitor_country: string | null;
+  user_agent?: string | null;
+  referrer?: string | null;
   video_started: boolean;
   video_completed: boolean;
   popup_shown: boolean;
@@ -25,6 +27,7 @@ interface CampaignEvent {
 }
 
 const LANGUAGES = ['es', 'en', 'fr', 'it', 'pt', 'de', 'nl', 'pl', 'dk'];
+const DUPLICATE_WINDOW_MS = 15_000;
 
 const AdminCampaigns: React.FC = () => {
   const [events, setEvents] = useState<CampaignEvent[]>([]);
