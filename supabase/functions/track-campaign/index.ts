@@ -112,11 +112,14 @@ Deno.serve(async (req) => {
     if (action === "contact") {
       const { contact: contactValue, interests } = payload;
 
-      if (!session_id || !contactValue) {
-        return jsonResponse({ success: false, error: "session_id and contact required" }, 400);
+      if (!session_id || (!contactValue && (!Array.isArray(interests) || interests.length === 0))) {
+        return jsonResponse({ success: false, error: "session_id and contact or interests required" }, 400);
       }
 
-      const updatePayload: Record<string, unknown> = { contact: contactValue };
+      const updatePayload: Record<string, unknown> = {};
+      if (contactValue) {
+        updatePayload.contact = contactValue;
+      }
       if (Array.isArray(interests) && interests.length > 0) {
         updatePayload.interests = interests;
       }

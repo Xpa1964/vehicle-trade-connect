@@ -111,7 +111,7 @@ export const useCampaignTracking = () => {
 
   const updateContact = useCallback(async (companyName: string, interests?: string[]) => {
     const clean = companyName.trim();
-    if (!clean) return;
+    if (!clean && (!interests || interests.length === 0)) return;
 
     await insertPromise.current;
 

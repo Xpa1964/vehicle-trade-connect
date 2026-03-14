@@ -47,7 +47,9 @@ const Home: React.FC = () => {
   const handleRegisterClicked = useCallback((companyName?: string, interests?: string[]) => {
     if (campaign) {
       updateEvent('register_clicked');
-      if (companyName) updateContact(companyName, interests);
+      if (companyName || (interests && interests.length > 0)) {
+        updateContact(companyName || '', interests);
+      }
     }
   }, [campaign, updateEvent, updateContact]);
 
