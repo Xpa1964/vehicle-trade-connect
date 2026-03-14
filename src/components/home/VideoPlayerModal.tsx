@@ -243,7 +243,28 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
           origin: window.location.origin,
         },
         events: {
-          onStateChange: handleStateChange,
+          onStateChange: (event: any) => {
+            const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
+            const endedState = window.YT?.PlayerState?.ENDED ?? 0;
+
+            console.log('[YT Player] onStateChange', {
+              state: event.data,
+              playingState,
+              endedState,
+            });
+
+            if (event.data === playingState && !videoStartedRef.current) {
+              videoStartedRef.current = true;
+              console.log('[YT Player] video_start event fired');
+              onVideoStartedRef.current?.();
+            }
+
+            if (event.data === endedState) {
+              console.log('[YT Player] video_complete event fired');
+              onVideoCompletedRef.current?.();
+              setShowOverlay(true);
+            }
+          },
           onReady: () => {
             console.log('[YT Player] Ready — API-created iframe', { videoId: videoIdForEmbed });
           },
@@ -267,7 +288,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       }
       playerRef.current = null;
     };
-  }, [isOpen, isYouTube, videoIdForEmbed, autoplay, handleStateChange]);
+  }, [isOpen, isYouTube, videoIdForEmbed, autoplay]);
 
   if (!isOpen) return null;
 
