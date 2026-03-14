@@ -19,6 +19,7 @@ interface CampaignEvent {
   visitor_country: string | null;
   user_agent?: string | null;
   referrer?: string | null;
+  interests?: string[] | null;
   video_started: boolean;
   video_completed: boolean;
   popup_shown: boolean;
