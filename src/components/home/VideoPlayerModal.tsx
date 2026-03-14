@@ -309,7 +309,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       }
       playerRef.current = null;
     };
-  }, [isOpen, isYouTube, videoIdForEmbed, autoplay, handleStateChange]);
+  }, [isOpen, isYouTube, videoIdForEmbed, autoplay]);
 
   if (!isOpen) return null;
 
