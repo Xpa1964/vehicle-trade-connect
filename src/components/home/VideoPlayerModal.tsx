@@ -52,7 +52,7 @@ interface VideoPlayerModalProps {
   onVideoStarted?: () => void;
   onVideoCompleted?: () => void;
   onPopupShown?: () => void;
-  onRegisterClicked?: (companyName?: string) => void;
+  onRegisterClicked?: (companyName?: string, interests?: string[]) => void;
 }
 
 const postVideoMessages: Record<string, {
