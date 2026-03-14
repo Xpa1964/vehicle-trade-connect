@@ -110,15 +110,20 @@ Deno.serve(async (req) => {
 
     // ── ACTION: contact ───────────────────────────────────
     if (action === "contact") {
-      const { contact: contactValue } = payload;
+      const { contact: contactValue, interests } = payload;
 
       if (!session_id || !contactValue) {
         return jsonResponse({ success: false, error: "session_id and contact required" }, 400);
       }
 
+      const updatePayload: Record<string, unknown> = { contact: contactValue };
+      if (Array.isArray(interests) && interests.length > 0) {
+        updatePayload.interests = interests;
+      }
+
       const { data, error } = await supabase
         .from("campaign_events")
-        .update({ contact: contactValue })
+        .update(updatePayload)
         .eq("session_id", session_id)
         .select("id");
 
