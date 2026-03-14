@@ -131,24 +131,40 @@ export const useCampaignTracking = () => {
   }, []);
 
   const updateEvent = useCallback(async (field: TrackingEventField) => {
+    console.log('[CampaignTracking] updateEvent CALLED', { field, sessionIdRef: sessionId.current, loggedRef: logged.current });
+
     await visitReady.current;
 
     const currentSessionId = sessionId.current;
-    if (!currentSessionId) return;
+    console.log('[CampaignTracking] updateEvent AFTER AWAIT', { field, currentSessionId, loggedRef: logged.current });
 
-    console.log('[CampaignTracking] updateEvent', { field, sessionId: currentSessionId });
+    if (!currentSessionId) {
+      console.error('[CampaignTracking] updateEvent ABORTED: no sessionId', { field });
+      return;
+    }
 
-    const { error } = await supabase
+    console.log('[CampaignTracking] updateEvent SENDING UPDATE', { field, sessionId: currentSessionId, updatePayload: { [field]: true } });
+
+    const result = await supabase
       .from('campaign_events' as any)
       .update({ [field]: true })
       .eq('session_id', currentSessionId);
 
-    if (error) {
-      console.error('[CampaignTracking] updateEvent failed', { field, sessionId: currentSessionId, error });
-      return;
-    }
+    console.log('[CampaignTracking] updateEvent FULL RESPONSE', {
+      field,
+      sessionId: currentSessionId,
+      data: result.data,
+      error: result.error,
+      status: result.status,
+      statusText: result.statusText,
+      count: result.count,
+    });
 
-    console.log('[CampaignTracking] updateEvent success', { field, sessionId: currentSessionId });
+    if (result.error) {
+      console.error('[CampaignTracking] updateEvent FAILED', { field, sessionId: currentSessionId, error: result.error });
+    } else {
+      console.log('[CampaignTracking] updateEvent SUCCESS', { field, sessionId: currentSessionId });
+    }
   }, []);
 
   const updateContact = useCallback(async (companyName: string) => {
