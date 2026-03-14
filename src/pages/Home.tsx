@@ -54,6 +54,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen">
       {showDebug && <CampaignDebugPanel />}
+      <main id="main-content">
         <div className="relative">
           <HeroSection />
           <WelcomeBanner />
