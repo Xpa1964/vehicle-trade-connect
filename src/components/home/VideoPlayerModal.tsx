@@ -162,7 +162,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [companyName, setCompanyName] = useState('');
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const playerContainerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<any>(null);
   const videoStartedRef = useRef(false);
 
@@ -170,22 +170,6 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
   const videoIdForEmbed = videoUrl.match(/(?:embed\/|v=)([^?&/]+)/)?.[1] || '';
-
-  const youtubeEmbedUrl = useMemo(() => {
-    if (!videoIdForEmbed) return '';
-
-    const params = new URLSearchParams({
-      enablejsapi: '1',
-      rel: '0',
-      autoplay: autoplay ? '1' : '0',
-    });
-
-    if (typeof window !== 'undefined') {
-      params.set('origin', window.location.origin);
-    }
-
-    return `https://www.youtube.com/embed/${videoIdForEmbed}?${params.toString()}`;
-  }, [videoIdForEmbed, autoplay]);
 
   const handleStateChange = useCallback((event: any) => {
     const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
