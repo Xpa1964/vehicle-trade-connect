@@ -8,6 +8,7 @@ import ServicesSection from '@/components/home/ServicesSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import WelcomeBanner from '@/components/home/WelcomeBanner';
 import { useCampaignTracking } from '@/hooks/useCampaignTracking';
+import CampaignDebugPanel from '@/components/debug/CampaignDebugPanel';
 
 const Home: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -16,6 +17,7 @@ const Home: React.FC = () => {
   const campaign = searchParams.get('campaign');
   const dealer = searchParams.get('dealer');
   const contact = searchParams.get('contact');
+  const showDebug = searchParams.get('debug') === 'true';
 
   const { logVisit, updateEvent, updateContact, sessionId } = useCampaignTracking();
 
@@ -51,6 +53,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen">
+      {showDebug && <CampaignDebugPanel />}
       <main id="main-content">
         <div className="relative">
           <HeroSection />
