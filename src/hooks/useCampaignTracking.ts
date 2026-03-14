@@ -1,5 +1,4 @@
 import { useRef, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 
 interface CampaignParams {
   video_language: string;
@@ -10,191 +9,120 @@ interface CampaignParams {
 
 type TrackingEventField = 'video_started' | 'video_completed' | 'popup_shown' | 'register_clicked';
 
-interface VisitState {
-  sessionId: string;
-  ready: Promise<void>;
-  createdAt: number;
-}
+const EDGE_FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-campaign`;
 
-const VISIT_STATE_TTL_MS = 15_000;
-const visitStateByKey = new Map<string, VisitState>();
+const trackCall = async (body: Record<string, unknown>) => {
+  console.log('[CampaignTracking] → fetch', body);
 
-const normalizeParam = (value?: string | null) => (value || '').trim().toLowerCase();
+  const res = await fetch(EDGE_FN_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+    },
+    body: JSON.stringify(body),
+  });
 
-const buildVisitKey = (params: CampaignParams) => [
-  normalizeParam(params.campaign),
-  normalizeParam(params.video_language),
-  normalizeParam(params.dealer),
-  normalizeParam(params.contact),
-].join('|');
+  const json = await res.json();
+  console.log('[CampaignTracking] ← response', { status: res.status, ...json });
 
-const cleanupExpiredVisitState = () => {
-  const now = Date.now();
-  for (const [key, state] of visitStateByKey.entries()) {
-    if (now - state.createdAt > VISIT_STATE_TTL_MS) {
-      visitStateByKey.delete(key);
-    }
+  if (!res.ok || !json.success) {
+    throw new Error(json.error || `HTTP ${res.status}`);
   }
+
+  return json;
 };
 
+// ── Deduplication ──────────────────────────────────────────
+const visitedKeys = new Set<string>();
+
+const buildVisitKey = (p: CampaignParams) =>
+  [p.campaign, p.video_language, p.dealer, p.contact]
+    .map((v) => (v || '').trim().toLowerCase())
+    .join('|');
+
+// ── Hook ───────────────────────────────────────────────────
 export const useCampaignTracking = () => {
   const sessionId = useRef('');
-  const logged = useRef(false);
-  const visitReady = useRef<Promise<void>>(Promise.resolve());
+  const insertDone = useRef(false);
+  const insertPromise = useRef<Promise<void>>(Promise.resolve());
 
   const logVisit = useCallback(async (params: CampaignParams) => {
-    cleanupExpiredVisitState();
-
-    if (logged.current) {
-      await visitReady.current;
+    // Already logged in this component instance
+    if (insertDone.current) {
+      await insertPromise.current;
       return;
     }
 
-    const visitKey = buildVisitKey(params);
-    const existingState = visitStateByKey.get(visitKey);
+    const key = buildVisitKey(params);
 
-    if (existingState) {
-      sessionId.current = existingState.sessionId;
-      visitReady.current = existingState.ready;
-      logged.current = true;
-      await visitReady.current;
+    // Already logged in another instance with same params
+    if (visitedKeys.has(key)) {
+      // We don't have the sessionId from the other instance,
+      // but we also don't want to create a duplicate.
+      insertDone.current = true;
       return;
     }
 
-    const currentSessionId = crypto.randomUUID();
-    sessionId.current = currentSessionId;
-    logged.current = true;
+    const newSessionId = crypto.randomUUID();
+    sessionId.current = newSessionId;
+    insertDone.current = true;
+    visitedKeys.add(key);
 
-    const ready = (async () => {
-      console.log('[CampaignTracking] logVisit start', {
-        sessionId: currentSessionId,
-        campaign: params.campaign,
-        videoLanguage: params.video_language,
-      });
-
-      const { error } = await supabase.from('campaign_events' as any).insert({
-        session_id: currentSessionId,
-        video_language: params.video_language,
-        campaign: params.campaign,
-        dealer: params.dealer || null,
-        contact: params.contact || null,
-        visitor_country: null,
-        user_agent: navigator.userAgent,
-        referrer: document.referrer || null,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      console.log('[CampaignTracking] logVisit inserted', { sessionId: currentSessionId });
-
-      try {
-        const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3000) });
-        const data = await res.json();
-        const visitorCountry = data.country_name || data.country || null;
-
-        if (visitorCountry) {
-          const { error: countryError } = await supabase
-            .from('campaign_events' as any)
-            .update({ visitor_country: visitorCountry })
-            .eq('session_id', currentSessionId);
-
-          if (countryError) {
-            console.warn('[CampaignTracking] visitor_country update failed', countryError);
-          }
-        }
-      } catch {
-        // fallback without country
-      }
-    })()
-      .catch((error) => {
-        console.error('[CampaignTracking] logVisit failed', { sessionId: currentSessionId, error });
-        logged.current = false;
-        visitStateByKey.delete(visitKey);
-      })
-      .finally(() => {
-        const state = visitStateByKey.get(visitKey);
-        if (state?.sessionId === currentSessionId) {
-          state.createdAt = Date.now();
-        }
-      });
-
-    visitReady.current = ready;
-    visitStateByKey.set(visitKey, {
-      sessionId: currentSessionId,
-      ready,
-      createdAt: Date.now(),
+    const promise = trackCall({
+      action: 'visit',
+      session_id: newSessionId,
+      video_language: params.video_language,
+      campaign: params.campaign,
+      dealer: params.dealer || null,
+      contact: params.contact || null,
+      user_agent: navigator.userAgent,
+      referrer: document.referrer || null,
+    }).catch((err) => {
+      console.error('[CampaignTracking] logVisit FAILED', err);
+      // Reset so a retry is possible
+      insertDone.current = false;
+      sessionId.current = '';
+      visitedKeys.delete(key);
     });
 
-    await visitReady.current;
+    insertPromise.current = promise.then(() => undefined);
+    await insertPromise.current;
   }, []);
 
   const updateEvent = useCallback(async (field: TrackingEventField) => {
-    console.log('[CampaignTracking] updateEvent CALLED', { field, sessionIdRef: sessionId.current, loggedRef: logged.current });
+    console.log('[CampaignTracking] updateEvent CALLED', { field, sessionId: sessionId.current });
 
-    await visitReady.current;
+    // Wait for INSERT to finish
+    await insertPromise.current;
 
-    const currentSessionId = sessionId.current;
-    console.log('[CampaignTracking] updateEvent AFTER AWAIT', { field, currentSessionId, loggedRef: logged.current });
-
-    if (!currentSessionId) {
-      console.error('[CampaignTracking] updateEvent ABORTED: no sessionId', { field });
+    const sid = sessionId.current;
+    if (!sid) {
+      console.error('[CampaignTracking] updateEvent ABORTED: no sessionId after insert', { field });
       return;
     }
 
-    console.log('[CampaignTracking] updateEvent SENDING UPDATE', { field, sessionId: currentSessionId, updatePayload: { [field]: true } });
-
-    const result = await supabase
-      .from('campaign_events' as any)
-      .update({ [field]: true })
-      .eq('session_id', currentSessionId);
-
-    console.log('[CampaignTracking] updateEvent FULL RESPONSE', {
-      field,
-      sessionId: currentSessionId,
-      data: result.data,
-      error: result.error,
-      status: result.status,
-      statusText: result.statusText,
-      count: result.count,
-    });
-
-    if (result.error) {
-      console.error('[CampaignTracking] updateEvent FAILED', { field, sessionId: currentSessionId, error: result.error });
-    } else {
-      console.log('[CampaignTracking] updateEvent SUCCESS', { field, sessionId: currentSessionId });
+    try {
+      await trackCall({ action: 'event', session_id: sid, field });
+    } catch (err) {
+      console.error('[CampaignTracking] updateEvent FAILED', { field, sessionId: sid, err });
     }
   }, []);
 
   const updateContact = useCallback(async (companyName: string) => {
-    const cleanCompanyName = companyName.trim();
-    console.log('[CampaignTracking] updateContact CALLED', { companyName, cleanCompanyName, sessionIdRef: sessionId.current });
+    const clean = companyName.trim();
+    if (!clean) return;
 
-    if (!cleanCompanyName) return;
+    await insertPromise.current;
 
-    await visitReady.current;
+    const sid = sessionId.current;
+    if (!sid) return;
 
-    const currentSessionId = sessionId.current;
-    console.log('[CampaignTracking] updateContact AFTER AWAIT', { currentSessionId });
-
-    if (!currentSessionId) {
-      console.error('[CampaignTracking] updateContact ABORTED: no sessionId');
-      return;
+    try {
+      await trackCall({ action: 'contact', session_id: sid, contact: clean });
+    } catch (err) {
+      console.error('[CampaignTracking] updateContact FAILED', err);
     }
-
-    const result = await supabase
-      .from('campaign_events' as any)
-      .update({ contact: cleanCompanyName })
-      .eq('session_id', currentSessionId);
-
-    console.log('[CampaignTracking] updateContact FULL RESPONSE', {
-      sessionId: currentSessionId,
-      data: result.data,
-      error: result.error,
-      status: result.status,
-      statusText: result.statusText,
-    });
   }, []);
 
   return { sessionId: sessionId.current, logVisit, updateEvent, updateContact };
