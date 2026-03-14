@@ -238,11 +238,35 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   useEffect(() => {
     if (!isOpen || !isYouTube || !videoIdForEmbed) return;
 
+    console.log('🔵 [DIAG] YT Player useEffect TRIGGERED', {
+      isOpen,
+      isYouTube,
+      videoIdForEmbed,
+      autoplay,
+      hasContainer: !!playerContainerRef.current,
+      hasCallbacks: {
+        onVideoStarted: typeof onVideoStarted === 'function',
+        onVideoCompleted: typeof onVideoCompleted === 'function',
+        onPopupShown: typeof onPopupShown === 'function',
+      },
+    });
+
     let destroyed = false;
 
     const initPlayer = async () => {
+      console.log('🔵 [DIAG] loadYouTubeApi() starting...');
       await loadYouTubeApi();
-      if (destroyed || !playerContainerRef.current) return;
+      console.log('🔵 [DIAG] loadYouTubeApi() resolved', {
+        destroyed,
+        hasContainer: !!playerContainerRef.current,
+        hasYT: !!window.YT,
+        hasYTPlayer: !!window.YT?.Player,
+      });
+
+      if (destroyed || !playerContainerRef.current) {
+        console.warn('🟡 [DIAG] Player init aborted — destroyed:', destroyed, 'container:', !!playerContainerRef.current);
+        return;
+      }
 
       // Clear any previous player content
       playerContainerRef.current.innerHTML = '';
@@ -250,7 +274,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       div.id = 'yt-player-' + Date.now();
       playerContainerRef.current.appendChild(div);
 
-      console.log('[YT Player] Creating player via API', { videoId: videoIdForEmbed, containerId: div.id });
+      console.log('🔵 [DIAG] Creating YT.Player', { containerId: div.id, videoId: videoIdForEmbed });
 
       playerRef.current = new window.YT.Player(div.id, {
         videoId: videoIdForEmbed,
@@ -265,20 +289,21 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
         events: {
           onStateChange: handleStateChange,
           onReady: () => {
-            console.log('[YT Player] Ready — API-created iframe', { videoId: videoIdForEmbed });
+            console.log('🟢 [DIAG] YT Player onReady fired', { videoId: videoIdForEmbed });
           },
           onError: (event: any) => {
-            console.error('[YT Player] Error:', event.data);
+            console.error('🔴 [DIAG] YT Player onError:', event.data);
           },
         },
       });
 
-      console.log('[YT Player] Instance created via API');
+      console.log('🔵 [DIAG] YT.Player instance created');
     };
 
     initPlayer();
 
     return () => {
+      console.log('🟠 [DIAG] YT Player useEffect CLEANUP — destroying player');
       destroyed = true;
       try {
         playerRef.current?.destroy?.();
