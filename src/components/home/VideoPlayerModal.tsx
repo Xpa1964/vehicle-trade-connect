@@ -160,16 +160,14 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [companyName, setCompanyName] = useState('');
-  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  const playerContainerRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<any>(null);
+  const videoStartedRef = useRef(false);
 
   const translations = postVideoMessages[language] || postVideoMessages['es'];
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
   const videoIdForEmbed = videoUrl.match(/embed\/([^?&/]+)/)?.[1] || '';
-  const embedParams = new URLSearchParams();
-  if (autoplay) embedParams.set('autoplay', '1');
-  embedParams.set('enablejsapi', '1');
-  const embedSrc = `https://www.youtube.com/embed/${videoIdForEmbed}?${embedParams.toString()}`;
 
   // Reset state when modal opens
   useEffect(() => {
@@ -177,7 +175,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       setShowOverlay(false);
       setSelectedInterests([]);
       setCompanyName('');
-      onVideoStarted?.();
+      videoStartedRef.current = false;
     }
   }, [isOpen]);
 
