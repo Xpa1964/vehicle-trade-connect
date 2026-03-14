@@ -267,7 +267,24 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
           origin: window.location.origin,
         },
         events: {
-          onStateChange: handleStateChange,
+          onStateChange: (event: any) => {
+            const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
+            const endedState = window.YT?.PlayerState?.ENDED ?? 0;
+
+            console.log('🔴 [DIAG] handleStateChange CALLED', { eventData: event.data, playingState, endedState });
+
+            if (event.data === playingState && !videoStartedRef.current) {
+              videoStartedRef.current = true;
+              console.log('🟢 [DIAG] PLAYING detected → calling onVideoStarted');
+              onVideoStartedRef.current?.();
+            }
+
+            if (event.data === endedState) {
+              console.log('🟢 [DIAG] ENDED detected → calling onVideoCompleted');
+              onVideoCompletedRef.current?.();
+              setShowOverlay(true);
+            }
+          },
           onReady: () => {
             console.log('🟢 [DIAG] YT Player onReady fired', { videoId: videoIdForEmbed });
           },
