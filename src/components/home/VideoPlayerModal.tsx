@@ -224,7 +224,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   };
 
   const handleContactClick = () => {
-    onRegisterClicked?.();
+    onRegisterClicked?.(companyName.trim() || undefined);
     const companyInfo = companyName.trim() ? `\n\nEmpresa / Company: ${companyName.trim()}` : '';
     const selected = selectedInterests.length > 0
       ? `\n\n${translations.interestLabel}\n${selectedInterests.map(i => `- ${i}`).join('\n')}`

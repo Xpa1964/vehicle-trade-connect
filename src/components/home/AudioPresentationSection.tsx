@@ -15,7 +15,7 @@ interface AudioPresentationSectionProps {
   onVideoStarted?: () => void;
   onVideoCompleted?: () => void;
   onPopupShown?: () => void;
-  onRegisterClicked?: () => void;
+  onRegisterClicked?: (companyName?: string) => void;
 }
 
 const AudioPresentationSection: React.FC<AudioPresentationSectionProps> = ({
