@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -18,12 +18,14 @@ function loadYouTubeApi(): Promise<void> {
       resolve();
       return;
     }
-    const prev = window.onYouTubeIframeAPIReady;
+
+    const previousHandler = window.onYouTubeIframeAPIReady;
     window.onYouTubeIframeAPIReady = () => {
       ytApiLoaded = true;
-      prev?.();
+      previousHandler?.();
       resolve();
     };
+
     if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
       const tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';
@@ -160,14 +162,53 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [companyName, setCompanyName] = useState('');
-  const playerContainerRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const playerRef = useRef<any>(null);
   const videoStartedRef = useRef(false);
 
-  const translations = postVideoMessages[language] || postVideoMessages['es'];
+  const translations = postVideoMessages[language] || postVideoMessages.es;
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
-  const videoIdForEmbed = videoUrl.match(/embed\/([^?&/]+)/)?.[1] || '';
+  const videoIdForEmbed = videoUrl.match(/(?:embed\/|v=)([^?&/]+)/)?.[1] || '';
+
+  const youtubeEmbedUrl = useMemo(() => {
+    if (!videoIdForEmbed) return '';
+
+    const params = new URLSearchParams({
+      enablejsapi: '1',
+      rel: '0',
+      autoplay: autoplay ? '1' : '0',
+    });
+
+    if (typeof window !== 'undefined') {
+      params.set('origin', window.location.origin);
+    }
+
+    return `https://www.youtube.com/embed/${videoIdForEmbed}?${params.toString()}`;
+  }, [videoIdForEmbed, autoplay]);
+
+  const handleStateChange = useCallback((event: any) => {
+    const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
+    const endedState = window.YT?.PlayerState?.ENDED ?? 0;
+
+    console.log('[YT Player] onStateChange', {
+      state: event.data,
+      playingState,
+      endedState,
+    });
+
+    if (event.data === playingState && !videoStartedRef.current) {
+      videoStartedRef.current = true;
+      console.log('[YT Player] video_start event fired');
+      onVideoStarted?.();
+    }
+
+    if (event.data === endedState) {
+      console.log('[YT Player] video_complete event fired');
+      onVideoCompleted?.();
+      setShowOverlay(true);
+    }
+  }, [onVideoStarted, onVideoCompleted]);
 
   // Reset state when modal opens
   useEffect(() => {
@@ -182,6 +223,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   // Fire popup shown callback
   useEffect(() => {
     if (showOverlay) {
+      console.log('[YT Player] popup_shown event fired');
       onPopupShown?.();
     }
   }, [showOverlay, onPopupShown]);
@@ -192,7 +234,9 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     } else {
       document.body.style.overflow = '';
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -205,49 +249,25 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
   // YouTube IFrame Player API integration
   useEffect(() => {
-    if (!isOpen || !isYouTube || !videoIdForEmbed) return;
+    if (!isOpen || !isYouTube || !videoIdForEmbed || !iframeRef.current) return;
 
-    let player: any = null;
     let destroyed = false;
 
     const initPlayer = async () => {
       await loadYouTubeApi();
-      if (destroyed || !playerContainerRef.current) return;
+      if (destroyed || !iframeRef.current) return;
 
-      // Clear container
-      playerContainerRef.current.innerHTML = '';
-      const div = document.createElement('div');
-      div.id = 'yt-player-' + Date.now();
-      playerContainerRef.current.appendChild(div);
+      try {
+        playerRef.current?.destroy?.();
+      } catch {
+        // no-op
+      }
 
-      player = new window.YT.Player(div.id, {
-        videoId: videoIdForEmbed,
-        width: '100%',
-        height: '100%',
-        playerVars: {
-          autoplay: autoplay ? 1 : 0,
-          enablejsapi: 1,
-          origin: window.location.origin,
-          rel: 0,
-        },
+      playerRef.current = new window.YT.Player(iframeRef.current, {
         events: {
-          onStateChange: (event: any) => {
-            console.log('[YT Player] State changed:', event.data);
-            // PLAYING = 1
-            if (event.data === 1 && !videoStartedRef.current) {
-              videoStartedRef.current = true;
-              console.log('[YT Player] video_start fired');
-              onVideoStarted?.();
-            }
-            // ENDED = 0
-            if (event.data === 0) {
-              console.log('[YT Player] video_complete fired');
-              onVideoCompleted?.();
-              setShowOverlay(true);
-            }
-          },
-          onReady: (event: any) => {
-            console.log('[YT Player] Ready');
+          onStateChange: handleStateChange,
+          onReady: () => {
+            console.log('[YT Player] Ready and bound to iframe', { videoId: videoIdForEmbed });
           },
           onError: (event: any) => {
             console.error('[YT Player] Error:', event.data);
@@ -255,7 +275,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
         },
       });
 
-      playerRef.current = player;
+      console.log('[YT Player] Instance created');
     };
 
     initPlayer();
@@ -263,29 +283,34 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     return () => {
       destroyed = true;
       try {
-        playerRef.current?.destroy();
-      } catch {}
+        playerRef.current?.destroy?.();
+      } catch {
+        // no-op
+      }
       playerRef.current = null;
     };
-  }, [isOpen, isYouTube, videoIdForEmbed, autoplay, onVideoStarted, onVideoCompleted]);
+  }, [isOpen, isYouTube, videoIdForEmbed, handleStateChange]);
 
   if (!isOpen) return null;
 
   const toggleInterest = (option: string) => {
-    setSelectedInterests(prev =>
-      prev.includes(option) ? prev.filter(i => i !== option) : [...prev, option]
+    setSelectedInterests((prev) =>
+      prev.includes(option) ? prev.filter((i) => i !== option) : [...prev, option]
     );
   };
 
   const handleContactClick = () => {
-    onRegisterClicked?.(companyName.trim() || undefined);
-    const companyInfo = companyName.trim() ? `\n\nEmpresa / Company: ${companyName.trim()}` : '';
+    const cleanCompanyName = companyName.trim() || undefined;
+    console.log('[YT Player] register_clicked event fired', { companyName: cleanCompanyName ?? null });
+    onRegisterClicked?.(cleanCompanyName);
+
+    const companyInfo = cleanCompanyName ? `\n\nEmpresa / Company: ${cleanCompanyName}` : '';
     const selected = selectedInterests.length > 0
-      ? `\n\n${translations.interestLabel}\n${selectedInterests.map(i => `- ${i}`).join('\n')}`
+      ? `\n\n${translations.interestLabel}\n${selectedInterests.map((i) => `- ${i}`).join('\n')}`
       : '';
     const body = `${translations.emailBody}${companyInfo}${selected}`;
     const mailtoUrl = `mailto:info@kontactvo.com?subject=${encodeURIComponent(translations.emailSubject)}&body=${encodeURIComponent(body)}`;
-    
+
     const link = document.createElement('a');
     link.href = mailtoUrl;
     link.target = '_blank';
@@ -316,7 +341,15 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
         <div className="relative w-full aspect-video bg-black">
           {isYouTube ? (
-            <div ref={playerContainerRef} className="w-full h-full" />
+            <iframe
+              key={videoIdForEmbed}
+              ref={iframeRef}
+              src={youtubeEmbedUrl}
+              title={title}
+              className="w-full h-full"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowFullScreen
+            />
           ) : (
             <video
               className="w-full h-full"
