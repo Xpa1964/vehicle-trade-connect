@@ -231,27 +231,38 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen, onClose]);
 
-  // YouTube IFrame Player API integration
+  // YouTube IFrame Player API integration — let the API create the iframe
   useEffect(() => {
-    if (!isOpen || !isYouTube || !videoIdForEmbed || !iframeRef.current) return;
+    if (!isOpen || !isYouTube || !videoIdForEmbed) return;
 
     let destroyed = false;
 
     const initPlayer = async () => {
       await loadYouTubeApi();
-      if (destroyed || !iframeRef.current) return;
+      if (destroyed || !playerContainerRef.current) return;
 
-      try {
-        playerRef.current?.destroy?.();
-      } catch {
-        // no-op
-      }
+      // Clear any previous player content
+      playerContainerRef.current.innerHTML = '';
+      const div = document.createElement('div');
+      div.id = 'yt-player-' + Date.now();
+      playerContainerRef.current.appendChild(div);
 
-      playerRef.current = new window.YT.Player(iframeRef.current, {
+      console.log('[YT Player] Creating player via API', { videoId: videoIdForEmbed, containerId: div.id });
+
+      playerRef.current = new window.YT.Player(div.id, {
+        videoId: videoIdForEmbed,
+        width: '100%',
+        height: '100%',
+        playerVars: {
+          autoplay: autoplay ? 1 : 0,
+          rel: 0,
+          enablejsapi: 1,
+          origin: window.location.origin,
+        },
         events: {
           onStateChange: handleStateChange,
           onReady: () => {
-            console.log('[YT Player] Ready and bound to iframe', { videoId: videoIdForEmbed });
+            console.log('[YT Player] Ready — API-created iframe', { videoId: videoIdForEmbed });
           },
           onError: (event: any) => {
             console.error('[YT Player] Error:', event.data);
@@ -259,7 +270,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
         },
       });
 
-      console.log('[YT Player] Instance created');
+      console.log('[YT Player] Instance created via API');
     };
 
     initPlayer();
@@ -273,7 +284,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       }
       playerRef.current = null;
     };
-  }, [isOpen, isYouTube, videoIdForEmbed, handleStateChange]);
+  }, [isOpen, isYouTube, videoIdForEmbed, autoplay, handleStateChange]);
 
   if (!isOpen) return null;
 
