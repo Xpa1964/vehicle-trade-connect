@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -162,7 +162,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [companyName, setCompanyName] = useState('');
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const playerContainerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<any>(null);
   const videoStartedRef = useRef(false);
 
@@ -170,22 +170,6 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
   const videoIdForEmbed = videoUrl.match(/(?:embed\/|v=)([^?&/]+)/)?.[1] || '';
-
-  const youtubeEmbedUrl = useMemo(() => {
-    if (!videoIdForEmbed) return '';
-
-    const params = new URLSearchParams({
-      enablejsapi: '1',
-      rel: '0',
-      autoplay: autoplay ? '1' : '0',
-    });
-
-    if (typeof window !== 'undefined') {
-      params.set('origin', window.location.origin);
-    }
-
-    return `https://www.youtube.com/embed/${videoIdForEmbed}?${params.toString()}`;
-  }, [videoIdForEmbed, autoplay]);
 
   const handleStateChange = useCallback((event: any) => {
     const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
@@ -247,27 +231,38 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen, onClose]);
 
-  // YouTube IFrame Player API integration
+  // YouTube IFrame Player API integration — let the API create the iframe
   useEffect(() => {
-    if (!isOpen || !isYouTube || !videoIdForEmbed || !iframeRef.current) return;
+    if (!isOpen || !isYouTube || !videoIdForEmbed) return;
 
     let destroyed = false;
 
     const initPlayer = async () => {
       await loadYouTubeApi();
-      if (destroyed || !iframeRef.current) return;
+      if (destroyed || !playerContainerRef.current) return;
 
-      try {
-        playerRef.current?.destroy?.();
-      } catch {
-        // no-op
-      }
+      // Clear any previous player content
+      playerContainerRef.current.innerHTML = '';
+      const div = document.createElement('div');
+      div.id = 'yt-player-' + Date.now();
+      playerContainerRef.current.appendChild(div);
 
-      playerRef.current = new window.YT.Player(iframeRef.current, {
+      console.log('[YT Player] Creating player via API', { videoId: videoIdForEmbed, containerId: div.id });
+
+      playerRef.current = new window.YT.Player(div.id, {
+        videoId: videoIdForEmbed,
+        width: '100%',
+        height: '100%',
+        playerVars: {
+          autoplay: autoplay ? 1 : 0,
+          rel: 0,
+          enablejsapi: 1,
+          origin: window.location.origin,
+        },
         events: {
           onStateChange: handleStateChange,
           onReady: () => {
-            console.log('[YT Player] Ready and bound to iframe', { videoId: videoIdForEmbed });
+            console.log('[YT Player] Ready — API-created iframe', { videoId: videoIdForEmbed });
           },
           onError: (event: any) => {
             console.error('[YT Player] Error:', event.data);
@@ -275,7 +270,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
         },
       });
 
-      console.log('[YT Player] Instance created');
+      console.log('[YT Player] Instance created via API');
     };
 
     initPlayer();
@@ -289,7 +284,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       }
       playerRef.current = null;
     };
-  }, [isOpen, isYouTube, videoIdForEmbed, handleStateChange]);
+  }, [isOpen, isYouTube, videoIdForEmbed, autoplay, handleStateChange]);
 
   if (!isOpen) return null;
 
@@ -341,15 +336,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
         <div className="relative w-full aspect-video bg-black">
           {isYouTube ? (
-            <iframe
-              key={videoIdForEmbed}
-              ref={iframeRef}
-              src={youtubeEmbedUrl}
-              title={title}
-              className="w-full h-full"
-              allow="autoplay; encrypted-media; picture-in-picture"
-              allowFullScreen
-            />
+            <div ref={playerContainerRef} className="w-full h-full" />
           ) : (
             <video
               className="w-full h-full"
