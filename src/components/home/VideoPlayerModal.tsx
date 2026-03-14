@@ -166,33 +166,16 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const playerRef = useRef<any>(null);
   const videoStartedRef = useRef(false);
 
+  // Stable refs for callbacks — prevents useEffect re-runs
+  const onVideoStartedRef = useRef(onVideoStarted);
+  const onVideoCompletedRef = useRef(onVideoCompleted);
+  onVideoStartedRef.current = onVideoStarted;
+  onVideoCompletedRef.current = onVideoCompleted;
+
   const translations = postVideoMessages[language] || postVideoMessages.es;
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
   const videoIdForEmbed = videoUrl.match(/(?:embed\/|v=)([^?&/]+)/)?.[1] || '';
-
-  const handleStateChange = useCallback((event: any) => {
-    const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
-    const endedState = window.YT?.PlayerState?.ENDED ?? 0;
-
-    console.log('[YT Player] onStateChange', {
-      state: event.data,
-      playingState,
-      endedState,
-    });
-
-    if (event.data === playingState && !videoStartedRef.current) {
-      videoStartedRef.current = true;
-      console.log('[YT Player] video_start event fired');
-      onVideoStarted?.();
-    }
-
-    if (event.data === endedState) {
-      console.log('[YT Player] video_complete event fired');
-      onVideoCompleted?.();
-      setShowOverlay(true);
-    }
-  }, [onVideoStarted, onVideoCompleted]);
 
   // Reset state when modal opens
   useEffect(() => {
