@@ -92,19 +92,26 @@ const AdminCampaigns: React.FC = () => {
 
   // Individual session rows sorted by date (newest first)
   const individualRows = useMemo(() => {
-    return filteredEvents.map(e => ({
-      id: e.id,
-      contact: e.contact || '-',
-      campaign: e.campaign || 'direct',
-      language: (e.video_language || 'es').toUpperCase(),
-      date: new Date(e.created_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }),
-      video_started: e.video_started,
-      video_completed: e.video_completed,
-      popup_shown: e.popup_shown,
-      register_clicked: e.register_clicked,
-      country: e.visitor_country || '-',
-      interests: e.interests && e.interests.length > 0 ? e.interests.join(', ') : '-',
-    }));
+    return filteredEvents.map(e => {
+      const interests = e.interests || [];
+      const buyPattern = /comprar|buying|acheter|kaufen|køb|kopen|comprare|kupno|compra/i;
+      const sellPattern = /vender|selling|vendre|verkaufen|salg|verkopen|vendere|sprzedaż|venta/i;
+      return {
+        id: e.id,
+        contact: e.contact || '-',
+        campaign: e.campaign || 'direct',
+        language: (e.video_language || 'es').toUpperCase(),
+        date: new Date(e.created_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }),
+        video_started: e.video_started,
+        video_completed: e.video_completed,
+        popup_shown: e.popup_shown,
+        register_clicked: e.register_clicked,
+        country: e.visitor_country || '-',
+        wantsBuy: interests.some(i => buyPattern.test(i) && !i.includes('/')),
+        wantsSell: interests.some(i => sellPattern.test(i) && !i.includes('/')),
+        wantsBoth: interests.some(i => i.includes('/')),
+      };
+    });
   }, [filteredEvents]);
 
   const byLanguage = useMemo(() => {
@@ -210,13 +217,15 @@ const AdminCampaigns: React.FC = () => {
                      <TableHead className="text-center">✅ Completa</TableHead>
                      <TableHead className="text-center">💬 Popup</TableHead>
                      <TableHead className="text-center">📧 Click</TableHead>
-                     <TableHead>Intereses</TableHead>
+                     <TableHead className="text-center">🛒 Comprar</TableHead>
+                     <TableHead className="text-center">💰 Vender</TableHead>
+                     <TableHead className="text-center">🔄 Ambos</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {individualRows.length === 0 ? (
                     <TableRow>
-                     <TableCell colSpan={10} className="text-center text-muted-foreground py-8">Sin datos</TableCell>
+                     <TableCell colSpan={12} className="text-center text-muted-foreground py-8">Sin datos</TableCell>
                     </TableRow>
                   ) : (
                     individualRows.map((row) => (
@@ -230,7 +239,9 @@ const AdminCampaigns: React.FC = () => {
                         <TableCell className="text-center">{row.video_completed ? '✅' : '❌'}</TableCell>
                         <TableCell className="text-center">{row.popup_shown ? '✅' : '❌'}</TableCell>
                         <TableCell className="text-center">{row.register_clicked ? '✅' : '❌'}</TableCell>
-                        <TableCell className="text-xs max-w-[200px] truncate" title={row.interests}>{row.interests}</TableCell>
+                        <TableCell className="text-center">{row.wantsBuy ? '✅' : ''}</TableCell>
+                        <TableCell className="text-center">{row.wantsSell ? '✅' : ''}</TableCell>
+                        <TableCell className="text-center">{row.wantsBoth ? '✅' : ''}</TableCell>
                       </TableRow>
                     ))
                   )}

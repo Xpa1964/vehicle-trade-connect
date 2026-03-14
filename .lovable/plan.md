@@ -1,32 +1,58 @@
 
 
-## Plan: Reemplazar columna "Intereses" por 3 columnas con checkmarks
+# Plan: Gestion de imagenes API con reemplazo limpio
 
-Solo se modifica `src/pages/admin/Campaigns.tsx`. No se toca ningún otro archivo.
+## Resumen
 
-### Cambios
+Dos cambios precisos sobre el plan original aprobado, sin modificar nada mas.
 
-1. **En `individualRows`** (línea 106): en vez de `interests: e.interests.join(', ')`, calcular 3 booleanos basados en el contenido exacto del array `interests`:
-   - `wantsBuy`: el array contiene un string con "comprar"/"buying"/"acheter"/"kaufen"/"køb"/"kopen"/"comprare"/"kupno"/"compra" (pero NO "vender"/"selling"/etc en el mismo string)
-   - `wantsSell`: contiene un string con "vender"/"selling"/"vendre"/"verkaufen"/"salg"/"verkopen"/"vendere"/"sprzedaż" (pero NO "comprar"/etc)
-   - `wantsBoth`: contiene un string con "/" (ej: "Comprar/Vender", "Buying/Selling")
+## Cambio 1: Migracion de base de datos
 
-2. **En el header** (líneas 213): reemplazar `<TableHead>Intereses</TableHead>` por 3 headers:
-   - `🛒 Comprar`
-   - `💰 Vender`
-   - `🔄 Ambos`
-
-3. **En las celdas** (línea 233): reemplazar la celda de intereses por 3 celdas con `✅` o vacío.
-
-4. **Actualizar `colSpan`** de "Sin datos" de 10 a 12.
-
-### Resultado visual
+Anadir columna `source` a `vehicle_images` **sin valor por defecto**:
 
 ```text
-... | 📧 Click | 🛒 Comprar | 💰 Vender | 🔄 Ambos
-... |    ✅    |     ✅     |           |    
-... |    ✅    |            |     ✅    |    ✅
+ALTER TABLE vehicle_images ADD COLUMN source text;
 ```
 
-Solo cambia la visualización en el panel admin. No se altera la base de datos, la edge function, ni el popup.
+Las imagenes existentes quedaran con `source = NULL`. Solo las imagenes insertadas desde la sincronizacion API recibiran `source = 'api'`.
+
+## Cambio 2: Modificar `processImages` en la edge function
+
+En `supabase/functions/api-sync-vehicles/index.ts`, funcion `processImages` (linea 472):
+
+**Paso nuevo antes de insertar** (sin tocar storage):
+
+```text
+DELETE FROM vehicle_images
+WHERE vehicle_id = vehicleId AND source = 'api'
+```
+
+**Al insertar cada imagen**, anadir `source: 'api'` al objeto:
+
+```text
+await supabase.from('vehicle_images').insert({
+  vehicle_id: vehicleId,
+  image_url: publicUrl,
+  display_order: i,
+  is_primary: i === 0,
+  source: 'api'        // <-- nuevo campo
+});
+```
+
+**No se eliminan archivos del bucket de storage.** Solo registros en base de datos.
+
+## Archivos modificados
+
+| Archivo | Cambio |
+|---------|--------|
+| Nueva migracion SQL | `ALTER TABLE vehicle_images ADD COLUMN source text;` |
+| `supabase/functions/api-sync-vehicles/index.ts` | Agregar DELETE previo y campo `source: 'api'` en insert |
+
+## Lo que NO se toca
+
+- Subida manual de imagenes
+- Componentes de UI
+- Bucket de storage (sin eliminar archivos fisicos)
+- RLS policies de `vehicle_images`
+- Ningun otro endpoint ni servicio
 
