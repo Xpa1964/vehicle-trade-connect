@@ -51,8 +51,34 @@ const AdminCampaigns: React.FC = () => {
     setLoading(false);
   };
 
+  const deduplicatedEvents = useMemo(() => {
+    const sorted = [...events].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    const lastSeenByFingerprint = new Map<string, number>();
+
+    return sorted.filter((event) => {
+      const fingerprint = [
+        event.campaign || '',
+        event.video_language || '',
+        event.dealer || '',
+        event.contact || '',
+        event.user_agent || '',
+        event.referrer || '',
+      ].join('|').toLowerCase();
+
+      const currentTs = new Date(event.created_at).getTime();
+      const lastTs = lastSeenByFingerprint.get(fingerprint);
+
+      if (lastTs && Math.abs(lastTs - currentTs) <= DUPLICATE_WINDOW_MS) {
+        return false;
+      }
+
+      lastSeenByFingerprint.set(fingerprint, currentTs);
+      return true;
+    });
+  }, [events]);
+
   const filteredEvents = useMemo(() => {
-    return events.filter(e => {
+    return deduplicatedEvents.filter(e => {
       if (filterCampaign && !e.campaign?.toLowerCase().includes(filterCampaign.toLowerCase())) return false;
       if (filterLanguage !== 'all' && e.video_language !== filterLanguage) return false;
       if (filterDealer && !e.dealer?.toLowerCase().includes(filterDealer.toLowerCase())) return false;
@@ -61,7 +87,7 @@ const AdminCampaigns: React.FC = () => {
       if (filterDateTo && e.created_at > filterDateTo + 'T23:59:59') return false;
       return true;
     });
-  }, [events, filterCampaign, filterLanguage, filterDealer, filterContact, filterDateFrom, filterDateTo]);
+  }, [deduplicatedEvents, filterCampaign, filterLanguage, filterDealer, filterContact, filterDateFrom, filterDateTo]);
 
   // Individual session rows sorted by date (newest first)
   const individualRows = useMemo(() => {
