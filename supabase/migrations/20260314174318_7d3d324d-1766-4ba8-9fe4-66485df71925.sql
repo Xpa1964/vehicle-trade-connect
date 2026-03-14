@@ -1,0 +1,1 @@
+DELETE FROM public.campaign_events WHERE session_id LIKE 'test-deploy-%';
