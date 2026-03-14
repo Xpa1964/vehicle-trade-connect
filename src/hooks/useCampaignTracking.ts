@@ -109,7 +109,7 @@ export const useCampaignTracking = () => {
     }
   }, []);
 
-  const updateContact = useCallback(async (companyName: string) => {
+  const updateContact = useCallback(async (companyName: string, interests?: string[]) => {
     const clean = companyName.trim();
     if (!clean) return;
 
@@ -119,7 +119,7 @@ export const useCampaignTracking = () => {
     if (!sid) return;
 
     try {
-      await trackCall({ action: 'contact', session_id: sid, contact: clean });
+      await trackCall({ action: 'contact', session_id: sid, contact: clean, interests: interests || [] });
     } catch (err) {
       console.error('[CampaignTracking] updateContact FAILED', err);
     }

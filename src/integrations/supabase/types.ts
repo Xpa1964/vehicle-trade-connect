@@ -600,6 +600,7 @@ export type Database = {
           created_at: string | null
           dealer: string | null
           id: string
+          interests: string[] | null
           popup_shown: boolean | null
           referrer: string | null
           register_clicked: boolean | null
@@ -616,6 +617,7 @@ export type Database = {
           created_at?: string | null
           dealer?: string | null
           id?: string
+          interests?: string[] | null
           popup_shown?: boolean | null
           referrer?: string | null
           register_clicked?: boolean | null
@@ -632,6 +634,7 @@ export type Database = {
           created_at?: string | null
           dealer?: string | null
           id?: string
+          interests?: string[] | null
           popup_shown?: boolean | null
           referrer?: string | null
           register_clicked?: boolean | null

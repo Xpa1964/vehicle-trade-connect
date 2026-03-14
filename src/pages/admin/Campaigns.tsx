@@ -19,6 +19,7 @@ interface CampaignEvent {
   visitor_country: string | null;
   user_agent?: string | null;
   referrer?: string | null;
+  interests?: string[] | null;
   video_started: boolean;
   video_completed: boolean;
   popup_shown: boolean;
@@ -102,6 +103,7 @@ const AdminCampaigns: React.FC = () => {
       popup_shown: e.popup_shown,
       register_clicked: e.register_clicked,
       country: e.visitor_country || '-',
+      interests: e.interests && e.interests.length > 0 ? e.interests.join(', ') : '-',
     }));
   }, [filteredEvents]);
 
@@ -204,16 +206,17 @@ const AdminCampaigns: React.FC = () => {
                     <TableHead>Idioma</TableHead>
                     <TableHead>País</TableHead>
                     <TableHead>Fecha</TableHead>
-                    <TableHead className="text-center">▶ Abre</TableHead>
-                    <TableHead className="text-center">✅ Completa</TableHead>
-                    <TableHead className="text-center">💬 Popup</TableHead>
-                    <TableHead className="text-center">📧 Click</TableHead>
+                     <TableHead className="text-center">▶ Abre</TableHead>
+                     <TableHead className="text-center">✅ Completa</TableHead>
+                     <TableHead className="text-center">💬 Popup</TableHead>
+                     <TableHead className="text-center">📧 Click</TableHead>
+                     <TableHead>Intereses</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {individualRows.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={9} className="text-center text-muted-foreground py-8">Sin datos</TableCell>
+                     <TableCell colSpan={10} className="text-center text-muted-foreground py-8">Sin datos</TableCell>
                     </TableRow>
                   ) : (
                     individualRows.map((row) => (
@@ -227,6 +230,7 @@ const AdminCampaigns: React.FC = () => {
                         <TableCell className="text-center">{row.video_completed ? '✅' : '❌'}</TableCell>
                         <TableCell className="text-center">{row.popup_shown ? '✅' : '❌'}</TableCell>
                         <TableCell className="text-center">{row.register_clicked ? '✅' : '❌'}</TableCell>
+                        <TableCell className="text-xs max-w-[200px] truncate" title={row.interests}>{row.interests}</TableCell>
                       </TableRow>
                     ))
                   )}

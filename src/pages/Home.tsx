@@ -44,10 +44,10 @@ const Home: React.FC = () => {
     if (campaign) updateEvent('popup_shown');
   }, [campaign, updateEvent]);
 
-  const handleRegisterClicked = useCallback((companyName?: string) => {
+  const handleRegisterClicked = useCallback((companyName?: string, interests?: string[]) => {
     if (campaign) {
       updateEvent('register_clicked');
-      if (companyName) updateContact(companyName);
+      if (companyName) updateContact(companyName, interests);
     }
   }, [campaign, updateEvent, updateContact]);
 

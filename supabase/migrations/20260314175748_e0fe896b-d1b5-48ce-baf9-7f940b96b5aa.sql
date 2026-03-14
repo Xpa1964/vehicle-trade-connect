@@ -1,0 +1,1 @@
+ALTER TABLE campaign_events ADD COLUMN interests text[] DEFAULT '{}';
