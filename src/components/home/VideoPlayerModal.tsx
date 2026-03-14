@@ -175,20 +175,23 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
     const endedState = window.YT?.PlayerState?.ENDED ?? 0;
 
-    console.log('[YT Player] onStateChange', {
-      state: event.data,
+    console.log('🔴 [DIAG] handleStateChange CALLED', {
+      eventData: event.data,
       playingState,
       endedState,
+      videoStartedRef: videoStartedRef.current,
+      hasOnVideoStarted: typeof onVideoStarted === 'function',
+      hasOnVideoCompleted: typeof onVideoCompleted === 'function',
     });
 
     if (event.data === playingState && !videoStartedRef.current) {
       videoStartedRef.current = true;
-      console.log('[YT Player] video_start event fired');
+      console.log('🟢 [DIAG] PLAYING detected → calling onVideoStarted');
       onVideoStarted?.();
     }
 
     if (event.data === endedState) {
-      console.log('[YT Player] video_complete event fired');
+      console.log('🟢 [DIAG] ENDED detected → calling onVideoCompleted + setShowOverlay');
       onVideoCompleted?.();
       setShowOverlay(true);
     }
