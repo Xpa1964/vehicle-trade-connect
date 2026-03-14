@@ -206,10 +206,11 @@ const AdminCampaigns: React.FC = () => {
                     <TableHead>Idioma</TableHead>
                     <TableHead>País</TableHead>
                     <TableHead>Fecha</TableHead>
-                    <TableHead className="text-center">▶ Abre</TableHead>
-                    <TableHead className="text-center">✅ Completa</TableHead>
-                    <TableHead className="text-center">💬 Popup</TableHead>
-                    <TableHead className="text-center">📧 Click</TableHead>
+                     <TableHead className="text-center">▶ Abre</TableHead>
+                     <TableHead className="text-center">✅ Completa</TableHead>
+                     <TableHead className="text-center">💬 Popup</TableHead>
+                     <TableHead className="text-center">📧 Click</TableHead>
+                     <TableHead>Intereses</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
