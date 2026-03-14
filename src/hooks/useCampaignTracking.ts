@@ -43,5 +43,13 @@ export const useCampaignTracking = () => {
       .eq('session_id', sessionId.current);
   }, []);
 
-  return { sessionId: sessionId.current, logVisit, updateEvent };
+  const updateContact = useCallback(async (companyName: string) => {
+    if (!companyName.trim()) return;
+    await supabase
+      .from('campaign_events' as any)
+      .update({ contact: companyName.trim() })
+      .eq('session_id', sessionId.current);
+  }, []);
+
+  return { sessionId: sessionId.current, logVisit, updateEvent, updateContact };
 };

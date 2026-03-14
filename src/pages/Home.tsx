@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   const dealer = searchParams.get('dealer');
   const contact = searchParams.get('contact');
 
-  const { logVisit, updateEvent, sessionId } = useCampaignTracking();
+  const { logVisit, updateEvent, updateContact, sessionId } = useCampaignTracking();
 
   useEffect(() => {
     if (campaign) {
@@ -44,7 +44,10 @@ const Home: React.FC = () => {
             onVideoStarted={campaign ? () => updateEvent('video_started') : undefined}
             onVideoCompleted={campaign ? () => updateEvent('video_completed') : undefined}
             onPopupShown={campaign ? () => updateEvent('popup_shown') : undefined}
-            onRegisterClicked={campaign ? () => updateEvent('register_clicked') : undefined}
+            onRegisterClicked={campaign ? (companyName?: string) => {
+              updateEvent('register_clicked');
+              if (companyName) updateContact(companyName);
+            } : undefined}
           />
         </div>
         <ServicesSection />
