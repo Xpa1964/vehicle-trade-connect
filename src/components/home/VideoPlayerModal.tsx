@@ -166,16 +166,33 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const playerRef = useRef<any>(null);
   const videoStartedRef = useRef(false);
 
-  // Store callbacks in refs to avoid recreating the YT player on every render
-  const onVideoStartedRef = useRef(onVideoStarted);
-  const onVideoCompletedRef = useRef(onVideoCompleted);
-  useEffect(() => { onVideoStartedRef.current = onVideoStarted; }, [onVideoStarted]);
-  useEffect(() => { onVideoCompletedRef.current = onVideoCompleted; }, [onVideoCompleted]);
-
   const translations = postVideoMessages[language] || postVideoMessages.es;
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
   const videoIdForEmbed = videoUrl.match(/(?:embed\/|v=)([^?&/]+)/)?.[1] || '';
+
+  const handleStateChange = useCallback((event: any) => {
+    const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
+    const endedState = window.YT?.PlayerState?.ENDED ?? 0;
+
+    console.log('[YT Player] onStateChange', {
+      state: event.data,
+      playingState,
+      endedState,
+    });
+
+    if (event.data === playingState && !videoStartedRef.current) {
+      videoStartedRef.current = true;
+      console.log('[YT Player] video_start event fired');
+      onVideoStarted?.();
+    }
+
+    if (event.data === endedState) {
+      console.log('[YT Player] video_complete event fired');
+      onVideoCompleted?.();
+      setShowOverlay(true);
+    }
+  }, [onVideoStarted, onVideoCompleted]);
 
   // Reset state when modal opens
   useEffect(() => {
@@ -218,35 +235,11 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   useEffect(() => {
     if (!isOpen || !isYouTube || !videoIdForEmbed) return;
 
-    console.log('🔵 [DIAG] YT Player useEffect TRIGGERED', {
-      isOpen,
-      isYouTube,
-      videoIdForEmbed,
-      autoplay,
-      hasContainer: !!playerContainerRef.current,
-      hasCallbacks: {
-        onVideoStarted: typeof onVideoStarted === 'function',
-        onVideoCompleted: typeof onVideoCompleted === 'function',
-        onPopupShown: typeof onPopupShown === 'function',
-      },
-    });
-
     let destroyed = false;
 
     const initPlayer = async () => {
-      console.log('🔵 [DIAG] loadYouTubeApi() starting...');
       await loadYouTubeApi();
-      console.log('🔵 [DIAG] loadYouTubeApi() resolved', {
-        destroyed,
-        hasContainer: !!playerContainerRef.current,
-        hasYT: !!window.YT,
-        hasYTPlayer: !!window.YT?.Player,
-      });
-
-      if (destroyed || !playerContainerRef.current) {
-        console.warn('🟡 [DIAG] Player init aborted — destroyed:', destroyed, 'container:', !!playerContainerRef.current);
-        return;
-      }
+      if (destroyed || !playerContainerRef.current) return;
 
       // Clear any previous player content
       playerContainerRef.current.innerHTML = '';
@@ -254,7 +247,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       div.id = 'yt-player-' + Date.now();
       playerContainerRef.current.appendChild(div);
 
-      console.log('🔵 [DIAG] Creating YT.Player', { containerId: div.id, videoId: videoIdForEmbed });
+      console.log('[YT Player] Creating player via API', { videoId: videoIdForEmbed, containerId: div.id });
 
       playerRef.current = new window.YT.Player(div.id, {
         videoId: videoIdForEmbed,
@@ -267,40 +260,22 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
           origin: window.location.origin,
         },
         events: {
-          onStateChange: (event: any) => {
-            const playingState = window.YT?.PlayerState?.PLAYING ?? 1;
-            const endedState = window.YT?.PlayerState?.ENDED ?? 0;
-
-            console.log('🔴 [DIAG] handleStateChange CALLED', { eventData: event.data, playingState, endedState });
-
-            if (event.data === playingState && !videoStartedRef.current) {
-              videoStartedRef.current = true;
-              console.log('🟢 [DIAG] PLAYING detected → calling onVideoStarted');
-              onVideoStartedRef.current?.();
-            }
-
-            if (event.data === endedState) {
-              console.log('🟢 [DIAG] ENDED detected → calling onVideoCompleted');
-              onVideoCompletedRef.current?.();
-              setShowOverlay(true);
-            }
-          },
+          onStateChange: handleStateChange,
           onReady: () => {
-            console.log('🟢 [DIAG] YT Player onReady fired', { videoId: videoIdForEmbed });
+            console.log('[YT Player] Ready — API-created iframe', { videoId: videoIdForEmbed });
           },
           onError: (event: any) => {
-            console.error('🔴 [DIAG] YT Player onError:', event.data);
+            console.error('[YT Player] Error:', event.data);
           },
         },
       });
 
-      console.log('🔵 [DIAG] YT.Player instance created');
+      console.log('[YT Player] Instance created via API');
     };
 
     initPlayer();
 
     return () => {
-      console.log('🟠 [DIAG] YT Player useEffect CLEANUP — destroying player');
       destroyed = true;
       try {
         playerRef.current?.destroy?.();
@@ -309,7 +284,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       }
       playerRef.current = null;
     };
-  }, [isOpen, isYouTube, videoIdForEmbed, autoplay]);
+  }, [isOpen, isYouTube, videoIdForEmbed, autoplay, handleStateChange]);
 
   if (!isOpen) return null;
 
