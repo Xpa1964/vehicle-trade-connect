@@ -1,0 +1,1 @@
+ALTER TABLE public.campaign_events ADD CONSTRAINT campaign_events_session_id_unique UNIQUE (session_id);
