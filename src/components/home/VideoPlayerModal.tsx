@@ -1,9 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import kontactLogo from '@/assets/kontact-vo-logo-orange.png';
+
+// Load YouTube IFrame API script once
+let ytApiLoaded = false;
+let ytApiPromise: Promise<void> | null = null;
+
+function loadYouTubeApi(): Promise<void> {
+  if (ytApiLoaded && window.YT?.Player) return Promise.resolve();
+  if (ytApiPromise) return ytApiPromise;
+  ytApiPromise = new Promise<void>((resolve) => {
+    if (window.YT?.Player) {
+      ytApiLoaded = true;
+      resolve();
+      return;
+    }
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      ytApiLoaded = true;
+      prev?.();
+      resolve();
+    };
+    if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    }
+  });
+  return ytApiPromise;
+}
+
+declare global {
+  interface Window {
+    YT: any;
+    onYouTubeIframeAPIReady: (() => void) | undefined;
+  }
+}
 
 interface VideoPlayerModalProps {
   isOpen: boolean;
@@ -125,16 +160,14 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [companyName, setCompanyName] = useState('');
-  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  const playerContainerRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<any>(null);
+  const videoStartedRef = useRef(false);
 
   const translations = postVideoMessages[language] || postVideoMessages['es'];
 
   const isYouTube = videoUrl.includes('youtube.com/embed');
   const videoIdForEmbed = videoUrl.match(/embed\/([^?&/]+)/)?.[1] || '';
-  const embedParams = new URLSearchParams();
-  if (autoplay) embedParams.set('autoplay', '1');
-  embedParams.set('enablejsapi', '1');
-  const embedSrc = `https://www.youtube.com/embed/${videoIdForEmbed}?${embedParams.toString()}`;
 
   // Reset state when modal opens
   useEffect(() => {
@@ -142,7 +175,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
       setShowOverlay(false);
       setSelectedInterests([]);
       setCompanyName('');
-      onVideoStarted?.();
+      videoStartedRef.current = false;
     }
   }, [isOpen]);
 
@@ -170,50 +203,71 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen, onClose]);
 
-  // Listen for YouTube player state changes via postMessage
+  // YouTube IFrame Player API integration
   useEffect(() => {
-    if (!isOpen || !isYouTube) return;
+    if (!isOpen || !isYouTube || !videoIdForEmbed) return;
 
-    const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== 'https://www.youtube.com') return;
-      try {
-        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-        if (data?.event === 'onStateChange' && data?.info === 0) {
-          onVideoCompleted?.();
-          setShowOverlay(true);
-        }
-      } catch {
-        // ignore non-JSON messages
-      }
+    let player: any = null;
+    let destroyed = false;
+
+    const initPlayer = async () => {
+      await loadYouTubeApi();
+      if (destroyed || !playerContainerRef.current) return;
+
+      // Clear container
+      playerContainerRef.current.innerHTML = '';
+      const div = document.createElement('div');
+      div.id = 'yt-player-' + Date.now();
+      playerContainerRef.current.appendChild(div);
+
+      player = new window.YT.Player(div.id, {
+        videoId: videoIdForEmbed,
+        width: '100%',
+        height: '100%',
+        playerVars: {
+          autoplay: autoplay ? 1 : 0,
+          enablejsapi: 1,
+          origin: window.location.origin,
+          rel: 0,
+        },
+        events: {
+          onStateChange: (event: any) => {
+            console.log('[YT Player] State changed:', event.data);
+            // PLAYING = 1
+            if (event.data === 1 && !videoStartedRef.current) {
+              videoStartedRef.current = true;
+              console.log('[YT Player] video_start fired');
+              onVideoStarted?.();
+            }
+            // ENDED = 0
+            if (event.data === 0) {
+              console.log('[YT Player] video_complete fired');
+              onVideoCompleted?.();
+              setShowOverlay(true);
+            }
+          },
+          onReady: (event: any) => {
+            console.log('[YT Player] Ready');
+          },
+          onError: (event: any) => {
+            console.error('[YT Player] Error:', event.data);
+          },
+        },
+      });
+
+      playerRef.current = player;
     };
 
-    window.addEventListener('message', handleMessage);
-
-    const sendListening = () => {
-      if (iframeRef.current?.contentWindow) {
-        iframeRef.current.contentWindow.postMessage(
-          JSON.stringify({ event: 'listening', id: 1 }),
-          'https://www.youtube.com'
-        );
-        iframeRef.current.contentWindow.postMessage(
-          JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'] }),
-          'https://www.youtube.com'
-        );
-      }
-    };
-
-    // Retry multiple times to ensure the iframe is ready
-    const timers = [
-      setTimeout(sendListening, 1000),
-      setTimeout(sendListening, 2500),
-      setTimeout(sendListening, 5000),
-    ];
+    initPlayer();
 
     return () => {
-      window.removeEventListener('message', handleMessage);
-      timers.forEach(clearTimeout);
+      destroyed = true;
+      try {
+        playerRef.current?.destroy();
+      } catch {}
+      playerRef.current = null;
     };
-  }, [isOpen, isYouTube, onVideoCompleted]);
+  }, [isOpen, isYouTube, videoIdForEmbed, autoplay, onVideoStarted, onVideoCompleted]);
 
   if (!isOpen) return null;
 
@@ -262,14 +316,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
 
         <div className="relative w-full aspect-video bg-black">
           {isYouTube ? (
-              <iframe
-                ref={iframeRef}
-                src={embedSrc}
-                className="w-full h-full"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                title="Video Player"
-              />
+            <div ref={playerContainerRef} className="w-full h-full" />
           ) : (
             <video
               className="w-full h-full"
