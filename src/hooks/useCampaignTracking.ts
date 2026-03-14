@@ -169,26 +169,32 @@ export const useCampaignTracking = () => {
 
   const updateContact = useCallback(async (companyName: string) => {
     const cleanCompanyName = companyName.trim();
+    console.log('[CampaignTracking] updateContact CALLED', { companyName, cleanCompanyName, sessionIdRef: sessionId.current });
+
     if (!cleanCompanyName) return;
 
     await visitReady.current;
 
     const currentSessionId = sessionId.current;
-    if (!currentSessionId) return;
+    console.log('[CampaignTracking] updateContact AFTER AWAIT', { currentSessionId });
 
-    console.log('[CampaignTracking] updateContact', {
-      sessionId: currentSessionId,
-      companyName: cleanCompanyName,
-    });
+    if (!currentSessionId) {
+      console.error('[CampaignTracking] updateContact ABORTED: no sessionId');
+      return;
+    }
 
-    const { error } = await supabase
+    const result = await supabase
       .from('campaign_events' as any)
       .update({ contact: cleanCompanyName })
       .eq('session_id', currentSessionId);
 
-    if (error) {
-      console.error('[CampaignTracking] updateContact failed', { sessionId: currentSessionId, error });
-    }
+    console.log('[CampaignTracking] updateContact FULL RESPONSE', {
+      sessionId: currentSessionId,
+      data: result.data,
+      error: result.error,
+      status: result.status,
+      statusText: result.statusText,
+    });
   }, []);
 
   return { sessionId: sessionId.current, logVisit, updateEvent, updateContact };
