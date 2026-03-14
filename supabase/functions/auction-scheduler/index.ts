@@ -417,7 +417,6 @@ const handler = async (req: Request): Promise<Response> => {
         );
 
         response.closed++;
-        response.closed++;
       }
     }
 
