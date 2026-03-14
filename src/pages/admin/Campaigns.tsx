@@ -217,7 +217,9 @@ const AdminCampaigns: React.FC = () => {
                      <TableHead className="text-center">✅ Completa</TableHead>
                      <TableHead className="text-center">💬 Popup</TableHead>
                      <TableHead className="text-center">📧 Click</TableHead>
-                     <TableHead>Intereses</TableHead>
+                     <TableHead className="text-center">🛒 Comprar</TableHead>
+                     <TableHead className="text-center">💰 Vender</TableHead>
+                     <TableHead className="text-center">🔄 Ambos</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
