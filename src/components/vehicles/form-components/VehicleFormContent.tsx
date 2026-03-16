@@ -16,7 +16,7 @@ interface VehicleFormContentProps {
   isEditing: boolean;
   onSubmit: (data: VehicleFormData) => Promise<void>;
   onChange: (field: string, value: string | number) => void;
-  onBrandChange: (brand: string) => void;
+  onBrandChange: (brand: string) => string[];
   availableModels: string[];
   isLoadingModels?: boolean;
   modelsError?: boolean;

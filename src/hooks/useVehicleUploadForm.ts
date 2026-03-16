@@ -37,28 +37,31 @@ export const useVehicleUploadForm = ({ vehicleId }: UseVehicleUploadFormProps) =
     }
   };
 
-  const handleBrandChange = useCallback((brand: string) => {
-    setAvailableModels([]);
+  const handleBrandChange = useCallback((brand: string): string[] => {
     setModelsError(false);
     setIsLoadingModels(true);
     
     try {
-      // Get models from existing vehicles in DB
-      const dbModels = getModelsForBrand(brand);
-      // Get static models as fallback
-      const staticModels = getStaticModelsForBrand(brand);
-      // Merge both, deduplicate, and sort
-      const merged = [...new Set([...staticModels, ...dbModels])].sort();
+      const normalizedBrand = brand.toUpperCase().trim();
+      const dbModels = getModelsForBrand(normalizedBrand);
+      const staticModels = getStaticModelsForBrand(normalizedBrand);
+      const merged = [...new Set([...staticModels, ...dbModels])]
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b));
+
       setAvailableModels(merged);
+      return merged;
     } catch (error) {
       console.error('[VehicleUploadForm] Error loading models:', error);
-      // Still try static models on error
-      const staticModels = getStaticModelsForBrand(brand);
+      const staticModels = getStaticModelsForBrand(brand.toUpperCase().trim());
       if (staticModels.length > 0) {
         setAvailableModels(staticModels);
-      } else {
-        setModelsError(true);
+        return staticModels;
       }
+
+      setAvailableModels([]);
+      setModelsError(true);
+      return [];
     } finally {
       setIsLoadingModels(false);
     }

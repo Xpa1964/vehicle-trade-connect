@@ -22,7 +22,7 @@ export const vehicleValidationSchema = {
   units: z.coerce.number().int().nonnegative(NONNEGATIVE_NUMBER),
   fuel: z.string().min(1, REQUIRED_MESSAGE),
   transmission: z.string().min(1, REQUIRED_MESSAGE),
-  location: z.string().min(1, REQUIRED_MESSAGE),
+  location: z.string().optional().or(z.literal('')),
   country: z.string().min(1, REQUIRED_MESSAGE),
   countryCode: z.string().min(1, REQUIRED_MESSAGE),
   ivaStatus: z.enum(['included', 'notIncluded', 'deductible', 'rebu']),
@@ -32,6 +32,7 @@ export const vehicleValidationSchema = {
   additionalFiles: z.any().optional(),
   equipment: z.array(z.string()).default([]),
   description: z.string().max(2000, 'Description must be less than 2000 characters').optional(),
+  version: z.string().max(120, 'Version must be less than 120 characters').optional().or(z.literal('')),
   vin: z.string()
     .regex(/^[A-HJ-NPR-Z0-9]{17}$/, {
       message: 'El VIN debe tener exactamente 17 caracteres y no puede contener las letras I, O ni Q.'
