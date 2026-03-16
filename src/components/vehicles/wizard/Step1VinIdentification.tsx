@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Search, Sparkles, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
-import { decodeVin, isValidVin } from '@/utils/vinDecoder';
+import { decodeVinAsync, isValidVin } from '@/utils/vinDecoder';
 import { countries } from '@/utils/countryUtils';
 
 interface Step1VinIdentificationProps {
