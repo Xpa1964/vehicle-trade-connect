@@ -212,7 +212,10 @@ export const decodeVinAsync = async (vin: string): Promise<VinDecodedData> => {
     const year = yearStr ? parseInt(yearStr, 10) : local.year;
     
     const fuelType = getValue('Fuel Type - Primary');
-    const fuel = fuelType ? (NHTSA_FUEL_MAP[fuelType] || fuelType.toLowerCase()) : local.fuel;
+    let fuel = local.fuel;
+    if (fuelType) {
+      fuel = NHTSA_FUEL_MAP[fuelType] || FUEL_ES_MAP[fuelType.toLowerCase()] || fuelType.toLowerCase();
+    }
     
     const engineSizeStr = getValue('Displacement (L)');
     const engineSize = engineSizeStr ? parseFloat(engineSizeStr) : local.engineSize;

@@ -54,13 +54,17 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
       const decoded = await decodeVinAsync(vin);
       const filled: string[] = [];
 
+      // Set brand first and trigger model loading
       if (decoded.brand) {
         onChange('brand', decoded.brand);
         onBrandChange(decoded.brand);
         filled.push('brand');
       }
+      // Delay model set so availableModels has time to populate after brand change
       if (decoded.model) {
-        onChange('model', decoded.model);
+        setTimeout(() => {
+          onChange('model', decoded.model!);
+        }, 150);
         filled.push('model');
       }
       if (decoded.year) {
