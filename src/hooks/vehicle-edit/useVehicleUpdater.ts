@@ -274,6 +274,10 @@ export const useVehicleUpdater = () => {
       }
       
       console.log('🎉 [useVehicleUpdater] Vehicle update completed');
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['vehicle', id] }),
+        queryClient.invalidateQueries({ queryKey: ['vehicle-images', id] })
+      ]);
       return updatedVehicle;
       
     } catch (error) {
