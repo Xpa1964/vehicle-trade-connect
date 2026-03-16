@@ -87,8 +87,8 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
   const [decodedFields, setDecodedFields] = useState<string[]>([]);
   const formData = (useWatch({ control: form.control }) || {}) as VehicleFormData;
 
-  const setFieldValue = <K extends keyof VehicleFormData>(field: K, value: VehicleFormData[K]) => {
-    form.setValue(field, value as VehicleFormData[K], {
+  const setFieldValue = (field: keyof VehicleFormData, value: VehicleFormData[keyof VehicleFormData]) => {
+    form.setValue(field as any, value as any, {
       shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,

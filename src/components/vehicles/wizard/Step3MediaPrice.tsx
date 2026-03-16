@@ -28,8 +28,8 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
   const [helpOpen, setHelpOpen] = useState(false);
   const formData = (useWatch({ control: form.control }) || {}) as VehicleFormData;
 
-  const setFieldValue = <K extends keyof VehicleFormData>(field: K, value: VehicleFormData[K]) => {
-    form.setValue(field, value as VehicleFormData[K], {
+  const setFieldValue = (field: keyof VehicleFormData, value: VehicleFormData[keyof VehicleFormData]) => {
+    form.setValue(field as any, value as any, {
       shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,
