@@ -102,10 +102,15 @@ export const isValidVin = (vin: string): boolean => {
 export const decodeVin = (vin: string): VinDecodedData => {
   const result: VinDecodedData = {
     brand: null,
+    model: null,
     year: null,
     fuel: null,
     transmission: null,
     country: null,
+    engineSize: null,
+    enginePower: null,
+    doors: null,
+    vehicleType: null,
   };
 
   if (!isValidVin(vin)) return result;
