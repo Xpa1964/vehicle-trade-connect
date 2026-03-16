@@ -385,7 +385,6 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
           />
         </div>
       </div>
-      </div>
     </div>
   );
 };
