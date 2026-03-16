@@ -17,10 +17,7 @@ export interface VinDecodedData {
   vehicleType: string | null;
 }
 
-// ──────────── WMI → Brand mapping (first 3 chars of VIN) ────────────
-
 const WMI_BRAND_MAP: Record<string, string> = {
-  // German
   'WBA': 'BMW', 'WBS': 'BMW', 'WBY': 'BMW', 'WBW': 'BMW',
   'WUA': 'AUDI', 'WAU': 'AUDI', 'WA1': 'AUDI',
   'WDB': 'MERCEDES-BENZ', 'WDC': 'MERCEDES-BENZ', 'WDD': 'MERCEDES-BENZ', 'W1K': 'MERCEDES-BENZ', 'W1N': 'MERCEDES-BENZ',
@@ -28,25 +25,19 @@ const WMI_BRAND_MAP: Record<string, string> = {
   'WF0': 'FORD', 'WF1': 'FORD',
   'W0L': 'OPEL',
   'WP0': 'PORSCHE', 'WP1': 'PORSCHE',
-  // French
   'VF1': 'RENAULT', 'VF2': 'RENAULT', 'VF6': 'RENAULT',
   'VF3': 'PEUGEOT', 'VF7': 'PEUGEOT',
   'VF8': 'CITROEN', 'VR7': 'CITROEN',
   'VF9': 'DACIA',
-  // Italian
   'ZAR': 'ALFA ROMEO',
   'ZFA': 'FIAT', 'ZFC': 'FIAT',
   'ZLA': 'LANCIA',
   'ZAM': 'MASERATI',
   'ZFF': 'FERRARI',
   'ZHW': 'LAMBORGHINI',
-  // Spanish
   'VSS': 'SEAT',
-  // Czech
   'TMB': 'SKODA',
-  // Swedish
   'YV1': 'VOLVO', 'YV4': 'VOLVO',
-  // Japanese
   'JTD': 'TOYOTA', 'JTE': 'TOYOTA', 'JTH': 'TOYOTA',
   'JN1': 'NISSAN', 'JN3': 'NISSAN',
   'JHM': 'HONDA', 'JHL': 'HONDA',
@@ -54,9 +45,7 @@ const WMI_BRAND_MAP: Record<string, string> = {
   'JA3': 'MITSUBISHI', 'JA4': 'MITSUBISHI', 'JMB': 'MITSUBISHI',
   'JF1': 'SUBARU', 'JF2': 'SUBARU',
   'JS1': 'SUZUKI', 'JS3': 'SUZUKI',
-  // Korean
   'KMH': 'HYUNDAI', 'KNA': 'KIA', 'KNC': 'KIA',
-  // USA
   '1FA': 'FORD', '1FT': 'FORD', '2FA': 'FORD', '3FA': 'FORD',
   '1G1': 'CHEVROLET', '1GC': 'CHEVROLET',
   '1GY': 'CADILLAC',
@@ -69,17 +58,11 @@ const WMI_BRAND_MAP: Record<string, string> = {
   '19U': 'ACURA',
   'JNK': 'INFINITI',
   'JTJ': 'LEXUS',
-  // Tesla
   '5YJ': 'TESLA', '7SA': 'TESLA',
-  // British
   'SAJ': 'JAGUAR', 'SAL': 'LAND ROVER',
-  // Romanian
   'UU1': 'DACIA',
-  // Isuzu
   'JAA': 'ISUZU',
 };
-
-// ──────────── Model Year from VIN position 10 ────────────
 
 const YEAR_CODES: Record<string, number> = {
   'A': 2010, 'B': 2011, 'C': 2012, 'D': 2013, 'E': 2014,
@@ -91,11 +74,8 @@ const YEAR_CODES: Record<string, number> = {
   '6': 2006, '7': 2007, '8': 2008, '9': 2009,
 };
 
-// ──────────── Public API ────────────
-
 export const isValidVin = (vin: string): boolean => {
   if (!vin || vin.length !== 17) return false;
-  // VIN must be alphanumeric, no I, O, Q
   return /^[A-HJ-NPR-Z0-9]{17}$/i.test(vin);
 };
 
@@ -117,11 +97,8 @@ export const decodeVin = (vin: string): VinDecodedData => {
 
   const upper = vin.toUpperCase();
   const wmi = upper.substring(0, 3);
-
-  // Brand from WMI
   result.brand = WMI_BRAND_MAP[wmi] || null;
 
-  // If exact 3-char match fails, try first 2 chars
   if (!result.brand) {
     const wmi2 = upper.substring(0, 2);
     for (const [key, brand] of Object.entries(WMI_BRAND_MAP)) {
@@ -132,11 +109,9 @@ export const decodeVin = (vin: string): VinDecodedData => {
     }
   }
 
-  // Year from position 10 (index 9)
   const yearChar = upper.charAt(9);
   result.year = YEAR_CODES[yearChar] || null;
 
-  // Country of origin from first char
   const firstChar = upper.charAt(0);
   if (['1', '4', '5'].includes(firstChar)) result.country = 'Estados Unidos';
   else if (firstChar === '2') result.country = 'Canada';
@@ -147,8 +122,6 @@ export const decodeVin = (vin: string): VinDecodedData => {
 
   return result;
 };
-
-// ──────────── NHTSA vPIC API (async, remote) ────────────
 
 interface NHTSAResult {
   Variable: string;
@@ -165,79 +138,102 @@ const NHTSA_FUEL_MAP: Record<string, string> = {
   'Flexible Fuel Vehicle (FFV)': 'gasolina',
   'Hydrogen Fuel Cell': 'hidrogeno',
   'Plug-in Hybrid Electric Vehicle (PHEV)': 'hibrido_enchufable',
+  'Hybrid': 'hibrido',
 };
 
-// Fallback mapping for values already in English lowercase
 const FUEL_ES_MAP: Record<string, string> = {
-  'gasoline': 'gasolina',
-  'diesel': 'diesel',
-  'electric': 'electrico',
-  'hybrid': 'hibrido',
-  'hydrogen': 'hidrogeno',
-  'gas': 'gas_natural',
+  gasoline: 'gasolina',
+  diesel: 'diesel',
+  electric: 'electrico',
+  hybrid: 'hibrido',
+  hydrogen: 'hidrogeno',
+  gas: 'gas_natural',
+  cng: 'gas_natural',
+  lpg: 'glp',
+  phev: 'hibrido_enchufable',
+  'plug-in hybrid': 'hibrido_enchufable',
 };
 
-/**
- * Async VIN decoder using NHTSA vPIC public API.
- * Returns richer data (brand + model) than the local decoder.
- * Falls back to local decoder on network errors.
- */
+const fetchWithTimeout = async (url: string, timeoutMs = 5000) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, { signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+};
+
 export const decodeVinAsync = async (vin: string): Promise<VinDecodedData> => {
-  // Start with local decode as baseline
   const local = decodeVin(vin);
-  
+
   if (!isValidVin(vin)) return local;
 
   try {
-    const response = await fetch(
-      `https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vin}?format=json`,
-      { signal: AbortSignal.timeout(5000) }
+    const response = await fetchWithTimeout(
+      `https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vin}?format=json`
     );
-    
+
     if (!response.ok) return local;
-    
+
     const data = await response.json();
     const results: NHTSAResult[] = data.Results || [];
-    
-    const getValue = (varName: string): string | null => {
-      const item = results.find(r => r.Variable === varName);
-      return item?.Value && item.Value.trim() !== '' && item.Value !== 'Not Applicable' 
-        ? item.Value.trim() 
-        : null;
+
+    const getValue = (variableNames: string | string[]) => {
+      const names = Array.isArray(variableNames) ? variableNames : [variableNames];
+
+      for (const variableName of names) {
+        const item = results.find((result) => result.Variable === variableName);
+        const value = item?.Value?.trim();
+        if (value && value !== 'Not Applicable') {
+          return value;
+        }
+      }
+
+      return null;
     };
 
     const brand = getValue('Make') || local.brand;
     const model = getValue('Model') || local.model;
     const yearStr = getValue('Model Year');
     const year = yearStr ? parseInt(yearStr, 10) : local.year;
-    
-    const fuelType = getValue('Fuel Type - Primary');
+
+    const fuelType = getValue(['Fuel Type - Primary', 'Fuel Type - Secondary']);
     let fuel = local.fuel;
     if (fuelType) {
       fuel = NHTSA_FUEL_MAP[fuelType] || FUEL_ES_MAP[fuelType.toLowerCase()] || fuelType.toLowerCase();
     }
-    
-    const engineSizeStr = getValue('Displacement (L)');
+
+    const transmissionStyle = getValue(['Transmission Style', 'Transmission Speeds']);
+    let transmission = local.transmission;
+    if (transmissionStyle) {
+      const normalizedTransmission = transmissionStyle.toLowerCase();
+      if (normalizedTransmission.includes('auto')) transmission = 'automatic';
+      else if (normalizedTransmission.includes('manual')) transmission = 'manual';
+    }
+
+    const engineSizeStr = getValue(['Displacement (L)', 'Displacement (CC)']);
     const engineSize = engineSizeStr ? parseFloat(engineSizeStr) : local.engineSize;
-    
-    const enginePowerStr = getValue('Engine Brake (hp) From');
+
+    const enginePowerStr = getValue(['Engine Brake (hp) From', 'Engine HP']);
     const enginePower = enginePowerStr ? parseInt(enginePowerStr, 10) : local.enginePower;
-    
+
     const doorsStr = getValue('Doors');
     const doors = doorsStr ? parseInt(doorsStr, 10) : local.doors;
-    
-    const vehicleType = getValue('Body Class') || local.vehicleType;
+
+    const vehicleType = getValue(['Body Class', 'Vehicle Type']) || local.vehicleType;
 
     return {
       brand: brand?.toUpperCase() || null,
       model: model?.toUpperCase() || null,
-      year: (year && !isNaN(year)) ? year : null,
+      year: year && !Number.isNaN(year) ? year : null,
       fuel,
-      transmission: local.transmission,
+      transmission,
       country: local.country,
-      engineSize: (engineSize && !isNaN(engineSize)) ? engineSize : null,
-      enginePower: (enginePower && !isNaN(enginePower)) ? enginePower : null,
-      doors: (doors && !isNaN(doors)) ? doors : null,
+      engineSize: engineSize && !Number.isNaN(engineSize) ? engineSize : null,
+      enginePower: enginePower && !Number.isNaN(enginePower) ? enginePower : null,
+      doors: doors && !Number.isNaN(doors) ? doors : null,
       vehicleType,
     };
   } catch (error) {

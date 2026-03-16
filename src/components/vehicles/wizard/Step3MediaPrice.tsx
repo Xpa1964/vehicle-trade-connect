@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, useWatch } from 'react-hook-form';
 import { VehicleFormData } from '@/types/vehicle';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { FileUpload } from '../form-sections/FileUpload';
@@ -21,17 +21,23 @@ interface Step3MediaPriceProps {
 
 export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
   form,
-  onChange,
   onImageChange,
   previewUrl,
 }) => {
   const { t } = useLanguage();
-  const formData = form.getValues();
   const [helpOpen, setHelpOpen] = useState(false);
+  const formData = (useWatch({ control: form.control }) || {}) as VehicleFormData;
+
+  const setFieldValue = <K extends keyof VehicleFormData>(field: K, value: VehicleFormData[K]) => {
+    form.setValue(field, value as VehicleFormData[K], {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
 
   return (
     <div className="space-y-6">
-      {/* Price & Status Card */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg font-bold">
@@ -45,8 +51,8 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
               <Label>{t('vehicles.price')} (€) *</Label>
               <Input
                 type="number"
-                value={formData.price || ''}
-                onChange={(e) => onChange('price', parseFloat(e.target.value) || 0)}
+                value={formData.price ?? ''}
+                onChange={(e) => setFieldValue('price', parseFloat(e.target.value) || 0)}
                 placeholder="25000"
                 min="0"
                 step="0.01"
@@ -57,8 +63,8 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
               <Label>{t('vehicles.mileage')} *</Label>
               <Input
                 type="number"
-                value={formData.mileage || ''}
-                onChange={(e) => onChange('mileage', parseInt(e.target.value) || 0)}
+                value={formData.mileage ?? ''}
+                onChange={(e) => setFieldValue('mileage', parseInt(e.target.value, 10) || 0)}
                 placeholder="50000"
                 min="0"
               />
@@ -67,7 +73,7 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
               <Label>{t('vehicles.status')}</Label>
               <Select
                 value={formData.status || 'available'}
-                onValueChange={(v) => onChange('status', v)}
+                onValueChange={(value) => setFieldValue('status', value as VehicleFormData['status'])}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -83,7 +89,6 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
         </CardContent>
       </Card>
 
-      {/* Description */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg font-bold">
@@ -94,14 +99,13 @@ export const Step3MediaPrice: React.FC<Step3MediaPriceProps> = ({
         <CardContent>
           <Textarea
             value={formData.description || ''}
-            onChange={(e) => onChange('description', e.target.value)}
+            onChange={(e) => setFieldValue('description', e.target.value)}
             placeholder={t('vehicles.additionalDescriptionPlaceholder')}
             className="min-h-[120px]"
           />
         </CardContent>
       </Card>
 
-      {/* Media Upload - reuse existing FileUpload */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">

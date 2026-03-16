@@ -1,6 +1,4 @@
-
-import React, { useState } from 'react';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import React, { useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { UseFormReturn } from 'react-hook-form';
@@ -11,8 +9,9 @@ import { MultipleImageUpload } from './file-upload/MultipleImageUpload';
 import { ImagePreviewGrid } from './file-upload/ImagePreviewGrid';
 import { ImageEditor } from './file-upload/ImageEditor';
 import { useImageUpload } from './file-upload/useImageUpload';
-import { ImageOff, FileText, X } from 'lucide-react';
+import { FileText, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { FormLabel } from '@/components/ui/form';
 
 interface FileUploadProps {
   form: UseFormReturn<VehicleFormData>;
@@ -20,55 +19,76 @@ interface FileUploadProps {
   previewUrl?: string | null;
 }
 
-export const FileUpload: React.FC<FileUploadProps> = ({ 
-  form, 
+export const FileUpload: React.FC<FileUploadProps> = ({
+  form,
   onImageChange,
-  previewUrl 
 }) => {
   const { t } = useLanguage();
-  const { 
-    selectedImages, 
-    handleSingleImageUpload, 
+  const {
+    selectedImages,
+    handleSingleImageUpload,
     handleBulkImageUpload,
-    handleMultipleImagesUpload, 
-    handleRemoveImage, 
+    handleMultipleImagesUpload,
+    handleRemoveImage,
     handleSetPrimary,
-    handleReorderImages
+    handleReorderImages,
   } = useImageUpload(form, onImageChange);
-  
   const [editingImageIndex, setEditingImageIndex] = useState<number | null>(null);
+
+  const additionalFilesValue = form.watch('additionalFiles');
+  const additionalFiles = useMemo(() => {
+    if (!additionalFilesValue) return [] as File[];
+    return Array.isArray(additionalFilesValue)
+      ? additionalFilesValue.filter((file): file is File => file instanceof File)
+      : Array.from(additionalFilesValue);
+  }, [additionalFilesValue]);
 
   const handleEditImage = (index: number) => {
     setEditingImageIndex(index);
   };
 
-  const handleSaveEdit = (editedImage: any) => {
+  const handleSaveEdit = () => {
     setEditingImageIndex(null);
-    // Here you would update the image with the edits
   };
 
   const handleCancelEdit = () => {
     setEditingImageIndex(null);
   };
 
+  const handleAdditionalFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    form.setValue('additionalFiles', files.length > 0 ? (files as VehicleFormData['additionalFiles']) : undefined, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+  };
+
+  const handleRemoveAdditionalFile = (index: number) => {
+    const updatedFiles = additionalFiles.filter((_, fileIndex) => fileIndex !== index);
+    form.setValue('additionalFiles', updatedFiles.length > 0 ? (updatedFiles as VehicleFormData['additionalFiles']) : undefined, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+  };
+
   return (
     <div className="space-y-6 min-h-[600px]">
       <div>
         <h3 className="text-lg font-bold mb-4">{t('vehicles.vehicleImages')}</h3>
-        
-        {/* Upload Controls */}
+
         <div className="flex flex-wrap items-center gap-2 mb-4">
           <SingleImageUpload onImageUpload={handleSingleImageUpload} />
           <BulkImageUpload onImagesUpload={handleBulkImageUpload} />
-          
+
           {selectedImages.length > 0 && (
             <p className="text-sm text-muted-foreground ml-2">
               {selectedImages.length} {t('vehicles.images').toLowerCase()}
             </p>
           )}
         </div>
-        
-        {/* Image Editor */}
+
         {editingImageIndex !== null && selectedImages[editingImageIndex] && (
           <ImageEditor
             image={selectedImages[editingImageIndex]}
@@ -77,7 +97,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           />
         )}
 
-        {/* Multiple Upload Area */}
         {selectedImages.length === 0 ? (
           <MultipleImageUpload
             onImagesUpload={handleMultipleImagesUpload}
@@ -85,7 +104,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           />
         ) : (
           <div className="space-y-4">
-            {/* Image Grid */}
             <ImagePreviewGrid
               images={selectedImages}
               onReorder={handleReorderImages}
@@ -93,8 +111,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
               onSetPrimary={handleSetPrimary}
               onEdit={handleEditImage}
             />
-            
-            {/* Add More Images */}
+
             {selectedImages.length < 25 && (
               <div className="border border-dashed rounded-lg p-4">
                 <MultipleImageUpload
@@ -105,58 +122,40 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             )}
           </div>
         )}
-        
+
         <p className="text-sm text-muted-foreground mt-2">
           {t('vehicles.imageTips')}
         </p>
       </div>
 
-      {/* Additional Files Section */}
       <div>
         <h3 className="text-lg font-bold mb-4">{t('vehicles.additionalFiles')}</h3>
-        <FormField
-          control={form.control}
-          name="additionalFiles"
-          render={({ field: { value, onChange, ...fieldProps } }) => (
-            <FormItem>
-              <FormLabel>{t('vehicles.allowedFileTypes')}</FormLabel>
-              <FormControl>
-                <Input
-                  {...fieldProps}
-                  type="file"
-                  multiple
-                  accept=".pdf,.doc,.docx,.xls,.xlsx"
-                  onChange={(e) => {
-                    onChange(e.target.files);
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        {form.watch('additionalFiles') && form.watch('additionalFiles').length > 0 && (
+        <div className="space-y-2">
+          <FormLabel>{t('vehicles.allowedFileTypes')}</FormLabel>
+          <Input
+            type="file"
+            multiple
+            accept=".pdf,.doc,.docx,.xls,.xlsx"
+            onChange={handleAdditionalFilesChange}
+          />
+        </div>
+
+        {additionalFiles.length > 0 && (
           <div className="mt-2">
             <p className="text-sm">
-              {form.watch('additionalFiles').length} {t('vehicles.files').toLowerCase()}
+              {additionalFiles.length} {t('vehicles.files').toLowerCase()}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-              {Array.from(form.watch('additionalFiles')).map((file, i) => (
-                <div key={i} className="flex items-center gap-2 p-2 rounded-md bg-muted border border-border">
+              {additionalFiles.map((file, index) => (
+                <div key={`${file.name}-${index}`} className="flex items-center gap-2 p-2 rounded-md bg-muted border border-border">
                   <FileText className="h-4 w-4 text-primary" />
                   <span className="text-sm truncate flex-1 text-foreground">{file.name}</span>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-6 w-6" 
-                    onClick={() => {
-                      const newFiles = Array.from(form.watch('additionalFiles'));
-                      newFiles.splice(i, 1);
-                      const dataTransfer = new DataTransfer();
-                      newFiles.forEach(file => dataTransfer.items.add(file));
-                      form.setValue('additionalFiles', dataTransfer.files);
-                    }}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    onClick={() => handleRemoveAdditionalFile(index)}
                   >
                     <X className="h-4 w-4" />
                   </Button>
