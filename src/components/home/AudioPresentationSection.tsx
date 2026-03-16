@@ -41,7 +41,7 @@ const AudioPresentationSection: React.FC<AudioPresentationSectionProps> = ({
     en: '4MW9r-kb_Lw',
     fr: 'Yjjo4qjHQrY',
     it: 'BIbIpsJCmHg',
-    pt: '6XMAzJvhSXI',
+    pt: 'OW_RO0a54qA',
     de: '6XMAzJvhSXI',
     nl: 'P5ytnUafM0g',
     pl: 'xL-PbQJniAk',
