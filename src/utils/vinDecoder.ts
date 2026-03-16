@@ -6,10 +6,15 @@
 
 export interface VinDecodedData {
   brand: string | null;
+  model: string | null;
   year: number | null;
   fuel: string | null;
   transmission: string | null;
   country: string | null;
+  engineSize: number | null;
+  enginePower: number | null;
+  doors: number | null;
+  vehicleType: string | null;
 }
 
 // ──────────── WMI → Brand mapping (first 3 chars of VIN) ────────────
