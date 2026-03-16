@@ -20,6 +20,7 @@ const MIN_FILE_SIZE_BYTES = 1024; // 1KB minimum — reject corrupt/blank files
  */
 export const useVehicleUpdater = () => {
   const { t } = useLanguage();
+  const queryClient = useQueryClient();
   const uploadInProgressRef = useRef(false);
 
   /**
