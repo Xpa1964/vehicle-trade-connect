@@ -371,25 +371,26 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>{t('vehicles.country')} *</Label>
-          <Select value={formData.country || ''} onValueChange={handleCountryChange}>
+          <Select value={selectedCountryCode || ''} onValueChange={handleCountryChange}>
             <SelectTrigger>
               <SelectValue placeholder={t('vehicles.selectCountry')} />
             </SelectTrigger>
             <SelectContent className="max-h-60">
               {countries.map((country) => (
-                <SelectItem key={country.code} value={country.name}>{country.name}</SelectItem>
+                <SelectItem key={country.code} value={country.code}>{country.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>{t('vehicles.city')} *</Label>
+          <Label>{t('vehicles.city', { fallback: 'Ciudad' })}</Label>
           <Input
             value={formData.location || ''}
             onChange={(e) => onChange('location', e.target.value)}
-            placeholder={t('vehicles.cityExample')}
+            placeholder={t('vehicles.cityExample', { fallback: 'Ciudad (opcional)' })}
           />
         </div>
+      </div>
       </div>
     </div>
   );
