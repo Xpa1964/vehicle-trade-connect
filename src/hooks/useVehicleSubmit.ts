@@ -39,8 +39,8 @@ export const useVehicleSubmit = () => {
         year: data.year,
         price: data.price,
         mileage: data.mileage,
-        location: `${data.location}, ${data.country}`,
-        country: data.country,
+        location: data.location?.trim() || null,
+        country: data.country?.trim() || null,
         country_code: data.countryCode,
         status: data.status || 'available',
         type: data.fuel,
@@ -71,7 +71,7 @@ export const useVehicleSubmit = () => {
         public_sale_price: data.publicSalePrice || null,
         commission_amount: data.commissionAmount || null,
         commission_query: data.commissionQuery || null,
-        version: data.version || null,
+        version: data.version?.trim() || null,
       };
 
       console.log('📝 [useVehicleSubmit] Vehicle data to insert:', vehicleData);

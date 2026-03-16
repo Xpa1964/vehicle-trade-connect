@@ -49,6 +49,7 @@ export interface Vehicle {
   enginePower?: number;
   color?: string;
   doors?: number;
+  version?: string;
   
   // New fields for emissions and commission sales
   euroStandard?: 'euro1' | 'euro2' | 'euro3' | 'euro4' | 'euro5' | 'euro6' | 'euro6d' | 'euro7';

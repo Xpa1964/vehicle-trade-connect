@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import React, { useState } from 'react';
+import { UseFormReturn, useWatch } from 'react-hook-form';
 import { VehicleFormData } from '@/types/vehicle';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Input } from '@/components/ui/input';
@@ -20,7 +20,6 @@ interface Step1VinIdentificationProps {
   modelsError?: boolean;
 }
 
-// Vehicle brands list
 const VEHICLE_BRANDS = [
   'AUDI', 'BMW', 'MERCEDES-BENZ', 'VOLKSWAGEN', 'FORD', 'RENAULT', 'PEUGEOT', 'CITROEN',
   'OPEL', 'SEAT', 'TOYOTA', 'NISSAN', 'HONDA', 'HYUNDAI', 'KIA', 'MAZDA', 'MITSUBISHI',
@@ -40,9 +39,44 @@ const normalizeModelName = (value: string) =>
     .replace(/[^A-Z0-9]/gi, '')
     .toUpperCase();
 
+const FUEL_VALUE_MAP: Record<string, string> = {
+  gasolina: 'gasolina',
+  gasoline: 'gasolina',
+  petrol: 'gasolina',
+  diesel: 'diesel',
+  gasoil: 'diesel',
+  electrico: 'electrico',
+  eléctrico: 'electrico',
+  electric: 'electrico',
+  hybrid: 'hibrido',
+  hibrido: 'hibrido',
+  híbrido: 'hibrido',
+  'mild hybrid': 'hibrido',
+  'full hybrid': 'hibrido',
+  'plug-in hybrid': 'hibrido_enchufable',
+  'plug in hybrid': 'hibrido_enchufable',
+  phev: 'hibrido_enchufable',
+  hibrido_enchufable: 'hibrido_enchufable',
+  'híbrido enchufable': 'hibrido_enchufable',
+  'compressed natural gas (cng)': 'gas_natural',
+  cng: 'gas_natural',
+  gas: 'gas_natural',
+  gas_natural: 'gas_natural',
+  lpg: 'glp',
+  glp: 'glp',
+  autogas: 'glp',
+  hydrogen: 'hidrogeno',
+  hidrogeno: 'hidrogeno',
+  hidrógeno: 'hidrogeno',
+};
+
+const normalizeFuelValue = (fuel: string | null | undefined) => {
+  if (!fuel) return '';
+  return FUEL_VALUE_MAP[fuel.trim().toLowerCase()] || '';
+};
+
 export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
   form,
-  onChange,
   onBrandChange,
   availableModels = [],
   isLoadingModels = false,
@@ -51,19 +85,35 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
   const { t } = useLanguage();
   const [vinStatus, setVinStatus] = useState<'idle' | 'decoded' | 'not-found' | 'loading'>('idle');
   const [decodedFields, setDecodedFields] = useState<string[]>([]);
+  const formData = (useWatch({ control: form.control }) || {}) as VehicleFormData;
 
-  const handleVinChange = useCallback(async (rawVin: string) => {
+  const setFieldValue = (field: keyof VehicleFormData, value: VehicleFormData[keyof VehicleFormData]) => {
+    form.setValue(field as any, value as any, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
+
+  const handleVinChange = async (rawVin: string) => {
     const vin = rawVin.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/gi, '');
-    onChange('vin', vin);
+    setFieldValue('vin', vin);
 
-    if (vin.length === 17 && isValidVin(vin)) {
-      setVinStatus('loading');
+    if (!(vin.length === 17 && isValidVin(vin))) {
+      setVinStatus('idle');
+      setDecodedFields([]);
+      return;
+    }
+
+    setVinStatus('loading');
+
+    try {
       const decoded = await decodeVinAsync(vin);
       const filled: string[] = [];
       let brandModels = availableModels;
 
       if (decoded.brand) {
-        onChange('brand', decoded.brand);
+        setFieldValue('brand', decoded.brand);
         brandModels = onBrandChange(decoded.brand);
         filled.push('brand');
       }
@@ -72,40 +122,50 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         const normalizedDecodedModel = normalizeModelName(decoded.model);
         const matchedModel = brandModels.find((model) => {
           const normalizedModel = normalizeModelName(model);
-          return normalizedModel === normalizedDecodedModel ||
+          return (
+            normalizedModel === normalizedDecodedModel ||
             normalizedModel.includes(normalizedDecodedModel) ||
-            normalizedDecodedModel.includes(normalizedModel);
+            normalizedDecodedModel.includes(normalizedModel)
+          );
         });
 
-        onChange('model', matchedModel || decoded.model.toUpperCase());
+        setFieldValue('model', matchedModel || decoded.model.toUpperCase());
         filled.push('model');
       }
+
       if (decoded.year) {
-        onChange('year', decoded.year);
+        setFieldValue('year', decoded.year);
         filled.push('year');
       }
-      if (decoded.fuel) {
-        onChange('fuel', decoded.fuel);
+
+      const normalizedFuel = normalizeFuelValue(decoded.fuel);
+      if (normalizedFuel) {
+        setFieldValue('fuel', normalizedFuel);
         filled.push('fuel');
       }
+
       if (decoded.engineSize) {
-        onChange('engineSize', decoded.engineSize);
+        setFieldValue('engineSize', decoded.engineSize);
         filled.push('engineSize');
       }
+
       if (decoded.enginePower) {
-        onChange('enginePower', decoded.enginePower);
+        setFieldValue('enginePower', decoded.enginePower);
         filled.push('enginePower');
       }
+
       if (decoded.doors) {
-        onChange('doors', decoded.doors);
+        setFieldValue('doors', decoded.doors);
         filled.push('doors');
       }
-      if (decoded.country) {
+
+      if (decoded.country && decoded.country !== 'Europa') {
         const countryCode = getCountryCodeByName(decoded.country);
-        const countryName = getCountryNameByCode(countryCode);
-        onChange('country', countryName);
-        onChange('countryCode', countryCode);
-        filled.push('country');
+        if (countryCode) {
+          setFieldValue('countryCode', countryCode);
+          setFieldValue('country', getCountryNameByCode(countryCode));
+          filled.push('country');
+        }
       }
 
       if (filled.length > 0) {
@@ -115,31 +175,30 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         setVinStatus('not-found');
         setDecodedFields([]);
       }
-    } else {
-      setVinStatus('idle');
+    } catch (error) {
+      console.error('[Step1VinIdentification] VIN decode error:', error);
+      setVinStatus('not-found');
       setDecodedFields([]);
     }
-  }, [availableModels, onChange, onBrandChange]);
+  };
 
   const handleBrandChange = (value: string) => {
     const upper = value.toUpperCase();
-    onChange('brand', upper);
-    onChange('model', '');
+    setFieldValue('brand', upper);
+    setFieldValue('model', '');
     onBrandChange(upper);
   };
 
   const handleCountryChange = (countryCode: string) => {
-    const selectedCountry = countries.find(c => c.code === countryCode);
-    onChange('countryCode', countryCode);
-    onChange('country', selectedCountry?.name || '');
+    const selectedCountry = countries.find((country) => country.code === countryCode);
+    setFieldValue('countryCode', countryCode);
+    setFieldValue('country', selectedCountry?.name || '');
   };
 
-  const formData = form.watch();
   const selectedCountryCode = formData.countryCode || (formData.country ? getCountryCodeByName(formData.country) : '');
 
   return (
     <div className="space-y-6">
-      {/* VIN Hero Input */}
       <Card className="border-2 border-primary/20 bg-primary/5">
         <CardContent className="pt-6">
           <div className="space-y-4">
@@ -167,28 +226,29 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                 {vinStatus === 'loading' && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
-                <Badge variant={
-                  vinStatus === 'decoded' ? 'default' :
-                  vinStatus === 'not-found' ? 'secondary' : 'outline'
-                } className="text-xs">
+                <Badge
+                  variant={
+                    vinStatus === 'decoded' ? 'default' :
+                    vinStatus === 'not-found' ? 'secondary' : 'outline'
+                  }
+                  className="text-xs"
+                >
                   {(formData.vin || '').length}/17
                 </Badge>
               </div>
             </div>
 
-            {/* VIN Status Feedback */}
             {vinStatus === 'decoded' && (
               <div className="flex items-center gap-2 text-sm text-primary bg-primary/10 p-3 rounded-lg">
                 <Sparkles className="h-4 w-4" />
                 <span>
-                  {t('vehicles.vinDecoded', { fallback: '¡VIN reconocido!' })}
-                  {' '}
-                  {decodedFields.map(f => t(`vehicles.${f}`, { fallback: f })).join(', ')}
-                  {' '}
+                  {t('vehicles.vinDecoded', { fallback: '¡VIN reconocido!' })}{' '}
+                  {decodedFields.map((field) => t(`vehicles.${field}`, { fallback: field })).join(', ')}{' '}
                   {t('vehicles.autoFilled', { fallback: 'autocompletados' })}
                 </span>
               </div>
             )}
+
             {vinStatus === 'not-found' && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted p-3 rounded-lg">
                 <AlertCircle className="h-4 w-4" />
@@ -201,13 +261,12 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         </CardContent>
       </Card>
 
-      {/* License plate */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>{t('vehicles.licensePlate')}</Label>
           <Input
             value={formData.licensePlate || ''}
-            onChange={(e) => onChange('licensePlate', e.target.value.toUpperCase())}
+            onChange={(e) => setFieldValue('licensePlate', e.target.value.toUpperCase())}
             placeholder={t('vehicles.licensePlatePlaceholder', { fallback: '1234 ABC' })}
             className="uppercase"
           />
@@ -216,13 +275,13 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
           <Label>{t('vehicles.vehicleType')}</Label>
           <Select
             value={formData.vehicleType || ''}
-            onValueChange={(v) => onChange('vehicleType', v)}
+            onValueChange={(value) => setFieldValue('vehicleType', value)}
           >
             <SelectTrigger>
               <SelectValue placeholder={t('vehicles.vehicleTypePlaceholder')} />
             </SelectTrigger>
             <SelectContent>
-              {['sedan', 'hatchback', 'suv', 'wagon', 'coupe', 'convertible', 'minivan', 'pickup', 'van', 'truck', 'motorcycle', 'other'].map(type => (
+              {['sedan', 'hatchback', 'suv', 'wagon', 'coupe', 'convertible', 'minivan', 'pickup', 'van', 'truck', 'motorcycle', 'other'].map((type) => (
                 <SelectItem key={type} value={type}>
                   {t(`vehicles.${type}`, { fallback: type })}
                 </SelectItem>
@@ -232,14 +291,11 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         </div>
       </div>
 
-      {/* Brand & Model */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label className="flex items-center gap-2">
             {t('vehicles.brand')} *
-            {decodedFields.includes('brand') && (
-              <CheckCircle2 className="h-4 w-4 text-primary" />
-            )}
+            {decodedFields.includes('brand') && <CheckCircle2 className="h-4 w-4 text-primary" />}
           </Label>
           <Select value={formData.brand || ''} onValueChange={handleBrandChange}>
             <SelectTrigger>
@@ -252,15 +308,17 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
             </SelectContent>
           </Select>
         </div>
+
         <div className="space-y-2">
           <Label className="flex items-center gap-2">
             {t('vehicles.model')} *
             {isLoadingModels && <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />}
           </Label>
+
           {availableModels.length > 0 && !modelsError ? (
             <Select
-              value={availableModels.some((model) => model === formData.model) ? (formData.model || '') : '__other__'}
-              onValueChange={(v) => onChange('model', v === '__other__' ? '' : v)}
+              value={availableModels.includes(formData.model || '') ? (formData.model || '') : '__other__'}
+              onValueChange={(value) => setFieldValue('model', value === '__other__' ? '' : value)}
               disabled={isLoadingModels}
             >
               <SelectTrigger>
@@ -279,7 +337,7 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
             <Input
               className={availableModels.length > 0 && !modelsError ? 'mt-2' : ''}
               value={formData.model || ''}
-              onChange={(e) => onChange('model', e.target.value.toUpperCase())}
+              onChange={(e) => setFieldValue('model', e.target.value.toUpperCase())}
               placeholder={modelsError
                 ? t('vehicles.modelManualEntry', { fallback: 'Escribe el modelo manualmente' })
                 : t('vehicles.modelExample', { fallback: 'Escribe el modelo' })}
@@ -289,28 +347,24 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         </div>
       </div>
 
-      {/* Version (optional) */}
       <div className="space-y-2">
         <Label>{t('vehicles.version')}</Label>
         <Input
           value={formData.version || ''}
-          onChange={(e) => onChange('version', e.target.value)}
+          onChange={(e) => setFieldValue('version', e.target.value)}
           placeholder={t('vehicles.versionPlaceholder')}
         />
       </div>
 
-      {/* Year, Fuel, Transmission */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label className="flex items-center gap-2">
             {t('vehicles.year')} *
-            {decodedFields.includes('year') && (
-              <CheckCircle2 className="h-4 w-4 text-primary" />
-            )}
+            {decodedFields.includes('year') && <CheckCircle2 className="h-4 w-4 text-primary" />}
           </Label>
           <Select
             value={formData.year?.toString() || ''}
-            onValueChange={(v) => onChange('year', parseInt(v))}
+            onValueChange={(value) => setFieldValue('year', parseInt(value, 10))}
           >
             <SelectTrigger>
               <SelectValue placeholder={t('vehicles.selectYear')} />
@@ -322,11 +376,12 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
             </SelectContent>
           </Select>
         </div>
+
         <div className="space-y-2">
           <Label>{t('vehicles.fuel')} *</Label>
           <Select
             value={formData.fuel || ''}
-            onValueChange={(v) => onChange('fuel', v)}
+            onValueChange={(value) => setFieldValue('fuel', value)}
           >
             <SelectTrigger>
               <SelectValue placeholder={t('vehicles.selectFuel')} />
@@ -343,11 +398,12 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
             </SelectContent>
           </Select>
         </div>
+
         <div className="space-y-2">
           <Label>{t('vehicles.transmission')} *</Label>
           <Select
             value={formData.transmission || ''}
-            onValueChange={(v) => onChange('transmission', v)}
+            onValueChange={(value) => setFieldValue('transmission', value)}
           >
             <SelectTrigger>
               <SelectValue placeholder={t('vehicles.selectTransmission')} />
@@ -361,7 +417,6 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         </div>
       </div>
 
-      {/* Location */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>{t('vehicles.country')} *</Label>
@@ -376,11 +431,12 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
             </SelectContent>
           </Select>
         </div>
+
         <div className="space-y-2">
           <Label>{t('vehicles.city', { fallback: 'Ciudad' })}</Label>
           <Input
             value={formData.location || ''}
-            onChange={(e) => onChange('location', e.target.value)}
+            onChange={(e) => setFieldValue('location', e.target.value)}
             placeholder={t('vehicles.cityExample', { fallback: 'Ciudad (opcional)' })}
           />
         </div>
