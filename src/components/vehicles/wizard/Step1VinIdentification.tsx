@@ -119,7 +119,7 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
     }
   };
 
-  const formData = form.getValues();
+  const formData = form.watch();
 
   return (
     <div className="space-y-6">
