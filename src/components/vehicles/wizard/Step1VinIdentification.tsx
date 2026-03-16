@@ -42,15 +42,16 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
   modelsError = false,
 }) => {
   const { t } = useLanguage();
-  const [vinStatus, setVinStatus] = useState<'idle' | 'decoded' | 'not-found'>('idle');
+  const [vinStatus, setVinStatus] = useState<'idle' | 'decoded' | 'not-found' | 'loading'>('idle');
   const [decodedFields, setDecodedFields] = useState<string[]>([]);
 
-  const handleVinChange = useCallback((rawVin: string) => {
+  const handleVinChange = useCallback(async (rawVin: string) => {
     const vin = rawVin.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/gi, '');
     onChange('vin', vin);
 
     if (vin.length === 17 && isValidVin(vin)) {
-      const decoded = decodeVin(vin);
+      setVinStatus('loading');
+      const decoded = await decodeVinAsync(vin);
       const filled: string[] = [];
 
       if (decoded.brand) {
@@ -58,9 +59,29 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         onBrandChange(decoded.brand);
         filled.push('brand');
       }
+      if (decoded.model) {
+        onChange('model', decoded.model);
+        filled.push('model');
+      }
       if (decoded.year) {
         onChange('year', decoded.year);
         filled.push('year');
+      }
+      if (decoded.fuel) {
+        onChange('fuel', decoded.fuel);
+        filled.push('fuel');
+      }
+      if (decoded.engineSize) {
+        onChange('engineSize', decoded.engineSize);
+        filled.push('engineSize');
+      }
+      if (decoded.enginePower) {
+        onChange('enginePower', decoded.enginePower);
+        filled.push('enginePower');
+      }
+      if (decoded.doors) {
+        onChange('doors', decoded.doors);
+        filled.push('doors');
       }
       if (decoded.country) {
         const selectedCountry = countries.find(c => c.name === decoded.country);
