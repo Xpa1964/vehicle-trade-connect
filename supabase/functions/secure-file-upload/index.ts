@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-import { getSupabaseClient, getAuthenticatedUser } from "./auth.ts"
+import { getSupabaseAdminClient, getSupabaseAuthClient, getAuthenticatedUser } from "./auth.ts"
 import { checkRateLimit, logBlockedRateLimit } from "./rateLimiting.ts"
 import { validateFile, sanitizeFilename } from "./fileValidation.ts"
 import { uploadFileToSupabaseStorage } from "./storage.ts"
@@ -19,9 +19,10 @@ serve(async (req) => {
   }
 
   try {
-    const supabase = getSupabaseClient();
+    const authClient = getSupabaseAuthClient();
+    const adminClient = getSupabaseAdminClient();
 
-    const { user, error: authError } = await getAuthenticatedUser(supabase, req);
+    const { user, error: authError } = await getAuthenticatedUser(authClient, req);
     if (authError || !user) {
       console.error('Auth failed:', authError);
       return new Response(
@@ -30,9 +31,9 @@ serve(async (req) => {
       )
     }
 
-    const { recentUploadCount, dailyUploadCount, now } = await checkRateLimit(supabase, user.id);
+    const { recentUploadCount, dailyUploadCount, now } = await checkRateLimit(adminClient, user.id);
     if (recentUploadCount >= 20 || dailyUploadCount >= 100) {
-      await logBlockedRateLimit(supabase, user.id, recentUploadCount, dailyUploadCount, now);
+      await logBlockedRateLimit(adminClient, user.id, recentUploadCount, dailyUploadCount, now);
       return new Response(
         JSON.stringify({ error: 'Límite de subida alcanzado. Intenta más tarde.' }),
         { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -89,15 +90,15 @@ serve(async (req) => {
     }
 
     const virusScanResult = await scanFileWithVirusTotal(file);
-    
+
     if (!virusScanResult.safe) {
-      await logAudit(supabase, user.id, file.name, bucketName, now, {
+      await logAudit(adminClient, user.id, file.name, bucketName, now, {
         action: 'virus_detected',
         detections: virusScanResult.detections,
         scanId: virusScanResult.scanId
       });
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: 'File contains malware or suspicious content',
           details: `${virusScanResult.detections} security engines flagged this file`,
           scanId: virusScanResult.scanId
@@ -108,11 +109,11 @@ serve(async (req) => {
 
     const clientSanitizedName = formData.get('sanitizedFilename') as string
     const sanitizedFilename = clientSanitizedName || sanitizeFilename(file.name)
-    
+
     const userFolder = user.id
     const filePath = folder ? `${userFolder}/${folder}/${sanitizedFilename}` : `${userFolder}/${sanitizedFilename}`
 
-    const { data, error } = await uploadFileToSupabaseStorage(supabase, bucketName, filePath, file);
+    const { data, error } = await uploadFileToSupabaseStorage(adminClient, bucketName, filePath, file);
 
     if (error) {
       console.error('Upload storage error:', error.message);
@@ -122,7 +123,7 @@ serve(async (req) => {
       )
     }
 
-    await logAudit(supabase, user.id, filePath, bucketName, now);
+    await logAudit(adminClient, user.id, filePath, bucketName, now);
 
     return new Response(
       JSON.stringify({
