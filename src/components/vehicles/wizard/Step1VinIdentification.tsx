@@ -149,7 +149,8 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
                 className="text-lg font-mono tracking-wider h-14 pr-24 uppercase bg-background"
                 maxLength={17}
               />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                {vinStatus === 'loading' && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
                 <Badge variant={
                   vinStatus === 'decoded' ? 'default' :
                   vinStatus === 'not-found' ? 'secondary' : 'outline'
