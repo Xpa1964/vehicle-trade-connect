@@ -4,6 +4,7 @@ import { VehicleFormData } from '@/types/vehicle';
 import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { uploadFileSecurely } from '@/utils/secureUpload';
 import { 
   mapFormDataToVehicle, 
@@ -19,6 +20,7 @@ const MIN_FILE_SIZE_BYTES = 1024; // 1KB minimum — reject corrupt/blank files
  */
 export const useVehicleUpdater = () => {
   const { t } = useLanguage();
+  const queryClient = useQueryClient();
   const uploadInProgressRef = useRef(false);
 
   /**
@@ -272,6 +274,10 @@ export const useVehicleUpdater = () => {
       }
       
       console.log('🎉 [useVehicleUpdater] Vehicle update completed');
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['vehicle', id] }),
+        queryClient.invalidateQueries({ queryKey: ['vehicle-images', id] })
+      ]);
       return updatedVehicle;
       
     } catch (error) {
