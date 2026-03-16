@@ -37,6 +37,13 @@ export const useVehicleUpdater = () => {
     let thumbnailUrl: string | null = null;
 
     try {
+      // Delete existing images before inserting new ones
+      console.log(`🗑️ [uploadImagesDirect] Deleting existing images for vehicle ${vehicleId}`);
+      await supabase
+        .from('vehicle_images')
+        .delete()
+        .eq('vehicle_id', vehicleId);
+
       for (let index = 0; index < images.length; index++) {
         const file = images[index];
 
