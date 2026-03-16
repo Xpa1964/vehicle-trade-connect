@@ -4,6 +4,7 @@ import { VehicleFormData } from '@/types/vehicle';
 import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { uploadFileSecurely } from '@/utils/secureUpload';
 import { 
   mapFormDataToVehicle, 
