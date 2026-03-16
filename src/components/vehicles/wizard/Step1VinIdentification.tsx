@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Search, Sparkles, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
-import { decodeVin, isValidVin } from '@/utils/vinDecoder';
+import { decodeVinAsync, isValidVin } from '@/utils/vinDecoder';
 import { countries } from '@/utils/countryUtils';
 
 interface Step1VinIdentificationProps {
@@ -42,15 +42,16 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
   modelsError = false,
 }) => {
   const { t } = useLanguage();
-  const [vinStatus, setVinStatus] = useState<'idle' | 'decoded' | 'not-found'>('idle');
+  const [vinStatus, setVinStatus] = useState<'idle' | 'decoded' | 'not-found' | 'loading'>('idle');
   const [decodedFields, setDecodedFields] = useState<string[]>([]);
 
-  const handleVinChange = useCallback((rawVin: string) => {
+  const handleVinChange = useCallback(async (rawVin: string) => {
     const vin = rawVin.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/gi, '');
     onChange('vin', vin);
 
     if (vin.length === 17 && isValidVin(vin)) {
-      const decoded = decodeVin(vin);
+      setVinStatus('loading');
+      const decoded = await decodeVinAsync(vin);
       const filled: string[] = [];
 
       if (decoded.brand) {
@@ -58,9 +59,29 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         onBrandChange(decoded.brand);
         filled.push('brand');
       }
+      if (decoded.model) {
+        onChange('model', decoded.model);
+        filled.push('model');
+      }
       if (decoded.year) {
         onChange('year', decoded.year);
         filled.push('year');
+      }
+      if (decoded.fuel) {
+        onChange('fuel', decoded.fuel);
+        filled.push('fuel');
+      }
+      if (decoded.engineSize) {
+        onChange('engineSize', decoded.engineSize);
+        filled.push('engineSize');
+      }
+      if (decoded.enginePower) {
+        onChange('enginePower', decoded.enginePower);
+        filled.push('enginePower');
+      }
+      if (decoded.doors) {
+        onChange('doors', decoded.doors);
+        filled.push('doors');
       }
       if (decoded.country) {
         const selectedCountry = countries.find(c => c.name === decoded.country);
@@ -128,7 +149,8 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
                 className="text-lg font-mono tracking-wider h-14 pr-24 uppercase bg-background"
                 maxLength={17}
               />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                {vinStatus === 'loading' && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
                 <Badge variant={
                   vinStatus === 'decoded' ? 'default' :
                   vinStatus === 'not-found' ? 'secondary' : 'outline'

@@ -6,10 +6,15 @@
 
 export interface VinDecodedData {
   brand: string | null;
+  model: string | null;
   year: number | null;
   fuel: string | null;
   transmission: string | null;
   country: string | null;
+  engineSize: number | null;
+  enginePower: number | null;
+  doors: number | null;
+  vehicleType: string | null;
 }
 
 // ──────────── WMI → Brand mapping (first 3 chars of VIN) ────────────
@@ -97,10 +102,15 @@ export const isValidVin = (vin: string): boolean => {
 export const decodeVin = (vin: string): VinDecodedData => {
   const result: VinDecodedData = {
     brand: null,
+    model: null,
     year: null,
     fuel: null,
     transmission: null,
     country: null,
+    engineSize: null,
+    enginePower: null,
+    doors: null,
+    vehicleType: null,
   };
 
   if (!isValidVin(vin)) return result;
@@ -136,4 +146,89 @@ export const decodeVin = (vin: string): VinDecodedData => {
   else if (['S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'].includes(firstChar)) result.country = 'Europa';
 
   return result;
+};
+
+// ──────────── NHTSA vPIC API (async, remote) ────────────
+
+interface NHTSAResult {
+  Variable: string;
+  Value: string | null;
+  ValueId: string | null;
+}
+
+const NHTSA_FUEL_MAP: Record<string, string> = {
+  'Gasoline': 'gasoline',
+  'Diesel': 'diesel',
+  'Electric': 'electric',
+  'Compressed Natural Gas (CNG)': 'gas',
+  'Ethanol (E85)': 'gasoline',
+  'Flexible Fuel Vehicle (FFV)': 'gasoline',
+  'Hydrogen Fuel Cell': 'hydrogen',
+  'Plug-in Hybrid Electric Vehicle (PHEV)': 'hybrid',
+};
+
+/**
+ * Async VIN decoder using NHTSA vPIC public API.
+ * Returns richer data (brand + model) than the local decoder.
+ * Falls back to local decoder on network errors.
+ */
+export const decodeVinAsync = async (vin: string): Promise<VinDecodedData> => {
+  // Start with local decode as baseline
+  const local = decodeVin(vin);
+  
+  if (!isValidVin(vin)) return local;
+
+  try {
+    const response = await fetch(
+      `https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vin}?format=json`,
+      { signal: AbortSignal.timeout(5000) }
+    );
+    
+    if (!response.ok) return local;
+    
+    const data = await response.json();
+    const results: NHTSAResult[] = data.Results || [];
+    
+    const getValue = (varName: string): string | null => {
+      const item = results.find(r => r.Variable === varName);
+      return item?.Value && item.Value.trim() !== '' && item.Value !== 'Not Applicable' 
+        ? item.Value.trim() 
+        : null;
+    };
+
+    const brand = getValue('Make') || local.brand;
+    const model = getValue('Model') || local.model;
+    const yearStr = getValue('Model Year');
+    const year = yearStr ? parseInt(yearStr, 10) : local.year;
+    
+    const fuelType = getValue('Fuel Type - Primary');
+    const fuel = fuelType ? (NHTSA_FUEL_MAP[fuelType] || fuelType.toLowerCase()) : local.fuel;
+    
+    const engineSizeStr = getValue('Displacement (L)');
+    const engineSize = engineSizeStr ? parseFloat(engineSizeStr) : local.engineSize;
+    
+    const enginePowerStr = getValue('Engine Brake (hp) From');
+    const enginePower = enginePowerStr ? parseInt(enginePowerStr, 10) : local.enginePower;
+    
+    const doorsStr = getValue('Doors');
+    const doors = doorsStr ? parseInt(doorsStr, 10) : local.doors;
+    
+    const vehicleType = getValue('Body Class') || local.vehicleType;
+
+    return {
+      brand: brand?.toUpperCase() || null,
+      model: model?.toUpperCase() || null,
+      year: (year && !isNaN(year)) ? year : null,
+      fuel,
+      transmission: local.transmission,
+      country: local.country,
+      engineSize: (engineSize && !isNaN(engineSize)) ? engineSize : null,
+      enginePower: (enginePower && !isNaN(enginePower)) ? enginePower : null,
+      doors: (doors && !isNaN(doors)) ? doors : null,
+      vehicleType,
+    };
+  } catch (error) {
+    console.warn('[VIN Decoder] NHTSA API failed, using local decode:', error);
+    return local;
+  }
 };
