@@ -259,8 +259,8 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
           </Label>
           {availableModels.length > 0 && !modelsError ? (
             <Select
-              value={formData.model || ''}
-              onValueChange={(v) => onChange('model', v)}
+              value={availableModels.some((model) => model === formData.model) ? (formData.model || '') : '__other__'}
+              onValueChange={(v) => onChange('model', v === '__other__' ? '' : v)}
               disabled={isLoadingModels}
             >
               <SelectTrigger>
@@ -273,23 +273,17 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
                 <SelectItem value="__other__">{t('vehicles.otherModel', { fallback: 'Otro modelo...' })}</SelectItem>
               </SelectContent>
             </Select>
-          ) : (
+          ) : null}
+
+          {(availableModels.length === 0 || modelsError || !availableModels.includes(formData.model || '')) && (
             <Input
+              className={availableModels.length > 0 && !modelsError ? 'mt-2' : ''}
               value={formData.model || ''}
               onChange={(e) => onChange('model', e.target.value.toUpperCase())}
-              placeholder={modelsError 
+              placeholder={modelsError
                 ? t('vehicles.modelManualEntry', { fallback: 'Escribe el modelo manualmente' })
-                : t('vehicles.modelExample')}
+                : t('vehicles.modelExample', { fallback: 'Escribe el modelo' })}
               disabled={isLoadingModels}
-            />
-          )}
-          {formData.model === '__other__' && (
-            <Input
-              className="mt-2"
-              value=""
-              onChange={(e) => onChange('model', e.target.value.toUpperCase())}
-              placeholder={t('vehicles.modelManualEntry', { fallback: 'Escribe el modelo' })}
-              autoFocus
             />
           )}
         </div>
