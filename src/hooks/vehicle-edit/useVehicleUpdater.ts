@@ -3,6 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { VehicleFormData } from '@/types/vehicle';
 import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useRef } from 'react';
+import { uploadFileSecurely } from '@/utils/secureUpload';
 import { 
   mapFormDataToVehicle, 
   mapMetadataToDatabase,
@@ -10,75 +12,90 @@ import {
   validateFormData 
 } from '@/services/vehicleDataMapper';
 
+const MIN_FILE_SIZE_BYTES = 1024; // 1KB minimum — reject corrupt/blank files
+
 /**
- * Hook for updating vehicle data - simplified image upload
+ * Hook for updating vehicle data
  */
 export const useVehicleUpdater = () => {
   const { t } = useLanguage();
+  const uploadInProgressRef = useRef(false);
 
   /**
-   * Direct image upload - bypasses complex service layers that fail silently
+   * Upload images via the secure Edge Function (service-role key on backend)
+   * with duplicate-call guard and file-content validation.
    */
   const uploadImagesDirect = async (images: File[], vehicleId: string) => {
+    // ── Guard: prevent duplicate invocations ──
+    if (uploadInProgressRef.current) {
+      console.warn('⚠️ [uploadImagesDirect] Upload already in progress — skipping duplicate call');
+      return { successful: [] as string[], failed: 0, errors: [] as string[] };
+    }
+    uploadInProgressRef.current = true;
+
     const results = { successful: [] as string[], failed: 0, errors: [] as string[] };
     let thumbnailUrl: string | null = null;
 
-    for (let index = 0; index < images.length; index++) {
-      const file = images[index];
-      try {
-        const fileExt = file.name.split('.').pop() || 'jpg';
-        const fileName = `${Date.now()}-${index}.${fileExt}`;
-        const filePath = `${vehicleId}/${fileName}`;
+    try {
+      for (let index = 0; index < images.length; index++) {
+        const file = images[index];
 
-        console.log(`🖼️ [uploadImagesDirect] Uploading ${index + 1}/${images.length}: ${file.name} (${(file.size/1024).toFixed(1)}KB)`);
-
-        const { error: uploadError } = await supabase.storage
-          .from('vehicles')
-          .upload(filePath, file);
-
-        if (uploadError) {
-          console.error(`❌ [uploadImagesDirect] Storage upload failed:`, uploadError);
+        // ── Validate real content ──
+        if (file.size < MIN_FILE_SIZE_BYTES) {
+          console.error(`❌ [uploadImagesDirect] File "${file.name}" is too small (${file.size} bytes) — likely corrupt/blank`);
           results.failed++;
-          results.errors.push(`${file.name}: ${uploadError.message}`);
+          results.errors.push(`${file.name}: Archivo vacío o corrupto (${file.size} bytes)`);
           continue;
         }
 
-        const { data: { publicUrl } } = supabase.storage
-          .from('vehicles')
-          .getPublicUrl(filePath);
+        try {
+          console.log(`🖼️ [uploadImagesDirect] Uploading ${index + 1}/${images.length}: ${file.name} (${(file.size / 1024).toFixed(1)}KB)`);
 
-        console.log(`✅ [uploadImagesDirect] Storage OK: ${publicUrl}`);
+          // Use the secure Edge Function instead of direct storage upload
+          const { publicUrl, error } = await uploadFileSecurely(file, 'vehicles', vehicleId);
 
-        if (index === 0) thumbnailUrl = publicUrl;
+          if (error || !publicUrl) {
+            console.error(`❌ [uploadImagesDirect] Secure upload failed:`, error);
+            results.failed++;
+            results.errors.push(`${file.name}: ${error || 'Upload failed'}`);
+            continue;
+          }
 
-        const { error: dbError } = await supabase
-          .from('vehicle_images')
-          .insert({
-            vehicle_id: vehicleId,
-            image_url: publicUrl,
-            is_primary: index === 0,
-            display_order: index
-          });
+          console.log(`✅ [uploadImagesDirect] Storage OK: ${publicUrl}`);
 
-        if (dbError) {
-          console.error(`❌ [uploadImagesDirect] DB insert failed:`, dbError);
+          if (index === 0) thumbnailUrl = publicUrl;
+
+          const { error: dbError } = await supabase
+            .from('vehicle_images')
+            .insert({
+              vehicle_id: vehicleId,
+              image_url: publicUrl,
+              is_primary: index === 0,
+              display_order: index
+            });
+
+          if (dbError) {
+            console.error(`❌ [uploadImagesDirect] DB insert failed:`, dbError);
+            results.failed++;
+            results.errors.push(`${file.name}: Error registro DB - ${dbError.message}`);
+            continue;
+          }
+
+          results.successful.push(publicUrl);
+          console.log(`✅ [uploadImagesDirect] Image ${index + 1} complete`);
+        } catch (err) {
+          console.error(`❌ [uploadImagesDirect] Exception:`, err);
           results.failed++;
-          results.errors.push(`${file.name}: Error registro DB - ${dbError.message}`);
-          continue;
+          results.errors.push(`${file.name}: ${err instanceof Error ? err.message : 'Error desconocido'}`);
         }
-
-        results.successful.push(publicUrl);
-        console.log(`✅ [uploadImagesDirect] Image ${index + 1} complete`);
-      } catch (err) {
-        console.error(`❌ [uploadImagesDirect] Exception:`, err);
-        results.failed++;
-        results.errors.push(`${file.name}: ${err instanceof Error ? err.message : 'Error desconocido'}`);
       }
-    }
 
-    // Update thumbnail
-    if (thumbnailUrl) {
-      await supabase.from('vehicles').update({ thumbnailurl: thumbnailUrl }).eq('id', vehicleId);
+      // Update thumbnail
+      if (thumbnailUrl) {
+        await supabase.from('vehicles').update({ thumbnailurl: thumbnailUrl }).eq('id', vehicleId);
+      }
+    } finally {
+      uploadInProgressRef.current = false;
     }
 
     return results;
@@ -160,7 +177,6 @@ export const useVehicleUpdater = () => {
       
       // Handle damages
       if (formData.damages && formData.damages.length > 0) {
-        // Delete existing damage images first
         const { data: existingDamages } = await supabase
           .from('vehicle_damages')
           .select('id')
@@ -195,26 +211,20 @@ export const useVehicleUpdater = () => {
             continue;
           }
           
-          // Upload damage images
           if (damage.images && damage.images.length > 0) {
             for (let i = 0; i < damage.images.length; i++) {
               const file = damage.images[i];
-              const fileExt = file.name.split('.').pop() || 'jpg';
-              const fileName = `damage-${Date.now()}-${i}.${fileExt}`;
-              const filePath = `${id}/damages/${fileName}`;
+              if (file.size < MIN_FILE_SIZE_BYTES) {
+                console.warn(`⚠️ Damage image "${file.name}" too small, skipping`);
+                continue;
+              }
+
+              const { publicUrl, error: uploadError } = await uploadFileSecurely(file, 'vehicles', `${id}/damages`);
               
-              const { error: uploadError } = await supabase.storage
-                .from('vehicles')
-                .upload(filePath, file);
-              
-              if (uploadError) {
+              if (uploadError || !publicUrl) {
                 console.error('❌ Damage image upload error:', uploadError);
                 continue;
               }
-              
-              const { data: { publicUrl } } = supabase.storage
-                .from('vehicles')
-                .getPublicUrl(filePath);
               
               await supabase.from('vehicle_damage_images').insert({
                 damage_id: insertedDamage.id,
@@ -223,7 +233,6 @@ export const useVehicleUpdater = () => {
                 description: file.name
               });
               
-              // Set first image as main image_url
               if (i === 0) {
                 await supabase.from('vehicle_damages')
                   .update({ image_url: publicUrl })
@@ -235,9 +244,9 @@ export const useVehicleUpdater = () => {
         console.log('✅ Damages updated with images');
       }
       
-      // DIRECT IMAGE UPLOAD - simple path, no complex service layers
+      // DIRECT IMAGE UPLOAD via secure Edge Function
       if (imagesToUpload.length > 0) {
-        console.log('🖼️ [useVehicleUpdater] Starting DIRECT image upload...');
+        console.log('🖼️ [useVehicleUpdater] Starting secure image upload...');
         const uploadResult = await uploadImagesDirect(imagesToUpload, id);
         
         console.log(`🖼️ [useVehicleUpdater] Upload result: ${uploadResult.successful.length} OK, ${uploadResult.failed} failed`);
@@ -248,7 +257,7 @@ export const useVehicleUpdater = () => {
         
         if (uploadResult.successful.length > 0) {
           toast.success(`${uploadResult.successful.length} imagen(es) subida(s) correctamente`);
-        } else {
+        } else if (imagesToUpload.length > 0 && uploadResult.successful.length === 0 && uploadResult.failed > 0) {
           toast.error('No se pudo subir ninguna imagen');
         }
       } else {
