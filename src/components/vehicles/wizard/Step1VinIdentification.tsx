@@ -9,12 +9,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Search, Sparkles, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { decodeVinAsync, isValidVin } from '@/utils/vinDecoder';
-import { countries } from '@/utils/countryUtils';
+import { countries, getCountryCodeByName, getCountryNameByCode } from '@/utils/countryUtils';
 
 interface Step1VinIdentificationProps {
   form: UseFormReturn<VehicleFormData>;
   onChange: (field: string, value: string | number) => void;
-  onBrandChange: (brand: string) => void;
+  onBrandChange: (brand: string) => string[];
   availableModels?: string[];
   isLoadingModels?: boolean;
   modelsError?: boolean;
@@ -32,6 +32,13 @@ const VEHICLE_BRANDS = [
 
 const currentYear = new Date().getFullYear();
 const YEARS = Array.from({ length: (currentYear + 1) - 1900 + 1 }, (_, i) => currentYear + 1 - i);
+
+const normalizeModelName = (value: string) =>
+  value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^A-Z0-9]/gi, '')
+    .toUpperCase();
 
 export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
   form,
@@ -53,18 +60,24 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
       setVinStatus('loading');
       const decoded = await decodeVinAsync(vin);
       const filled: string[] = [];
+      let brandModels = availableModels;
 
-      // Set brand first and trigger model loading
       if (decoded.brand) {
         onChange('brand', decoded.brand);
-        onBrandChange(decoded.brand);
+        brandModels = onBrandChange(decoded.brand);
         filled.push('brand');
       }
-      // Delay model set so availableModels has time to populate after brand change
+
       if (decoded.model) {
-        setTimeout(() => {
-          onChange('model', decoded.model!);
-        }, 150);
+        const normalizedDecodedModel = normalizeModelName(decoded.model);
+        const matchedModel = brandModels.find((model) => {
+          const normalizedModel = normalizeModelName(model);
+          return normalizedModel === normalizedDecodedModel ||
+            normalizedModel.includes(normalizedDecodedModel) ||
+            normalizedDecodedModel.includes(normalizedModel);
+        });
+
+        onChange('model', matchedModel || decoded.model.toUpperCase());
         filled.push('model');
       }
       if (decoded.year) {
@@ -88,12 +101,11 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
         filled.push('doors');
       }
       if (decoded.country) {
-        const selectedCountry = countries.find(c => c.name === decoded.country);
-        if (selectedCountry) {
-          onChange('country', decoded.country);
-          onChange('countryCode', selectedCountry.code);
-          filled.push('country');
-        }
+        const countryCode = getCountryCodeByName(decoded.country);
+        const countryName = getCountryNameByCode(countryCode);
+        onChange('country', countryName);
+        onChange('countryCode', countryCode);
+        filled.push('country');
       }
 
       if (filled.length > 0) {
@@ -107,23 +119,23 @@ export const Step1VinIdentification: React.FC<Step1VinIdentificationProps> = ({
       setVinStatus('idle');
       setDecodedFields([]);
     }
-  }, [onChange, onBrandChange]);
+  }, [availableModels, onChange, onBrandChange]);
 
   const handleBrandChange = (value: string) => {
     const upper = value.toUpperCase();
-    onBrandChange(upper);
     onChange('brand', upper);
+    onChange('model', '');
+    onBrandChange(upper);
   };
 
-  const handleCountryChange = (countryName: string) => {
-    const selectedCountry = countries.find(c => c.name === countryName);
-    if (selectedCountry) {
-      onChange('country', countryName);
-      onChange('countryCode', selectedCountry.code);
-    }
+  const handleCountryChange = (countryCode: string) => {
+    const selectedCountry = countries.find(c => c.code === countryCode);
+    onChange('countryCode', countryCode);
+    onChange('country', selectedCountry?.name || '');
   };
 
   const formData = form.watch();
+  const selectedCountryCode = formData.countryCode || (formData.country ? getCountryCodeByName(formData.country) : '');
 
   return (
     <div className="space-y-6">
