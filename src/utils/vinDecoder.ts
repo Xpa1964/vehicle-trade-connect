@@ -157,14 +157,24 @@ interface NHTSAResult {
 }
 
 const NHTSA_FUEL_MAP: Record<string, string> = {
-  'Gasoline': 'gasoline',
+  'Gasoline': 'gasolina',
   'Diesel': 'diesel',
-  'Electric': 'electric',
-  'Compressed Natural Gas (CNG)': 'gas',
-  'Ethanol (E85)': 'gasoline',
-  'Flexible Fuel Vehicle (FFV)': 'gasoline',
-  'Hydrogen Fuel Cell': 'hydrogen',
-  'Plug-in Hybrid Electric Vehicle (PHEV)': 'hybrid',
+  'Electric': 'electrico',
+  'Compressed Natural Gas (CNG)': 'gas_natural',
+  'Ethanol (E85)': 'gasolina',
+  'Flexible Fuel Vehicle (FFV)': 'gasolina',
+  'Hydrogen Fuel Cell': 'hidrogeno',
+  'Plug-in Hybrid Electric Vehicle (PHEV)': 'hibrido_enchufable',
+};
+
+// Fallback mapping for values already in English lowercase
+const FUEL_ES_MAP: Record<string, string> = {
+  'gasoline': 'gasolina',
+  'diesel': 'diesel',
+  'electric': 'electrico',
+  'hybrid': 'hibrido',
+  'hydrogen': 'hidrogeno',
+  'gas': 'gas_natural',
 };
 
 /**
