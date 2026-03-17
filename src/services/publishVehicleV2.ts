@@ -357,8 +357,7 @@ export async function publishVehicleV2({
     version: data.version?.trim() || null,
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error: vehicleError } = await (supabase as any)
+  const { error: vehicleError } = await supabase
     .from('vehicles')
     .insert(vehicleRow);
 
