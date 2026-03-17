@@ -11,7 +11,9 @@ export const useVehicleFormTabs = () => {
   const tabs = [
     { id: 'basic', label: t('vehicles.basicDetails', { fallback: 'Detalles Básicos' }) },
     { id: 'identification', label: t('vehicles.identification', { fallback: 'Identificación' }) },
+    { id: 'transaction', label: t('vehicles.transactionDetails', { fallback: 'Transacción' }) },
     { id: 'specs', label: t('vehicles.technicalDetails', { fallback: 'Especificaciones' }) },
+    { id: 'equipment', label: t('vehicles.equipment', { fallback: 'Equipamiento' }) },
     { id: 'additional', label: t('vehicles.additionalInfo', { fallback: 'Info Adicional' }) },
     { id: 'damages', label: t('vehicles.damages', { fallback: 'Daños' }) },
     { id: 'media', label: t('vehicles.images', { fallback: 'Imágenes' }) },

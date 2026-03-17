@@ -183,8 +183,16 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
                   <VehicleIdentification form={form} />
                 )}
 
+                {activeTab === 'transaction' && (
+                  <TransactionDetails form={form} />
+                )}
+
                 {activeTab === 'specs' && (
                   <VehicleSpecs form={form} />
+                )}
+
+                {activeTab === 'equipment' && (
+                  <EquipmentSelection form={form} />
                 )}
 
                 {activeTab === 'additional' && (
