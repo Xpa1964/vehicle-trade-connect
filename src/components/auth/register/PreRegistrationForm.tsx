@@ -99,10 +99,10 @@ const PreRegistrationForm: React.FC = () => {
           />
         </div>
         <CardTitle className="text-xl font-bold text-center">
-          {t('auth.preRegistration.title')}
+          {copy.title}
         </CardTitle>
         <CardDescription className="text-center">
-          {t('auth.preRegistration.subtitle')}
+          {copy.subtitle}
         </CardDescription>
       </CardHeader>
       
@@ -110,7 +110,7 @@ const PreRegistrationForm: React.FC = () => {
         {/* Info banner */}
         <div className="mb-6 p-4 bg-primary/10 border-l-4 border-primary rounded-r-lg">
           <p className="text-sm text-primary leading-relaxed">
-            {t('auth.preRegistration.infoBanner')}
+            {copy.infoBanner}
           </p>
         </div>
 
