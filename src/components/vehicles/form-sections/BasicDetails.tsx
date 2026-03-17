@@ -108,6 +108,16 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({
               required
             />
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="version">{t('vehicles.version')}</Label>
+            <Input
+              id="version"
+              value={formData.version || ''}
+              onChange={(e) => onChange('version', e.target.value)}
+              placeholder={t('vehicles.versionPlaceholder')}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

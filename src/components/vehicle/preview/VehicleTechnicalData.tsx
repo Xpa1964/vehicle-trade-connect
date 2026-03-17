@@ -89,6 +89,11 @@ const VehicleTechnicalData: React.FC<VehicleTechnicalDataProps> = ({ vehicle, is
               <CardTitle className="text-2xl font-heading font-medium text-foreground tracking-tight">
                 {vehicle.brand} {vehicle.model}
               </CardTitle>
+              {vehicle.version && (
+                <p className="text-sm font-medium text-muted-foreground">
+                  {vehicle.version}
+                </p>
+              )}
             </div>
 
             {/* Línea 2: Precio */}
