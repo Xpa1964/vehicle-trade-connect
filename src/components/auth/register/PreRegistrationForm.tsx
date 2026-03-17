@@ -27,16 +27,16 @@ const PreRegistrationForm: React.FC = () => {
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.companyName.trim() || formData.companyName.trim().length < 3) {
-      newErrors.companyName = `${t('auth.register.companyName')} (${t('auth.preRegistration.minChars')})`;
+      newErrors.companyName = `${t('auth.register.companyName')} (${copy.minChars})`;
     }
     if (!formData.contactPerson.trim() || formData.contactPerson.trim().length < 3) {
-      newErrors.contactPerson = `${t('auth.register.contactPerson')} (${t('auth.preRegistration.minChars')})`;
+      newErrors.contactPerson = `${t('auth.register.contactPerson')} (${copy.minChars})`;
     }
     if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = t('form.invalidEmail');
     }
     if (!formData.phone.trim() || formData.phone.trim().length < 6) {
-      newErrors.phone = `${t('auth.register.phone')} (${t('auth.preRegistration.minChars')})`;
+      newErrors.phone = `${t('auth.register.phone')} (${copy.minChars})`;
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
