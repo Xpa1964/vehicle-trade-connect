@@ -91,9 +91,9 @@ const PreRegistrationForm: React.FC = () => {
       <CardHeader className="space-y-1 pb-4">
         <div className="flex justify-center mb-4">
           <img 
-            src={LOGO_IMAGES.primaryPNG} 
+            src={kontactLogoOrange} 
             alt="KONTACT VO Logo" 
-            className="h-16 w-auto drop-shadow-sm"
+            className="h-28 sm:h-32 w-auto drop-shadow-md"
             loading="eager"
           />
         </div>
