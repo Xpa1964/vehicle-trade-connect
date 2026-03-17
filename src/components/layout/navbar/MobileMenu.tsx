@@ -171,7 +171,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, isHomePage, isScrolled 
               </Link>
               <Link to="/register" className="block">
                 <Button size="default" className="w-full h-12 text-base touch-manipulation">
-                  {t('auth.register')}
+                  Pre-Registro
                 </Button>
               </Link>
             </div>

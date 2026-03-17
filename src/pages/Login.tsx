@@ -202,7 +202,7 @@ const Login: React.FC = () => {
           <p className="text-center text-sm text-muted-foreground">
             {t('auth.dontHaveAccount')}{' '}
             <Link to="/register" className="text-primary hover:underline font-medium">
-              {t('auth.register')}
+              Pre-Registro
             </Link>
           </p>
         </CardFooter>
