@@ -238,6 +238,7 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
         height: '100%',
         playerVars: {
           autoplay: autoplay ? 1 : 0,
+          playsinline: 1,
           rel: 0,
           enablejsapi: 1,
           origin: window.location.origin,
