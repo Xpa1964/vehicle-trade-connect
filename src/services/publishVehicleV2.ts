@@ -311,6 +311,15 @@ export async function publishVehicleV2({
   const vehicleId = uuidv4();
   console.log(`[V2] INSERT — vehicleId: ${vehicleId}`);
 
+  let registrationDateFormatted: string | null = null;
+
+  const rawRegDate = data.registrationDate as unknown;
+  if (rawRegDate instanceof Date) {
+    registrationDateFormatted = rawRegDate.toISOString().split('T')[0];
+  } else if (typeof rawRegDate === 'string' && rawRegDate.length > 0) {
+    registrationDateFormatted = rawRegDate;
+  }
+
   const vehicleRow: Record<string, unknown> = {
     id: vehicleId,
     seller_id: userId,
@@ -331,9 +340,7 @@ export async function publishVehicleV2({
     transmission: data.transmission || null,
     vin: data.vin || null,
     license_plate: data.licensePlate || null,
-    registration_date: data.registrationDate
-      ? data.registrationDate.toISOString().split('T')[0]
-      : null,
+    registration_date: registrationDateFormatted,
     vehicle_type: data.vehicleType || null,
     transaction_type: data.transactionType || 'national',
     accepts_exchange: data.acceptsExchange || false,
