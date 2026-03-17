@@ -192,7 +192,7 @@ const AudioPresentationSection: React.FC<AudioPresentationSectionProps> = ({
                   size="lg"
                   className="w-full text-base sm:text-lg md:text-xl font-semibold py-4 sm:py-5 min-h-[52px] bg-gradient-to-br from-card to-secondary hover:from-secondary hover:to-card text-primary border-border touch-manipulation active:scale-95 transition-transform"
                 >
-                  {t('auth.register.title')}
+                  Pre-Registro
                 </Button>
               </div>
             </div>

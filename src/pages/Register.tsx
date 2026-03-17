@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterFormData, registerSchema } from '@/schemas/registerSchema';
 import { cleanMaliciousDrafts, validateFormCleanliness } from '@/utils/securityCleanup';
-import { Lock } from 'lucide-react';
+import { Lock, ArrowLeft } from 'lucide-react';
 
 // Flag to control pre-registration mode
 const PRE_REGISTRATION_MODE = true;
@@ -92,16 +92,24 @@ const Register: React.FC = () => {
 
   if (PRE_REGISTRATION_MODE) {
     return (
-      <div className="min-h-screen bg-background py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
+      <div className="min-h-screen bg-background py-6 sm:py-10 px-4 sm:px-6 lg:px-8">
+        {/* Back to home button */}
+        <div className="max-w-6xl mx-auto mb-4">
+          <a href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-4 w-4" />
+            Volver al inicio
+          </a>
+        </div>
+
+        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 lg:gap-8 items-stretch justify-center">
           {/* Left: Pre-registration form (active) */}
-          <div className="w-full lg:w-auto flex-shrink-0">
+          <div className="w-full lg:w-auto flex-shrink-0 flex items-center">
             <PreRegistrationForm />
           </div>
 
           {/* Right: Full registration form (disabled/locked) */}
           <div className="w-full lg:flex-1 max-w-3xl relative">
-            {/* Overlay to disable interaction */}
+            {/* Overlay to disable interaction - centered vertically */}
             <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] z-10 rounded-lg flex flex-col items-center justify-center">
               <div className="bg-card border border-border rounded-xl p-6 shadow-lg text-center max-w-sm mx-4">
                 <div className="mx-auto w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-3">

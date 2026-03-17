@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { LOGO_IMAGES } from '@/constants/imageAssets';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { CheckCircle, Building2, Mail, Phone, User } from 'lucide-react';
+import kontactLogoOrange from '@/assets/kontact-vo-logo-orange-2.png';
 
 const PreRegistrationForm: React.FC = () => {
   const { t } = useLanguage();
@@ -90,9 +90,9 @@ const PreRegistrationForm: React.FC = () => {
       <CardHeader className="space-y-1 pb-4">
         <div className="flex justify-center mb-4">
           <img 
-            src={LOGO_IMAGES.primaryPNG} 
+            src={kontactLogoOrange} 
             alt="KONTACT VO Logo" 
-            className="h-16 w-auto drop-shadow-sm"
+            className="h-28 sm:h-32 w-auto drop-shadow-md"
             loading="eager"
           />
         </div>
