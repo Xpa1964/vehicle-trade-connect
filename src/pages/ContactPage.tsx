@@ -56,8 +56,8 @@ const ContactPage: React.FC = () => {
                   <h3 className="font-semibold mb-1 text-foreground">{t('contact.mainOffice')}</h3>
                   <p className="text-muted-foreground">
                     KONTACT VO<br />
-                    [Dirección por confirmar]<br />
-                    España
+                    Plaça Joan Oliu 6<br />
+                    Sabadell, Barcelona
                   </p>
                 </div>
               </div>
