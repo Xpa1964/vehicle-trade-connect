@@ -139,10 +139,9 @@ async function uploadImagesWithConcurrency(
       batch.map(async (file, localIdx) => {
         const globalIndex = batchStart + localIdx;
 
-        const { publicUrl, error: uploadError } = await uploadFileSecurely(
-          file,
-          'vehicles',
-          vehicleId
+        const { publicUrl, error: uploadError } = await withTimeout(
+          uploadFileSecurely(file, 'vehicles', vehicleId),
+          UPLOAD_TIMEOUT_MS
         );
 
         if (uploadError || !publicUrl) {
