@@ -17,7 +17,7 @@ export const useVehicleFormTabs = () => {
     { id: 'additional', label: t('vehicles.additionalInfo', { fallback: 'Info Adicional' }) },
     { id: 'damages', label: t('vehicles.damages', { fallback: 'Daños' }) },
     { id: 'media', label: t('vehicles.images', { fallback: 'Imágenes' }) },
-    { id: 'published', label: t('vehicles.publication', { fallback: 'Publicación' }) }
+    { id: 'published', label: t('vehicles.publish', { fallback: 'Publicar' }) }
   ];
 
   // Navigation functions for mobile
