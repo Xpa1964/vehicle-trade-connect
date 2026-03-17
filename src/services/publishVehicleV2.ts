@@ -1,3 +1,6 @@
+// 🚫 CRITICAL MODULE (PRE-LOCK)
+// Stabilized version — pending admin lock
+
 /**
  * publishVehicleV2 — Isolated, production-ready vehicle publication service
  *
