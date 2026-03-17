@@ -9,13 +9,13 @@ export const useVehicleFormTabs = () => {
 
   // Define the tab order and labels - ahora con 7 tabs
   const tabs = [
-    { id: 'basic', label: t('vehicles.basicDetails') },
-    { id: 'identification', label: t('vehicles.identification') },
-    { id: 'specs', label: t('vehicles.technicalDetails') },
-    { id: 'additional', label: t('vehicles.additionalInfo') },
-    { id: 'damages', label: t('vehicles.damages') },
-    { id: 'media', label: 'Imágenes' },
-    { id: 'published', label: 'Vehículo Publicado' }
+    { id: 'basic', label: t('vehicles.basicDetails', { fallback: 'Detalles Básicos' }) },
+    { id: 'identification', label: t('vehicles.identification', { fallback: 'Identificación' }) },
+    { id: 'specs', label: t('vehicles.technicalDetails', { fallback: 'Especificaciones' }) },
+    { id: 'additional', label: t('vehicles.additionalInfo', { fallback: 'Info Adicional' }) },
+    { id: 'damages', label: t('vehicles.damages', { fallback: 'Daños' }) },
+    { id: 'media', label: t('vehicles.images', { fallback: 'Imágenes' }) },
+    { id: 'published', label: t('vehicles.publication', { fallback: 'Publicación' }) }
   ];
 
   // Navigation functions for mobile
