@@ -14,10 +14,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const REPORT_PRICES = {
-  basic: 15,
-  technical: 30,
-  premium: null // Precio personalizado según presupuesto
+const REPORT_PRICES: Record<string, number | null> = {
+  basic: 160,
+  technical: 200,
+  premium: null,
+  dgt: 19,
+  carfax: 29
 };
 
 const reportSchema = z.object({
