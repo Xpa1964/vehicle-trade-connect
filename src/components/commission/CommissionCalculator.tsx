@@ -85,12 +85,6 @@ const CommissionCalculator: React.FC<CommissionCalculatorProps> = ({
                     <Label htmlFor="vendedor-compact" className="text-xs text-foreground truncate">{t('commission.seller')}</Label>
                   </div>
                 )}
-                {allowedTypes.includes('trader') && (
-                  <div className="flex items-center space-x-1">
-                    <RadioGroupItem value="trader" id="trader-compact" className="h-3 w-3 flex-shrink-0" />
-                    <Label htmlFor="trader-compact" className="text-xs text-foreground truncate">{t('commission.trader')}</Label>
-                  </div>
-                )}
               </RadioGroup>
             </div>
           </div>
