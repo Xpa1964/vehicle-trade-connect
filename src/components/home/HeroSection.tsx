@@ -50,7 +50,7 @@ const HeroSection: React.FC = () => {
               <div className="mb-4 sm:mb-5 md:mb-6 pointer-events-none">
                 <div className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 relative">
                   <div 
-                    className="absolute inset-0 rounded-full bg-black/50 blur-3xl scale-125"
+                    className="absolute inset-0 rounded-full bg-black/25 blur-3xl scale-125"
                     aria-hidden="true"
                   />
                   <SimpleImage
