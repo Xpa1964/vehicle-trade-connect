@@ -49,15 +49,6 @@ const ContactPage: React.FC = () => {
                   <p className="text-muted-foreground">fjpa@kontactvo.com</p>
                 </div>
               </div>
-              {/* Teléfono */}
-              <div className="flex items-start gap-4">
-                <Phone className="h-6 w-6 text-primary mt-1" />
-                <div>
-                  <h3 className="font-semibold mb-1 text-foreground">{t('contact.phone')}</h3>
-                  <p className="text-muted-foreground">+34 XXX XXX XXX</p>
-                  <p className="text-sm text-muted-foreground">{t('contact.phoneSchedule')}</p>
-                </div>
-              </div>
               {/* Oficina */}
               <div className="flex items-start gap-4">
                 <MapPin className="h-6 w-6 text-primary mt-1" />
