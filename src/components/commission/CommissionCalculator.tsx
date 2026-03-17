@@ -85,12 +85,6 @@ const CommissionCalculator: React.FC<CommissionCalculatorProps> = ({
                     <Label htmlFor="vendedor-compact" className="text-xs text-foreground truncate">{t('commission.seller')}</Label>
                   </div>
                 )}
-                {allowedTypes.includes('trader') && (
-                  <div className="flex items-center space-x-1">
-                    <RadioGroupItem value="trader" id="trader-compact" className="h-3 w-3 flex-shrink-0" />
-                    <Label htmlFor="trader-compact" className="text-xs text-foreground truncate">{t('commission.trader')}</Label>
-                  </div>
-                )}
               </RadioGroup>
             </div>
           </div>
@@ -166,12 +160,6 @@ const CommissionCalculator: React.FC<CommissionCalculatorProps> = ({
                   <Label htmlFor="vendedor" className="cursor-pointer text-foreground">{t('commission.seller')}</Label>
                 </div>
               )}
-              {allowedTypes.includes('trader') && (
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="trader" id="trader" />
-                  <Label htmlFor="trader" className="cursor-pointer text-foreground">{t('commission.trader')}</Label>
-                </div>
-              )}
             </RadioGroup>
           </div>
         </div>
@@ -204,7 +192,7 @@ const CommissionCalculator: React.FC<CommissionCalculatorProps> = ({
             <Separator className="bg-border" />
             
             <div className="flex justify-between items-center text-lg font-bold">
-              <span className="text-foreground">{t('commission.totalCosts')} {type === 'comprador' ? t('commission.buyer') : type === 'vendedor' ? t('commission.seller') : t('commission.trader')}:</span>
+              <span className="text-foreground">{t('commission.totalCosts')} {type === 'comprador' ? t('commission.buyer') : t('commission.seller')}:</span>
               <span className="text-primary">{formatCurrencyCommission(result.totalCost)}</span>
             </div>
           </div>
@@ -215,7 +203,7 @@ const CommissionCalculator: React.FC<CommissionCalculatorProps> = ({
           <ul className="list-disc list-inside space-y-1">
             <li>{t('commission.minCommissionInfo')}</li>
             <li>{t('commission.maxPriceInfo')}</li>
-            <li>{t('commission.traderInfo')}</li>
+            
             <li>{t('commission.maintenanceInfo')}</li>
           </ul>
         </div>
