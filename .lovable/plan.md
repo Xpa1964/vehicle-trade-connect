@@ -1,58 +1,16 @@
 
 
-# Plan: Gestion de imagenes API con reemplazo limpio
+## Plan: Adjust Logo Position in Navbar
 
-## Resumen
+The logo in `NavbarContainer.tsx` (line 52-60) needs to shift **50px left** and **30px up** from its current position.
 
-Dos cambios precisos sobre el plan original aprobado, sin modificar nada mas.
+### Change
+**File: `src/components/layout/navbar/NavbarContainer.tsx`** (line 52)
 
-## Cambio 1: Migracion de base de datos
-
-Anadir columna `source` a `vehicle_images` **sin valor por defecto**:
-
-```text
-ALTER TABLE vehicle_images ADD COLUMN source text;
+Add relative positioning with negative margins to the logo container:
+```tsx
+<div className="flex-shrink-0 touch-manipulation relative" style={{ marginLeft: '-50px', marginTop: '-30px' }}>
 ```
 
-Las imagenes existentes quedaran con `source = NULL`. Solo las imagenes insertadas desde la sincronizacion API recibiran `source = 'api'`.
-
-## Cambio 2: Modificar `processImages` en la edge function
-
-En `supabase/functions/api-sync-vehicles/index.ts`, funcion `processImages` (linea 472):
-
-**Paso nuevo antes de insertar** (sin tocar storage):
-
-```text
-DELETE FROM vehicle_images
-WHERE vehicle_id = vehicleId AND source = 'api'
-```
-
-**Al insertar cada imagen**, anadir `source: 'api'` al objeto:
-
-```text
-await supabase.from('vehicle_images').insert({
-  vehicle_id: vehicleId,
-  image_url: publicUrl,
-  display_order: i,
-  is_primary: i === 0,
-  source: 'api'        // <-- nuevo campo
-});
-```
-
-**No se eliminan archivos del bucket de storage.** Solo registros en base de datos.
-
-## Archivos modificados
-
-| Archivo | Cambio |
-|---------|--------|
-| Nueva migracion SQL | `ALTER TABLE vehicle_images ADD COLUMN source text;` |
-| `supabase/functions/api-sync-vehicles/index.ts` | Agregar DELETE previo y campo `source: 'api'` en insert |
-
-## Lo que NO se toca
-
-- Subida manual de imagenes
-- Componentes de UI
-- Bucket de storage (sin eliminar archivos fisicos)
-- RLS policies de `vehicle_images`
-- Ningun otro endpoint ni servicio
+This uses inline `style` for precise pixel control since Tailwind doesn't have exact 50px/30px utility classes. The `relative` class ensures it doesn't break the navbar flow while visually shifting the logo.
 
