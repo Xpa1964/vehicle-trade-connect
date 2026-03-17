@@ -311,6 +311,14 @@ export async function publishVehicleV2({
   const vehicleId = uuidv4();
   console.log(`[V2] INSERT — vehicleId: ${vehicleId}`);
 
+  let registrationDateFormatted: string | null = null;
+
+  if (data.registrationDate instanceof Date) {
+    registrationDateFormatted = data.registrationDate.toISOString().split('T')[0];
+  } else if (typeof data.registrationDate === 'string' && data.registrationDate.length > 0) {
+    registrationDateFormatted = data.registrationDate;
+  }
+
   const vehicleRow: Record<string, unknown> = {
     id: vehicleId,
     seller_id: userId,
