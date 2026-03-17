@@ -326,7 +326,7 @@ export const useVehicleSubmit = () => {
         
         console.log(`✅ [handleImageUploads] Image ${index} uploaded successfully:`, publicUrl);
         
-        if (index === 0) {
+        if (!thumbnailUrl) {
           thumbnailUrl = publicUrl;
         }
         
@@ -335,7 +335,7 @@ export const useVehicleSubmit = () => {
           .insert({
             vehicle_id: vehicleId,
             image_url: publicUrl,
-            is_primary: index === 0,
+            is_primary: false,
             display_order: index
           });
           
