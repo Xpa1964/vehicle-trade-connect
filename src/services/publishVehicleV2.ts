@@ -313,10 +313,11 @@ export async function publishVehicleV2({
 
   let registrationDateFormatted: string | null = null;
 
-  if (data.registrationDate instanceof Date) {
-    registrationDateFormatted = data.registrationDate.toISOString().split('T')[0];
-  } else if (typeof data.registrationDate === 'string' && data.registrationDate.length > 0) {
-    registrationDateFormatted = data.registrationDate;
+  const rawRegDate = data.registrationDate as unknown;
+  if (rawRegDate instanceof Date) {
+    registrationDateFormatted = rawRegDate.toISOString().split('T')[0];
+  } else if (typeof rawRegDate === 'string' && rawRegDate.length > 0) {
+    registrationDateFormatted = rawRegDate;
   }
 
   const vehicleRow: Record<string, unknown> = {
