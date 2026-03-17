@@ -45,8 +45,8 @@ const ContactPage: React.FC = () => {
                 <Mail className="h-6 w-6 text-primary mt-1" />
                 <div>
                   <h3 className="font-semibold mb-1 text-foreground">{t('contact.email')}</h3>
-                  <p className="text-muted-foreground">contacto@kontactvo.com</p>
-                  <p className="text-muted-foreground">soporte@kontactvo.com</p>
+                  <p className="text-muted-foreground">info@kontactvo.com</p>
+                  <p className="text-muted-foreground">fjpa@kontactvo.com</p>
                 </div>
               </div>
               {/* Teléfono */}
