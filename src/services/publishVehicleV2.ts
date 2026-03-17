@@ -216,6 +216,8 @@ async function assignPrimaryImage(vehicleId: string, primaryUrl: string): Promis
 async function rollback(vehicleId: string, uploadedUrls: string[]): Promise<void> {
   console.warn(`⚠️ [V2] ROLLBACK — cleaning up vehicle ${vehicleId}`);
 
+  const rollbackErrors: string[] = [];
+
   // Best-effort: delete vehicle_images records
   const { error: imgDelError } = await supabase
     .from('vehicle_images')
@@ -224,6 +226,7 @@ async function rollback(vehicleId: string, uploadedUrls: string[]): Promise<void
 
   if (imgDelError) {
     console.error('❌ [V2] ROLLBACK — failed to delete vehicle_images:', imgDelError.message);
+    rollbackErrors.push(`vehicle_images: ${imgDelError.message}`);
   }
 
   // Best-effort: delete metadata
@@ -234,6 +237,7 @@ async function rollback(vehicleId: string, uploadedUrls: string[]): Promise<void
 
   if (metaDelError) {
     console.error('❌ [V2] ROLLBACK — failed to delete metadata:', metaDelError.message);
+    rollbackErrors.push(`vehicle_metadata: ${metaDelError.message}`);
   }
 
   // Best-effort: delete equipment
@@ -244,6 +248,7 @@ async function rollback(vehicleId: string, uploadedUrls: string[]): Promise<void
 
   if (eqDelError) {
     console.error('❌ [V2] ROLLBACK — failed to delete equipment:', eqDelError.message);
+    rollbackErrors.push(`vehicle_equipment: ${eqDelError.message}`);
   }
 
   // Best-effort: remove uploaded files from storage
@@ -266,6 +271,7 @@ async function rollback(vehicleId: string, uploadedUrls: string[]): Promise<void
 
       if (storageError) {
         console.error('❌ [V2] ROLLBACK — failed to remove storage files:', storageError.message);
+        rollbackErrors.push(`storage: ${storageError.message}`);
       }
     }
   }
@@ -278,6 +284,11 @@ async function rollback(vehicleId: string, uploadedUrls: string[]): Promise<void
 
   if (vehDelError) {
     console.error('❌ [V2] ROLLBACK — failed to delete vehicle:', vehDelError.message);
+    rollbackErrors.push(`vehicle: ${vehDelError.message}`);
+  }
+
+  if (rollbackErrors.length > 0) {
+    console.error('❌ [V2] ROLLBACK — completed with errors:', rollbackErrors);
   }
 
   console.warn(`⚠️ [V2] ROLLBACK — complete for ${vehicleId}`);
