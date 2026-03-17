@@ -21,16 +21,16 @@ const Home: React.FC = () => {
 
   const { logVisit, updateEvent, updateContact, sessionId } = useCampaignTracking();
 
+  const effectiveCampaign = campaign || 'organic_web';
+
   useEffect(() => {
-    if (campaign) {
-      logVisit({
-        video_language: videoLang || 'es',
-        campaign,
-        dealer: dealer || undefined,
-        contact: contact || undefined,
-      });
-    }
-  }, [campaign, videoLang, dealer, logVisit]);
+    logVisit({
+      video_language: videoLang || 'es',
+      campaign: effectiveCampaign,
+      dealer: dealer || undefined,
+      contact: contact || undefined,
+    });
+  }, [effectiveCampaign, videoLang, dealer, logVisit]);
 
   const handleVideoStarted = useCallback(() => {
     if (campaign) updateEvent('video_started');
