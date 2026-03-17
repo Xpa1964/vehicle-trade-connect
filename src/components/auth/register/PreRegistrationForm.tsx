@@ -75,12 +75,12 @@ const PreRegistrationForm: React.FC = () => {
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
             <CheckCircle className="w-8 h-8 text-primary" />
           </div>
-          <h2 className="text-xl font-semibold mb-2 text-foreground">{t('auth.preRegistration.successTitle')}</h2>
+          <h2 className="text-xl font-semibold mb-2 text-foreground">{copy.successTitle}</h2>
           <p className="text-muted-foreground mb-4">
-            {t('auth.preRegistration.successMessage')}
+            {copy.successMessage}
           </p>
           <p className="text-sm text-muted-foreground">
-            {t('auth.preRegistration.successDetail')}
+            {copy.successDetail}
           </p>
         </CardContent>
       </Card>
