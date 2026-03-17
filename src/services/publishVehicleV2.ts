@@ -24,6 +24,8 @@ const ALLOWED_MIME_TYPES: ReadonlySet<string> = new Set([
   'image/webp',
 ]);
 const UPLOAD_CONCURRENCY = 3;
+const MAX_TOTAL_SIZE_BYTES = 50 * 1024 * 1024; // 50MB
+const UPLOAD_TIMEOUT_MS = 15000; // 15s per image
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
