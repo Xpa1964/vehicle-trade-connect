@@ -6,6 +6,7 @@ import RegisterHeader from '@/components/auth/register/RegisterHeader';
 import RegisterForm from '@/components/auth/register/RegisterForm';
 import RegisterFooter from '@/components/auth/register/RegisterFooter';
 import PreRegistrationForm from '@/components/auth/register/PreRegistrationForm';
+import { preRegistrationCopy } from '@/components/auth/register/preRegistrationCopy';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,7 +18,8 @@ import { Lock, ArrowLeft } from 'lucide-react';
 const PRE_REGISTRATION_MODE = true;
 
 const Register: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
+  const preRegisterCopy = preRegistrationCopy[currentLanguage] ?? preRegistrationCopy.en;
   const { 
     handleSubmit: submitRegistration, 
     isSubmitting, 
@@ -97,7 +99,7 @@ const Register: React.FC = () => {
         <div className="max-w-6xl mx-auto mb-4">
           <a href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="h-4 w-4" />
-            {t('auth.preRegistration.backToHome')}
+            {preRegisterCopy.backToHome}
           </a>
         </div>
 
@@ -115,9 +117,9 @@ const Register: React.FC = () => {
                 <div className="mx-auto w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-3">
                   <Lock className="w-6 h-6 text-muted-foreground" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">{t('auth.preRegistration.fullRegistrationTitle')}</h3>
+                <h3 className="font-semibold text-foreground mb-2">{preRegisterCopy.fullRegistrationTitle}</h3>
                 <p className="text-sm text-muted-foreground">
-                  {t('auth.preRegistration.fullRegistrationMessage')}
+                  {preRegisterCopy.fullRegistrationMessage}
                 </p>
               </div>
             </div>

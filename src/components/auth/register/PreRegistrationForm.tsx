@@ -9,9 +9,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { CheckCircle, Building2, Mail, Phone, User } from 'lucide-react';
 import kontactLogoOrange from '@/assets/kontact-vo-logo-orange-2.png';
+import { preRegistrationCopy } from './preRegistrationCopy';
 
 const PreRegistrationForm: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
+  const copy = preRegistrationCopy[currentLanguage] ?? preRegistrationCopy.en;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,16 +27,16 @@ const PreRegistrationForm: React.FC = () => {
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.companyName.trim() || formData.companyName.trim().length < 3) {
-      newErrors.companyName = `${t('auth.register.companyName')} (${t('auth.preRegistration.minChars')})`;
+      newErrors.companyName = `${t('auth.register.companyName')} (${copy.minChars})`;
     }
     if (!formData.contactPerson.trim() || formData.contactPerson.trim().length < 3) {
-      newErrors.contactPerson = `${t('auth.register.contactPerson')} (${t('auth.preRegistration.minChars')})`;
+      newErrors.contactPerson = `${t('auth.register.contactPerson')} (${copy.minChars})`;
     }
     if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = t('form.invalidEmail');
     }
     if (!formData.phone.trim() || formData.phone.trim().length < 6) {
-      newErrors.phone = `${t('auth.register.phone')} (${t('auth.preRegistration.minChars')})`;
+      newErrors.phone = `${t('auth.register.phone')} (${copy.minChars})`;
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -57,10 +59,10 @@ const PreRegistrationForm: React.FC = () => {
       if (error) throw error;
 
       setIsSuccess(true);
-      toast.success(t('auth.preRegistration.toastSuccess'));
+      toast.success(copy.toastSuccess);
     } catch (error: any) {
       console.error('[PreRegistration] Error:', error);
-      toast.error(t('auth.preRegistration.toastError'));
+      toast.error(copy.toastError);
     } finally {
       setIsSubmitting(false);
     }
@@ -73,12 +75,12 @@ const PreRegistrationForm: React.FC = () => {
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
             <CheckCircle className="w-8 h-8 text-primary" />
           </div>
-          <h2 className="text-xl font-semibold mb-2 text-foreground">{t('auth.preRegistration.successTitle')}</h2>
+          <h2 className="text-xl font-semibold mb-2 text-foreground">{copy.successTitle}</h2>
           <p className="text-muted-foreground mb-4">
-            {t('auth.preRegistration.successMessage')}
+            {copy.successMessage}
           </p>
           <p className="text-sm text-muted-foreground">
-            {t('auth.preRegistration.successDetail')}
+            {copy.successDetail}
           </p>
         </CardContent>
       </Card>
@@ -97,10 +99,10 @@ const PreRegistrationForm: React.FC = () => {
           />
         </div>
         <CardTitle className="text-xl font-bold text-center">
-          {t('auth.preRegistration.title')}
+          {copy.title}
         </CardTitle>
         <CardDescription className="text-center">
-          {t('auth.preRegistration.subtitle')}
+          {copy.subtitle}
         </CardDescription>
       </CardHeader>
       
@@ -108,7 +110,7 @@ const PreRegistrationForm: React.FC = () => {
         {/* Info banner */}
         <div className="mb-6 p-4 bg-primary/10 border-l-4 border-primary rounded-r-lg">
           <p className="text-sm text-primary leading-relaxed">
-            {t('auth.preRegistration.infoBanner')}
+            {copy.infoBanner}
           </p>
         </div>
 
@@ -185,12 +187,12 @@ const PreRegistrationForm: React.FC = () => {
             className="w-full mt-6" 
             disabled={isSubmitting}
           >
-            {isSubmitting ? t('auth.preRegistration.submitting') : t('auth.preRegistration.submit')}
+            {isSubmitting ? copy.submitting : copy.submit}
           </Button>
         </form>
 
         <p className="text-xs text-muted-foreground text-center mt-4">
-          {t('auth.preRegistration.consent')}
+          {copy.consent}
         </p>
       </CardContent>
     </Card>
