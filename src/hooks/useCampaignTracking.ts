@@ -34,7 +34,8 @@ const trackCall = async (body: Record<string, unknown>) => {
 };
 
 // ── Deduplication ──────────────────────────────────────────
-const visitedKeys = new Set<string>();
+// Store sessionId per visit key so remounted components can recover it
+const visitedSessions = new Map<string, string>();
 
 const buildVisitKey = (p: CampaignParams) =>
   [p.campaign, p.video_language, p.dealer, p.contact]
@@ -56,10 +57,10 @@ export const useCampaignTracking = () => {
 
     const key = buildVisitKey(params);
 
-    // Already logged in another instance with same params
-    if (visitedKeys.has(key)) {
-      // We don't have the sessionId from the other instance,
-      // but we also don't want to create a duplicate.
+    // Already logged in another instance with same params — recover sessionId
+    const existingSession = visitedSessions.get(key);
+    if (existingSession) {
+      sessionId.current = existingSession;
       insertDone.current = true;
       return;
     }
@@ -67,7 +68,7 @@ export const useCampaignTracking = () => {
     const newSessionId = crypto.randomUUID();
     sessionId.current = newSessionId;
     insertDone.current = true;
-    visitedKeys.add(key);
+    visitedSessions.set(key, newSessionId);
 
     const promise = trackCall({
       action: 'visit',
@@ -83,7 +84,7 @@ export const useCampaignTracking = () => {
       // Reset so a retry is possible
       insertDone.current = false;
       sessionId.current = '';
-      visitedKeys.delete(key);
+      visitedSessions.delete(key);
     });
 
     insertPromise.current = promise.then(() => undefined);
