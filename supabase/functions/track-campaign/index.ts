@@ -13,6 +13,32 @@ function jsonResponse(body: Record<string, unknown>, status = 200) {
   });
 }
 
+function isInternalPreviewUrl(value: string | null | undefined) {
+  if (!value) return false;
+
+  try {
+    const hostname = new URL(value).hostname.toLowerCase();
+    return (
+      hostname === "lovable.dev" ||
+      hostname.endsWith(".lovable.dev") ||
+      hostname.startsWith("preview--") ||
+      hostname.startsWith("id-preview--")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function isInternalPreviewTraffic(req: Request, referrer: unknown) {
+  const candidates = [
+    typeof referrer === "string" ? referrer : null,
+    req.headers.get("origin"),
+    req.headers.get("referer"),
+  ];
+
+  return candidates.some((value) => isInternalPreviewUrl(value));
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -34,6 +60,11 @@ Deno.serve(async (req) => {
         return jsonResponse({ success: false, error: "session_id and campaign required" }, 400);
       }
 
+      if (isInternalPreviewTraffic(req, referrer)) {
+        console.log("[track-campaign] Ignored internal preview visit", { campaign, referrer });
+        return jsonResponse({ success: true, ignored: true, reason: "internal_preview" });
+      }
+
       const { error } = await supabase.from("campaign_events").insert({
         session_id,
         video_language: video_language || null,
@@ -46,7 +77,6 @@ Deno.serve(async (req) => {
       });
 
       if (error) {
-        // Unique constraint → already exists, treat as success
         if (error.code === "23505") {
           return jsonResponse({ success: true, deduplicated: true });
         }
@@ -54,8 +84,6 @@ Deno.serve(async (req) => {
         return jsonResponse({ success: false, error: error.message }, 500);
       }
 
-      // Try to get visitor country in the background (non-blocking response)
-      // We respond immediately and update country asynchronously
       EdgeRuntime?.waitUntil?.(
         (async () => {
           try {

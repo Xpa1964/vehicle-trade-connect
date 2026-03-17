@@ -9,7 +9,14 @@ interface CampaignParams {
 
 type TrackingEventField = 'video_started' | 'video_completed' | 'popup_shown' | 'register_clicked';
 
+type StoredVisitSession = {
+  sessionId: string;
+  timestamp: number;
+};
+
 const EDGE_FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-campaign`;
+const VISIT_DEDUP_MS = 15_000;
+const VISIT_STORAGE_PREFIX = 'campaign-visit-session:';
 
 const trackCall = async (body: Record<string, unknown>) => {
   console.log('[CampaignTracking] → fetch', body);
@@ -34,41 +41,99 @@ const trackCall = async (body: Record<string, unknown>) => {
 };
 
 // ── Deduplication ──────────────────────────────────────────
-// Store sessionId per visit key so remounted components can recover it
-const visitedSessions = new Map<string, string>();
+// Store recent sessionId per visit key so remounted components and quick reloads recover it
+const visitedSessions = new Map<string, StoredVisitSession>();
 
 const buildVisitKey = (p: CampaignParams) =>
   [p.campaign, p.video_language, p.dealer, p.contact]
     .map((v) => (v || '').trim().toLowerCase())
     .join('|');
 
+const getStorageKey = (visitKey: string) => `${VISIT_STORAGE_PREFIX}${visitKey}`;
+
+const getValidStoredSession = (visitKey: string): string | null => {
+  const now = Date.now();
+  const memorySession = visitedSessions.get(visitKey);
+
+  if (memorySession) {
+    if (now - memorySession.timestamp <= VISIT_DEDUP_MS) {
+      return memorySession.sessionId;
+    }
+    visitedSessions.delete(visitKey);
+  }
+
+  try {
+    const raw = window.localStorage.getItem(getStorageKey(visitKey));
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw) as StoredVisitSession;
+    if (!parsed?.sessionId || typeof parsed.timestamp !== 'number') {
+      window.localStorage.removeItem(getStorageKey(visitKey));
+      return null;
+    }
+
+    if (now - parsed.timestamp > VISIT_DEDUP_MS) {
+      window.localStorage.removeItem(getStorageKey(visitKey));
+      return null;
+    }
+
+    visitedSessions.set(visitKey, parsed);
+    return parsed.sessionId;
+  } catch {
+    return null;
+  }
+};
+
+const persistSession = (visitKey: string, sessionId: string) => {
+  const value = { sessionId, timestamp: Date.now() };
+  visitedSessions.set(visitKey, value);
+
+  try {
+    window.localStorage.setItem(getStorageKey(visitKey), JSON.stringify(value));
+  } catch {
+    // ignore storage issues
+  }
+};
+
+const clearSession = (visitKey: string) => {
+  visitedSessions.delete(visitKey);
+
+  try {
+    window.localStorage.removeItem(getStorageKey(visitKey));
+  } catch {
+    // ignore storage issues
+  }
+};
+
 // ── Hook ───────────────────────────────────────────────────
 export const useCampaignTracking = () => {
   const sessionId = useRef('');
   const insertDone = useRef(false);
   const insertPromise = useRef<Promise<void>>(Promise.resolve());
+  const sentEvents = useRef<Set<TrackingEventField>>(new Set());
 
   const logVisit = useCallback(async (params: CampaignParams) => {
-    // Already logged in this component instance
     if (insertDone.current) {
       await insertPromise.current;
       return;
     }
 
     const key = buildVisitKey(params);
+    const existingSession = getValidStoredSession(key);
 
-    // Already logged in another instance with same params — recover sessionId
-    const existingSession = visitedSessions.get(key);
     if (existingSession) {
       sessionId.current = existingSession;
       insertDone.current = true;
+      sentEvents.current.clear();
+      console.log('[CampaignTracking] visit deduplicated', { sessionId: existingSession, key });
       return;
     }
 
     const newSessionId = crypto.randomUUID();
     sessionId.current = newSessionId;
     insertDone.current = true;
-    visitedSessions.set(key, newSessionId);
+    sentEvents.current.clear();
+    persistSession(key, newSessionId);
 
     const promise = trackCall({
       action: 'visit',
@@ -81,10 +146,9 @@ export const useCampaignTracking = () => {
       referrer: document.referrer || null,
     }).catch((err) => {
       console.error('[CampaignTracking] logVisit FAILED', err);
-      // Reset so a retry is possible
       insertDone.current = false;
       sessionId.current = '';
-      visitedSessions.delete(key);
+      clearSession(key);
     });
 
     insertPromise.current = promise.then(() => undefined);
@@ -94,7 +158,11 @@ export const useCampaignTracking = () => {
   const updateEvent = useCallback(async (field: TrackingEventField) => {
     console.log('[CampaignTracking] updateEvent CALLED', { field, sessionId: sessionId.current });
 
-    // Wait for INSERT to finish
+    if (sentEvents.current.has(field)) {
+      console.log('[CampaignTracking] updateEvent SKIPPED duplicate', { field, sessionId: sessionId.current });
+      return;
+    }
+
     await insertPromise.current;
 
     const sid = sessionId.current;
@@ -105,6 +173,7 @@ export const useCampaignTracking = () => {
 
     try {
       await trackCall({ action: 'event', session_id: sid, field });
+      sentEvents.current.add(field);
     } catch (err) {
       console.error('[CampaignTracking] updateEvent FAILED', { field, sessionId: sid, err });
     }

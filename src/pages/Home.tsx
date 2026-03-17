@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import HeroSection from '@/components/home/HeroSection';
 import AudioPresentationSection from '@/components/home/AudioPresentationSection';
@@ -22,15 +22,16 @@ const Home: React.FC = () => {
   const { logVisit, updateEvent, updateContact, sessionId } = useCampaignTracking();
 
   const effectiveCampaign = campaign || 'organic_web';
+  const initialTrackingParams = useRef({
+    video_language: videoLang || 'es',
+    campaign: effectiveCampaign,
+    dealer: dealer || undefined,
+    contact: contact || undefined,
+  });
 
   useEffect(() => {
-    logVisit({
-      video_language: videoLang || 'es',
-      campaign: effectiveCampaign,
-      dealer: dealer || undefined,
-      contact: contact || undefined,
-    });
-  }, [effectiveCampaign, videoLang, dealer, logVisit]);
+    logVisit(initialTrackingParams.current);
+  }, [logVisit]);
 
   const handleVideoStarted = useCallback(() => {
     updateEvent('video_started');
