@@ -33,7 +33,7 @@ export const useCommissionCalculator = ({
       case 'buyer_seller':
         return ['comprador', 'vendedor'];
       case 'trader':
-        return ['trader'];
+        return ['comprador', 'vendedor'];
       default:
         return ['comprador', 'vendedor', 'trader'];
     }
