@@ -49,7 +49,7 @@ const NavbarContainer: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo - Responsive sizing MEJORADO PARA MÓVIL */}
-          <div className="flex-shrink-0 touch-manipulation relative" style={{ marginLeft: '-550px', marginTop: '-60px' }}>
+          <div className="flex-shrink-0 touch-manipulation relative" style={{ marginLeft: '-950px', marginTop: '-60px' }}>
             <img 
               src="/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png" 
               alt="Logo" 
