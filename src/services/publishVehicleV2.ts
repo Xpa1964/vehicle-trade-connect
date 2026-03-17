@@ -357,9 +357,10 @@ export async function publishVehicleV2({
     version: data.version?.trim() || null,
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error: vehicleError } = await supabase
     .from('vehicles')
-    .insert(vehicleRow);
+    .insert(vehicleRow as any);
 
   if (vehicleError) {
     console.error(`❌ [V2] INSERT — failed:`, vehicleError.message);
