@@ -34,7 +34,8 @@ const trackCall = async (body: Record<string, unknown>) => {
 };
 
 // ── Deduplication ──────────────────────────────────────────
-const visitedKeys = new Set<string>();
+// Store sessionId per visit key so remounted components can recover it
+const visitedSessions = new Map<string, string>();
 
 const buildVisitKey = (p: CampaignParams) =>
   [p.campaign, p.video_language, p.dealer, p.contact]
