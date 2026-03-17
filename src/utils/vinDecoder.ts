@@ -124,131 +124,36 @@ export const decodeVin = (vin: string): VinDecodedData => {
   result.year = YEAR_CODES[yearChar] || null;
 
   const firstChar = upper.charAt(0);
-  if (['1', '4', '5'].includes(firstChar)) result.country = 'Estados Unidos';
-  else if (firstChar === '2') result.country = 'Canada';
-  else if (firstChar === '3') result.country = 'Mexico';
-  else if (firstChar === 'J') result.country = 'Japan';
-  else if (firstChar === 'K') result.country = 'Korea';
-  else if (['S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'].includes(firstChar)) result.country = 'Europa';
+  const wmi2 = upper.substring(0, 2);
+  
+  // European country mapping (detailed)
+  if (firstChar === 'W') result.country = 'Alemania';
+  else if (['SA', 'SB', 'SC', 'SD', 'SE', 'SF', 'SG', 'SH', 'SJ', 'SK', 'SL', 'SM', 'SN', 'SO', 'SP', 'SR', 'SS', 'ST'].includes(wmi2) || firstChar === 'S') result.country = 'Reino Unido';
+  else if (['VF', 'VG', 'VH', 'VJ', 'VK', 'VL', 'VM', 'VN', 'VP', 'VR', 'VS'].includes(wmi2)) {
+    if (wmi2 === 'VS') result.country = 'España';
+    else result.country = 'Francia';
+  }
+  else if (firstChar === 'Z') result.country = 'Italia';
+  else if (['TM', 'TK', 'TJ'].includes(wmi2) || firstChar === 'T') result.country = 'República Checa';
+  else if (['TR', 'TW'].includes(wmi2)) result.country = 'Hungría';
+  else if (wmi2 === 'UU') result.country = 'Rumanía';
+  else if (['XL', 'XW', 'X4', 'X9'].includes(wmi2)) result.country = 'Rusia';
+  else if (['YV', 'YK'].includes(wmi2)) result.country = 'Suecia';
+  else if (['YB', 'YC', 'YF'].includes(wmi2)) result.country = 'Finlandia';
+  else if (wmi2 === 'YS') result.country = 'Noruega';
+  else if (['NL', 'NM', 'NP'].includes(wmi2)) result.country = 'Turquía';
+  else if (firstChar === 'J') result.country = 'Japón';
+  else if (firstChar === 'K') result.country = 'Corea del Sur';
+  else if (firstChar === 'L') result.country = 'China';
+  else if (['1', '4', '5'].includes(firstChar)) result.country = 'Estados Unidos';
 
   return result;
 };
 
-interface NHTSAResult {
-  Variable: string;
-  Value: string | null;
-  ValueId: string | null;
-}
-
-const NHTSA_FUEL_MAP: Record<string, string> = {
-  'Gasoline': 'gasolina',
-  'Diesel': 'diesel',
-  'Electric': 'electrico',
-  'Compressed Natural Gas (CNG)': 'gas_natural',
-  'Ethanol (E85)': 'gasolina',
-  'Flexible Fuel Vehicle (FFV)': 'gasolina',
-  'Hydrogen Fuel Cell': 'hidrogeno',
-  'Plug-in Hybrid Electric Vehicle (PHEV)': 'hibrido_enchufable',
-  'Hybrid': 'hibrido',
-};
-
-const FUEL_ES_MAP: Record<string, string> = {
-  gasoline: 'gasolina',
-  diesel: 'diesel',
-  electric: 'electrico',
-  hybrid: 'hibrido',
-  hydrogen: 'hidrogeno',
-  gas: 'gas_natural',
-  cng: 'gas_natural',
-  lpg: 'glp',
-  phev: 'hibrido_enchufable',
-  'plug-in hybrid': 'hibrido_enchufable',
-};
-
-const fetchWithTimeout = async (url: string, timeoutMs = 5000) => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    return await fetch(url, { signal: controller.signal });
-  } finally {
-    clearTimeout(timeoutId);
-  }
-};
-
+/**
+ * Async VIN decoder - uses local decode only (European market).
+ * No dependency on NHTSA (US market API).
+ */
 export const decodeVinAsync = async (vin: string): Promise<VinDecodedData> => {
-  const local = decodeVin(vin);
-
-  if (!isValidVin(vin)) return local;
-
-  try {
-    const response = await fetchWithTimeout(
-      `https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vin}?format=json`
-    );
-
-    if (!response.ok) return local;
-
-    const data = await response.json();
-    const results: NHTSAResult[] = data.Results || [];
-
-    const getValue = (variableNames: string | string[]) => {
-      const names = Array.isArray(variableNames) ? variableNames : [variableNames];
-
-      for (const variableName of names) {
-        const item = results.find((result) => result.Variable === variableName);
-        const value = item?.Value?.trim();
-        if (value && value !== 'Not Applicable') {
-          return value;
-        }
-      }
-
-      return null;
-    };
-
-    const brand = getValue('Make') || local.brand;
-    const model = getValue('Model') || local.model;
-    const yearStr = getValue('Model Year');
-    const year = yearStr ? parseInt(yearStr, 10) : local.year;
-
-    const fuelType = getValue(['Fuel Type - Primary', 'Fuel Type - Secondary']);
-    let fuel = local.fuel;
-    if (fuelType) {
-      fuel = NHTSA_FUEL_MAP[fuelType] || FUEL_ES_MAP[fuelType.toLowerCase()] || fuelType.toLowerCase();
-    }
-
-    const transmissionStyle = getValue(['Transmission Style', 'Transmission Speeds']);
-    let transmission = local.transmission;
-    if (transmissionStyle) {
-      const normalizedTransmission = transmissionStyle.toLowerCase();
-      if (normalizedTransmission.includes('auto')) transmission = 'automatic';
-      else if (normalizedTransmission.includes('manual')) transmission = 'manual';
-    }
-
-    const engineSizeStr = getValue(['Displacement (L)', 'Displacement (CC)']);
-    const engineSize = engineSizeStr ? parseFloat(engineSizeStr) : local.engineSize;
-
-    const enginePowerStr = getValue(['Engine Brake (hp) From', 'Engine HP']);
-    const enginePower = enginePowerStr ? parseInt(enginePowerStr, 10) : local.enginePower;
-
-    const doorsStr = getValue('Doors');
-    const doors = doorsStr ? parseInt(doorsStr, 10) : local.doors;
-
-    const vehicleType = getValue(['Body Class', 'Vehicle Type']) || local.vehicleType;
-
-    return {
-      brand: brand?.toUpperCase() || null,
-      model: model?.toUpperCase() || null,
-      year: year && !Number.isNaN(year) ? year : null,
-      fuel,
-      transmission,
-      country: local.country,
-      engineSize: engineSize && !Number.isNaN(engineSize) ? engineSize : null,
-      enginePower: enginePower && !Number.isNaN(enginePower) ? enginePower : null,
-      doors: doors && !Number.isNaN(doors) ? doors : null,
-      vehicleType,
-    };
-  } catch (error) {
-    console.warn('[VIN Decoder] NHTSA API failed, using local decode:', error);
-    return local;
-  }
+  return decodeVin(vin);
 };
