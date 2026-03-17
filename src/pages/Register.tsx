@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterFormData, registerSchema } from '@/schemas/registerSchema';
 import { cleanMaliciousDrafts, validateFormCleanliness } from '@/utils/securityCleanup';
-import { Lock } from 'lucide-react';
+import { Lock, ArrowLeft } from 'lucide-react';
 
 // Flag to control pre-registration mode
 const PRE_REGISTRATION_MODE = true;
