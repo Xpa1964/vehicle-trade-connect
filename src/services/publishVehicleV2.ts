@@ -339,9 +339,7 @@ export async function publishVehicleV2({
     transmission: data.transmission || null,
     vin: data.vin || null,
     license_plate: data.licensePlate || null,
-    registration_date: data.registrationDate
-      ? data.registrationDate.toISOString().split('T')[0]
-      : null,
+    registration_date: registrationDateFormatted,
     vehicle_type: data.vehicleType || null,
     transaction_type: data.transactionType || 'national',
     accepts_exchange: data.acceptsExchange || false,
