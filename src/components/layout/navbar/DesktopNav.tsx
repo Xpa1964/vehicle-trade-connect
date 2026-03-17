@@ -84,7 +84,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ isHomePage, isScrolled, isAdmin
                 size="sm"
                 className="h-9 px-3 text-sm"
               >
-                {t('auth.register')}
+                Pre-Registro
               </Button>
             </Link>
           </>
