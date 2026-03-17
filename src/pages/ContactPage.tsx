@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Mail, Phone, MapPin, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Mail, MapPin, MessageSquare } from 'lucide-react';
 import ContactPageLogo from "@/components/contact/ContactPageLogo";
 import ContactCorporateHeader from "@/components/contact/ContactCorporateHeader";
 
@@ -45,17 +45,8 @@ const ContactPage: React.FC = () => {
                 <Mail className="h-6 w-6 text-primary mt-1" />
                 <div>
                   <h3 className="font-semibold mb-1 text-foreground">{t('contact.email')}</h3>
-                  <p className="text-muted-foreground">contacto@kontactvo.com</p>
-                  <p className="text-muted-foreground">soporte@kontactvo.com</p>
-                </div>
-              </div>
-              {/* Teléfono */}
-              <div className="flex items-start gap-4">
-                <Phone className="h-6 w-6 text-primary mt-1" />
-                <div>
-                  <h3 className="font-semibold mb-1 text-foreground">{t('contact.phone')}</h3>
-                  <p className="text-muted-foreground">+34 XXX XXX XXX</p>
-                  <p className="text-sm text-muted-foreground">{t('contact.phoneSchedule')}</p>
+                  <p className="text-muted-foreground">info@kontactvo.com</p>
+                  <p className="text-muted-foreground">fjpa@kontactvo.com</p>
                 </div>
               </div>
               {/* Oficina */}
@@ -65,8 +56,8 @@ const ContactPage: React.FC = () => {
                   <h3 className="font-semibold mb-1 text-foreground">{t('contact.mainOffice')}</h3>
                   <p className="text-muted-foreground">
                     KONTACT VO<br />
-                    [Dirección por confirmar]<br />
-                    España
+                    Plaça Joan Oliu 6<br />
+                    Sabadell, Barcelona
                   </p>
                 </div>
               </div>
