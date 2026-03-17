@@ -14,10 +14,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const REPORT_PRICES = {
-  basic: 15,
-  technical: 30,
-  premium: null // Precio personalizado según presupuesto
+const REPORT_PRICES: Record<string, number | null> = {
+  basic: 160,
+  technical: 200,
+  premium: null,
+  dgt: 19,
+  carfax: 29
 };
 
 const reportSchema = z.object({
@@ -30,7 +32,7 @@ const reportSchema = z.object({
     .min(1900, 'Año inválido')
     .max(new Date().getFullYear() + 1, 'Año inválido'),
   vehicle_location: z.string().min(1, 'La ubicación es obligatoria'),
-  report_type: z.enum(['basic', 'technical', 'premium']),
+  report_type: z.enum(['basic', 'technical', 'premium', 'dgt', 'carfax']),
   observations: z.string().optional(),
   vehicle_count: z.coerce.number()
     .min(1, 'Mínimo 1 vehículo')
@@ -115,21 +117,33 @@ export const ReportRequestForm: React.FC<ReportRequestFormProps> = ({ onSuccess 
     switch (type) {
       case 'basic':
         return {
-          name: 'Básico (DGT)',
-          price: '15€',
-          description: 'Informe oficial de la DGT con titularidad, cargas, ITV y kilometraje'
+          name: t('inspection.basic.title'),
+          price: t('inspection.basic.price'),
+          description: t('inspection.basic.f1') + ', ' + t('inspection.basic.f2') + ', ' + t('inspection.basic.f3')
         };
       case 'technical':
         return {
-          name: 'Técnico (Carfax)',
-          price: '30€',
-          description: 'Historial detallado: mantenimiento, siniestros y revisiones'
+          name: t('inspection.standard.title'),
+          price: t('inspection.standard.price'),
+          description: t('inspection.standard.f1') + ', ' + t('inspection.standard.f2') + ', ' + t('inspection.standard.f3')
         };
       case 'premium':
         return {
-          name: 'Premium (Carfax + Inspección)',
-          price: 'Precio según presupuesto personalizado',
-          description: 'Informe Carfax + revisión física de 126 puntos con fotos y vídeo. Recibirás un presupuesto personalizado según ubicación, urgencia y número de vehículos.'
+          name: t('inspection.premium.title'),
+          price: t('inspection.premium.price'),
+          description: t('inspection.premium.f1') + ', ' + t('inspection.premium.f2') + ', ' + t('inspection.premium.f7')
+        };
+      case 'dgt':
+        return {
+          name: t('inspection.extras.dgt'),
+          price: t('inspection.extras.dgt.price'),
+          description: t('inspection.basic.f1') + ', ' + t('inspection.basic.f2')
+        };
+      case 'carfax':
+        return {
+          name: t('inspection.extras.carfax'),
+          price: t('inspection.extras.carfax.price'),
+          description: t('inspection.standard.f1') + ', ' + t('inspection.standard.f2')
         };
       default:
         return null;
@@ -243,9 +257,11 @@ export const ReportRequestForm: React.FC<ReportRequestFormProps> = ({ onSuccess 
                   <SelectValue placeholder="Selecciona el tipo de informe" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="basic">Básico (DGT) - 15€</SelectItem>
-                  <SelectItem value="technical">Técnico (Carfax) - 30€</SelectItem>
-                  <SelectItem value="premium">Premium (Carfax + Inspección) - Presupuesto personalizado</SelectItem>
+                  <SelectItem value="basic">{t('inspection.basic.title')} - {t('inspection.basic.price')}</SelectItem>
+                  <SelectItem value="technical">{t('inspection.standard.title')} - {t('inspection.standard.price')}</SelectItem>
+                  <SelectItem value="premium">{t('inspection.premium.title')} - {t('inspection.premium.price')}</SelectItem>
+                  <SelectItem value="dgt">{t('inspection.extras.dgt')} - {t('inspection.extras.dgt.price')}</SelectItem>
+                  <SelectItem value="carfax">{t('inspection.extras.carfax')} - {t('inspection.extras.carfax.price')}</SelectItem>
                 </SelectContent>
               </Select>
               {form.formState.errors.report_type && (
