@@ -301,77 +301,98 @@ export const useVehicleSubmit = () => {
   };
 
   const handleImageUploads = async (images: FileList | File[], vehicleId: string) => {
-    try {
-      console.log('🖼️ [handleImageUploads] Starting image uploads for vehicle:', vehicleId);
-      let thumbnailUrl: string | null = null;
-      
-      const filesArray = Array.from(images);
-      const imagePromises = filesArray.map(async (file, index) => {
-        try {
-          console.log(`🖼️ [handleImageUploads] Processing image ${index + 1}/${images.length}:`, file.name);
+    console.log('🖼️ [handleImageUploads] Starting image uploads for vehicle:', vehicleId);
+    let thumbnailUrl: string | null = null;
+    const uploadedImages: string[] = [];
+    const uploadErrors: { fileName: string; error: string }[] = [];
+    
+    const filesArray = Array.from(images);
+    const imagePromises = filesArray.map(async (file, index) => {
+      try {
+        console.log(`🖼️ [handleImageUploads] Processing image ${index + 1}/${filesArray.length}:`, file.name);
 
-          // Upload through secure-file-upload edge function
-          const { publicUrl, error: uploadError } = await uploadFileSecurely(
-            file,
-            'vehicles',
-            vehicleId
-          );
-            
-          if (uploadError || !publicUrl) {
-            console.error(`❌ [handleImageUploads] Error uploading image ${index}:`, uploadError);
-            return null;
-          }
+        const { publicUrl, error: uploadError } = await uploadFileSecurely(
+          file,
+          'vehicles',
+          vehicleId
+        );
           
-          console.log(`✅ [handleImageUploads] Image ${index} uploaded successfully:`, publicUrl);
-          
-          // Store URL for the first image to use as thumbnail
-          if (index === 0) {
-            thumbnailUrl = publicUrl;
-          }
-          
-          // Add to vehicle_images table
-          const { error: imageInsertError } = await supabase
-            .from('vehicle_images')
-            .insert({
-              vehicle_id: vehicleId,
-              image_url: publicUrl,
-              is_primary: index === 0,
-              display_order: index
-            });
-            
-          if (imageInsertError) {
-            console.error(`❌ [handleImageUploads] Error inserting image record ${index}:`, imageInsertError);
-            return null;
-          }
-          
-          return publicUrl;
-        } catch (err) {
-          console.error(`❌ [handleImageUploads] Error processing image ${index}:`, err);
+        if (uploadError || !publicUrl) {
+          const errMsg = typeof uploadError === 'string' ? uploadError : uploadError?.message || 'Upload failed';
+          console.error(`❌ [handleImageUploads] Error uploading image ${index}:`, uploadError);
+          uploadErrors.push({ fileName: file.name, error: errMsg });
           return null;
         }
-      });
-      
-      await Promise.all(imagePromises);
-      
-      // Update vehicle with thumbnail URL
-      if (thumbnailUrl) {
-        console.log('🖼️ [handleImageUploads] Setting thumbnail URL:', thumbnailUrl);
-        const { error: thumbnailError } = await supabase
-          .from('vehicles')
-          .update({ thumbnailurl: thumbnailUrl })
-          .eq('id', vehicleId);
-          
-        if (thumbnailError) {
-          console.error('❌ [handleImageUploads] Error updating vehicle thumbnail:', thumbnailError);
-        } else {
-          console.log('✅ [handleImageUploads] Thumbnail updated successfully');
+        
+        console.log(`✅ [handleImageUploads] Image ${index} uploaded successfully:`, publicUrl);
+        
+        if (index === 0) {
+          thumbnailUrl = publicUrl;
         }
+        
+        const { error: imageInsertError } = await supabase
+          .from('vehicle_images')
+          .insert({
+            vehicle_id: vehicleId,
+            image_url: publicUrl,
+            is_primary: index === 0,
+            display_order: index
+          });
+          
+        if (imageInsertError) {
+          console.error(`❌ [handleImageUploads] Error inserting image record ${index}:`, imageInsertError);
+          uploadErrors.push({ fileName: file.name, error: imageInsertError.message });
+          return null;
+        }
+        
+        uploadedImages.push(publicUrl);
+        return publicUrl;
+      } catch (err: any) {
+        console.error(`❌ [handleImageUploads] Error processing image ${index}:`, err);
+        uploadErrors.push({ fileName: file.name, error: err?.message || 'Unknown error' });
+        return null;
       }
-      
-      console.log('🎉 [handleImageUploads] All images processed successfully');
-    } catch (err) {
-      console.error('❌ [handleImageUploads] Error uploading images:', err);
+    });
+    
+    await Promise.all(imagePromises);
+
+    console.log(`📸 Uploaded images: ${uploadedImages.length}/${filesArray.length}`);
+
+    // If images were provided but none uploaded, throw
+    if (filesArray.length > 0 && uploadedImages.length === 0) {
+      const { toast } = await import('sonner');
+      toast.error('No se pudo subir ninguna imagen. Inténtalo de nuevo.');
+      throw new Error('All image uploads failed');
     }
+
+    // Surface partial failures
+    if (uploadErrors.length > 0) {
+      console.warn('⚠️ Image upload issues:', uploadErrors);
+      const { toast } = await import('sonner');
+      toast.warning(`${uploadErrors.length} imagen(es) no se subieron correctamente.`);
+    }
+
+    // Thumbnail fallback: if first image failed but others succeeded
+    if (!thumbnailUrl && uploadedImages.length > 0) {
+      thumbnailUrl = uploadedImages[0];
+    }
+    
+    // Update vehicle with thumbnail URL
+    if (thumbnailUrl) {
+      console.log('🖼️ [handleImageUploads] Setting thumbnail URL:', thumbnailUrl);
+      const { error: thumbnailError } = await supabase
+        .from('vehicles')
+        .update({ thumbnailurl: thumbnailUrl })
+        .eq('id', vehicleId);
+        
+      if (thumbnailError) {
+        console.error('❌ [handleImageUploads] Error updating vehicle thumbnail:', thumbnailError);
+      } else {
+        console.log('✅ [handleImageUploads] Thumbnail updated successfully');
+      }
+    }
+    
+    console.log('🎉 [handleImageUploads] All images processed:', uploadedImages.length, 'success,', uploadErrors.length, 'failed');
   };
 
   const handleDocumentUploads = async (files: File[], vehicleId: string, userId: string) => {
