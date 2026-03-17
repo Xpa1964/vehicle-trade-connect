@@ -59,10 +59,10 @@ const PreRegistrationForm: React.FC = () => {
       if (error) throw error;
 
       setIsSuccess(true);
-      toast.success(t('auth.preRegistration.toastSuccess'));
+      toast.success(copy.toastSuccess);
     } catch (error: any) {
       console.error('[PreRegistration] Error:', error);
-      toast.error(t('auth.preRegistration.toastError'));
+      toast.error(copy.toastError);
     } finally {
       setIsSubmitting(false);
     }
