@@ -12,7 +12,8 @@ import kontactLogoOrange from '@/assets/kontact-vo-logo-orange-2.png';
 import { preRegistrationCopy } from './preRegistrationCopy';
 
 const PreRegistrationForm: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
+  const copy = preRegistrationCopy[currentLanguage] ?? preRegistrationCopy.en;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState({
