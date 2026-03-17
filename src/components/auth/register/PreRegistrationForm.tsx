@@ -70,8 +70,8 @@ const PreRegistrationForm: React.FC = () => {
     return (
       <Card className="w-full max-w-md shadow-xl border-primary/20">
         <CardContent className="p-6 sm:p-8 text-center">
-          <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-            <CheckCircle className="w-8 h-8 text-green-600" />
+          <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+            <CheckCircle className="w-8 h-8 text-primary" />
           </div>
           <h2 className="text-xl font-semibold mb-2 text-foreground">Pre-registro Enviado</h2>
           <p className="text-muted-foreground mb-4">
