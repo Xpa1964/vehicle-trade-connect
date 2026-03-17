@@ -21,37 +21,35 @@ const Home: React.FC = () => {
 
   const { logVisit, updateEvent, updateContact, sessionId } = useCampaignTracking();
 
+  const effectiveCampaign = campaign || 'organic_web';
+
   useEffect(() => {
-    if (campaign) {
-      logVisit({
-        video_language: videoLang || 'es',
-        campaign,
-        dealer: dealer || undefined,
-        contact: contact || undefined,
-      });
-    }
-  }, [campaign, videoLang, dealer, logVisit]);
+    logVisit({
+      video_language: videoLang || 'es',
+      campaign: effectiveCampaign,
+      dealer: dealer || undefined,
+      contact: contact || undefined,
+    });
+  }, [effectiveCampaign, videoLang, dealer, logVisit]);
 
   const handleVideoStarted = useCallback(() => {
-    if (campaign) updateEvent('video_started');
-  }, [campaign, updateEvent]);
+    updateEvent('video_started');
+  }, [updateEvent]);
 
   const handleVideoCompleted = useCallback(() => {
-    if (campaign) updateEvent('video_completed');
-  }, [campaign, updateEvent]);
+    updateEvent('video_completed');
+  }, [updateEvent]);
 
   const handlePopupShown = useCallback(() => {
-    if (campaign) updateEvent('popup_shown');
-  }, [campaign, updateEvent]);
+    updateEvent('popup_shown');
+  }, [updateEvent]);
 
   const handleRegisterClicked = useCallback((companyName?: string, interests?: string[]) => {
-    if (campaign) {
-      updateEvent('register_clicked');
-      if (companyName || (interests && interests.length > 0)) {
-        updateContact(companyName || '', interests);
-      }
+    updateEvent('register_clicked');
+    if (companyName || (interests && interests.length > 0)) {
+      updateContact(companyName || '', interests);
     }
-  }, [campaign, updateEvent, updateContact]);
+  }, [updateEvent, updateContact]);
 
   return (
     <div className="min-h-screen">
