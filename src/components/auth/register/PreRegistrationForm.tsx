@@ -9,6 +9,7 @@ import { LOGO_IMAGES } from '@/constants/imageAssets';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { CheckCircle, Building2, Mail, Phone, User } from 'lucide-react';
+import kontactLogoOrange from '@/assets/kontact-vo-logo-orange-2.png';
 
 const PreRegistrationForm: React.FC = () => {
   const { t } = useLanguage();
