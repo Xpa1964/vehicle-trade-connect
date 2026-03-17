@@ -1,3 +1,6 @@
+// 🚫 CRITICAL MODULE (PRE-LOCK)
+// Stabilized version — pending admin lock
+
 /**
  * publishVehicleV2 — Isolated, production-ready vehicle publication service
  *
@@ -21,6 +24,8 @@ const ALLOWED_MIME_TYPES: ReadonlySet<string> = new Set([
   'image/webp',
 ]);
 const UPLOAD_CONCURRENCY = 3;
+const MAX_TOTAL_SIZE_BYTES = 50 * 1024 * 1024; // 50MB
+const UPLOAD_TIMEOUT_MS = 15000; // 15s per image
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -92,7 +97,25 @@ function validateInput(data: VehicleFormData, files: File[]): void {
     }
   }
 
+  const totalSize = files.reduce((acc, f) => acc + f.size, 0);
+  if (totalSize > MAX_TOTAL_SIZE_BYTES) {
+    throw new Error(
+      `Validation: total image size exceeds 50MB (${(totalSize / 1024 / 1024).toFixed(1)}MB)`
+    );
+  }
+
   console.log('[V2] VALIDATION — passed');
+}
+
+// ─── Timeout helper ──────────────────────────────────────────────────────────
+
+async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error('Upload timeout')), ms)
+    ),
+  ]);
 }
 
 // ─── Concurrency-limited upload ──────────────────────────────────────────────
@@ -118,10 +141,9 @@ async function uploadImagesWithConcurrency(
       batch.map(async (file, localIdx) => {
         const globalIndex = batchStart + localIdx;
 
-        const { publicUrl, error: uploadError } = await uploadFileSecurely(
-          file,
-          'vehicles',
-          vehicleId
+        const { publicUrl, error: uploadError } = await withTimeout(
+          uploadFileSecurely(file, 'vehicles', vehicleId),
+          UPLOAD_TIMEOUT_MS
         );
 
         if (uploadError || !publicUrl) {
