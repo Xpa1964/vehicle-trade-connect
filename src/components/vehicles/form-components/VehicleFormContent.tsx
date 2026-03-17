@@ -75,10 +75,20 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
     const allFormValues = form.getValues();
     try {
       allFormValues.status = 'available';
-      await onSubmit(allFormValues);
-      markAsPublished();
+      const result = await onSubmit(allFormValues);
+      if (result?.id) {
+        markAsPublished();
+      } else {
+        console.error('❌ [VehicleForm] No vehicle ID returned');
+        import('sonner').then(({ toast }) => {
+          toast.error('Error al publicar el vehículo. Inténtalo de nuevo.');
+        });
+      }
     } catch (error) {
       console.error('❌ [VehicleForm] Submit error:', error);
+      import('sonner').then(({ toast }) => {
+        toast.error('Error al publicar el vehículo. Revisa los datos e inténtalo de nuevo.');
+      });
     }
   };
 
