@@ -192,7 +192,7 @@ const CommissionCalculator: React.FC<CommissionCalculatorProps> = ({
             <Separator className="bg-border" />
             
             <div className="flex justify-between items-center text-lg font-bold">
-              <span className="text-foreground">{t('commission.totalCosts')} {type === 'comprador' ? t('commission.buyer') : type === 'vendedor' ? t('commission.seller') : t('commission.trader')}:</span>
+              <span className="text-foreground">{t('commission.totalCosts')} {type === 'comprador' ? t('commission.buyer') : t('commission.seller')}:</span>
               <span className="text-primary">{formatCurrencyCommission(result.totalCost)}</span>
             </div>
           </div>
