@@ -78,7 +78,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({
         <CardTitle className="font-bold text-lg">{t('vehicles.basicDetails')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label htmlFor="brand">{t('vehicles.brand')} *</Label>
             <Select 
