@@ -40,7 +40,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ isHomePage, isScrolled, isAdmin
       }`;
     }
     
-    return `${baseClass} text-gray-700 hover:text-primary hover:bg-gray-50 ${
+    return `${baseClass} text-foreground hover:text-primary hover:bg-primary/10 ${
       isActive ? 'text-primary bg-primary/5' : ''
     }`;
   };

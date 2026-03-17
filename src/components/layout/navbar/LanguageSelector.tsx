@@ -47,7 +47,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ isHomePage, isScrol
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className={`flex items-center gap-1.5 ${textClass} ${hoverClass} px-2.5 py-2 rounded-lg touch-manipulation min-h-[44px] border border-border/40 backdrop-blur-sm transition-all ${isMobile ? 'text-sm w-full justify-start' : 'text-sm'}`}
+          className={`flex items-center gap-1.5 ${textClass} ${hoverClass} px-3 py-2 rounded-lg touch-manipulation min-h-[44px] border border-primary/30 bg-primary/5 backdrop-blur-md shadow-sm transition-all ${isMobile ? 'text-sm w-full justify-start' : 'text-sm'}`}
           aria-haspopup="menu"
           aria-label="Cambiar idioma"
         >
