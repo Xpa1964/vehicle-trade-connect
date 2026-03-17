@@ -117,21 +117,33 @@ export const ReportRequestForm: React.FC<ReportRequestFormProps> = ({ onSuccess 
     switch (type) {
       case 'basic':
         return {
-          name: 'Básico (DGT)',
-          price: '15€',
-          description: 'Informe oficial de la DGT con titularidad, cargas, ITV y kilometraje'
+          name: t('inspection.basic.title'),
+          price: t('inspection.basic.price'),
+          description: t('inspection.basic.f1') + ', ' + t('inspection.basic.f2') + ', ' + t('inspection.basic.f3')
         };
       case 'technical':
         return {
-          name: 'Técnico (Carfax)',
-          price: '30€',
-          description: 'Historial detallado: mantenimiento, siniestros y revisiones'
+          name: t('inspection.standard.title'),
+          price: t('inspection.standard.price'),
+          description: t('inspection.standard.f1') + ', ' + t('inspection.standard.f2') + ', ' + t('inspection.standard.f3')
         };
       case 'premium':
         return {
-          name: 'Premium (Carfax + Inspección)',
-          price: 'Precio según presupuesto personalizado',
-          description: 'Informe Carfax + revisión física de 126 puntos con fotos y vídeo. Recibirás un presupuesto personalizado según ubicación, urgencia y número de vehículos.'
+          name: t('inspection.premium.title'),
+          price: t('inspection.premium.price'),
+          description: t('inspection.premium.f1') + ', ' + t('inspection.premium.f2') + ', ' + t('inspection.premium.f7')
+        };
+      case 'dgt':
+        return {
+          name: t('inspection.extras.dgt'),
+          price: t('inspection.extras.dgt.price'),
+          description: t('inspection.basic.f1') + ', ' + t('inspection.basic.f2')
+        };
+      case 'carfax':
+        return {
+          name: t('inspection.extras.carfax'),
+          price: t('inspection.extras.carfax.price'),
+          description: t('inspection.standard.f1') + ', ' + t('inspection.standard.f2')
         };
       default:
         return null;
