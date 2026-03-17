@@ -33,25 +33,23 @@ const Home: React.FC = () => {
   }, [effectiveCampaign, videoLang, dealer, logVisit]);
 
   const handleVideoStarted = useCallback(() => {
-    if (campaign) updateEvent('video_started');
-  }, [campaign, updateEvent]);
+    updateEvent('video_started');
+  }, [updateEvent]);
 
   const handleVideoCompleted = useCallback(() => {
-    if (campaign) updateEvent('video_completed');
-  }, [campaign, updateEvent]);
+    updateEvent('video_completed');
+  }, [updateEvent]);
 
   const handlePopupShown = useCallback(() => {
-    if (campaign) updateEvent('popup_shown');
-  }, [campaign, updateEvent]);
+    updateEvent('popup_shown');
+  }, [updateEvent]);
 
   const handleRegisterClicked = useCallback((companyName?: string, interests?: string[]) => {
-    if (campaign) {
-      updateEvent('register_clicked');
-      if (companyName || (interests && interests.length > 0)) {
-        updateContact(companyName || '', interests);
-      }
+    updateEvent('register_clicked');
+    if (companyName || (interests && interests.length > 0)) {
+      updateContact(companyName || '', interests);
     }
-  }, [campaign, updateEvent, updateContact]);
+  }, [updateEvent, updateContact]);
 
   return (
     <div className="min-h-screen">
