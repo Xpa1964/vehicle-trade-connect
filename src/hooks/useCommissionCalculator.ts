@@ -35,7 +35,7 @@ export const useCommissionCalculator = ({
       case 'trader':
         return ['comprador', 'vendedor'];
       default:
-        return ['comprador', 'vendedor', 'trader'];
+        return ['comprador', 'vendedor'];
     }
   }, [user?.profile?.trader_type]);
 

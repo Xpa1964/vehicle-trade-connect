@@ -203,7 +203,7 @@ const CommissionCalculator: React.FC<CommissionCalculatorProps> = ({
           <ul className="list-disc list-inside space-y-1">
             <li>{t('commission.minCommissionInfo')}</li>
             <li>{t('commission.maxPriceInfo')}</li>
-            <li>{t('commission.traderInfo')}</li>
+            
             <li>{t('commission.maintenanceInfo')}</li>
           </ul>
         </div>
