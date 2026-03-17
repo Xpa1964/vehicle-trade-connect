@@ -243,9 +243,11 @@ export const ReportRequestForm: React.FC<ReportRequestFormProps> = ({ onSuccess 
                   <SelectValue placeholder="Selecciona el tipo de informe" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="basic">Básico (DGT) - 15€</SelectItem>
-                  <SelectItem value="technical">Técnico (Carfax) - 30€</SelectItem>
-                  <SelectItem value="premium">Premium (Carfax + Inspección) - Presupuesto personalizado</SelectItem>
+                  <SelectItem value="basic">{t('inspection.basic.title')} - {t('inspection.basic.price')}</SelectItem>
+                  <SelectItem value="technical">{t('inspection.standard.title')} - {t('inspection.standard.price')}</SelectItem>
+                  <SelectItem value="premium">{t('inspection.premium.title')} - {t('inspection.premium.price')}</SelectItem>
+                  <SelectItem value="dgt">{t('inspection.extras.dgt')} - {t('inspection.extras.dgt.price')}</SelectItem>
+                  <SelectItem value="carfax">{t('inspection.extras.carfax')} - {t('inspection.extras.carfax.price')}</SelectItem>
                 </SelectContent>
               </Select>
               {form.formState.errors.report_type && (
