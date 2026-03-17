@@ -117,9 +117,9 @@ const Register: React.FC = () => {
                 <div className="mx-auto w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-3">
                   <Lock className="w-6 h-6 text-muted-foreground" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">{t('auth.preRegistration.fullRegistrationTitle')}</h3>
+                <h3 className="font-semibold text-foreground mb-2">{preRegisterCopy.fullRegistrationTitle}</h3>
                 <p className="text-sm text-muted-foreground">
-                  {t('auth.preRegistration.fullRegistrationMessage')}
+                  {preRegisterCopy.fullRegistrationMessage}
                 </p>
               </div>
             </div>

@@ -187,12 +187,12 @@ const PreRegistrationForm: React.FC = () => {
             className="w-full mt-6" 
             disabled={isSubmitting}
           >
-            {isSubmitting ? t('auth.preRegistration.submitting') : t('auth.preRegistration.submit')}
+            {isSubmitting ? copy.submitting : copy.submit}
           </Button>
         </form>
 
         <p className="text-xs text-muted-foreground text-center mt-4">
-          {t('auth.preRegistration.consent')}
+          {copy.consent}
         </p>
       </CardContent>
     </Card>
