@@ -257,10 +257,9 @@ async function rollback(vehicleId: string, uploadedUrls: string[]): Promise<void
     // Format: .../storage/v1/object/public/vehicles/<vehicleId>/<filename>
     const storagePaths = uploadedUrls
       .map((url) => {
-        const marker = '/storage/v1/object/public/vehicles/';
-        const idx = url.indexOf(marker);
-        if (idx === -1) return null;
-        return url.substring(idx + marker.length);
+        const parts = url.split('/storage/v1/object/public/vehicles/');
+        if (parts.length !== 2) return null;
+        return parts[1];
       })
       .filter((p): p is string => p !== null);
 
