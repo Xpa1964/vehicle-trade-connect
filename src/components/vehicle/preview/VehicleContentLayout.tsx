@@ -96,6 +96,11 @@ const VehicleContentLayout: React.FC<VehicleContentLayoutProps> = ({
                 <h1 className="text-2xl font-heading font-semibold text-foreground tracking-tight leading-tight">
                   {vehicle.brand} {vehicle.model}
                 </h1>
+                {vehicle.version && (
+                  <p className="text-sm font-medium text-muted-foreground mt-0.5">
+                    {vehicle.version}
+                  </p>
+                )}
                 <p className="text-sm text-muted-foreground mt-1">
                   {vehicle.year} · {vehicle.location || vehicle.country}
                 </p>

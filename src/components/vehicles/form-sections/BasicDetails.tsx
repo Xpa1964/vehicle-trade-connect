@@ -78,7 +78,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({
         <CardTitle className="font-bold text-lg">{t('vehicles.basicDetails')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label htmlFor="brand">{t('vehicles.brand')} *</Label>
             <Select 
@@ -106,6 +106,16 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({
               onChange={(e) => handleModelChange(e.target.value)}
               placeholder={t('vehicles.modelExample')}
               required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="version">{t('vehicles.version')}</Label>
+            <Input
+              id="version"
+              value={formData.version || ''}
+              onChange={(e) => onChange('version', e.target.value)}
+              placeholder={t('vehicles.versionPlaceholder')}
             />
           </div>
         </div>
