@@ -27,11 +27,6 @@ export const useVehicleFormTabs = () => {
     const currentIndex = getCurrentTabIndex();
     if (currentIndex < tabs.length - 1) {
       setActiveTab(tabs[currentIndex + 1].id);
-      
-      // Si llegamos al último tab, marcar como publicado
-      if (currentIndex + 1 === tabs.length - 1) {
-        setIsVehiclePublished(true);
-      }
     }
   };
   
