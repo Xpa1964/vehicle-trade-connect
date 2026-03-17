@@ -95,7 +95,25 @@ function validateInput(data: VehicleFormData, files: File[]): void {
     }
   }
 
+  const totalSize = files.reduce((acc, f) => acc + f.size, 0);
+  if (totalSize > MAX_TOTAL_SIZE_BYTES) {
+    throw new Error(
+      `Validation: total image size exceeds 50MB (${(totalSize / 1024 / 1024).toFixed(1)}MB)`
+    );
+  }
+
   console.log('[V2] VALIDATION — passed');
+}
+
+// ─── Timeout helper ──────────────────────────────────────────────────────────
+
+async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error('Upload timeout')), ms)
+    ),
+  ]);
 }
 
 // ─── Concurrency-limited upload ──────────────────────────────────────────────
