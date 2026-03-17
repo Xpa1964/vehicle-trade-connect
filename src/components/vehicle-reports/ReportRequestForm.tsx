@@ -30,7 +30,7 @@ const reportSchema = z.object({
     .min(1900, 'Año inválido')
     .max(new Date().getFullYear() + 1, 'Año inválido'),
   vehicle_location: z.string().min(1, 'La ubicación es obligatoria'),
-  report_type: z.enum(['basic', 'technical', 'premium']),
+  report_type: z.enum(['basic', 'technical', 'premium', 'dgt', 'carfax']),
   observations: z.string().optional(),
   vehicle_count: z.coerce.number()
     .min(1, 'Mínimo 1 vehículo')
