@@ -6,6 +6,7 @@ import RegisterHeader from '@/components/auth/register/RegisterHeader';
 import RegisterForm from '@/components/auth/register/RegisterForm';
 import RegisterFooter from '@/components/auth/register/RegisterFooter';
 import PreRegistrationForm from '@/components/auth/register/PreRegistrationForm';
+import { preRegistrationCopy } from '@/components/auth/register/preRegistrationCopy';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
