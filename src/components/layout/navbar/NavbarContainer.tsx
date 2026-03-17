@@ -49,11 +49,12 @@ const NavbarContainer: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo - Responsive sizing MEJORADO PARA MÓVIL */}
-          <div className="flex-shrink-0 touch-manipulation relative" style={{ marginLeft: '-100px', marginTop: '-60px' }}>
+          <div className="flex-shrink-0 touch-manipulation relative" style={{ marginLeft: '-300px', marginTop: '-60px' }}>
             <img 
               src="/lovable-uploads/a645acd2-f5c2-4f99-be3b-9d089c634c3c.png" 
               alt="Logo" 
-              className="h-8 w-auto sm:h-10 md:h-12 transition-all duration-200"
+              className="h-8 w-auto sm:h-10 md:h-12 transition-all duration-200 brightness-[0.85] contrast-[1.1]"
+              style={{ filter: 'brightness(0.85) contrast(1.1) drop-shadow(0 0 8px rgba(0,0,0,0.15))' }}
               loading="eager"
               width={48}
               height={48}
