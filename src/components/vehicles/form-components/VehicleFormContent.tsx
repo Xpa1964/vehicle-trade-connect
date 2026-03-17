@@ -23,7 +23,7 @@ import {
 interface VehicleFormContentProps {
   form: UseFormReturn<VehicleFormData>;
   isEditing: boolean;
-  onSubmit: (data: VehicleFormData) => Promise<void>;
+  onSubmit: (data: VehicleFormData) => Promise<any>;
   onChange: (field: string, value: string | number) => void;
   onBrandChange: (brand: string) => string[];
   availableModels: string[];
