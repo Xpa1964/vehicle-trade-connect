@@ -326,7 +326,7 @@ export const useVehicleSubmit = () => {
         
         console.log(`✅ [handleImageUploads] Image ${index} uploaded successfully:`, publicUrl);
         
-        if (index === 0) {
+        if (!thumbnailUrl) {
           thumbnailUrl = publicUrl;
         }
         
@@ -335,7 +335,7 @@ export const useVehicleSubmit = () => {
           .insert({
             vehicle_id: vehicleId,
             image_url: publicUrl,
-            is_primary: index === 0,
+            is_primary: false,
             display_order: index
           });
           
@@ -360,7 +360,6 @@ export const useVehicleSubmit = () => {
 
     // If images were provided but none uploaded, throw
     if (filesArray.length > 0 && uploadedImages.length === 0) {
-      const { toast } = await import('sonner');
       toast.error('No se pudo subir ninguna imagen. Inténtalo de nuevo.');
       throw new Error('All image uploads failed');
     }
@@ -368,13 +367,36 @@ export const useVehicleSubmit = () => {
     // Surface partial failures
     if (uploadErrors.length > 0) {
       console.warn('⚠️ Image upload issues:', uploadErrors);
-      const { toast } = await import('sonner');
       toast.warning(`${uploadErrors.length} imagen(es) no se subieron correctamente.`);
     }
 
-    // Thumbnail fallback: if first image failed but others succeeded
-    if (!thumbnailUrl && uploadedImages.length > 0) {
-      thumbnailUrl = uploadedImages[0];
+    // Ensure exactly ONE primary image after all uploads complete
+    if (uploadedImages.length > 0) {
+      const primaryImageUrl = uploadedImages[0];
+
+      // Reset all to non-primary
+      const { error: primaryResetError } = await supabase
+        .from('vehicle_images')
+        .update({ is_primary: false })
+        .eq('vehicle_id', vehicleId);
+
+      if (primaryResetError) {
+        console.error('❌ Error resetting primary images:', primaryResetError);
+      }
+
+      // Set the first successfully uploaded image as primary
+      const { error: setPrimaryError } = await supabase
+        .from('vehicle_images')
+        .update({ is_primary: true })
+        .eq('vehicle_id', vehicleId)
+        .eq('image_url', primaryImageUrl);
+
+      if (setPrimaryError) {
+        console.error('❌ Error setting primary image:', setPrimaryError);
+      }
+
+      // Ensure thumbnail matches the primary image
+      thumbnailUrl = primaryImageUrl;
     }
     
     // Update vehicle with thumbnail URL
