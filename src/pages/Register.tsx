@@ -18,7 +18,8 @@ import { Lock, ArrowLeft } from 'lucide-react';
 const PRE_REGISTRATION_MODE = true;
 
 const Register: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
+  const preRegisterCopy = preRegistrationCopy[currentLanguage] ?? preRegistrationCopy.en;
   const { 
     handleSubmit: submitRegistration, 
     isSubmitting, 
