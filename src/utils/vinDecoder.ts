@@ -62,6 +62,17 @@ const WMI_BRAND_MAP: Record<string, string> = {
   'SAJ': 'JAGUAR', 'SAL': 'LAND ROVER',
   'UU1': 'DACIA',
   'JAA': 'ISUZU',
+  // Turkish manufacturers
+  'NLH': 'HYUNDAI', 'NLE': 'HYUNDAI',
+  'NMT': 'TOYOTA', 'NM0': 'FORD', 'NM4': 'FORD',
+  'NMA': 'FIAT',
+  'U5Y': 'KIA', 'KNE': 'KIA',
+  'SJN': 'NISSAN',
+  // Additional European
+  'TRU': 'AUDI', 'TK9': 'SKODA',
+  'LVS': 'FORD', 'LVG': 'FORD',
+  'MEE': 'RENAULT',
+  'VNE': 'RENAULT',
 };
 
 const YEAR_CODES: Record<string, number> = {
