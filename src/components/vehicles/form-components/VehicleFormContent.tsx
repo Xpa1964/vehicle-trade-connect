@@ -272,7 +272,7 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
                           )}
                           <Button
                             type="button"
-                            onClick={handleFormSubmit}
+                            onClick={handleValidatedSubmit}
                             className="min-h-[48px] px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
                           >
                             {isEditing ? (
