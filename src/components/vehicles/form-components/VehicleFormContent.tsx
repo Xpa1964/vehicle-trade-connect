@@ -71,6 +71,7 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
 
   const formData = useWatch({ control: form.control }) as VehicleFormData;
 
+  // DEPRECATED: kept for safety, no longer called
   const handleFormSubmit = async () => {
     const allFormValues = form.getValues();
     try {
@@ -91,6 +92,29 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
       });
     }
   };
+
+  const handleValidatedSubmit = form.handleSubmit(
+    async (data) => {
+      try {
+        data.status = 'available';
+        const result = await onSubmit(data);
+        if (result?.id) {
+          markAsPublished();
+        } else {
+          throw new Error('Vehicle not created');
+        }
+      } catch (error) {
+        console.error('❌ [VehicleForm] Submit error:', error);
+        const { toast } = await import('sonner');
+        toast.error('Error al publicar el vehículo. Revisa los datos.');
+      }
+    },
+    async (validationErrors) => {
+      console.error('❌ [VehicleForm] Validation errors:', validationErrors);
+      const { toast } = await import('sonner');
+      toast.error('Formulario inválido. Revisa los campos obligatorios.');
+    }
+  );
 
   const handleSaveDraft = async () => {
     const allFormValues = form.getValues();
@@ -248,7 +272,7 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
                           )}
                           <Button
                             type="button"
-                            onClick={handleFormSubmit}
+                            onClick={handleValidatedSubmit}
                             className="min-h-[48px] px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
                           >
                             {isEditing ? (
