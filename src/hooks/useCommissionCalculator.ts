@@ -21,7 +21,7 @@ export const useCommissionCalculator = ({
     
     // Si no hay usuario autenticado o no tiene trader_type, mostrar todos (Opción A)
     if (!traderType) {
-      return ['comprador', 'vendedor', 'trader'];
+      return ['comprador', 'vendedor'];
     }
 
     // Filtrar según el tipo de trader
