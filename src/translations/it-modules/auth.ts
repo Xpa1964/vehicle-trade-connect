@@ -125,4 +125,21 @@ export default {
   'auth.register.importer': 'Importatore',
   'auth.register.exporter': 'Esportatore',
   'auth.register.other': 'Altro',
+
+  // Pre-Registration
+  'auth.preRegistration.title': 'Pre-registrazione',
+  'auth.preRegistration.subtitle': 'Richiesta di accesso anticipato a KONTACT VO',
+  'auth.preRegistration.infoBanner': 'Compila questo modulo di pre-registrazione. Non appena KONTACT VO inizierà la propria attività, ti contatteremo per richiedere la documentazione necessaria, validarla e attivare il tuo account.',
+  'auth.preRegistration.submit': 'Invia pre-registrazione',
+  'auth.preRegistration.submitting': 'Invio in corso...',
+  'auth.preRegistration.successTitle': 'Pre-registrazione inviata',
+  'auth.preRegistration.successMessage': 'Abbiamo ricevuto correttamente la tua richiesta di pre-registrazione.',
+  'auth.preRegistration.successDetail': 'Non appena inizieremo l\'attività, ti contatteremo per completare il processo di registrazione e attivare il tuo account.',
+  'auth.preRegistration.consent': 'Inviando questo modulo accetti di essere contattato quando il servizio sarà disponibile.',
+  'auth.preRegistration.toastSuccess': 'Pre-registrazione inviata con successo',
+  'auth.preRegistration.toastError': 'Errore nell\'invio della pre-registrazione. Riprova.',
+  'auth.preRegistration.minChars': 'min. 3 caratteri',
+  'auth.preRegistration.backToHome': 'Torna alla home',
+  'auth.preRegistration.fullRegistrationTitle': 'Registrazione completa',
+  'auth.preRegistration.fullRegistrationMessage': 'Il modulo di registrazione completa sarà disponibile a breve. Nel frattempo, completa la pre-registrazione a sinistra per riservare il tuo accesso.',
 };

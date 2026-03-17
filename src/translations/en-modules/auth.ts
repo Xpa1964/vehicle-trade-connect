@@ -134,4 +134,21 @@ export default {
   'auth.register.other': 'Other',
   'auth.register.generatedUsername': 'Your username',
   'auth.register.usernameExplanation': 'Automatically generated from your company name and manager last name',
+
+  // Pre-Registration
+  'auth.preRegistration.title': 'Pre-Registration',
+  'auth.preRegistration.subtitle': 'Early access request for KONTACT VO',
+  'auth.preRegistration.infoBanner': 'Complete this pre-registration form. As soon as KONTACT VO begins operations, we will contact you to request the necessary documentation, validate it and activate your account.',
+  'auth.preRegistration.submit': 'Submit Pre-Registration',
+  'auth.preRegistration.submitting': 'Submitting...',
+  'auth.preRegistration.successTitle': 'Pre-registration Submitted',
+  'auth.preRegistration.successMessage': 'We have received your pre-registration request successfully.',
+  'auth.preRegistration.successDetail': 'As soon as we begin operations, we will contact you to complete the registration process and activate your account.',
+  'auth.preRegistration.consent': 'By submitting this form you agree to be contacted when the service becomes available.',
+  'auth.preRegistration.toastSuccess': 'Pre-registration submitted successfully',
+  'auth.preRegistration.toastError': 'Error submitting pre-registration. Please try again.',
+  'auth.preRegistration.minChars': 'min. 3 characters',
+  'auth.preRegistration.backToHome': 'Back to home',
+  'auth.preRegistration.fullRegistrationTitle': 'Full Registration',
+  'auth.preRegistration.fullRegistrationMessage': 'The full registration form will be available soon. In the meantime, complete the pre-registration on the left to reserve your access.',
 };

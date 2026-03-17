@@ -25,16 +25,16 @@ const PreRegistrationForm: React.FC = () => {
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.companyName.trim() || formData.companyName.trim().length < 3) {
-      newErrors.companyName = t('auth.register.companyName') + ' (min. 3 caracteres)';
+      newErrors.companyName = `${t('auth.register.companyName')} (${t('auth.preRegistration.minChars')})`;
     }
     if (!formData.contactPerson.trim() || formData.contactPerson.trim().length < 3) {
-      newErrors.contactPerson = t('auth.register.contactPerson') + ' (min. 3 caracteres)';
+      newErrors.contactPerson = `${t('auth.register.contactPerson')} (${t('auth.preRegistration.minChars')})`;
     }
     if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = t('form.invalidEmail');
     }
     if (!formData.phone.trim() || formData.phone.trim().length < 6) {
-      newErrors.phone = t('auth.register.phone') + ' (min. 6 caracteres)';
+      newErrors.phone = `${t('auth.register.phone')} (${t('auth.preRegistration.minChars')})`;
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -57,10 +57,10 @@ const PreRegistrationForm: React.FC = () => {
       if (error) throw error;
 
       setIsSuccess(true);
-      toast.success('Pre-registro enviado correctamente');
+      toast.success(t('auth.preRegistration.toastSuccess'));
     } catch (error: any) {
       console.error('[PreRegistration] Error:', error);
-      toast.error('Error al enviar el pre-registro. Inténtelo de nuevo.');
+      toast.error(t('auth.preRegistration.toastError'));
     } finally {
       setIsSubmitting(false);
     }
@@ -73,12 +73,12 @@ const PreRegistrationForm: React.FC = () => {
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
             <CheckCircle className="w-8 h-8 text-primary" />
           </div>
-          <h2 className="text-xl font-semibold mb-2 text-foreground">Pre-registro Enviado</h2>
+          <h2 className="text-xl font-semibold mb-2 text-foreground">{t('auth.preRegistration.successTitle')}</h2>
           <p className="text-muted-foreground mb-4">
-            Hemos recibido su solicitud de pre-registro correctamente.
+            {t('auth.preRegistration.successMessage')}
           </p>
           <p className="text-sm text-muted-foreground">
-            En cuanto iniciemos la actividad, nos pondremos en contacto con usted para completar el proceso de registro y habilitar su cuenta.
+            {t('auth.preRegistration.successDetail')}
           </p>
         </CardContent>
       </Card>
@@ -97,10 +97,10 @@ const PreRegistrationForm: React.FC = () => {
           />
         </div>
         <CardTitle className="text-xl font-bold text-center">
-          Pre-Registro
+          {t('auth.preRegistration.title')}
         </CardTitle>
         <CardDescription className="text-center">
-          Solicitud de acceso anticipado a KONTACT VO
+          {t('auth.preRegistration.subtitle')}
         </CardDescription>
       </CardHeader>
       
@@ -108,9 +108,7 @@ const PreRegistrationForm: React.FC = () => {
         {/* Info banner */}
         <div className="mb-6 p-4 bg-primary/10 border-l-4 border-primary rounded-r-lg">
           <p className="text-sm text-primary leading-relaxed">
-            Complete este formulario de pre-registro. En cuanto KONTACT VO inicie su actividad, 
-            nos pondremos en contacto con usted para solicitar la documentación necesaria, 
-            validarla y habilitar su cuenta.
+            {t('auth.preRegistration.infoBanner')}
           </p>
         </div>
 
@@ -187,12 +185,12 @@ const PreRegistrationForm: React.FC = () => {
             className="w-full mt-6" 
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Enviando...' : 'Enviar Pre-Registro'}
+            {isSubmitting ? t('auth.preRegistration.submitting') : t('auth.preRegistration.submit')}
           </Button>
         </form>
 
         <p className="text-xs text-muted-foreground text-center mt-4">
-          Al enviar este formulario acepta que contactemos con usted cuando el servicio esté disponible.
+          {t('auth.preRegistration.consent')}
         </p>
       </CardContent>
     </Card>

@@ -97,7 +97,7 @@ const Register: React.FC = () => {
         <div className="max-w-6xl mx-auto mb-4">
           <a href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="h-4 w-4" />
-            Volver al inicio
+            {t('auth.preRegistration.backToHome')}
           </a>
         </div>
 
@@ -115,10 +115,9 @@ const Register: React.FC = () => {
                 <div className="mx-auto w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-3">
                   <Lock className="w-6 h-6 text-muted-foreground" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Registro Completo</h3>
+                <h3 className="font-semibold text-foreground mb-2">{t('auth.preRegistration.fullRegistrationTitle')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  El formulario de registro completo estará disponible próximamente. 
-                  Mientras tanto, complete el pre-registro a la izquierda para reservar su acceso.
+                  {t('auth.preRegistration.fullRegistrationMessage')}
                 </p>
               </div>
             </div>

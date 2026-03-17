@@ -127,4 +127,21 @@ export default {
   'auth.register.importer': 'Importør',
   'auth.register.exporter': 'Eksportør',
   'auth.register.other': 'Andet',
+
+  // Pre-Registration
+  'auth.preRegistration.title': 'Forhåndsregistrering',
+  'auth.preRegistration.subtitle': 'Anmodning om tidlig adgang til KONTACT VO',
+  'auth.preRegistration.infoBanner': 'Udfyld denne forhåndsregistreringsformular. Så snart KONTACT VO starter sin aktivitet, kontakter vi dig for at anmode om den nødvendige dokumentation, validere den og aktivere din konto.',
+  'auth.preRegistration.submit': 'Send forhåndsregistrering',
+  'auth.preRegistration.submitting': 'Sender...',
+  'auth.preRegistration.successTitle': 'Forhåndsregistrering sendt',
+  'auth.preRegistration.successMessage': 'Vi har modtaget din forhåndsregistreringsanmodning.',
+  'auth.preRegistration.successDetail': 'Så snart vi starter vores aktivitet, kontakter vi dig for at fuldføre registreringsprocessen og aktivere din konto.',
+  'auth.preRegistration.consent': 'Ved at indsende denne formular accepterer du at blive kontaktet, når tjenesten er tilgængelig.',
+  'auth.preRegistration.toastSuccess': 'Forhåndsregistrering sendt succesfuldt',
+  'auth.preRegistration.toastError': 'Fejl ved afsendelse af forhåndsregistrering. Prøv igen.',
+  'auth.preRegistration.minChars': 'min. 3 tegn',
+  'auth.preRegistration.backToHome': 'Tilbage til forsiden',
+  'auth.preRegistration.fullRegistrationTitle': 'Fuld registrering',
+  'auth.preRegistration.fullRegistrationMessage': 'Den fulde registreringsformular vil snart være tilgængelig. Udfyld i mellemtiden forhåndsregistreringen til venstre for at reservere din adgang.',
 };

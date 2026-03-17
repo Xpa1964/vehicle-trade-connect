@@ -121,4 +121,21 @@ export default {
   'auth.register.importer': 'Importeur',
   'auth.register.exporter': 'Exporteur',
   'auth.register.other': 'Anders',
+
+  // Pre-Registration
+  'auth.preRegistration.title': 'Pre-registratie',
+  'auth.preRegistration.subtitle': 'Aanvraag voor vroege toegang tot KONTACT VO',
+  'auth.preRegistration.infoBanner': 'Vul dit pre-registratieformulier in. Zodra KONTACT VO zijn activiteiten start, nemen wij contact met u op om de benodigde documentatie op te vragen, deze te valideren en uw account te activeren.',
+  'auth.preRegistration.submit': 'Pre-registratie verzenden',
+  'auth.preRegistration.submitting': 'Bezig met verzenden...',
+  'auth.preRegistration.successTitle': 'Pre-registratie verzonden',
+  'auth.preRegistration.successMessage': 'Wij hebben uw pre-registratieaanvraag succesvol ontvangen.',
+  'auth.preRegistration.successDetail': 'Zodra wij onze activiteiten starten, nemen wij contact met u op om het registratieproces te voltooien en uw account te activeren.',
+  'auth.preRegistration.consent': 'Door dit formulier te verzenden gaat u ermee akkoord dat wij contact met u opnemen wanneer de dienst beschikbaar is.',
+  'auth.preRegistration.toastSuccess': 'Pre-registratie succesvol verzonden',
+  'auth.preRegistration.toastError': 'Fout bij het verzenden van de pre-registratie. Probeer het opnieuw.',
+  'auth.preRegistration.minChars': 'min. 3 tekens',
+  'auth.preRegistration.backToHome': 'Terug naar startpagina',
+  'auth.preRegistration.fullRegistrationTitle': 'Volledige registratie',
+  'auth.preRegistration.fullRegistrationMessage': 'Het volledige registratieformulier is binnenkort beschikbaar. Vul in de tussentijd de pre-registratie links in om uw toegang te reserveren.',
 };
