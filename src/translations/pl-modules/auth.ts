@@ -127,4 +127,21 @@ export default {
   'auth.register.importer': 'Importer',
   'auth.register.exporter': 'Eksporter',
   'auth.register.other': 'Inne',
+
+  // Pre-Registration
+  'auth.preRegistration.title': 'Wstępna rejestracja',
+  'auth.preRegistration.subtitle': 'Wniosek o wczesny dostęp do KONTACT VO',
+  'auth.preRegistration.infoBanner': 'Wypełnij ten formularz wstępnej rejestracji. Gdy tylko KONTACT VO rozpocznie działalność, skontaktujemy się z Tobą w celu uzyskania niezbędnej dokumentacji, jej weryfikacji i aktywacji Twojego konta.',
+  'auth.preRegistration.submit': 'Wyślij wstępną rejestrację',
+  'auth.preRegistration.submitting': 'Wysyłanie...',
+  'auth.preRegistration.successTitle': 'Wstępna rejestracja wysłana',
+  'auth.preRegistration.successMessage': 'Pomyślnie otrzymaliśmy Twój wniosek o wstępną rejestrację.',
+  'auth.preRegistration.successDetail': 'Gdy tylko rozpoczniemy działalność, skontaktujemy się z Tobą w celu dokończenia procesu rejestracji i aktywacji Twojego konta.',
+  'auth.preRegistration.consent': 'Wysyłając ten formularz, wyrażasz zgodę na kontakt, gdy usługa będzie dostępna.',
+  'auth.preRegistration.toastSuccess': 'Wstępna rejestracja wysłana pomyślnie',
+  'auth.preRegistration.toastError': 'Błąd podczas wysyłania wstępnej rejestracji. Spróbuj ponownie.',
+  'auth.preRegistration.minChars': 'min. 3 znaki',
+  'auth.preRegistration.backToHome': 'Powrót do strony głównej',
+  'auth.preRegistration.fullRegistrationTitle': 'Pełna rejestracja',
+  'auth.preRegistration.fullRegistrationMessage': 'Pełny formularz rejestracyjny będzie dostępny wkrótce. W międzyczasie wypełnij wstępną rejestrację po lewej stronie, aby zarezerwować dostęp.',
 };
