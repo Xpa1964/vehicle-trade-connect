@@ -303,7 +303,8 @@ export const useVehicleSubmit = () => {
   const handleImageUploads = async (images: FileList | File[], vehicleId: string) => {
     console.log('🖼️ [handleImageUploads] Starting image uploads for vehicle:', vehicleId);
     let thumbnailUrl: string | null = null;
-    const uploadedImages: string[] = [];
+    type UploadedImage = { url: string; originalIndex: number };
+    const uploadedImages: UploadedImage[] = [];
     const uploadErrors: { fileName: string; error: string }[] = [];
     
     const filesArray = Array.from(images);
@@ -326,10 +327,6 @@ export const useVehicleSubmit = () => {
         
         console.log(`✅ [handleImageUploads] Image ${index} uploaded successfully:`, publicUrl);
         
-        if (!thumbnailUrl) {
-          thumbnailUrl = publicUrl;
-        }
-        
         const { error: imageInsertError } = await supabase
           .from('vehicle_images')
           .insert({
@@ -345,7 +342,7 @@ export const useVehicleSubmit = () => {
           return null;
         }
         
-        uploadedImages.push(publicUrl);
+        uploadedImages.push({ url: publicUrl, originalIndex: index });
         return publicUrl;
       } catch (err: any) {
         console.error(`❌ [handleImageUploads] Error processing image ${index}:`, err);
@@ -355,6 +352,9 @@ export const useVehicleSubmit = () => {
     });
     
     await Promise.all(imagePromises);
+
+    // Sort by original user-selected order (not async completion order)
+    uploadedImages.sort((a, b) => a.originalIndex - b.originalIndex);
 
     console.log(`📸 Uploaded images: ${uploadedImages.length}/${filesArray.length}`);
 
@@ -372,7 +372,7 @@ export const useVehicleSubmit = () => {
 
     // Ensure exactly ONE primary image after all uploads complete
     if (uploadedImages.length > 0) {
-      const primaryImageUrl = uploadedImages[0];
+      const primaryImageUrl = uploadedImages[0].url;
 
       // Reset all to non-primary
       const { error: primaryResetError } = await supabase
@@ -384,7 +384,7 @@ export const useVehicleSubmit = () => {
         console.error('❌ Error resetting primary images:', primaryResetError);
       }
 
-      // Set the first successfully uploaded image as primary
+      // Set the first user-selected image as primary
       const { error: setPrimaryError } = await supabase
         .from('vehicle_images')
         .update({ is_primary: true })
@@ -395,7 +395,7 @@ export const useVehicleSubmit = () => {
         console.error('❌ Error setting primary image:', setPrimaryError);
       }
 
-      // Ensure thumbnail matches the primary image
+      // Ensure thumbnail matches the user's first selected image
       thumbnailUrl = primaryImageUrl;
     }
     
