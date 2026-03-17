@@ -6,11 +6,12 @@ import { ArrowRight, Search, FileText, PlusCircle } from 'lucide-react';
 import { useStaticImage } from '@/hooks/useStaticImage';
 import vehicleFormScreenshot from '@/assets/vehicle-form-screenshot.png';
 import vehicleDetailScreenshot from '@/assets/vehicle-detail-screenshot.png';
+import galleryViewScreenshot from '@/assets/gallery-view-screenshot.png';
 
 const VehicleGalleryInfoPage = () => {
   // Use registry-based images that update from Storage
   const { src: showroomHeroSrc, objectPosition: showroomPos } = useStaticImage('hero.vehicles');
-  const { src: galleryViewSrc } = useStaticImage('services.showroom');
+  const galleryViewSrc = galleryViewScreenshot;
   const vehicleDetailSrc = vehicleDetailScreenshot;
   const vehicleFormSrc = vehicleFormScreenshot;
   const navigate = useNavigate();
