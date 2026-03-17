@@ -4,13 +4,13 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 export const useVehicleFormTabs = () => {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState("basic");
+  const [activeTab, setActiveTab] = useState("identification");
   const [isVehiclePublished, setIsVehiclePublished] = useState(false);
 
-  // Define the tab order and labels - ahora con 7 tabs
+  // Define the tab order and labels - Identificación primero
   const tabs = [
-    { id: 'basic', label: t('vehicles.basicDetails', { fallback: 'Detalles Básicos' }) },
     { id: 'identification', label: t('vehicles.identification', { fallback: 'Identificación' }) },
+    { id: 'basic', label: t('vehicles.basicDetails', { fallback: 'Detalles Básicos' }) },
     { id: 'transaction', label: t('vehicles.transactionDetails', { fallback: 'Transacción' }) },
     { id: 'specs', label: t('vehicles.technicalDetails', { fallback: 'Especificaciones' }) },
     { id: 'equipment', label: t('vehicles.equipment', { fallback: 'Equipamiento' }) },
