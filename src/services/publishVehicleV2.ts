@@ -328,7 +328,8 @@ export async function publishVehicleV2({
     version: data.version?.trim() || null,
   };
 
-  const { error: vehicleError } = await (supabase as ReturnType<typeof import('@supabase/supabase-js').createClient>)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error: vehicleError } = await (supabase as any)
     .from('vehicles')
     .insert(vehicleRow);
 
