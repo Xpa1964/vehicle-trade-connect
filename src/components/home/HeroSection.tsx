@@ -48,9 +48,9 @@ const HeroSection: React.FC = () => {
           <div className="w-full lg:w-auto flex flex-col items-center justify-center text-center space-y-4 sm:space-y-6">
             <div className="flex flex-col items-center text-center">
               <div className="mb-4 sm:mb-5 md:mb-6 pointer-events-none">
-                <div className="w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 xl:w-60 xl:h-60 relative">
+                <div className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 relative">
                   <div 
-                    className="absolute inset-0 rounded-full bg-white/40 blur-2xl scale-110"
+                    className="absolute inset-0 rounded-full bg-black/50 blur-3xl scale-125"
                     aria-hidden="true"
                   />
                   <SimpleImage
