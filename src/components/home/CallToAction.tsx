@@ -95,7 +95,7 @@ const CallToAction: React.FC = () => {
               onClick={() => navigate('/register')}
               className="bg-auto-gold hover:bg-auto-gold/90 text-white text-base font-semibold px-8"
             >
-              {t('auth.register', { fallback: 'Registrarme ahora' })}
+              Pre-Registro
             </Button>
             <Button 
               size="lg"
