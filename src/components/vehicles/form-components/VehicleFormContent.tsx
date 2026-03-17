@@ -1,15 +1,24 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, useWatch } from 'react-hook-form';
 import { VehicleFormData } from '@/types/vehicle';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { WizardStepIndicator } from '../wizard/WizardStepIndicator';
-import { Step1VinIdentification } from '../wizard/Step1VinIdentification';
-import { Step2TechnicalDetails } from '../wizard/Step2TechnicalDetails';
-import { Step3MediaPrice } from '../wizard/Step3MediaPrice';
-import { ChevronLeft, ChevronRight, Upload, Save, FileEdit } from 'lucide-react';
+import { useVehicleFormTabs } from '@/hooks/useVehicleFormTabs';
+import BasicDetails from '../form-sections/BasicDetails';
+import { VehicleIdentification } from '../form-sections/VehicleIdentification';
+import { TransactionDetails } from '../form-sections/TransactionDetails';
+import { VehicleSpecs } from '../form-sections/VehicleSpecs';
+import { EquipmentSelection } from '../form-sections/EquipmentSelection';
+import { AdditionalInfo } from '../form-sections/AdditionalInfo';
+import { DamagesSection } from '../form-sections/DamagesSection';
+import { FileUpload } from '../form-sections/FileUpload';
+import { cn } from '@/lib/utils';
+import {
+  Upload, Save, FileEdit, ChevronLeft, ChevronRight,
+  Car, CreditCard, Settings, Package, Info, AlertTriangle, Image, CheckCircle
+} from 'lucide-react';
 
 interface VehicleFormContentProps {
   form: UseFormReturn<VehicleFormData>;
@@ -24,6 +33,18 @@ interface VehicleFormContentProps {
   previewUrl: string | null;
 }
 
+const TAB_ICONS: Record<string, React.ElementType> = {
+  basic: Car,
+  identification: CreditCard,
+  transaction: CreditCard,
+  specs: Settings,
+  equipment: Package,
+  additional: Info,
+  damages: AlertTriangle,
+  media: Image,
+  published: CheckCircle,
+};
+
 export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
   form,
   isEditing,
@@ -37,30 +58,25 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
   previewUrl
 }) => {
   const { t } = useLanguage();
-  const [currentStep, setCurrentStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const {
+    activeTab,
+    setActiveTab,
+    tabs,
+    getCurrentTabIndex,
+    goToNextTab,
+    goToPreviousTab,
+    isVehiclePublished,
+    markAsPublished
+  } = useVehicleFormTabs();
 
-  const markStepCompleted = (step: number) => {
-    setCompletedSteps(prev => prev.includes(step) ? prev : [...prev, step]);
-  };
-
-  const goToStep = (step: number) => {
-    // Mark current step as completed when moving forward
-    if (step > currentStep) {
-      markStepCompleted(currentStep);
-    }
-    setCurrentStep(step);
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const formData = useWatch({ control: form.control }) as VehicleFormData;
 
   const handleFormSubmit = async () => {
     const allFormValues = form.getValues();
     try {
-      // Ensure status is 'available' when publishing
       allFormValues.status = 'available';
       await onSubmit(allFormValues);
-      markStepCompleted(3);
+      markAsPublished();
     } catch (error) {
       console.error('❌ [VehicleForm] Submit error:', error);
     }
@@ -71,7 +87,6 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
     try {
       allFormValues.status = 'draft';
       await onSubmit(allFormValues);
-      markStepCompleted(3);
     } catch (error) {
       console.error('❌ [VehicleForm] Draft save error:', error);
     }
@@ -91,11 +106,13 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
     }
   };
 
-  // Prevent browser from navigating to dropped files
   const preventDragNavigation = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
   };
+
+  const currentTabIndex = getCurrentTabIndex();
+  const currentTabLabel = tabs.find(tab => tab.id === activeTab)?.label || '';
 
   return (
     <div
@@ -111,101 +128,162 @@ export const VehicleFormContent: React.FC<VehicleFormContentProps> = ({
           }}
           className="relative"
         >
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            {/* Wizard Step Indicator */}
-            <WizardStepIndicator
-              currentStep={currentStep}
-              completedSteps={completedSteps}
-            />
-
-            {/* Step Content */}
-            <div className="min-h-[500px]">
-              {currentStep === 1 && (
-                <Step1VinIdentification
-                  form={form}
-                  onChange={onChange}
-                  onBrandChange={onBrandChange}
-                  availableModels={availableModels}
-                  isLoadingModels={isLoadingModels}
-                  modelsError={modelsError}
-                />
-              )}
-
-              {currentStep === 2 && (
-                <Step2TechnicalDetails form={form} />
-              )}
-
-              {currentStep === 3 && (
-                <Step3MediaPrice
-                  form={form}
-                  onChange={onChange}
-                  onImageChange={onImageChange}
-                  previewUrl={previewUrl}
-                />
-              )}
-            </div>
-
-            {/* Navigation Buttons */}
-            <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
-              {currentStep > 1 ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => goToStep(currentStep - 1)}
-                  className="min-h-[48px] px-6 rounded-xl"
-                >
-                  <ChevronLeft className="h-4 w-4 mr-2" />
-                  {t('common.previous', { fallback: 'Anterior' })}
-                </Button>
-              ) : (
-                <div />
-              )}
-
-              {currentStep < 3 ? (
-                <Button
-                  type="button"
-                  onClick={() => goToStep(currentStep + 1)}
-                  className="min-h-[48px] px-6 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
-                >
-                  {t('common.next', { fallback: 'Siguiente' })}
-                  <ChevronRight className="h-4 w-4 ml-2" />
-                </Button>
-              ) : (
-                <div className="flex gap-3">
-                  {!isEditing && (
-                    <Button
+          <div className="flex flex-col md:flex-row min-h-[600px]">
+            {/* Sidebar Navigation */}
+            <aside className="w-full md:w-56 lg:w-64 flex-shrink-0 border-b md:border-b-0 md:border-r border-border bg-card/50 p-3 md:p-4">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 px-2">
+                {t('vehicles.vehicleForm', { fallback: 'Formulario de vehículo' })}
+              </p>
+              <nav className="flex md:flex-col gap-1 overflow-x-auto md:overflow-x-visible">
+                {tabs.map((tab) => {
+                  const Icon = TAB_ICONS[tab.id] || Car;
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
                       type="button"
-                      variant="outline"
-                      onClick={handleSaveDraft}
-                      className="min-h-[48px] px-6 rounded-xl"
+                      onClick={() => setActiveTab(tab.id)}
+                      className={cn(
+                        'flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap w-full text-left',
+                        isActive
+                          ? 'bg-primary text-primary-foreground shadow-sm'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                      )}
                     >
-                      <FileEdit className="h-4 w-4 mr-2" />
-                      {t('vehicles.saveDraft', { fallback: 'Guardar borrador' })}
-                    </Button>
-                  )}
+                      <Icon className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{tab.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+            </aside>
+
+            {/* Main Content */}
+            <main className="flex-1 min-w-0">
+              {/* Tab Title Bar */}
+              <div className="border-b border-border px-4 md:px-6 py-4">
+                <h2 className="text-xl font-bold">{currentTabLabel}</h2>
+                <div className="h-1 w-16 bg-primary rounded-full mt-2" />
+              </div>
+
+              {/* Tab Content */}
+              <div className="p-4 md:p-6 lg:p-8">
+                {activeTab === 'basic' && (
+                  <BasicDetails
+                    formData={formData}
+                    onChange={onChange}
+                    onBrandChange={(brand: string) => {
+                      onBrandChange(brand);
+                    }}
+                    availableModels={availableModels}
+                  />
+                )}
+
+                {activeTab === 'identification' && (
+                  <VehicleIdentification form={form} />
+                )}
+
+                {activeTab === 'specs' && (
+                  <VehicleSpecs form={form} />
+                )}
+
+                {activeTab === 'additional' && (
+                  <AdditionalInfo form={form} />
+                )}
+
+                {activeTab === 'damages' && (
+                  <DamagesSection form={form} />
+                )}
+
+                {activeTab === 'media' && (
+                  <div className="space-y-4">
+                    <FileUpload
+                      form={form}
+                      onImageChange={onImageChange}
+                      previewUrl={previewUrl}
+                    />
+                  </div>
+                )}
+
+                {activeTab === 'published' && (
+                  <div className="space-y-6">
+                    {isVehiclePublished ? (
+                      <div className="flex flex-col items-center justify-center py-12 text-center">
+                        <CheckCircle className="h-16 w-16 text-primary mb-4" />
+                        <h3 className="text-xl font-bold mb-2">{t('vehicles.vehiclePublished', { fallback: '¡Vehículo publicado!' })}</h3>
+                        <p className="text-muted-foreground">{t('vehicles.vehiclePublishedDesc', { fallback: 'Tu vehículo está ahora visible en la plataforma.' })}</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center py-12 text-center gap-4">
+                        <p className="text-muted-foreground">{t('vehicles.readyToPublish', { fallback: 'Revisa los datos y publica tu vehículo.' })}</p>
+                        <div className="flex gap-3">
+                          {!isEditing && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={handleSaveDraft}
+                              className="min-h-[48px] px-6 rounded-xl"
+                            >
+                              <FileEdit className="h-4 w-4 mr-2" />
+                              {t('vehicles.saveDraft', { fallback: 'Guardar borrador' })}
+                            </Button>
+                          )}
+                          <Button
+                            type="button"
+                            onClick={handleFormSubmit}
+                            className="min-h-[48px] px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                          >
+                            {isEditing ? (
+                              <>
+                                <Save className="h-4 w-4 mr-2" />
+                                {t('vehicles.updateVehicle')}
+                              </>
+                            ) : (
+                              <>
+                                <Upload className="h-4 w-4 mr-2" />
+                                {t('vehicles.publishVehicle')}
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Bottom Navigation (mobile-friendly) */}
+              <div className="flex items-center justify-between px-4 md:px-6 py-4 border-t border-border">
+                {currentTabIndex > 0 ? (
                   <Button
                     type="button"
-                    onClick={handleFormSubmit}
-                    className="min-h-[48px] px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                    variant="outline"
+                    onClick={goToPreviousTab}
+                    className="min-h-[44px] px-4 rounded-xl"
                   >
-                    {isEditing ? (
-                      <>
-                        <Save className="h-4 w-4 mr-2" />
-                        {t('vehicles.updateVehicle')}
-                      </>
-                    ) : (
-                      <>
-                        <Upload className="h-4 w-4 mr-2" />
-                        {t('vehicles.publishVehicle')}
-                      </>
-                    )}
+                    <ChevronLeft className="h-4 w-4 mr-1" />
+                    {t('common.previous', { fallback: 'Anterior' })}
                   </Button>
-                </div>
-              )}
-            </div>
+                ) : (
+                  <div />
+                )}
+
+                {currentTabIndex < tabs.length - 1 ? (
+                  <Button
+                    type="button"
+                    onClick={goToNextTab}
+                    className="min-h-[44px] px-4 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
+                  >
+                    {t('common.next', { fallback: 'Siguiente' })}
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                ) : (
+                  <div />
+                )}
+              </div>
+            </main>
           </div>
 
-          {/* Hidden submit for form validation */}
           <Button type="submit" className="hidden">Submit</Button>
         </form>
       </Form>
