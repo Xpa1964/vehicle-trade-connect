@@ -318,7 +318,7 @@ export const useVehicleSubmit = () => {
         );
           
         if (uploadError || !publicUrl) {
-          const errMsg = typeof uploadError === 'string' ? uploadError : uploadError?.message || 'Upload failed';
+          const errMsg = typeof uploadError === 'string' ? uploadError : (uploadError as any)?.message || 'Upload failed';
           console.error(`❌ [handleImageUploads] Error uploading image ${index}:`, uploadError);
           uploadErrors.push({ fileName: file.name, error: errMsg });
           return null;
