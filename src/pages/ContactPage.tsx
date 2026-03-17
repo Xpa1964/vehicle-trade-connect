@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Mail, Phone, MapPin, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Mail, MapPin, MessageSquare } from 'lucide-react';
 import ContactPageLogo from "@/components/contact/ContactPageLogo";
 import ContactCorporateHeader from "@/components/contact/ContactCorporateHeader";
 
