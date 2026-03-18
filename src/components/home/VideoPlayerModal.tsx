@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { X, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -145,6 +146,90 @@ const postVideoMessages: Record<string, {
     options: ['Køb af køretøjer', 'Salg af køretøjer', 'Køb/Salg af køretøjer'],
     companyPlaceholder: 'Dit firma (valgfrit)',
   },
+};
+
+const PostVideoOverlay: React.FC<{
+  translations: typeof postVideoMessages['es'];
+  selectedInterests: string[];
+  toggleInterest: (option: string) => void;
+  companyName: string;
+  setCompanyName: (v: string) => void;
+  handleContactClick: () => void;
+}> = ({ translations, selectedInterests, toggleInterest, companyName, setCompanyName, handleContactClick }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showScrollHint, setShowScrollHint] = useState(false);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const check = () => setShowScrollHint(el.scrollHeight > el.clientHeight + 8 && el.scrollTop < 10);
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    const onScroll = () => { if (el.scrollTop > 10) setShowScrollHint(false); };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => { ro.disconnect(); el.removeEventListener('scroll', onScroll); };
+  }, []);
+
+  return (
+    <div className="relative flex-1 overflow-hidden">
+      <div
+        ref={scrollRef}
+        className="h-full max-h-[70vh] sm:max-h-[75vh] overflow-y-auto bg-background flex flex-col items-center gap-2 sm:gap-5 animate-in fade-in duration-500 px-4 sm:px-6 py-4 sm:py-6"
+      >
+        <img
+          src={kontactLogo}
+          alt="KONTACT VO"
+          className="w-14 h-14 sm:w-28 sm:h-28 md:w-36 md:h-36 object-contain flex-shrink-0"
+        />
+        <p className="text-foreground text-lg sm:text-xl md:text-2xl font-bold text-center">
+          {translations.message}
+        </p>
+
+        <div className="flex flex-col gap-2 sm:gap-3 w-full max-w-md">
+          <p className="text-muted-foreground text-sm font-semibold">{translations.interestLabel}</p>
+          {translations.options.map((option) => (
+            <div
+              key={option}
+              className="flex items-center gap-3 cursor-pointer rounded-lg border border-border px-3 py-2 sm:px-4 sm:py-3 hover:bg-muted/50 transition-colors"
+              onClick={() => toggleInterest(option)}
+            >
+              <Checkbox
+                checked={selectedInterests.includes(option)}
+                className="h-5 w-5 pointer-events-none"
+              />
+              <span className="text-foreground text-sm sm:text-base font-medium">{option}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="w-full max-w-md">
+          <Input
+            type="text"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+            placeholder={translations.companyPlaceholder}
+            className="w-full"
+          />
+        </div>
+
+        <Button
+          onClick={handleContactClick}
+          size="lg"
+          className="text-lg sm:text-xl px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 flex-shrink-0"
+        >
+          <Mail className="w-5 h-5" />
+          {translations.button}
+        </Button>
+      </div>
+
+      {showScrollHint && (
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce pointer-events-none">
+          <ChevronDown className="w-6 h-6 text-primary" />
+        </div>
+      )}
+    </div>
+  );
 };
 
 const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
@@ -339,70 +424,34 @@ const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({
           </button>
         </div>
 
-        <div className="relative w-full aspect-video bg-black">
-          {isYouTube ? (
-            <div ref={playerContainerRef} className="w-full h-full" />
-          ) : (
-            <video
-              className="w-full h-full"
-              controls
-              playsInline
-              preload="metadata"
-              autoPlay={autoplay}
-            >
-              <source src={videoUrl} type="video/mp4" />
-            </video>
-          )}
-
-          {showOverlay && (
-            <div className="absolute inset-0 bg-background flex flex-col items-center justify-start gap-3 sm:gap-5 animate-in fade-in duration-500 z-10 px-4 sm:px-6 py-4 sm:py-6 overflow-y-auto">
-              <img
-                src={kontactLogo}
-                alt="KONTACT VO"
-                className="w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 object-contain flex-shrink-0"
-              />
-              <p className="text-foreground text-lg sm:text-xl md:text-2xl font-bold text-center">
-                {translations.message}
-              </p>
-
-              <div className="flex flex-col gap-3 w-full max-w-md">
-                <p className="text-muted-foreground text-sm font-semibold">{translations.interestLabel}</p>
-                {translations.options.map((option) => (
-                  <div
-                    key={option}
-                    className="flex items-center gap-3 cursor-pointer rounded-lg border border-border px-4 py-3 hover:bg-muted/50 transition-colors"
-                    onClick={() => toggleInterest(option)}
-                  >
-                    <Checkbox
-                      checked={selectedInterests.includes(option)}
-                      className="h-5 w-5 pointer-events-none"
-                    />
-                    <span className="text-foreground text-sm sm:text-base font-medium">{option}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="w-full max-w-md">
-                <Input
-                  type="text"
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder={translations.companyPlaceholder}
-                  className="w-full"
-                />
-              </div>
-
-              <Button
-                onClick={handleContactClick}
-                size="lg"
-                className="text-lg sm:text-xl px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2"
+        {!showOverlay && (
+          <div className="relative w-full aspect-video bg-black">
+            {isYouTube ? (
+              <div ref={playerContainerRef} className="w-full h-full" />
+            ) : (
+              <video
+                className="w-full h-full"
+                controls
+                playsInline
+                preload="metadata"
+                autoPlay={autoplay}
               >
-                <Mail className="w-5 h-5" />
-                {translations.button}
-              </Button>
-            </div>
-          )}
-        </div>
+                <source src={videoUrl} type="video/mp4" />
+              </video>
+            )}
+          </div>
+        )}
+
+        {showOverlay && (
+          <PostVideoOverlay
+            translations={translations}
+            selectedInterests={selectedInterests}
+            toggleInterest={toggleInterest}
+            companyName={companyName}
+            setCompanyName={setCompanyName}
+            handleContactClick={handleContactClick}
+          />
+        )}
       </div>
     </div>
   );
