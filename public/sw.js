@@ -82,10 +82,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // JS/CSS - Stale while revalidate to avoid serving mixed versions after deploy
-  // (cache-first on JS can easily break React and cause "invalid hook call" loops)
+  // JS/CSS - Network first to ensure latest tracking/app code is always served
   if (url.pathname.match(/\.(js|css)$/) && !url.origin.includes('supabase.co')) {
-    event.respondWith(staleWhileRevalidate(request));
+    event.respondWith(networkFirst(request));
     return;
   }
 
