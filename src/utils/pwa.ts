@@ -9,55 +9,50 @@ export interface BeforeInstallPromptEvent extends Event {
 }
 
 let deferredPrompt: BeforeInstallPromptEvent | null = null;
+const SW_VERSION = 'v4';
+const PWA_CLEANUP_KEY = `pwa-cleanup-${SW_VERSION}`;
 
 /**
  * Initialize PWA features
  */
 export function initializePWA(): void {
-  // IMPORTANT: In development/preview, service workers can cause asset cache mismatches
-  // (old JS chunks served with new HTML), which looks like "continuous reload" and wipes form state.
-  // So we proactively disable SW + clear caches in DEV.
   if (import.meta.env.DEV) {
-    void (async () => {
-      try {
-        if ('serviceWorker' in navigator) {
-          const regs = await navigator.serviceWorker.getRegistrations();
-          await Promise.all(regs.map((r) => r.unregister()));
-        }
-
-        if ('caches' in window) {
-          const cacheNames = await caches.keys();
-          await Promise.all(cacheNames.map((name) => caches.delete(name)));
-        }
-
-        console.log('[PWA] DEV: service worker disabled and caches cleared');
-      } catch (error) {
-        console.warn('[PWA] DEV: failed to disable service worker', error);
-      }
-    })();
-
+    void cleanupServiceWorkersAndCaches();
     return;
   }
 
-  // Register service worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      registerServiceWorker();
+      void registerServiceWorker();
     });
   }
 
-  // Capture install prompt
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e as BeforeInstallPromptEvent;
     console.log('[PWA] Install prompt captured');
   });
 
-  // Track installation
   window.addEventListener('appinstalled', () => {
     console.log('[PWA] App installed successfully');
     deferredPrompt = null;
   });
+}
+
+async function cleanupServiceWorkersAndCaches(): Promise<void> {
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((registration) => registration.unregister()));
+    }
+
+    if ('caches' in window) {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map((name) => caches.delete(name)));
+    }
+  } catch (error) {
+    console.warn('[PWA] Failed to clear old service workers/caches', error);
+  }
 }
 
 /**
@@ -65,35 +60,45 @@ export function initializePWA(): void {
  */
 async function registerServiceWorker(): Promise<void> {
   try {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
+    if (localStorage.getItem(PWA_CLEANUP_KEY) !== 'done') {
+      await cleanupServiceWorkersAndCaches();
+      localStorage.setItem(PWA_CLEANUP_KEY, 'done');
+    }
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+
+    const registration = await navigator.serviceWorker.register(`/sw.js?${SW_VERSION}`, {
       scope: '/',
     });
 
     console.log('[PWA] Service Worker registered:', registration);
 
-    // Check for updates periodically
-    setInterval(() => {
-      registration.update();
-    }, 60 * 60 * 1000); // Check every hour
+    await registration.update();
 
-    // Handle updates
+    if (registration.waiting) {
+      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }
+
+    setInterval(() => {
+      void registration.update();
+    }, 60 * 60 * 1000);
+
     registration.addEventListener('updatefound', () => {
       const newWorker = registration.installing;
-      
-      if (newWorker) {
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // New service worker available
-            console.log('[PWA] New version available');
-            
-            // Optionally notify user
-            if (window.confirm('Nueva versión disponible. ¿Recargar?')) {
-              newWorker.postMessage({ type: 'SKIP_WAITING' });
-              window.location.reload();
-            }
-          }
-        });
-      }
+
+      if (!newWorker) return;
+
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          console.log('[PWA] New version available, activating automatically');
+          newWorker.postMessage({ type: 'SKIP_WAITING' });
+        }
+      });
     });
   } catch (error) {
     console.error('[PWA] Service Worker registration failed:', error);
