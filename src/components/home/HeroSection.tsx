@@ -90,7 +90,7 @@ const HeroSection: React.FC = () => {
               )}
             </div>
             
-            <div className="flex-1 min-h-[30px] sm:min-h-[50px] md:min-h-[70px] lg:min-h-[90px]" aria-hidden="true"></div>
+            <div className="flex-1 min-h-[10px] sm:min-h-[20px] md:min-h-[30px] lg:min-h-[40px]" aria-hidden="true"></div>
             
             <div className="mb-0 sm:mb-1 md:mb-2 lg:mb-3 xl:mb-4 px-3 sm:px-4 md:px-6">
               <p 
