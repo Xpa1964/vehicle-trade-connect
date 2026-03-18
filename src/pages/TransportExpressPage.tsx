@@ -77,24 +77,25 @@ const TransportExpressPage: React.FC = () => {
 
         {/* Kontact Drive Preview */}
         <div className="mt-8 bg-card rounded-lg shadow-lg border border-border overflow-hidden">
-          <div className="p-6 border-b border-border flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Calculator className="h-6 w-6 text-primary" />
-              <div>
-                <h2 className="text-xl font-bold text-foreground">
+          <div className="p-4 sm:p-6 border-b border-border flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
+            <div className="flex items-center gap-3 min-w-0">
+              <Calculator className="h-6 w-6 text-primary flex-shrink-0" />
+              <div className="min-w-0">
+                <h2 className="text-base sm:text-xl font-bold text-foreground leading-tight">
                   {t('transport.express.cta')}
                 </h2>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   {t('transport.formDescription')}
                 </p>
               </div>
             </div>
             <Button
               onClick={() => window.open(CALCULATOR_URL, '_blank')}
-              className="gap-2"
+              className="gap-2 w-full sm:w-auto flex-shrink-0"
+              size="sm"
             >
               <ExternalLink className="h-4 w-4" />
-              {t('transport.express.cta')}
+              <span className="truncate">{t('transport.express.cta')}</span>
             </Button>
           </div>
           
