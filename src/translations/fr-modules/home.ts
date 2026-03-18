@@ -6,7 +6,7 @@ export default {
   'home.subtitle': 'VO, VN, KM0',
   'home.marketplace': 'AUTOMOTIVE MARKETPLACE',
   'home.welcomeBack': 'Bon retour',
-  'home.promoSlogan': 'Découvrez KONTACT VO en quelques minutes',
+  'home.promoSlogan': 'Découvrez KONTACT VO en 90 secondes',
   'home.promoDescription': 'Regardez notre présentation complète du marketplace qui révolutionne l\'importation et l\'exportation de véhicules',
   'home.videoComingSoon': 'Vidéo bientôt disponible dans cette langue',
   'home.chooseLanguage': 'Choisissez votre langue préférée:',

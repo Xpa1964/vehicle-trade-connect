@@ -5,7 +5,7 @@ export default {
   'home.subtitle': 'GEBRUIKTE, NIEUWE EN HALF-NIEUWE VOERTUIGEN',
   'home.marketplace': 'AUTOMOTIVE MARKETPLACE',
   'home.welcomeBack': 'Welkom terug',
-  'home.promoSlogan': 'Ontdek KONTACT VO in een paar minuten',
+  'home.promoSlogan': 'Ontdek KONTACT VO in 90 seconden',
   'home.promoDescription': 'Luister naar onze complete presentatie van de marktplaats die de import en export van voertuigen revolutioneert',
   'home.chooseLanguage': 'Kies je gewenste taal:',
   'home.ecosystemDescription': 'Het creëren van een exclusief ecosysteem voor professionals uit de gebruikte voertuigsector ligt binnen je bereik. We hoeven alleen de kritische massa van gebruikers te bereiken die deze ruimte versterkt, waardoor de ontwikkeling van talloze zakelijke kansen mogelijk wordt: koop en verkoop van voertuigen, het creëren of deelnemen aan veilingen, uitwisselingen tussen professionals en het publiceren van samenwerkingsvoorstellen.',
