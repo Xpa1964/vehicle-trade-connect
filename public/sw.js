@@ -3,8 +3,8 @@
  * Provides basic offline functionality and asset caching
  */
 
-const CACHE_NAME = 'kontact-vo-v2';
-const RUNTIME_CACHE = 'kontact-vo-runtime-v2';
+const CACHE_NAME = 'kontact-vo-v3';
+const RUNTIME_CACHE = 'kontact-vo-runtime-v3';
 
 // Assets to cache immediately on install
 const PRECACHE_ASSETS = [
