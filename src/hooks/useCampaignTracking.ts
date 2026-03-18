@@ -171,11 +171,27 @@ export const useCampaignTracking = () => {
       return;
     }
 
-    try {
-      await trackCall({ action: 'event', session_id: sid, field });
-      sentEvents.current.add(field);
-    } catch (err) {
-      console.error('[CampaignTracking] updateEvent FAILED', { field, sessionId: sid, err });
+    const attempt = async (): Promise<boolean> => {
+      try {
+        const result = await trackCall({ action: 'event', session_id: sid, field });
+        if (result.rows_updated && result.rows_updated > 0) {
+          sentEvents.current.add(field);
+          return true;
+        }
+        console.warn('[CampaignTracking] updateEvent 0 rows updated', { field, sid });
+        return false;
+      } catch (err) {
+        console.error('[CampaignTracking] updateEvent FAILED', { field, sessionId: sid, err });
+        return false;
+      }
+    };
+
+    const ok = await attempt();
+    if (!ok) {
+      // Retry once after 1.5s — visit row may not have propagated yet
+      console.log('[CampaignTracking] updateEvent retrying in 1.5s', { field });
+      await new Promise((r) => setTimeout(r, 1500));
+      await attempt();
     }
   }, []);
 

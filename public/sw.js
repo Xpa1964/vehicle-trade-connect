@@ -3,8 +3,8 @@
  * Provides basic offline functionality and asset caching
  */
 
-const CACHE_NAME = 'kontact-vo-v2';
-const RUNTIME_CACHE = 'kontact-vo-runtime-v2';
+const CACHE_NAME = 'kontact-vo-v3';
+const RUNTIME_CACHE = 'kontact-vo-runtime-v3';
 
 // Assets to cache immediately on install
 const PRECACHE_ASSETS = [
@@ -82,10 +82,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // JS/CSS - Stale while revalidate to avoid serving mixed versions after deploy
-  // (cache-first on JS can easily break React and cause "invalid hook call" loops)
+  // JS/CSS - Network first to ensure latest tracking/app code is always served
   if (url.pathname.match(/\.(js|css)$/) && !url.origin.includes('supabase.co')) {
-    event.respondWith(staleWhileRevalidate(request));
+    event.respondWith(networkFirst(request));
     return;
   }
 

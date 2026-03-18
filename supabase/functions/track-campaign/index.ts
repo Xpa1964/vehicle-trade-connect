@@ -133,6 +133,10 @@ Deno.serve(async (req) => {
       const rowsUpdated = data?.length ?? 0;
       console.log(`[track-campaign] event UPDATE: field=${field}, session=${session_id}, rows=${rowsUpdated}`);
 
+      if (rowsUpdated === 0) {
+        return jsonResponse({ success: false, error: "session_not_found", rows_updated: 0 }, 404);
+      }
+
       return jsonResponse({ success: true, rows_updated: rowsUpdated });
     }
 

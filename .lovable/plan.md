@@ -1,42 +1,58 @@
 
 
-## Diagnosis
+# Plan: Gestion de imagenes API con reemplazo limpio
 
-I've confirmed from the live database and edge function logs that:
+## Resumen
 
-- **LinkedIn tracking works perfectly**: session `a3bce066` has all 4 events (start, complete, popup, click) = true
-- **organic_web visits ARE being created** in the DB, but events (start, complete, popup, click) remain all false
-- **Edge function logs show NO event UPDATE calls for organic_web sessions** -- meaning the frontend is NOT sending event updates for web visits
+Dos cambios precisos sobre el plan original aprobado, sin modificar nada mas.
 
-The root cause is a combination of **3 bugs**:
+## Cambio 1: Migracion de base de datos
 
-### Bug 1: Edge function returns "success" even when 0 rows are updated
-When `updateEvent` sends an event, the edge function does `UPDATE ... WHERE session_id = $id` and returns `{success: true, rows_updated: 0}` without signaling failure. The frontend treats this as success and marks the event as "sent" -- permanently preventing retries.
+Anadir columna `source` a `vehicle_images` **sin valor por defecto**:
 
-### Bug 2: Frontend marks events as "sent" without verifying actual DB update
-In `useCampaignTracking.ts`, after calling `trackCall`, the hook does `sentEvents.current.add(field)` regardless of whether the backend actually updated any rows. Combined with Bug 1, events are silently lost forever.
+```text
+ALTER TABLE vehicle_images ADD COLUMN source text;
+```
 
-### Bug 3: Service Worker serves stale JavaScript on custom domain
-The `sw.js` uses "stale-while-revalidate" for JS files -- meaning kontactvo.com may serve a cached (old) version of the tracking code on first load. The user only gets fresh code on the SECOND visit. This explains why LinkedIn (fresh URL, no cache) works but web (cached SW) doesn't.
+Las imagenes existentes quedaran con `source = NULL`. Solo las imagenes insertadas desde la sincronizacion API recibiran `source = 'api'`.
 
-## Plan
+## Cambio 2: Modificar `processImages` en la edge function
 
-### 1. Fix the Edge Function to report actual update failures
-In `supabase/functions/track-campaign/index.ts`, for the `event` action: if `rows_updated === 0`, return `{success: false, error: "session_not_found"}` with HTTP 404 instead of pretending it worked.
+En `supabase/functions/api-sync-vehicles/index.ts`, funcion `processImages` (linea 472):
 
-### 2. Fix the frontend to only mark events "sent" on confirmed success
-In `src/hooks/useCampaignTracking.ts`:
-- After `trackCall` for events, check the response for `rows_updated > 0` before adding to `sentEvents`
-- If `rows_updated === 0`, don't add to `sentEvents` so the event can be retried
-- Add a small retry mechanism (wait 1-2 seconds and retry once if the visit insert hasn't propagated yet)
+**Paso nuevo antes de insertar** (sin tocar storage):
 
-### 3. Fix Service Worker JS caching strategy
-In `public/sw.js`:
-- Change JS/CSS caching from "stale-while-revalidate" to **"network-first"** -- this ensures the latest code is always served, falling back to cache only when offline
-- Bump the cache version names to force invalidation of stale caches
+```text
+DELETE FROM vehicle_images
+WHERE vehicle_id = vehicleId AND source = 'api'
+```
 
-This combination of fixes ensures:
-- Events are never silently lost
-- The custom domain always serves fresh tracking code
-- Failed events can be retried instead of being permanently skipped
+**Al insertar cada imagen**, anadir `source: 'api'` al objeto:
+
+```text
+await supabase.from('vehicle_images').insert({
+  vehicle_id: vehicleId,
+  image_url: publicUrl,
+  display_order: i,
+  is_primary: i === 0,
+  source: 'api'        // <-- nuevo campo
+});
+```
+
+**No se eliminan archivos del bucket de storage.** Solo registros en base de datos.
+
+## Archivos modificados
+
+| Archivo | Cambio |
+|---------|--------|
+| Nueva migracion SQL | `ALTER TABLE vehicle_images ADD COLUMN source text;` |
+| `supabase/functions/api-sync-vehicles/index.ts` | Agregar DELETE previo y campo `source: 'api'` en insert |
+
+## Lo que NO se toca
+
+- Subida manual de imagenes
+- Componentes de UI
+- Bucket de storage (sin eliminar archivos fisicos)
+- RLS policies de `vehicle_images`
+- Ningun otro endpoint ni servicio
 
