@@ -30,10 +30,8 @@ function App() {
     initializePWA();
 
     // Initialize Google Analytics (optional GA_ID from env)
-    const gaId = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
-    if (gaId) {
-      analytics.init(gaId);
-    }
+    // Google Analytics 4 - Production tracking
+    analytics.init('G-TJMZN1V2LH');
 
     // Initialize Core Web Vitals monitoring
     reportWebVitals();
