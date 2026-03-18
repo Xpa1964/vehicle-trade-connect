@@ -101,22 +101,22 @@ const BulletinInfoPage: React.FC = () => {
         </h2>
 
         <Tabs defaultValue="business">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 h-auto gap-1">
-            <TabsTrigger value="business" className="flex items-center gap-2">
-              <Briefcase className="h-4 w-4" />
-              {t('bulletinInfo.examples.business.title')}
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 h-auto gap-2 p-1">
+            <TabsTrigger value="business" className="flex items-center gap-1.5 text-xs sm:text-sm py-2 px-2 whitespace-normal text-center">
+              <Briefcase className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">{t('bulletinInfo.examples.business.title')}</span>
             </TabsTrigger>
-            <TabsTrigger value="search" className="flex items-center gap-2">
-              <Search className="h-4 w-4" />
-              {t('bulletinInfo.examples.search.title')}
+            <TabsTrigger value="search" className="flex items-center gap-1.5 text-xs sm:text-sm py-2 px-2 whitespace-normal text-center">
+              <Search className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">{t('bulletinInfo.examples.search.title')}</span>
             </TabsTrigger>
-            <TabsTrigger value="vehicles" className="flex items-center gap-2">
-              <Car className="h-4 w-4" />
-              {t('bulletinInfo.examples.vehicles.title')}
+            <TabsTrigger value="vehicles" className="flex items-center gap-1.5 text-xs sm:text-sm py-2 px-2 whitespace-normal text-center">
+              <Car className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">{t('bulletinInfo.examples.vehicles.title')}</span>
             </TabsTrigger>
-            <TabsTrigger value="services" className="flex items-center gap-2">
-              <Wrench className="h-4 w-4" />
-              {t('bulletinInfo.examples.services.title')}
+            <TabsTrigger value="services" className="flex items-center gap-1.5 text-xs sm:text-sm py-2 px-2 whitespace-normal text-center">
+              <Wrench className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">{t('bulletinInfo.examples.services.title')}</span>
             </TabsTrigger>
           </TabsList>
           
