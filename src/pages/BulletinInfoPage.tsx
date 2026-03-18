@@ -101,7 +101,7 @@ const BulletinInfoPage: React.FC = () => {
         </h2>
 
         <Tabs defaultValue="business">
-          <TabsList className="grid w-full grid-cols-4 mb-8">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 h-auto gap-1">
             <TabsTrigger value="business" className="flex items-center gap-2">
               <Briefcase className="h-4 w-4" />
               {t('bulletinInfo.examples.business.title')}
