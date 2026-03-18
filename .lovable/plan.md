@@ -1,58 +1,39 @@
 
 
-# Plan: Gestion de imagenes API con reemplazo limpio
+## Problem
 
-## Resumen
+On mobile, the post-video overlay (contact form with checkboxes + submit button) is inside a `div` with `aspect-video` dimensions. The overlay has `overflow-y-auto` but the user doesn't realize they can scroll — the checkboxes and "OK, me interesa" button are cut off below the fold with no visual indication.
 
-Dos cambios precisos sobre el plan original aprobado, sin modificar nada mas.
+## Solution
 
-## Cambio 1: Migracion de base de datos
+Replace the current overlay positioning so it **breaks out of the aspect-video container** on mobile and uses the full modal height. Add a subtle animated scroll indicator (bouncing chevron) that appears when content overflows, and auto-hides once the user scrolls.
 
-Anadir columna `source` a `vehicle_images` **sin valor por defecto**:
+### Changes in `src/components/home/VideoPlayerModal.tsx`:
 
-```text
-ALTER TABLE vehicle_images ADD COLUMN source text;
+1. **Move the overlay outside the `aspect-video` div** — When `showOverlay` is true, hide the video area and show the form in the main modal body instead, giving it the full `max-h-[90vh]` space rather than being constrained to the 16:9 aspect ratio.
+
+2. **Add a scroll indicator** — A small animated bouncing chevron (▼) at the bottom of the overlay that:
+   - Only shows when content overflows (using a `ResizeObserver` or scroll check)
+   - Disappears after the user scrolls down
+   - Uses Tailwind's `animate-bounce` for attention
+
+3. **Make the form more compact on mobile** — Reduce logo size further on small screens (`w-14 h-14`), tighten gaps (`gap-2`), so more of the actionable content (checkboxes + button) is visible above the fold.
+
+### Structural change (simplified):
+
+```
+// Current: overlay is INSIDE aspect-video div (constrained)
+<div className="aspect-video">
+  <player/>
+  {showOverlay && <overlay/>}  ← cramped
+</div>
+
+// New: overlay REPLACES video area in the flex column
+<div className="flex flex-col">
+  {!showOverlay && <div className="aspect-video"><player/></div>}
+  {showOverlay && <overlay with full height + scroll indicator/>}
+</div>
 ```
 
-Las imagenes existentes quedaran con `source = NULL`. Solo las imagenes insertadas desde la sincronizacion API recibiran `source = 'api'`.
-
-## Cambio 2: Modificar `processImages` en la edge function
-
-En `supabase/functions/api-sync-vehicles/index.ts`, funcion `processImages` (linea 472):
-
-**Paso nuevo antes de insertar** (sin tocar storage):
-
-```text
-DELETE FROM vehicle_images
-WHERE vehicle_id = vehicleId AND source = 'api'
-```
-
-**Al insertar cada imagen**, anadir `source: 'api'` al objeto:
-
-```text
-await supabase.from('vehicle_images').insert({
-  vehicle_id: vehicleId,
-  image_url: publicUrl,
-  display_order: i,
-  is_primary: i === 0,
-  source: 'api'        // <-- nuevo campo
-});
-```
-
-**No se eliminan archivos del bucket de storage.** Solo registros en base de datos.
-
-## Archivos modificados
-
-| Archivo | Cambio |
-|---------|--------|
-| Nueva migracion SQL | `ALTER TABLE vehicle_images ADD COLUMN source text;` |
-| `supabase/functions/api-sync-vehicles/index.ts` | Agregar DELETE previo y campo `source: 'api'` en insert |
-
-## Lo que NO se toca
-
-- Subida manual de imagenes
-- Componentes de UI
-- Bucket de storage (sin eliminar archivos fisicos)
-- RLS policies de `vehicle_images`
-- Ningun otro endpoint ni servicio
+This ensures the form gets the full modal height (~90vh) on mobile instead of being locked to the small 16:9 video area.
 
