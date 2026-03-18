@@ -37,7 +37,7 @@ const AudioPresentationSection: React.FC<AudioPresentationSectionProps> = ({
   const headphonesImg = useStaticImage('home.headphones');
 
   const videoIds: Record<string, string | null> = {
-    es: 'D7euQl-30rs',
+    es: 'nSm2qoyH0mI',
     en: '4MW9r-kb_Lw',
     fr: 'Yjjo4qjHQrY',
     it: 'BIbIpsJCmHg',
