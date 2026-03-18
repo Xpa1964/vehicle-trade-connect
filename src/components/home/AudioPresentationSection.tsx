@@ -38,14 +38,14 @@ const AudioPresentationSection: React.FC<AudioPresentationSectionProps> = ({
 
   const videoIds: Record<string, string | null> = {
     es: 'nSm2qoyH0mI',
-    en: '4MW9r-kb_Lw',
-    fr: 'Yjjo4qjHQrY',
-    it: 'BIbIpsJCmHg',
-    pt: 'OW_RO0a54qA',
-    de: '6XMAzJvhSXI',
-    nl: 'P5ytnUafM0g',
-    pl: 'xL-PbQJniAk',
-    dk: 'Ncdm_Hf3xA8',
+    en: '--X1nZNsTXA',
+    fr: '0MsvLQxjTJk',
+    it: 'gH8qrDrJMPE',
+    pt: '4dmNmaLfbTI',
+    de: 'jV6jRcFPsp8',
+    nl: 'BpWcG-haHFg',
+    pl: 'oRz3f17G-AA',
+    dk: 'kAlp5nrb5-o',
   };
 
   const languageNames: Record<string, string> = {
