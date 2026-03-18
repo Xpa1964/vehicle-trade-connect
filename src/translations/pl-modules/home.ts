@@ -10,7 +10,7 @@ export default {
   'home.features': 'Funkcje',
   'home.services': 'Usługi',
   'home.welcomeBack': 'Witamy ponownie',
-  'home.promoSlogan': 'Odkryj KONTACT VO w kilka minut',
+  'home.promoSlogan': 'Odkryj KONTACT VO w 90 sekund',
   'home.promoDescription': 'Obejrzyj naszą pełną prezentację marketplace\'u, który rewolucjonizuje import i eksport pojazdów',
   'home.videoComingSoon': 'Wideo wkrótce dostępne w tym języku',
   'home.chooseLanguage': 'Wybierz preferowany język:',
