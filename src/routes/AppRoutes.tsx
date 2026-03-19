@@ -1,6 +1,8 @@
 
 import { Suspense, lazy, ComponentType } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { analytics } from "@/utils/analytics";
 import Layout from "@/components/layout/Layout";
 import ProtectedRoute from "@/components/shared/ProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
