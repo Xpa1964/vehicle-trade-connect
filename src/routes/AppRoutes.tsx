@@ -148,6 +148,12 @@ const AdminCampaigns = lazyWithRetry(() => import("../pages/admin/Campaigns"));
 // Removed AdminDisputes page (mediation system disabled)
 
 const AppRoutes = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    analytics.trackPageView(location.pathname);
+  }, [location.pathname]);
+
   return (
     <Suspense fallback={<LoadingFallback />}>
       <main id="main-content">
