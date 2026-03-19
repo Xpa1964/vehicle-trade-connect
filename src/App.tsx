@@ -53,6 +53,7 @@ function App() {
                   <div className="min-h-screen bg-background">
                     <Toaster />
                     <AppRoutes />
+                    <CookieConsent />
                   </div>
                 </AuthProvider>
               </Router>
