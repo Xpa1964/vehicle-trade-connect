@@ -245,6 +245,9 @@
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        analytics_storage: localStorage.getItem('cookies_accepted') === 'true' ? 'granted' : 'denied'
+      });
       gtag('js', new Date());
       gtag('config', 'G-TJMZN1V2LH');
     </script>

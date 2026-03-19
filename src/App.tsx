@@ -14,6 +14,7 @@ import { reportWebVitals } from '@/utils/webVitals';
 import { analytics } from '@/utils/analytics';
 import { SkipToContent } from '@/components/accessibility/SkipToContent';
 import { ScrollToTop } from '@/components/shared/ScrollToTop';
+import { CookieConsent } from '@/components/shared/CookieConsent';
 // FASE 1: Usar QueryClient único optimizado de react-query.tsx
 import { queryClient } from '@/lib/react-query';
 
@@ -53,6 +54,7 @@ function App() {
                   <div className="min-h-screen bg-background">
                     <Toaster />
                     <AppRoutes />
+                    <CookieConsent />
                   </div>
                 </AuthProvider>
               </Router>
