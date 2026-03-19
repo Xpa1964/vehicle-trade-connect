@@ -1,0 +1,1 @@
+DELETE FROM campaign_events WHERE user_agent LIKE '%Chrome/119%';
