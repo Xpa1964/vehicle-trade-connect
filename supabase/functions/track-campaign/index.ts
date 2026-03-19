@@ -100,6 +100,11 @@ Deno.serve(async (req) => {
         return jsonResponse({ success: true, ignored: true, reason: "internal_preview" });
       }
 
+      if (isBot(user_agent)) {
+        console.log("[track-campaign] Ignored bot visit", { campaign, user_agent });
+        return jsonResponse({ success: true, ignored: true, reason: "bot" });
+      }
+
       const { error } = await supabase.from("campaign_events").insert({
         session_id,
         video_language: video_language || null,
