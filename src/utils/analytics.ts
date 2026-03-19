@@ -32,8 +32,18 @@ class AnalyticsService {
       return;
     }
 
-    // Initialize GA4 if measurement ID is provided
-    if (measurementId && typeof window !== 'undefined') {
+    if (typeof window === 'undefined') return;
+
+    const existingGtag = (window as any).gtag;
+    const existingDataLayer = (window as any).dataLayer;
+
+    if (typeof existingGtag === 'function' || Array.isArray(existingDataLayer)) {
+      console.log('[Analytics] GA4 already initialized from index.html');
+      return;
+    }
+
+    // Fallback initialization if the head snippet is missing
+    if (measurementId) {
       const script = document.createElement('script');
       script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
       script.async = true;
@@ -46,7 +56,7 @@ class AnalyticsService {
       gtag('js', new Date());
       gtag('config', measurementId, {
         send_page_view: true,
-        anonymize_ip: true, // GDPR compliance
+        anonymize_ip: true,
       });
 
       (window as any).gtag = gtag;
