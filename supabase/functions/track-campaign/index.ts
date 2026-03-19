@@ -42,7 +42,7 @@ const BOT_PATTERNS = [
 
 // LinkedIn and similar platforms use pre-release Chrome versions for link previews
 const PRERELEASE_CHROME_RE = /Chrome\/(\d+)\./;
-const STABLE_CHROME_MIN = 144; // anything below this in 2026 is likely a bot/preview
+const STABLE_CHROME_MIN = 130; // anything below 130 in 2026 is a bot or very outdated
 
 function isBot(userAgent: string | null | undefined): boolean {
   if (!userAgent) return false;
@@ -52,13 +52,8 @@ function isBot(userAgent: string | null | undefined): boolean {
   const chromeMatch = userAgent.match(PRERELEASE_CHROME_RE);
   if (chromeMatch) {
     const majorVersion = parseInt(chromeMatch[1], 10);
-    // Pre-release or very old Chrome versions used by link preview bots
-    if (majorVersion > 0 && majorVersion < STABLE_CHROME_MIN) {
-      // But allow legitimate mobile browsers which may lag behind
-      const isModernBrowser = /Safari\/\d+/.test(userAgent) && !/bot|crawl/i.test(userAgent);
-      // Chrome 141/142 etc. are LinkedIn link preview bots
-      if (majorVersion < 143) return true;
-    }
+    // Chrome versions below 130 are either bots or extremely outdated browsers
+    if (majorVersion > 0 && majorVersion < STABLE_CHROME_MIN) return true;
   }
 
   return false;
