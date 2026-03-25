@@ -71,7 +71,7 @@ export const BROWSER_LANGUAGE_MAP: Record<string, Language> = {
 /**
  * Idioma por defecto del sistema
  */
-export const DEFAULT_LANGUAGE: Language = 'es';
+export const DEFAULT_LANGUAGE: Language = 'en';
 
 /**
  * Configuración para el localStorage

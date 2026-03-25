@@ -17,7 +17,7 @@ export interface LanguageSelectorProps {
 
 const LANGUAGES = [
   { code: 'es', flag: 'es', label: 'Español' },
-  { code: 'en', flag: 'us', label: 'English' },
+  { code: 'en', flag: 'gb', label: 'English' },
   { code: 'fr', flag: 'fr', label: 'Français' },
   { code: 'it', flag: 'it', label: 'Italiano' },
   { code: 'de', flag: 'de', label: 'Deutsch' },
