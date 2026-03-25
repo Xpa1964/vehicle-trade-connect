@@ -10,7 +10,7 @@ interface FlagDef {
 
 const flags: FlagDef[] = [
   { code: 'es', name: 'Español', gradient: 'linear-gradient(to bottom, #AA151B 0%, #AA151B 25%, #F1BF00 25%, #F1BF00 75%, #AA151B 75%, #AA151B 100%)' },
-  { code: 'en', name: 'English', gradient: 'linear-gradient(135deg, #012169 0%, #012169 40%, #C8102E 40%, #C8102E 60%, #012169 60%, #012169 100%)' },
+  { code: 'en', name: 'English', gradient: 'linear-gradient(to bottom, #012169 0%, #012169 33.33%, #FFFFFF 33.33%, #FFFFFF 50%, #C8102E 50%, #C8102E 66.66%, #FFFFFF 66.66%, #FFFFFF 83.33%, #012169 83.33%, #012169 100%)' },
   { code: 'fr', name: 'Français', gradient: 'linear-gradient(to right, #0055A4 0%, #0055A4 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #EF4135 66.66%, #EF4135 100%)' },
   { code: 'it', name: 'Italiano', gradient: 'linear-gradient(to right, #009246 0%, #009246 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #CE2B37 66.66%, #CE2B37 100%)' },
   { code: 'de', name: 'Deutsch', gradient: 'linear-gradient(to bottom, #000000 0%, #000000 33.33%, #DD0000 33.33%, #DD0000 66.66%, #FFCE00 66.66%, #FFCE00 100%)' },
